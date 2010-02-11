@@ -1,0 +1,229 @@
+  
+<project name="com.nokia.s60tools.analyzetool" default="build.all">
+
+  <!-- declare ant4eclipse -->
+  <taskdef resource="net/sf/ant4eclipse/antlib.xml" />
+
+  <!-- Name definitions -->
+  <property name="feature.name" value="AnalyzeTool"/>
+  <property name="project.name" value="com.nokia.carbide.extensions.analyzetool" />
+  <property name="jar.filename" value="${ant.project.name}.jar"/>
+  
+  <!-- Folder definitions -->
+  <property name="workspace.path" value="." />
+  <property name="java.location" value="C:/APPS/j2sdk_1.5.0_12" />
+  <property name="destination.path" value="." />
+  
+  <property name="carbide.folder" value="C:/Carbide_internal" />
+	<property name="carbide.int.folder" location="c:/Carbide_ADT/plugins"/>
+	<property name="carbide.dev.folder" location="c:/Carbide_development/plugins"/>
+	
+	<property name="test.folder" location="${ant.project.name}.tests"/>
+	<property name="test.cache.folder" location="${ant.project.name}.cache.tests"/>
+	<property name="test.ifsheets.folder" location="${ant.project.name}.ifsheets.tests"/>
+	<property name="test.web.folder" location="${ant.project.name}.web.tests"/> 
+  <property name="reports.folder" location="reports"/>
+	<property name="reports.emma" location="${reports.folder}/emma"/>
+	<property name="instr.folder" location="instr"/>
+	<property name="binaries.folder" location="${feature.name}.binaries"/>
+	
+	
+	<!-- EMMA configuration -->
+ 	<path id="emma.lib" >
+    	<pathelement location="${ant.home}/lib/emma.jar" />
+    	<pathelement location="${ant.home}/lib/emma_ant.jar" />
+  	</path>
+
+  	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
+	
+	<!-- PMD configuration -->
+	<path id="pmd.lib" >
+    	<pathelement location="${ant.home}/lib/pmd-4.2.5.jar" />
+    	<pathelement location="${ant.home}/lib/asm-3.1.jar" />
+    	<pathelement location="${ant.home}/lib/jaxen-1.1.1.jar" />
+  	</path>
+	
+	<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.lib" />
+	
+	<!-- Folders -->
+	<delete dir="${instr.folder}"/>
+	<mkdir dir="${instr.folder}"/>
+	
+	<delete dir="${reports.folder}"/>
+	<mkdir dir="${reports.folder}"/>
+	
+	<!-- Carbide_classpath -->
+	<path id="carbide_classpath">
+		<fileset dir="${carbide.int.folder}" includes="**/*.jar" />
+		<fileset dir="plugins" includes="**/*.jar" />
+	</path>
+	
+  <!-- Delete old plugins and features -->
+  <target name="delete">
+	  <delete dir="plugins" failonerror="false"/>
+	  <delete dir="features" failonerror="false"/>
+	  <delete dir="${ant.project.name}/bin/com" failonerror="false"/>
+	  <delete dir="${ant.project.name}.tests/bin/com" failonerror="false"/>
+	  <delete dir="${ant.project.name}.trace/bin/com" failonerror="false"/>
+  </target>
+ 
+   
+  <!-- Target Plugin -->
+  <target name="build.plugins" depends="">
+  <buildPlugin workspace="${workspace.path}" targetPlatformLocation="${carbide.folder}" projectname="${ant.project.name}" destDir="${destination.path}" packageAsJar="true">
+  	<javacLibraryCompiler>
+  <compilerSettings debug="true" fork="true"/>
+  </javacLibraryCompiler>
+  </buildPlugin>
+  <buildPlugin workspace="${workspace.path}" targetPlatformLocation="${carbide.folder}" projectname="${ant.project.name}.corecomponents" destDir="${destination.path}" packageAsJar="true">
+  	<javacLibraryCompiler>
+  <compilerSettings debug="true" fork="true"/>
+  </javacLibraryCompiler>
+  </buildPlugin>
+  <buildPlugin workspace="${workspace.path}" targetPlatformLocation="${carbide.folder}" projectname="${ant.project.name}.help" destDir="${destination.path}" packageAsJar="true">
+  	<javacLibraryCompiler>
+  <compilerSettings debug="true" fork="true"/>
+  </javacLibraryCompiler>
+  </buildPlugin>
+   <buildPlugin workspace="${workspace.path}" targetPlatformLocation="${carbide.folder}" projectname="${ant.project.name}.trace" destDir="${destination.path}" packageAsJar="true">
+  	<javacLibraryCompiler>
+  <compilerSettings debug="true" fork="true"/>
+  </javacLibraryCompiler>
+  </buildPlugin>
+
+                
+                
+  <!-- Build MultiTestRunner feature -->
+  <buildFeature workspace="${workspace.path}"
+               targetPlatformLocation="${carbide.folder}"
+               projectname="${project.name}"
+               buildPluginTarget="build.plugin"
+               destDir="${destination.path}" />
+               
+  </target>
+  
+  <!-- Empty target to do nothing --> 
+  <target name="build.plugin">
+  </target>	
+  
+  
+  
+  <!-- Instrumentation target, depends on build.mtrunner -->
+	<target name="instr" depends="build.plugins">
+		<!-- Instrument the source code -->
+		<emma>
+			<instr instrpath="${ant.project.name}/bin" destdir="${instr.folder}" metadatafile="${reports.emma}/metadata.emma" merge="true"/>
+		</emma>
+	</target>
+  
+  
+  <target name="create.zip">
+  
+  	<delete dir="${binaries.folder}/nightly_builds"/>
+  	<mkdir dir="${binaries.folder}/nightly_builds"/>
+  	
+ 		 <!-- Zip jars to AnalyzeTool.zip -->
+ 		<tstamp>
+		   <format property="timestamp" pattern="dd-MM-yyyy" />
+		</tstamp> 
+ 		 
+    <zip destfile="${binaries.folder}/nightly_builds/${feature.name}-${timestamp}.zip"
+       basedir="."
+       includes="plugins/*, features/com.nokia.carbide.extensions.*/"/>
+  </target>
+  
+  <!-- Analyze target -->
+	<target name="analyze">
+		<!-- PMD -->
+		<pmd shortFileNames="true">
+			<!-- Rules -->
+			<ruleset>basic</ruleset>
+			<ruleset>codesize</ruleset>
+			<ruleset>coupling</ruleset>
+			<ruleset>design</ruleset>
+			<ruleset>strictexception</ruleset>
+			<ruleset>strings</ruleset>
+			<ruleset>sunsecure</ruleset>
+			<ruleset>unusedcode</ruleset>
+			<ruleset>junit</ruleset>
+			
+			<!-- XML output -->
+			<formatter type="xml" toFile="${reports.folder}/report.pmd.xml"/>
+			
+			<!-- Files to analyze -->
+			<!-- Files to analyze -->
+			<fileset dir="${ant.project.name}/src/">
+				<include name="**/*.java"/>
+			</fileset>
+			<fileset dir="${ant.project.name}.tests/src/">
+				<include name="**/*.java"/>
+			</fileset>
+			<fileset dir="${ant.project.name}.trace/src/">
+				<include name="**/*.java"/>
+			</fileset>
+		</pmd>
+	</target>
+	
+	<!-- Test target, depends on instrumentation and analyze -->
+	<target name="test" depends="instr, analyze" description="Run unit tests">
+    	<!-- Test classpath -->
+    	<path id="test_classpath">
+			<!-- Test classes -->
+			<pathelement location="${test.folder}/src"/>
+			
+			<!-- Instrumented class files -->
+		   	<pathelement location="${instr.folder}"/>
+		   	
+		   	<!-- EMMA -->
+		   	<pathelement path="${ant.home}/lib/emma.jar"/>
+		   	
+		   	<path refid="carbide_classpath" />
+		</path>
+	
+		<!-- Compile the tests -->
+     	<javac srcdir="${test.folder}" verbose="${javacVerbose}">
+      		<classpath refid="test_classpath"/>
+	    </javac>
+
+		<!-- Run JUnit -->
+	    <junit printsummary="yes" fork="yes" haltonfailure="no">
+	      	<classpath refid="test_classpath" />
+	      	
+	      	<!-- Plain format and XML -->
+	      	<formatter type="plain" />
+	      	<formatter type="xml" />
+			
+			<!-- Instrumentation arguments to JVM -->
+			<jvmarg value="-Demma.coverage.out.file=${reports.emma}/coverage.emma" />
+	    <jvmarg value="-Demma.coverage.out.merge=true" />
+
+			<!-- Test classes -->
+	      	<test name="com.nokia.s60tools.analyzetool.tests.AllPureJUnitTests" todir="${reports.folder}"/>
+	    </junit>
+	    
+	    <!-- Create EMMA report -->
+	    <emma>
+	    	<report sourcepath="src/" >
+            	<fileset dir="${reports.emma}" >
+                	<include name="*.emma" />
+            	</fileset>
+            	<xml outfile="${reports.emma}/coverage.xml" />
+        	</report>
+	    </emma>
+	</target>
+	
+	<target name="copy_to_carbide">
+	<!-- Copy the actual plug-ins to the carbide folders -->
+		<copy todir="${carbide.int.folder}" failonerror="true" overwrite="true">
+				<fileset dir="plugins"/>
+		</copy>
+		<copy todir="${carbide.dev.folder}" failonerror="true" overwrite="true">
+				<fileset dir="plugins"/>
+		</copy>
+  </target>
+  
+  
+  <!-- Target Build all -->
+  <target name="build.all" depends="delete, build.plugins, instr, analyze, test, copy_to_carbide, create.zip" />
+  
+</project>

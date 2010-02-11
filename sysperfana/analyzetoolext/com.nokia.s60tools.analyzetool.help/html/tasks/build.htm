@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 1.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="content-style-type" content="text/css">
+<link href="../nokia.css" type="text/css" rel="StyleSheet">
+<title>Build project</title>
+</head>
+<body>
+
+<h2>Building the project with AnalyzeTool</h2>
+<p>To be able to analyse memory leaks, you must build each project with AnalyzeTool.</p>
+<p>To build with AnalyzeTool:</p>
+<ol>
+<li>Choose any of the following options for the data gathering mode:<br>
+<ul>
+<li><b>Monitored external </b>or<b> External</b>: This option will send the memory analysis data through a tracing utility connection. For more information, see <a href="../tasks/capture.htm#capture_external">Capturing data in external data gathering mode</a>.</li>
+<li><b>Monitored internal</b>: This option will create a data file to the target device. The default data file name is the same as the target process name. If you select the <b>Name from the user</b> option, you must define a name for the data file. For more information, see <a href="../tasks/capture.htm#capture_s60_file">Capturing data in internal data gathering mode</a>.</li>
+<li><b>Ask always</b>: This option will ask from the user which data gathering mode to use.</li>
+</ul>
+<p>
+<b>Note!</b> There are some differences between a monitored and a not monitored external data gathering modes:
+<ul>
+<li>A process using the monitored mode  is visible from the AnalyzeTool configuration UI application on device.</li>
+<li>A hooked process executes faster in the external (not monitored) mode than in the monitored mode.</li>
+</ul>
+</p>
+</li>
+<li>Activate the AnalyzeTool build from the <b>AnalyzeTool</b> toolbar or from the <b>Project Explorer</b> view pop-up menu.
+<p><b>Note!</b> You can also deactivate the build from the <b>AnalyzeTool</b> toolbar or the <b>Project Explorer</b> view pop-up menu.</p></li>
+<li>Build the project.</li>
+<li><p>Check if the build completed successfully.</p>
+<p>Information about the build process is displayed in the <b>Console view</b>. The last row of the <b>Console view</b> indicates if the build was successful or not.</p> <p>For more information on error messages, see <a href="../reference/troubleshooting.htm">Troubleshooting</a>.</p></li>
+</ol>
+
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

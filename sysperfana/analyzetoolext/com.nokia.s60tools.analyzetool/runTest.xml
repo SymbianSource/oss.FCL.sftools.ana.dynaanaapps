@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.nokia.s60tools.analyzetool" default="test" basedir=".">
+
+	<property name="basews" value="${ws}"/>
+	<property name="baseos" value="${os}"/>
+	<property name="basearch" value="${arch}"/>
+	<property name="basenl" value="${nl}"/>
+
+	<!-- Compiler settings -->
+	<property name="javacFailOnError" value="true"/>
+	<property name="javacDebugInfo" value="on"/>
+	<property name="javacVerbose" value="false"/>
+	<property name="logExtension" value=".log"/>
+	<property name="compilerArg" value=""/>
+	<property name="javacSource" value="5"/>
+	<property name="javacTarget" value="5"/>
+	
+	<property name="bootclasspath" refid="path_bootclasspath"/>
+	<property name="bundleJavacSource" value="${javacSource}"/>
+	<property name="bundleJavacTarget" value="${javacTarget}"/>
+	<property name="bundleBootClasspath" value="${bootclasspath}"/>
+	
+	<property name="help.project.name" value="${ant.project.name}.help"/>
+	<property name="feature.project.folder" location="../com.nokia.carbide.extensions.analyzetool"/>
+	<property name="feature.name" value="AnalyzeTool"/>
+	
+	<property name="jar.filename" value="${ant.project.name}.jar"/>
+	<property name="help.jar.filename" value="${help.project.name}.jar"/>
+	
+	<!-- Folder definitions -->
+	<property name="carbide.folder" location="C:/PlatformRnDTools/Carbide_Extensions/AnalyzeTool/carbide_libs"/>
+	<property name="test.folder" location="../com.nokia.s60tools.analyzetool.tests"/>
+	<property name="dist.folder" location="../AnalyzeTool.binaries"/>
+	
+	<property name="reports.folder" location="reports"/>
+	<property name="reports.emma" location="${reports.folder}/emma"/>
+	<property name="instr.folder" location="instr"/>
+	<property name="pmd.folder" location="/pmd-4.2.2"/>
+	
+	<!-- EMMA configuration -->
+ 	<path id="emma.lib" >
+    	<pathelement location="${ant.home}/lib/emma.jar" />
+    	<pathelement location="${ant.home}/lib/emma_ant.jar" />
+  	</path>
+
+  	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
+	
+	<!-- PMD configuration -->
+	<path id="pmd.classpath">
+		<pathelement location="${build}"/>
+		<fileset dir="${pmd.folder}/lib/">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	
+	<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.classpath" />
+	
+	<path id="path_bootclasspath">
+		<fileset dir="${java.home}/lib">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	
+	<path id="build_classpath">
+		<path refid="carbide_classpath"/>
+	</path>
+	
+	<path id="carbide_classpath">
+		<fileset dir="${carbide.folder}" includes="**/*.jar" />
+	</path>
+	
+	<target name="properties" if="eclipse.running">
+		<property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+	</target>
+
+	<!-- Initialization -->
+	<target name="init" depends="properties">
+		<condition property="pluginTemp" value="${buildTempFolder}/plugins">
+			<isset property="buildTempFolder"/>
+		</condition>
+		<property name="pluginTemp" value="${basedir}"/>
+		<condition property="build.result.folder" value="${pluginTemp}/${ant.project.name}">
+			<isset property="buildTempFolder"/>
+		</condition>
+		<property name="build.result.folder" value="${basedir}"/>
+		<property name="temp.folder" value="${basedir}/temp.folder"/>
+		<property name="plugin.destination" value="${basedir}"/>
+
+		<property name="jar.filename" value="${ant.project.name}.jar"/>
+		
+		<delete dir="${temp.folder}"/>
+		<mkdir dir="${temp.folder}"/>
+
+		<delete dir="${temp.folder}/bin"/>
+		<mkdir dir="${temp.folder}/bin"/>
+		
+		<delete dir="${reports.folder}"/>
+		<mkdir dir="${reports.folder}"/>
+	</target>
+
+	<!-- Build target -->
+	<target name="build" depends="init" description="Build the source">
+		<!-- Build the source -->
+		<javac destdir="${temp.folder}/bin" failonerror="${javacFailOnError}" verbose="${javacVerbose}" debug="${javacDebugInfo}" includeAntRuntime="no" bootclasspath="${bundleBootClasspath}" source="${bundleJavacSource}" target="${bundleJavacTarget}">
+			<compilerarg line="${compilerArg}" compiler="${build.compiler}"/>
+			<classpath refid="build_classpath" />
+			<src path="src/" />
+			<compilerarg value="@${basedir}/javaCompiler...args" compiler="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+			<compilerarg line="-log '${temp.folder}/bin${logExtension}'" compiler="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+		</javac>
+
+		<!-- Copy necessary resources -->
+		<copy todir="${temp.folder}/bin" failonerror="true" overwrite="false">
+			<fileset dir="src/" excludes="**/*.java, **/package.htm*" />
+		</copy>
+
+		<!-- Create build result folder -->
+		<mkdir dir="${build.result.folder}"/>
+
+		<!-- Copy classes from the temporary folder to bin -->
+		<copy todir="${build.result.folder}/bin" failonerror="true" overwrite="false">
+			<fileset dir="${temp.folder}/bin" />
+		</copy>
+		
+		<!-- Delete temporary folder -->
+		<delete dir="${temp.folder}/bin"/>
+	</target>
+	
+	<!-- Clean target -->
+	<target name="clean" description="Clean" depends="clean-test">
+		<delete dir="${build.result.folder}/bin" />
+		<delete>
+			<fileset dir="${dist.folder}" includes="*.jar"/>
+		</delete>
+	</target>
+	
+	<!-- Analyze target -->
+	<target name="analyze">
+		<!-- PMD -->
+		<pmd>
+			<!-- Rules -->
+			<ruleset>basic</ruleset>
+			<ruleset>codesize</ruleset>
+			<ruleset>coupling</ruleset>
+			<ruleset>design</ruleset>
+			<ruleset>strictexception</ruleset>
+			<ruleset>strings</ruleset>
+			<ruleset>sunsecure</ruleset>
+			
+			<!-- XML output -->
+			<formatter type="xml" toFile="${reports.folder}/report.pmd.xml"/>
+			
+			<!-- Files to analyze -->
+			<fileset dir="src/">
+				<include name="**/*.java"/>
+			</fileset>
+		</pmd>
+	</target>
+	
+	<!-- Instrumentation target, depends on JAR -->
+	<target name="instr" depends="jar">
+		<!-- Instrument the source code -->
+		<emma>
+			<instr instrpath="${temp.folder}/${jar.filename}" destdir="${instr.folder}" metadatafile="${reports.emma}/metadata.emma" merge="true"/>
+		</emma>
+	</target>
+	
+	<!-- JAR target -->
+	<target name="jar" depends="build" description="Create JAR">
+		<!-- Create JAR -->
+		<jar destfile="${temp.folder}/${jar.filename}" basedir="${build.result.folder}/bin" />
+	</target>
+
+	<!-- Feature target -->
+	<target name="feature" depends="jar" description="Create feature">
+		<property name="feature.folder" location="${dist.folder}/feature"/>
+		
+		<mkdir dir="${feature.folder}"/>
+		<mkdir dir="${feature.folder}/plugins"/>
+		<mkdir dir="${feature.folder}/features"/>
+				
+		<!-- Create help JAR -->
+		<jar destfile="${feature.folder}/plugins/${help.jar.filename}" basedir="../${help.project.name}" excludes="src/,.*"/>
+		
+		<!-- Copy feature stuff to the temp folder -->
+		<copy todir="${feature.folder}/features" file="${feature.project.folder}/feature.xml"/>
+		<copy todir="${feature.folder}/features" file="${feature.project.folder}/license.txt"/>
+		
+		<!-- Copy the actual plug-in to the temp folder -->
+		<copy todir="${feature.folder}/plugins" file="${dist.folder}/${jar.filename}"/>
+		
+		<!-- Create the feature zip -->
+		<zip destfile="${dist.folder}/${feature.name}.zip" basedir="${feature.folder}"/>
+		
+		<deltree dir="${feature.folder}"/>
+
+		<!-- Nightly build -->
+		<tstamp>
+		   <format property="timestamp" pattern="dd-MM-yyyy" />
+		</tstamp>
+
+		<copy tofile="../../nightly_builds/${feature.name}/${feature.name}-${timestamp}.zip" file="${dist.folder}/${feature.name}.zip"/>
+	</target>
+	
+	
+	<!-- Clean tests target -->
+  	<target name="clean-test" description="Clean test">
+    	<delete>
+      		<fileset dir="${test.folder}" includes="**/*.class" />
+    	</delete>
+    	<delete dir="${instr.folder}"/>
+    	<delete dir="${reports.folder}"/>
+  	</target>
+  
+  	<!-- Test target, depends on instrumentation and analyze -->
+	<target name="test" depends="instr" description="Run unit tests">
+    	<!-- Test classpath -->
+    	<path id="test_classpath">
+			<!-- Test classes -->
+			<pathelement location="${test.folder}/src"/>
+			
+			<!-- Instrumented class files -->
+		   	<pathelement location="${instr.folder}"/>
+		   	
+    		<!-- Normal class files -->
+    		<pathelement path="${dist.folder}/${jar.filename}"/>
+    		
+		   	<!-- EMMA -->
+		   	<pathelement path="${ant.home}/lib/emma.jar"/>
+		   	
+		   	<path refid="build_classpath" />
+		</path>
+	
+		<!-- Compile the tests -->
+     	<javac srcdir="${test.folder}" verbose="${javacVerbose}">
+      		<classpath refid="test_classpath"/>
+	    </javac>
+		
+		<!-- Run JUnit -->
+	    <junit printsummary="yes" haltonfailure="yes">
+	      	<classpath refid="test_classpath" />
+	      	
+	      	<!-- Plain format and XML -->
+	      	<formatter type="plain" />
+	      	<formatter type="xml" />
+			
+			<!-- Instrumentation arguments to JVM -->
+			<jvmarg value="-Demma.coverage.out.file=${reports.emma}/coverage.emma" />
+	    	<jvmarg value="-Demma.coverage.out.merge=true" />
+
+			<!-- Test classes -->
+	      	<test name="com.nokia.s60tools.analyzetool.tests.AllTests" todir="${reports.folder}"/>
+	    </junit>
+	    
+	    <!-- Create EMMA report -->
+	    <emma>
+	    	<report sourcepath="src/" >
+            	<fileset dir="${reports.emma}" >
+                	<include name="*.emma" />
+            	</fileset>
+            	<html outfile="${reports.emma}/coverage.html" />
+        	</report>
+	    </emma>
+	</target>
+	
+	<target name="cc" depends="test, analyze, feature" description="Build, instrument, run unit tests and analyze code"/>
+</project>

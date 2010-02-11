@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 1.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<title>Viewing AnalyzeTool memory leaks</title>
+<link href="../nokia.css" type="text/css" rel="StyleSheet">
+</head>
+<body>
+
+<h2>Viewing memory leaks</h2>
+<p>Test run details will be shown in the <b>AnalyzeTool</b> view automatically after the data capture in tracing utility connection. You can also open the memory analysis data file by yourself later. For more information, see <a href="..\concepts\datafile.htm">AnalyzeTool files</a>.</p>
+<p>There are two options for opening a memory analysis data file:</p>
+<ul>
+<li>From <b>Project pop-up</b> menu, select <b>AnalyzeTool</b> > <b>Open and analyze data file</b></li>
+<li>In the <b>AnalyzeTool</b> view, select <b>Open and analyze data file</b></li>
+</ul>
+<p>The memory leak analysis results are displayed in the <b>AnalyzeTool</b> window. Test runs with the memory leak information is displayed in the left pane. The right pane shows the information on the selected memory leak call stack.</p><br>
+<img src="../images/resultsaftercapture.PNG" alt="Results after data capture">
+
+<h5>Description of call stack view</h5>
+<ul>
+<li>One line always contains the memory address, for example <i>7cf255571 MemoryLeaker.exe</i>. A module name is displayed if the memory address is in the module memory area, otherwise <i>???</i> is displayed.</li>
+<li>The function name, for example <i>CMemoryLeakerListbox: :OfferKeyEventL,</i> is displayed if the function is identified, otherwise <i>???</i> is displayed. The class name is also displayed if the function belongs to a class.</li>
+<li>A .cpp file name, for example <i>MemoryLeakerListbox.cpp:570</i>, is displayed if the source code file is available. If the address can be matched to an exact code line, the line number is shown. Code line number is <i>???</i> if the memory address is within function memory area but does not point to a code line.</li>
+</ul><p>By double-clicking the call stack item which has known code line number opens the appropriate source code file to that code line.</p>
+
+<h5>Descriptions of icons</h5>
+<ul>
+<li>(<img src="../images/module_build.png">) Describes that the module belongs to an active/selected project and has been built with AnalyzeTool. The module can be analyzed right away.</li>
+<li>(<img src="../images/module_not_build.png">) Describes that the module belongs to an active/selected project but has not been built with AnalyzeTool. It is possible to analyze the project but it needs to be built first.</li>
+<li>(<img src="../images/module_outside.png">) Describes that the module does not belong to an active/selected project. It is some library that has been loaded but is not available in the Carbide.c++ project at the moment. You need to take additional steps (identifying component, importing to Carbide.c++, building with AnalyzeTool etc.) for being able to analyze.</li>
+</ul>
+
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

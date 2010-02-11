@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.7.0
+Created-By: 10.0-b19 (Sun Microsystems Inc.)
+Bundle-ManifestVersion: 2
+Bundle-Name: Carbide.c++ Extensions - AnalyzeTool Help Plug-in
+Bundle-SymbolicName: com.nokia.s60tools.analyzetool.help;singleton:=tr
+ ue
+Bundle-Version: 1.8.0
+Bundle-Vendor: Nokia
+

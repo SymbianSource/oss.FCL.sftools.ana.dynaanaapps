@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<plugin>
+	<extension point="org.eclipse.help.toc">
+		<toc
+			file="html/toolTOC.xml"
+			primary="true"/>
+	</extension>
+
+	<extension point="org.eclipse.help.contexts">
+    	<contexts file="html/contexts.xml" plugin="com.nokia.s60tools.analyzetool.help"/>
+  	</extension>
+<!-- Carbide.c++ cheatsheets extension / ADDED 02022009 -->
+
+	<extension point="org.eclipse.ui.cheatsheets.cheatSheetContent">
+		<!-- <category
+			id="com.nokia.carbide.cpp.tools.cheatsheets"
+			name="Carbide.c++ Tools" /> -->
+		<cheatsheet
+			category="com.nokia.carbide.cpp.tools.cheatsheets"
+			contentFile="html/cheatsheets/getStarted_at_cs.xml"
+			composite="false"
+			id="com.nokia.s60tools.analyzetool.quickstart"
+			name="Analyze Tool Quick Start Guide"/>
+	</extension>
+
+<!-- Carbide.c++ INDEX extension / ADDED 02022009
+    <extension point="org.eclipse.help.index" >
+        <index file="html/index.xml"/>
+    </extension> -->
+
+<!-- =================================================================================== -->
+<!-- Universal Intro support for welcome pages                                           -->
+<!-- =================================================================================== -->
+	<extension
+		point="org.eclipse.ui.intro.configExtension">
+		
+		<configExtension
+			configId="org.eclipse.ui.intro.universalConfig" 
+			content="html/intro/overviewAtoolExtContent.xml" />
+		 
+		<configExtension
+			configId="org.eclipse.ui.intro.universalConfig"
+			content="html/intro/tutorialsAtoolExtContent.xml" /> 
+		 
+	</extension>
+
+</plugin>

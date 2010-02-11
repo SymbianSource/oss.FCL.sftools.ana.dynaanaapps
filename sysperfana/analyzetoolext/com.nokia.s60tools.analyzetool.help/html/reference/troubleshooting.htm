@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 1.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="content-style-type" content="text/css">
+<title>AnalyzeTool Troubleshooting</title>
+<link href="../nokia.css" type="text/css" rel="StyleSheet">
+</head>
+<body>
+
+<h2>Troubleshooting</h2>
+<p>The following table lists AnalyzeTool error messages:</p>
+
+<table width="615" border="1" cellspacing="1" cellpadding="2">
+<colgroup>
+<col width="250*">
+<col width="356*"></colgroup>
+<tbody>
+<tr>
+<th>Message</th>
+<th align="center">Description</th>
+</tr>
+<tr>
+<td>No project selected. Please select project.</td>
+<td>You tried to use Carbide.c++ Extension actions but you have not selected a project first. Select a project from the <b>Project Explorer</b> window, and run action again.</td>
+</tr>
+<tr>
+<td>Could not find mmp file for current project.</td>
+<td>AnalyzeTool Carbide.c++ Extension could not load the mmp file info. Ensure that project's <i>bld.inf</i> file contains mmp files.</td>
+</tr>
+<tr>
+<td>Invalid name. Do you want to specify a valid name?</td>
+<td>You have entered an invalid subtest name, for example the name is empty or starts with an illegal parameter.</td>
+</tr>
+<tr>
+<td>No process started, could not start a subtest.</td>
+<td>The trace is active but no processes started in the target hardware which are built with the external data gathering mode of AnalyzeTool.</td>
+</tr>
+<tr>
+<td>The given subtest is already started for the active process.</td>
+<td>You have already started the subtest with same name for selected process.
+</td>
+</tr>
+<tr>
+<td>Cannot find AnalyzeTool libraries from current SDK. Install libraries first.</td>
+<td>This message is displayed in the <b>Console</b> view if AnalyzeTool is not included in SDK.</td>
+</tr>
+</tbody>
+</table>
+
+<p>The following table lists possible known problematic situations related to AnalyzeTool:</p>
+
+<table width="615" border="1" cellspacing="1" cellpadding="2">
+<colgroup>
+<col width="250*">
+<col width="356*"></colgroup>
+<tbody>
+<tr>
+<th>Problem</th>
+<th align="center">Possible cause</th>
+</tr>
+<tr>
+<td>Compiling with AnalyzeTool gives an error related to header files.</td>
+<td>Mixing header files from different AnalyzeTool versions might be the cause. From version 1.5.0 onwards, AnalyzeTool uses a different folder structure compared to previous versions. Therefore it is essential that you check that there are no header files in the folder <i>\epoc32\include\applications\analyzetool</i> or <i>\epoc32\include\analyzetool</i>.</td>
+</tr>
+<tr>
+<td>Compiling with AnalyzeTool gives an error related to AnalyzeTool library files.</td>
+<td>Build environment is missing AnalyzeTool files. Install the AnalyzeTool to build environment by unzipping environment changes from AnalyzeTool installation folder.</i>.</td>
+</tr>
+<tr>
+<td>Software compiled with AnalyzeTool does not run.</td>
+<td>Mixing header files from different AnalyzeTool versions might be the cause. From version 1.5.0 onwards, AnalyzeTool uses a different folder structure compared to previous versions. Therefore it is essential that you check that there are no header files in the folder <i>\epoc32\include\applications\analyzetool</i> or <i>\epoc32\include\analyzetool</i>.</td>
+</tr>
+<tr>
+<td>Software compiled with AnalyzeTool does not run.</td>
+<td>AnalyzeTool core components are missing from the target HW/emulator environment.</td>
+</tr>
+<tr>
+<td>Software compiled with AnalyzeTool does not run.</td>
+<td>The AnalyzeTool core components in the target HW/emulator environment are old (incompatible) versions.</td>
+</tr>
+</tbody>
+</table>
+
+<p>The following ones are Command line engine related errors. These errors are displayed in the Carbide.c++ <b>Console</b> view.</p>
+
+<table>
+<colgroup>
+<col width="250*">
+<col width="356*"></colgroup>
+<tbody>
+<tr>
+<th>Error</th>
+<th align="center">Possible cause</th>
+</tr>
+<tr>
+<td>Mmp file: &lt;mmp file name> is read only. Compile aborted.</td>
+<td>The project's mmp file is read only. Remove the write protection from the mmp file.</td>
+</tr>
+<tr>
+<td>AnalyzeTool build failed in module: &lt;mmp file name&gt;.</td>
+<td>Project contains build errors. Details can be found from <b>Console</b> view.</td>
+</tr>
+<tr>
+<td>Can not find AnalyzeTool libraries from current SDK</td>
+<td>Your build environment is missing the necessary files for building with AnalyzeTool. You need to compile AnalyzeTool to all platforms in your environment.</td>
+</tr>
+<tr>
+<td>AnalyzeTool : Errors :<br>
+Missing symbol file: <symbol file name></td>
+<td>You are using GCCE release build which does not produce needed symbol files. Symbol files are needed to pinpoint memory leaks. To correct this user needs to add "<i>-debug</i>" to project's build configuration arguments. To do this open project's <b>properties</b>, select <b>Carbide.c++ &gt; Build Configurations &gt; Arguments</b> while the GCCE release build configuration is selected and write the <i>-debug</i> to arguments field.</td>
+</tr>
+</tbody>
+</table>
+
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="feature_export" name="build">
+	<property name="feature_location" value="C:\temp"/>
+	<property name="feature_name" value="AnalyzeTool_2009w26_Carbide_Extension.zip"/>
+	<target name="feature_export">
+		<pde.exportFeatures destination="${feature_location}" exportSource="false" exportType="zip" features="com.nokia.carbide.extensions.analyzetool" filename="${feature_name}" useJARFormat="false"/>
+	</target>
+</project>

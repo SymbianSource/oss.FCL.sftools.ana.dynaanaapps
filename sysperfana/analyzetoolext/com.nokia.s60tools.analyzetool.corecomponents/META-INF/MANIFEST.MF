@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Carbide.c++ Extensions - AnalyzeTool Core Components  Plug-in
+Bundle-SymbolicName: com.nokia.s60tools.analyzetool.corecomponents
+Bundle-Version: 1.8.0
+Bundle-Vendor: Nokia

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.nokia.s60tools.analyzetool" default="build.jars" basedir=".">
+
+	<property name="pluginVersion" value="1.8.0"/>
+	<property name="basews" value="${ws}"/>
+	<property name="baseos" value="${os}"/>
+	<property name="basearch" value="${arch}"/>
+	<property name="basenl" value="${nl}"/>
+	<property name="bundleId" value="com.nokia.s60tools.analyzetool"/>
+	<property name="bundleVersion" value="${pluginVersion}"/>
+
+	<!-- Compiler settings. -->
+	<property name="javacFailOnError" value="false"/>
+	<property name="javacDebugInfo" value="on"/>
+	<property name="javacVerbose" value="false"/>
+	<property name="logExtension" value=".log"/>
+	<property name="compilerArg" value=""/>
+	<property name="javacSource" value="1.5"/>
+	<property name="javacTarget" value="1.5"/>
+	<property name="carbide.plugins" location="e:/carbide_libs"/>
+	<condition property="dir_bootclasspath" value="${java.home}/../Classes">
+		<os family="mac"/>
+	</condition>
+	<property name="dir_bootclasspath" value="${java.home}/lib"/>
+	<path id="path_bootclasspath">
+		<fileset dir="${dir_bootclasspath}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
+	<path id="build_classpath">
+		<path refid="carbide_classpath"/>
+	</path>
+
+	<path id="carbide_classpath">
+		<fileset dir="${carbide.plugins}" includes="**/*.jar" />
+	</path>
+	<property name="bootclasspath" refid="path_bootclasspath"/>
+	<property name="bundleJavacSource" value="${javacSource}"/>
+	<property name="bundleJavacTarget" value="${javacTarget}"/>
+	<property name="bundleBootClasspath" value="${bootclasspath}"/>
+
+	<target name="init" depends="properties">
+		<condition property="pluginTemp" value="${buildTempFolder}/plugins">
+			<isset property="buildTempFolder"/>
+		</condition>
+		<property name="pluginTemp" value="${basedir}"/>
+		<condition property="build.result.folder" value="${pluginTemp}/com.nokia.s60tools.analyzetool_${pluginVersion}">
+			<isset property="buildTempFolder"/>
+		</condition>
+		<property name="build.result.folder" value="${basedir}"/>
+		<property name="temp.folder" value="${basedir}/temp.folder"/>
+		<property name="plugin.destination" value="${basedir}"/>
+	</target>
+
+	<target name="properties" if="eclipse.running">
+		<property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+
+	</target>
+
+	<target name="build.update.jar" depends="init" description="Build the plug-in: com.nokia.s60tools.analyzetool for an update site.">
+		<delete dir="${temp.folder}"/>
+		<mkdir dir="${temp.folder}"/>
+		<antcall target="build.jars"/>
+		<antcall target="gather.bin.parts">
+			<param name="destination.temp.folder" value="${temp.folder}/"/>
+		</antcall>
+		<jar destfile="${plugin.destination}/com.nokia.s60tools.analyzetool_${pluginVersion}.jar" basedir="${temp.folder}/com.nokia.s60tools.analyzetool_${pluginVersion}" filesetmanifest="merge"/>
+		<delete dir="${temp.folder}"/>
+	</target>
+
+	<target name="@dot" depends="init" unless="@dot" description="Create jar: com.nokia.s60tools.analyzetool @dot.">
+		<delete dir="${temp.folder}/@dot.bin"/>
+		<mkdir dir="${temp.folder}/@dot.bin"/>
+		<!-- compile the source code -->
+		<javac destdir="${temp.folder}/@dot.bin" failonerror="${javacFailOnError}" verbose="${javacVerbose}" debug="${javacDebugInfo}" includeAntRuntime="no" bootclasspath="${bundleBootClasspath}" source="${bundleJavacSource}" target="${bundleJavacTarget}"		>
+			<compilerarg line="${compilerArg}" compiler="${build.compiler}"/>
+			<classpath refid="build_classpath" />
+			<src path="src/"			/>
+			<compilerarg value="@${basedir}/javaCompiler...args" compiler="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+			<compilerarg line="-log '${temp.folder}/@dot.bin${logExtension}'" compiler="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+		</javac>
+		<!-- Copy necessary resources -->
+		<copy todir="${temp.folder}/@dot.bin" failonerror="true" overwrite="false">
+			<fileset dir="src/">
+				<exclude name="**/*.java"/>
+				<exclude name="**/package.htm*"/>
+			</fileset>
+		</copy>
+		<mkdir dir="${build.result.folder}"/>
+		<copy todir="${build.result.folder}/@dot" failonerror="true" overwrite="false">
+			<fileset dir="${temp.folder}/@dot.bin">
+			</fileset>
+		</copy>
+		<delete dir="${temp.folder}/@dot.bin"/>
+	</target>
+
+	<target name="src.zip" depends="init" unless="src.zip">
+		<mkdir dir="${build.result.folder}"/>
+		<zip destfile="${build.result.folder}/src.zip" filesonly="false" whenempty="skip" update="false">
+			<fileset dir="src/">
+				<include name="**/*.java"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="build.jars" depends="init" description="Compile classes and build nested jars for the plug-in: com.nokia.s60tools.analyzetool.">
+		<available property="@dot" file="${build.result.folder}/@dot"/>
+		<antcall target="@dot"/>
+	</target>
+
+	<target name="build.sources" depends="init">
+		<available property="src.zip" file="${build.result.folder}/src.zip"/>
+		<antcall target="src.zip"/>
+	</target>
+
+	<target name="gather.bin.parts" depends="init" if="destination.temp.folder">
+		<mkdir dir="${destination.temp.folder}/com.nokia.s60tools.analyzetool_${pluginVersion}"/>
+		<copy todir="${destination.temp.folder}/com.nokia.s60tools.analyzetool_${pluginVersion}" failonerror="true" overwrite="false">
+			<fileset dir="${build.result.folder}/@dot">
+				<include name="**"/>
+			</fileset>
+		</copy>
+		<copy todir="${destination.temp.folder}/com.nokia.s60tools.analyzetool_${pluginVersion}" failonerror="true" overwrite="false">
+			<fileset dir="${basedir}">
+				<include name="plugin.xml"/>
+				<include name="META-INF/"/>
+				<include name="icons/"/>
+				<include name="about.html"/>
+				<include name="about.ini"/>
+				<include name="about.properties"/>
+				<include name="plugin.properties"/>
+				<include name="license.txt"/>
+				<include name="about.mappings"/>
+				<include name="tools/" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="build.zips" depends="init">
+	</target>
+
+	<target name="gather.sources" depends="init" if="destination.temp.folder">
+		<mkdir dir="${destination.temp.folder}/com.nokia.s60tools.analyzetool_${pluginVersion}"/>
+		<copy file="${build.result.folder}/src.zip" todir="${destination.temp.folder}/com.nokia.s60tools.analyzetool_${pluginVersion}" failonerror="false" overwrite="false"/>
+	</target>
+
+	<target name="gather.logs" depends="init" if="destination.temp.folder">
+		<mkdir dir="${destination.temp.folder}/com.nokia.s60tools.analyzetool_${pluginVersion}"/>
+		<copy todir="${destination.temp.folder}/com.nokia.s60tools.analyzetool_${pluginVersion}" failonerror="false" overwrite="false">
+			<fileset dir="${temp.folder}">
+				<include name="@dot.bin${logExtension}"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="clean" depends="init" description="Clean the plug-in: com.nokia.s60tools.analyzetool of all the zips, jars and logs created.">
+		<delete dir="${build.result.folder}/@dot"/>
+		<delete file="${build.result.folder}/src.zip"/>
+		<delete file="${plugin.destination}/com.nokia.s60tools.analyzetool_${pluginVersion}.jar"/>
+		<delete file="${plugin.destination}/com.nokia.s60tools.analyzetool_${pluginVersion}.zip"/>
+		<delete dir="${temp.folder}"/>
+	</target>
+
+	<target name="refresh" depends="init" if="eclipse.running" description="Refresh this folder.">
+		<eclipse.convertPath fileSystemPath="C:/PlatformRnDTools/Carbide_Extensions/AnalyzeTool/trunk/com.nokia.s60tools.analyzetool" property="resourcePath"/>
+		<eclipse.refreshLocal resource="${resourcePath}" depth="infinite"/>
+	</target>
+
+	<target name="zip.plugin" depends="init" description="Create a zip containing all the elements for the plug-in: com.nokia.s60tools.analyzetool.">
+		<delete dir="${temp.folder}"/>
+		<mkdir dir="${temp.folder}"/>
+		<antcall target="build.jars"/>
+		<antcall target="build.sources"/>
+		<antcall target="gather.bin.parts">
+			<param name="destination.temp.folder" value="${temp.folder}/"/>
+		</antcall>
+		<antcall target="gather.sources">
+			<param name="destination.temp.folder" value="${temp.folder}/"/>
+		</antcall>
+		<delete>
+			<fileset dir="${temp.folder}">
+				<include name="**/*.bin${logExtension}"/>
+			</fileset>
+		</delete>
+		<zip destfile="${plugin.destination}/com.nokia.s60tools.analyzetool_${pluginVersion}.zip" basedir="${temp.folder}" filesonly="true" whenempty="skip" update="false"/>
+		<delete dir="${temp.folder}"/>
+	</target>
+
+</project>

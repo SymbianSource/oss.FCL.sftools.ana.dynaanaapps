@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<introContent>
+<!-- Extension to the Tutorials page. -->
+
+	<extensionContent 
+		id="com.nokia.s60tools.analyzetool.help-tutorials" 
+		alt-style="atool.properties" 
+		style="atool.css" 
+		path="tutorials/@">
+		
+		<group 
+			id="content-group" 
+			style-id="content-group">
+			
+		<link 
+			label="AnalyzeTool tutorial" 
+			url="http://org.eclipse.ui.intro/showStandby?partId=org.eclipse.platform.cheatsheet&amp;input=com.nokia.s60tools.analyzetool.quickstart" 
+			id="atool"
+			style-id="content-link">
+             <text>Start analyzing memory leaks by following step-by-step instructions.</text>
+    	</link>
+			
+		</group>
+		
+	</extensionContent>
+  
+</introContent>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<!--
+	Links tool docs to main TOC for Carbide help in the defined location.
+	NOTE: Tool name seems to be ignored here for display purposes but needed to
+	make the link_to section work.
+-->
+
+<toc label="AnalyzeTool"
+	link_to="../com.nokia.carbide.help.common/carbideHelpTOC.xml#anchorCarbideFeature" >
+
+	<topic label="AnalyzeTool" href="html/tool.htm">
+		<topic label="Release note" href="html/release_notes.htm" />
+		<topic label="Getting started" href="html/gettingstarted/gs_index.htm">
+			<topic label="Overview" href="html/gettingstarted/overview.htm" />
+			<topic label="Prerequisites" href="html/gettingstarted/prerequisites.htm" />
+			<topic label="Basic walk-through" href="html/gettingstarted/basic.htm" />
+		</topic>
+
+		<topic label="Concepts" href="html/concepts/concepts.htm">
+			<topic label="AnalyzeTool preferences" href="html/concepts/preferences.htm" />
+			<topic label="AnalyzeTool properties" href="html/concepts/advanced.htm" />
+			<topic label="AnalyzeTool files" href="html/concepts/datafile.htm" />
+			<topic label="Memory leaks" href="html/concepts/memory_leaks.htm" />
+			<topic label="Tracing" href="html/concepts/tracing.htm" />
+		</topic>
+
+		<topic label="Tasks" href="html/tasks/tasks.htm">
+			<topic label="Building the project with AnalyzeTool" href="html/tasks/build.htm" />
+			<topic label="Capturing trace data" href="html/tasks/capture.htm" />
+			<topic label="Running subtests" href="html/tasks/subtest.htm" />
+			<topic label="Viewing memory leaks" href="html/tasks/viewmemoryleaks.htm" />
+		</topic>
+
+		<topic label="References" href="html/reference/references.htm">
+			<topic label="Toolbar" href="html/reference/toolbar.htm" />
+			<topic label="Troubleshooting" href="html/reference/troubleshooting.htm" />
+		</topic>
+
+		<topic label="Legal" href="html/legal.htm" />
+
+	</topic>
+
+</toc>

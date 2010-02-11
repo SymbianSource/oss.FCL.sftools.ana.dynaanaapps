@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 1.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<title>Viewing AnalyzeTool memory activity graphs</title>
+<link href="../nokia.css" type="text/css" rel="StyleSheet">
+</head>
+<body>
+
+<h2>Viewing memory activity graph</h2>
+<p>Memory activity graphs are generated automatically after the data capturing is stopped. Alternatively, an existing trace file can be opened to view memory activity graphs. For more information, see <a href="..\concepts\datafile.htm">AnalyzeTool files</a>.</p>
+<p>There are two options for opening a memory analysis data file:</p>
+<ul>
+<li>From the <b>Project pop-up</b> menu, select <b>AnalyzeTool</b> > <b>Open and analyze data file</b>.</li>
+<li>In the <b>AnalyzeTool</b> view, click the <b>Open and analyze data file</b> button.</li>
+</ul>
+<p>Memory activity graphs are displayed in the <b>AnalyzeTool</b> window on the <b>Graph</b> tab. After the data has loaded, select a process in the <b>Process</b> drop down box to view its memory activity. </p>
+<p><img src="../images/sample_graph.png" alt="AnalyzeTool graph tab"></p>
+
+<h3>Description of graph</h3>
+<p>The graph shows the cumulative memory of the given process over time. 
+Each memory operation is marked with a dot on the graph as follows:
+<ul>
+<li><font color="blue">Alloc</font>: A memory allocation is marked in blue if it is freed during the lifetime of the process.</li>
+<li><font color="red">Leak</font>: A memory allocation is marked in red with a vertical line going down if it is not freed during the lifetime of the process (also known as <em>leak</em>).</li>
+<li><font color="green">Free</font>: A memory free is marked in green.</li>
+</ul>
+<p>Hovering the mouse over a memory operation shows a tooltip with relevant information. 
+A memory operation can also be selected with a mouse click. This will highlight the memory operation on the graph, and 
+more detailed information is shown in the Eclipse Properties view. The Eclipse Properties view may include callstack information if available.
+<p><b>Tip</b>: Use the <b>arrow left</b> and <b>arrow right</b> keys to move to the next or previous memory operation.</p> 
+<p>When a memory operation is selected, related memory operations are highlighted on the graph. For example, when an alloc is selected, its associated free memory is marked on the graph with a green line going down.</p>
+
+<h3>Navigating the graph</h3>
+<ul>
+<li><b>Zoom in:</b> Select a region in the graph with your mouse (click the left edge and drag to the right edge of the region to be zoomed in).</li>
+<li><b>Zoom out:</b> Right-click with the mouse.</li>
+<li><b>Scroll:</b> Use the scroll bar. Alternatively, select a memory operation with your mouse and use the <b>arrow right</b> or <b>arrow left</b> keys to bring the next or previous into view.</li>
+</ul>
+
+<h3>The Eclipse Properties View</h3>
+<p>When a single memory allocation is selected on the graph, the Eclipse Properties view shows detailed information about the memory operation.
+If the Eclipse Properties view is not already open, it can be opened by selecting <b>Windows</b> > <b>Show View</b> > <b>Properties</b>.
+</p>
+<img src="../images/properties_view.png" alt="AnalyzeTool Properties View">
+<p>Double-clicking an item in the callstack opens the appropriate source code file to that code line, provided the source code file can be found in the selected project in Carbide.c++.</p>
+
+
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

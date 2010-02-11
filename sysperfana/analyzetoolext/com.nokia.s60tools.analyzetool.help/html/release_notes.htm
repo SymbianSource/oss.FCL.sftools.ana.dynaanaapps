@@ -1,0 +1,338 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<title>Release Notes</title>
+<link href="nokia.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+
+<h2>Release note</h2>
+<h4>AnalyzeTool Carbide.c++ Extension &ndash; Version 1.8.0</h4>
+<p>Released 12th December 2009</p>
+
+<ul>
+	<li><a href="#description">Product description</a></li>
+	<li><a href="#features">Main features</a></li>
+	<li><a href="#newfeatures">What's new</a></li>
+	<li><a href="#installation">Installation notes</a></li>
+	<li><a href="#requirements">System requirements</a></li>
+	<li><a href="#compissues">Compatibility issues</a></li>
+	<li><a href="#issues">Known issues</a></li>
+</ul>
+
+<h3><a name="description"></a>Product description</h3>
+<p>AnalyzeTool is a test software tool that is used for testing Symbian software for memory leaks and pinpointing the leaking problems in the source code.</p>
+<p>For any support email list "D-AnalyzeTool-Support DG" should be used.</p>
+
+<h3><a name="features"></a>Main features</h3>
+<ul>
+	<li>UI for activating a memory leak analysis. </li>
+	<li>UI for seeing results of a memory leak analysis.</li>
+	<li>Pinpoints memory leaks from target hardware to source code lines.</li>
+	<li>Discovers resource leaks from process.</li>
+	<li>Command line interface and Carbide.c++ Extension.</li>
+</ul>
+
+<h3><a name="newfeatures"></a>What's new</h3>
+<ul>
+	<li>N/A</li>
+</ul>
+
+<h3><a name="installation"></a>Installation notes</h3>
+<ul>
+	<li>N/A</li>
+</ul>
+
+<h3><a name="requirements"></a>System requirements</h3>
+<p>Basic Requirements:</p>
+<ul>
+	<li>Windows XP.</li>
+	<li>S60 3.1, 3.2, 5.0 or 5.1 (R&amp;D SW).</li>
+	<li>ARMV5 or GCCE compiler.</li>
+	<li>Tracing utility Carbide.c++ Extension (version 1.0.1+).</li>
+</ul>
+<p>Additional Requirements:</p>
+<ul>
+	<li>Tracing utility connection (USB connection) is required for collecting real time data from target hardware to PC.</li>
+</ul>
+
+<h3><a name="compissues"></a>Compatibility issues</h3>
+<ul>
+    <li>AnalyzeTool iby files (ROM image creation) at S60 5.0 SDK and higher are not compatible with older than week 16/2009 release of SDK.</li>
+	<li>Not compatible with older versions than 1.6.0 of AnalyzeTool command line engine.</li>
+	<li>Kernel code analysis not supported.</li>
+</ul>
+
+<h3><a name="issues"></a>Known issues</h3>
+<ul>
+	<li><b>Note:</b> If you are updating AnalyzeTool from the version older than 1.5.0, AnalyzeTool uses a different folder structure compared to previous versions. Therefore it is essential that you check that there are no header files in the folder <i>\epoc32\include\applications\analyzetool</i> or <i>\epoc32\include\analyzetool</i>.</li>
+	<li>Tested processes must be closed successfully, meaning that they cannot be panicked or exited abnormally (will cause also a lot of false memory leaks).</li>
+	<li>Handle leaks in subtest shows substraction of open handles within the subtest.</li>
+	<li>The subtesting feature cannot be used with internal data gathering mode.</li>
+	<li>Memory leaks from ECOM plugins are reported, but not pinpointed to code lines inside plugin.</li>
+	<li>Pinpointing memory leaks from urel binaries shows only function names.</li>
+</ul>
+
+<h3>Version history</h3>
+<h5>Version 1.7.4 &ndash; 4th November 2009</h5>
+<ul>
+	<li>Feature: [AT-560] - Third data gathering mode which is simple and fast.</li>
+	<li>Feature: [AT-592] - Support for specifying call stack size(s).</li>
+	<li>Feature: [AT-627] - Button to open preferences.</li>
+	<li>Feature: [AT-551] - New error dialogs in Carbide extension.</li>
+	<li>Feature: [AT-583] - Extension version number shown in AnalyzeTool view.</li>
+	<li>Fix: [AT-568] - Inform user in build phase that kernel mode is not supported/hooked.</li>
+	<li>Fix: [AT-623] - Version conflict not shown to user.</li>
+	<li>Fix: [AT-632] - Selecting leak from sub test does not give call stack info.</li>	
+</ul>
+
+<h5>Version 1.7.3 &ndash; 1st October 2009</h5>
+<ul>
+	<li>Fix: [AT-570] - Support for define multiple symbol files</li>
+	<li>Fix: [AT-586] - Carbide extension builds project although the selected target is not supported.
+</ul>
+
+<h5>Version in 1.7.2 &ndash; 3th September 2009</h5>
+<ul>
+	<li>Fix: [AT-538] - Memory leak information copied to clipboard.</li>
+</ul>
+
+<h5>Version in 1.7.1 &ndash; 19th August 2009</h5>
+<ul>
+	<li>Fix: [AT-542] - Decrease extension memory usage when creating results.</li>
+	<li>Fix: [AT-553] - Device data file input should not accept path.</li>
+</ul>
+
+<h5>Version in 1.7.0 &ndash; 25th June 2009</h5>
+<ul>
+	<li>Feature: [AT-520] - "-debug" passed as build argument in Carbide.</li>
+	<li>Feature: [AT-134] - Carbide.c++ AnalyzeTool building of a QT project.</li>
+	<li>Feature: [AT-236] - Refresh button which makes results again.</li>
+	<li>Feature: [AT-136] - AnalyzeTool Carbide.c++ Extension can be used to visualize results for emulator/simulator memory leaks automatically.</li>
+	<li>Fix: [AT-517] - Improve parsing speed of addresses.</li>
+	<li>Fix: [AT-464] - Verbose output renders AnalyzeTool unusable slow.</li>
+	<li>Fix: [AT-279] - Usability Improvement: Console view should be opened after building done.</li>
+</ul>
+
+<h5>Version in 1.6.0 &ndash; 20th April 2009</h5>
+<ul>
+	<li>Feature: [AT-480] - Rom symbol file can be defined in Carbide Extension preferences.</li>
+	<li>Feature: [AT-489] - AnalyzeTool memory leak results can be cleared from view.</li>
+	<li>Feature: [AT-475] - Number of max callstack items increased to 40.</li>
+	<li>Feature: [AT-453] - On the fly call stack filtering improved.</li>
+	<li>Feature: [AT-481] - "PROCESS_END x ABNORMAL" are now printed also when internal data gathering mode is used.</li>
+	<li>Feature: [AT-337] - Supports for pinpointing codelines from GCCE binaries.</li>
+	<li>Feature: [AT-113] - Pinpoint memory leaks to code lines also in urel builds.</li>
+	<li>Feature: [AT-467] - Cheat sheet for AnalyzeTool created.</li>
+	<li>Feature: [AT-416] - Carbide extension checks atool.exe version before using it.</li>
+	<li>Feature: [AT-440] - atool.exe version number showed in AnalyzeTool preference page.</li>
+	<li>Feature: [AT-442] - AnalyzeTool "core" version number is displayed in Carbide preferences.</li>
+	<li>Feature: [AT-451] - Added support for pinpointing codelines from static libraries in ARMV5 platform.</li>
+	<li>Fix: [AT-461] - Pinpointing works also to dlls in emulator environment.</li>
+	<li>Fix: [AT-419] - Clear AnalyzeTool changes runs reallyclean also.</li>
+	<li>Fix: [AT-446] - Error message is displayed when user analysis invalid data.</li>
+	<li>Fix: [AT-466] - Cancelling build enabled during pre-builder.</li>
+	<li>Fix: [AT-420] - Analysis progress bar now progresses.</li>
+</ul>
+
+<h5>Version in 1.5.2 &ndash; 27th March 2009</h5>
+<ul>
+	<li>Feature: [AT-254] - AnalyzeTool to work also in emulator.</li>
+	<li>Feature: [AT-323] - AnalyzeTool Carbide extension can be used without Traceviewer Extension.</li>
+	<li>Fix: [AT-350] - Running atool -c in directory where only empty atool_temp directory exists will not delete atool_temp directory.</li>
+	<li>Fix: [AT-330] - In analyze report pinpointed memoryleak count is always zero when using sbs v.2, in logging levels 1 & 2.</li>
+	<li>Fix: [AT-333] - Use of raptor build variables leads to incorrect listing file name with certain types.</li>
+	<li>Fix: [AT-357] - AnalyzeTool can share existing Tracing utility connection.</li>
+	<li>Fix: [AT-361] - Unnecessary "Can not analyze" dialog is no longer displayed after the project is built with AnalyzeTool.</li>
+	<li>Fix: [AT-363] - Needed files for AnalyzeTool hooking are also checked for winscw.</li>
+	<li>Fix: [AT-376] - Analyze Tool Pre- and Post-Build Errors are added to Problems View.</li>
+	<li>Fix: [AT-272] - AnalyzeTool debug logging improved.</li>
+	<li>Fix: [AT-374] - Start tracing icon changed.</li>
+	<li>Fix: [AT-372] - If SDK prefs not ok in Carbide, atool gives error: missing libraries from SDK.</li>
+	<li>Fix: [AT-378] - Crash when trying to navigate to source location.</li>
+	<li>Fix: [AT-390] - Emulator pinpoints to wrong cpp file.</li>
+	<li>Fix: [AT-393] - Progress monitor is shown while starting the Tracing utility connection.</li>
+	<li>Fix: [AT-410] - Command line tool, "atool.exe", is bundled into the Carbide extension.</li>
+	<li>Fix: [AT-325] - unnecessary copying of trace file removed from Carbide.</li>
+	<li>Fix: [AT-358] - Disable unnecessary AnalyzeTool buttons when trace is started.</li>
+</ul>
+
+<h5>Version 1.5.1 &ndash; 19th March 2009</h5>
+<ul>
+	<li>Feature: [AT-443] - Atool version is checked when hooked application is started.</li>
+	<li>Fearure: [AT-451] - Added support for pinpointing codelines from static libraries in ARMV5 platform.</li>
+	<li>Fix: [AT-422] - Abnormal process ends not anymore showed for non-AnalyzeTool processes.</li>
+</ul>
+
+<h5>Version 1.5.0 &ndash; 19th February 2009</h5>
+<ul>
+	<li>Feature: [AT-254] - AnalyzeTool to work also in emulator.</li>
+	<li>Feature: [AT-323] - AnalyzeTool Carbide extension can be used without Traceviewer Extension.</li>
+	<li>Fix: [AT-350] - Running atool -c in directory where only empty atool_temp directory exists will not delete atool_temp directory.</li>
+	<li>Fix: [AT-330] - In analyze report pinpointed memoryleak count is always zero when using sbs v.2, in logging levels 1 & 2.</li>
+	<li>Fix: [AT-333] - Use of raptor build variables leads to incorrect listing file name with certain types.</li>
+	<li>Fix: [AT-357] - AnalyzeTool can share existing Tracing utility connection.</li>
+	<li>Fix: [AT-361] - Unnecessary "Can not analyze" dialog is no longer displayed after the project is built with AnalyzeTool.</li>
+	<li>Fix: [AT-363] - Needed files for AnalyzeTool hooking are also checked for winscw.</li>
+	<li>Fix: [AT-376] - Analyze Tool Pre- and Post-Build Errors are added to Problems View.</li>
+	<li>Fix: [AT-272] - AnalyzeTool debug logging improved.</li>
+	<li>Fix: [AT-374] - Start tracing icon changed.</li>
+	<li>Fix: [AT-372] - If SDK prefs not ok in Carbide, atool gives error: missing libraries from SDK.</li>
+	<li>Fix: [AT-378] - Crash when trying to navigate to source location.</li>
+	<li>Fix: [AT-390] - Emulator pinpoints to wrong cpp file.</li>
+	<li>Fix: [AT-393] - Progress monitor is shown while starting the Tracing utility connection.</li>
+	<li>Fix: [AT-410] - Command line tool, "atool.exe", is bundled into the Carbide extension.</li>
+	<li>Fix: [AT-325] - unnecessary copying of trace file removed from Carbide.</li>
+	<li>Fix: [AT-358] - Disable unnecessary AnalyzeTool buttons when trace is started.</li>
+</ul>
+
+<h5>Version 1.4.1 &ndash; 19th December 2008</h5>
+<ul>
+	<li>Change: [AT-235] - Carbide Extension could show which modules are built with atool.</li>
+	<li>Change: [AT-263] - Atool supports Symbian build system version 2 (SBS v.2).</li>
+	<li>Change: [AT-69]  - Subtest memory analysis summary should be separated inside to subtest information.</li>
+	<li>Change: [AT-252] - Carbide extension to ask user "to continue or abort compilation" if target is not supported.</li>
+	<li>Change: [AT-274] - AnalyzeTool window buttons improvement.</li>
+	<li>Change: [AT-218] - History of files opened added to open file button.</li>
+	<li>Change: [AT-219] - Verbose configuration option for Carbide.c++.</li>
+	<li>Change: [AT-233] - Results include processes udeb/urel info.</li>
+	<li>Fix: [AT-205] - Carbide Extension cannot find the .cpp file where memoryleak is pinpointed.</li>
+	<li>Fix: [AT-278] - Usability Improvement: Preferences page and Logging mode.</li>
+	<li>Fix: [AT-300] - Number of leaks in subtest is displayed in report.</li>
+	<li>Fix: [AT-237] - Support analysing datafiles without /epoc32/build content or from sub folder where build was made.</li>
+	<li>Fix: [AT-276] - Atool will not show the correct name of subtest if it contains spaces.</li>
+	<li>Fix: [AT-280] - Compiling a project deletes logging data file from atool_temp.</li>
+	<li>Fix: [AT-285] - Temporary file left to output directory in atool.exe analyze.</li>
+	<li>Fix: [AT-286] - AnalyzeTool window not updated after current project change.</li>
+	<li>Fix: [AT-289] - Number of memory leaks info should be updated after report detail level change.</li>
+	<li>Fix: [AT-226] - Project only specifies one MMP but all the MMP files are built.</li>
+	<li>Fix: [AT-234] - Changing detail level of report clears call stack window.</li>
+	<li>Fix: [AT-249] - AnalyzeTool post-builder is not working with variants on Carbide.c++.</li>
+	<li>Fix: [AT-273] - "Start Trace" clears results from all open projects.</li>
+	<li>Fix: [AT-275] - Pinpointing from urel module does not work from Carbide.c++.</li>
+</ul>
+
+<h5>Version 1.4.0 &ndash; 12th December 2008</h5>
+<ul>
+	<li>Change: [AT-218] - History of files opened added to open file button.</li>
+	<li>Change: [AT-219] - Verbose configuration option for Carbide.c++.</li>
+	<li>Change: [AT-233] - Results include processes udeb/urel info.</li>
+	<li>Fix: [AT-226] - Project only specifies one MMP but all the mmp files are built.</li>
+	<li>Fix: [AT-234] - Changing detail level of report clears callstack window.</li>
+	<li>Fix: [AT-249] - AnalyzeTool post-builder is not working with variants on Carbide.c++.</li>
+	<li>Fix: [AT-273] - "Start Trace" clears results from all open projects.</li>
+	<li>Fix: [AT-275] - Pinpointing from urel module does not work from Carbide.</li>
+</ul>
+
+<h5>Version 1.3.3 &ndash; 27th November 2008</h5>
+<ul>
+	<li>Change: [AT-218] - History of files opened added to open file button.</li>
+	<li>Change: [AT-219] - Verbose configuration option for Carbide.c++.</li>
+	<li>Change: [AT-233] - Results include processes udeb/urel info.</li>
+	<li>Fix: [AT-226] - Project only specifies one MMP but all the mmp files are built.</li>
+	<li>Fix: [AT-234] - Changing detail level of report clears callstack window.</li>
+	<li>Fix: [AT-249] - AnalyzeTool post-builder is not working with variants on Carbide.c++.</li>
+	<li>Fix: [AT-273] - "Start Trace" clears results from all open projects.</li>
+	<li>Fix: [AT-275] - Pinpointing from urel module does not work from Carbide.</li>
+</ul>
+
+<h5>Version 1.3.2 &ndash; 13th November 2008</h5>
+<ul>
+	<li>Change: [AT-218] - History of files opened added to open file button.</li>
+	<li>Change: [AT-219] - Verbose configuration option for Carbide.c++.</li>
+	<li>Change: [AT-233] - Results include processes udeb/urel info.</li>
+	<li>Fix: [AT-226] - Project only specifies one MMP but all the mmp files are built.</li>
+	<li>Fix: [AT-234] - Changing detail level of report clears callstack window.</li>
+	<li>Fix: [AT-249] - AnalyzeTool post-builder is not working with variants on Carbide.c++.</li>
+	<li>Fix: [AT-273] - "Start Trace" clears results from all open projects.</li>
+	<li>Fix: [AT-275] - Pinpointing from urel module does not work from Carbide.</li>
+</ul>
+
+<h5>Version 1.3.1 &ndash; 30th October 2008</h5>
+<ul>
+	<li>Change: [AT-163] - A single process start - end, should not be a test run.</li>
+	<li>Change: [AT-189] - Carbide.c++ Extension shows ABNORMAL text when system exception happens in the phone.</li>
+	<li>Change: [AT-190] - Carbide.c++ Extension could filter memory leaks which does not contain any call stack.</li>
+	<li>Change: [AT-191] - MemoryHook reports PROCESS_END with ABNORMAL tag.</li>
+	<li>Change: [AT-192] - atool -c to undo mmp change.</li>
+	<li>Change: [AT-202] - Modules with read only mmp files can be hooked.</li>
+	<li>Change: [AT-209] - Print S60 logging filename if not given.</li>
+	<li>Fix: [AT-156] - Multiple subtests within test run show only one subtest.</li>
+	<li>Fix: [AT-181] - Logging levels 1 and 3 produce same results when using UREL target.</li>
+	<li>Fix: [AT-204] - Memoryhook prints PROCESS_END when child threads are killed.</li>
+	<li>Fix: [AT-206] - Atool reports runs from irrelevant PROCESS_ENDS.</li>
+	<li>Fix: [AT-222] - No error message data file can not be opened.</li>
+	<li>Fix: [AT-225] - NPE when using the Analyze View in Carbide 2.0.</li>
+	<li>Fix: [AT-243] - "Error 1 make[1]: *** Waiting for unfinished jobs...." error is displayed during the AnalyzeTool build.</li>
+	<li>Fix: [AT-247] - run abld reallyclean instead of abld clean.</li>
+	<li>Fix: [AT-248] - AnalyzeTool builder "is shown active" after importing a deleted project again to Carbide.c++.</li>
+	<li>Fix: [AT-212] - Progress information: Executing AnalyzeTool, Cannot send to background.</li>
+	<li>Fix: [AT-250] - Devlon52 or other ARMV5 based variants cannot be built from Carbide.</li>
+</ul>
+
+<h5>Version 1.3.0 &ndash; 23rd October 2008</h5>
+<ul>
+	<li>Change: [AT-163] - A single process start - end, should not be a test run.</li>
+	<li>Change: [AT-189] - Carbide.c++ Extension shows ABNORMAL text when system exception happens in the phone.</li>
+	<li>Change: [AT-190] - Carbide.c++ Extension could filter memory leaks which does not contain any call stack.</li>
+	<li>Change: [AT-191] - MemoryHook reports PROCESS_END with ABNORMAL tag.</li>
+	<li>Change: [AT-192] - atool -c to undo mmp change.</li>
+	<li>Change: [AT-202] - Modules with read only mmp files can be hooked.</li>
+	<li>Change: [AT-209] - Print S60 logging filename if not given.</li>
+	<li>Fix: [AT-156] - Multiple subtests within test run show only one subtest.</li>
+	<li>Fix: [AT-181] - Logging levels 1 and 3 produce same results when using UREL target.</li>
+	<li>Fix: [AT-204] - Memoryhook prints PROCESS_END when child threads are killed.</li>
+	<li>Fix: [AT-206] - Atool reports runs from irrelevant PROCESS_ENDS.</li>
+	<li>Fix: [AT-222] - No error message data file can not be opened.</li>
+	<li>Fix: [AT-225] - NPE when using the Analyze View in Carbide 2.0.</li>
+</ul>
+
+<h5>Version 1.2.1 &ndash; 2nd October 2008</h5>
+<ul>
+	<li>Change: AnalyzeTool building method changed: AnalyzeTool Carbide.c++ Extension uses now the Carbide builder.</li>
+</ul>
+
+<h5>Version 1.2.0 &ndash; 18th September 2008</h5>
+<ul>
+	<li>Change: AnalyzeTool building method changed: AnalyzeTool Carbide.c++ Extension uses now the Carbide builder.</li>
+</ul>
+
+<h5>Version 1.1.2 &ndash; 21th August 2008</h5>
+<ul>
+	<li>Fix: [AT-97] - Launching Carbide.c++ generates error message to the atool error log.</li>
+	<li>Fix: [AT-99] - 'Module not build with AnalyzeTool' is still displayed after AnalyzeTool build.</li>
+</ul>
+
+<h5>Version 1.1.1 &ndash; 7th August 2008</h5>
+<ul>
+	<li>Fix: [AT-72] - Command line tool can not handle project where two MMP-files are in same directory.</li>
+</ul>
+
+<h5>Version 1.1.0 &ndash; 10th July 2008</h5>
+<ul>
+	<li>Feature: [AT-59] - Trace data can be saved to a file.</li>
+	<li>Feature: [AT-68] - Cancel logging from ConfigUI feature.</li>
+	<li>Fix: [AT-70] - Redundant handle leak information.</li>
+</ul>
+
+<h5>Version 1.0.0 &ndash; 7th July 2008</h5>
+<p>The first version.</p>
+
+<div id="footer">
+Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies).<br>
+All rights reserved. <br>
+This component and the accompanying materials are made available <br>
+under the terms of "Eclipse Public License v1.0" <br>
+which accompanies this distribution and is available <br>
+at the URL <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.
+<br><br>
+Initial Contributors:<br>
+Nokia Corporation - initial contribution
+<br><br>
+Contributors:<br>
+Description:
+
+</div>
+</body>
+</html>

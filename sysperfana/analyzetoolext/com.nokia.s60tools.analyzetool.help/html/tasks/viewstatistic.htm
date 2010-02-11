@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 1.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<title>Viewing AnalyzeTool memory statistic</title>
+<link href="../nokia.css" type="text/css" rel="StyleSheet">
+</head>
+<body>
+
+<h2>Viewing memory statistics</h2>
+<p>Memory usage statistics are generated automatically after the data capturing is stopped. Alternative to the data capture user can open the existing trace file to see memory statistics. For more information, see <a href="..\concepts\datafile.htm">AnalyzeTool files</a>.</p>
+<p>There are two options for opening a memory analysis data file:</p>
+<ul>
+<li>From <b>Project pop-up</b> menu, select <b>AnalyzeTool</b> > <b>Open and analyze data file</b></li>
+<li>In the <b>AnalyzeTool</b> view, select <b>Open and analyze data file</b></li>
+</ul>
+<p><b>Note!</b> The memory statistics generation must be activated from the AnalyzeTool preferences page, see <a href="../concepts/preferences.htm" >AnalyzeTool preferences</a>
+<p>The memory statistics are displayed in the <b>AnalyzeTool</b> window.</p><br>
+<img src="../images/statistic.PNG" alt="AnalyzeTool statistic tab">
+
+<h5>Description of statistics tab</h5>
+<ul>
+<li>File column: Source code file name.</li>
+<li>Function column: Function name.</li>
+<li>Line column: Source code line number.</li>
+<li>Allocations column: How many allocations match to the source code location.</li>
+<li>Time column: The last allocation time.</li>
+<li>Size column: Total size of allocations.</li>
+</ul>
+<p>User can select/change active run by using drop down list. By default the statistics information is ordered by “Allocations” column. The code line matching most allocations is topmost of the list. User can reorganize the list by clicking “Allocations”, “Time” or “Size” columns.</p>
+<p>Double-clicking the statistic item opens the appropriate source code file to that code line.</p>
+
+
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

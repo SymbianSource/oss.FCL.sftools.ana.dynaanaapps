@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="AnalyzeTool" name="AnalyzeTool" schema="schema/com.nokia.s60tools.analyzetool.schema.exsd"/>
+   <extension point="org.eclipse.ui.popupMenus">
+      <objectContribution adaptable="true"
+            			  objectClass="org.eclipse.core.resources.IProject"
+            			  id="com.nokia.s60tools.analyzetool.contribution">
+		<menu
+               label="AnalyzeTool"
+               path="additions"
+               id="com.nokia.s60tools.analyzetool.menu">
+            <separator
+                  name="submenu">
+            </separator>
+
+        </menu>
+    	<action
+               label="Clean AnalyzeTool changes"
+               class="com.nokia.s60tools.analyzetool.ui.actions.ClearAtoolChanges"
+               menubarPath="com.nokia.s60tools.analyzetool.menu/submenu"
+               enablesFor="1"
+               id="com.nokia.s60tools.analyzetool.ui.actions.ClearAtoolChanges"
+               tooltip="Clean AnalyzeTool changes">
+
+        </action>
+        <action
+               label="Open and analyze data file"
+               class="com.nokia.s60tools.analyzetool.ui.actions.ViewMemoryLeakFromFile"
+               menubarPath="com.nokia.s60tools.analyzetool.menu/submenu"
+               enablesFor="1"
+               id="com.nokia.s60tools.analyzetool.ui.actions.ViewMemoryLeakFromFile"
+               tooltip="Open and analyze data file">
+        </action>
+        <action
+               label="Activate AnalyzeTool build"
+               class="com.nokia.s60tools.analyzetool.ui.actions.CompileWithAtool"
+               menubarPath="com.nokia.s60tools.analyzetool.menu/submenu"
+               enablesFor="1"
+               id="com.nokia.s60tools.analyzetool.ui.actions.CompileWithAtool"
+               tooltip="Activate AnalyzeTool build">
+        </action>
+        <filter
+              name="projectNature"
+              value="com.nokia.carbide.cdt.builder.carbideCPPBuilderNature"/>
+
+
+      </objectContribution>
+  </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+      		adaptable="true"
+            objectClass="org.eclipse.core.resources.IFile"
+            id="com.nokia.s60tools.analyzetool.ui.actions.CompileSymbianComponent">
+             <visibility>
+              <and>
+                 <objectState
+                    name="projectNature"
+                    value="com.nokia.carbide.cdt.builder.carbideCPPBuilderNature"/>
+                  <or>
+                    <objectState
+                       name="extension"
+                       value="mk"
+                       />
+                    <objectState
+                        name="extension"
+                        value="mmp"
+                        />
+                  </or>
+              </and>
+            </visibility>
+            <menu
+               label="AnalyzeTool"
+               path="additions"
+               id="com.nokia.s60tools.analyzetool.menu1">
+            <separator
+                  name="submenu">
+            </separator>
+
+        </menu>
+          <action
+               label="Instrument and build with AnalyzeTool"
+               class="com.nokia.s60tools.analyzetool.ui.actions.CompileSymbianComponent"
+               menubarPath="com.nokia.s60tools.analyzetool.menu1/submen"
+               enablesFor="+"
+                definitionId="com.nokia.s60tools.analyzetool.ui.actions.CompileSymbianComponent"
+               id="com.nokia.s60tools.analyzetool.ui.actions.CompileSymbianComponent"
+               tooltip="Instrument and build with AnalyzeTool">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+       point="org.eclipse.ui.views">
+    <category
+          id="com.nokia.s60tools"
+          name="Carbide Extensions">
+    </category>
+    <view
+          category="com.nokia.s60tools"
+          class="com.nokia.s60tools.analyzetool.ui.MainView"
+          icon="icons/analyzetool.png"
+          id="com.nokia.s60tools.analyzetool.ui.MainView"
+          name="AnalyzeTool">
+    </view>
+ </extension>
+  <extension
+       point="org.eclipse.ui.preferencePages">
+    <page
+          class="com.nokia.s60tools.analyzetool.preferences.AnalyzeToolPreferencePage"
+          id="com.nokia.s60tools.analyzetool.preferences.AnalyzeToolPreferencePage"
+          name="AnalyzeTool"
+          category="com.nokia.carbide.cpp.preferences.ExtensionsPreferencesPage">
+    </page>
+    <page
+          class="com.nokia.s60tools.analyzetool.preferences.AdvancedPreferencePage"
+          id="com.nokia.s60tools.analyzetool.preferences.AdvancedPreferencePage"
+          name="Advanced"
+          category="com.nokia.s60tools.analyzetool.preferences.AnalyzeToolPreferencePage">
+    </page>
+ </extension>
+ <extension
+       point="org.eclipse.core.runtime.preferences">
+    <initializer
+          class="com.nokia.s60tools.analyzetool.preferences.PreferenceInitializer">
+    </initializer>
+ </extension>
+  <extension
+          point="org.eclipse.ui.actionSets">
+      <actionSet
+      description="1"
+            id="com.nokia.s60tools.analyzetool.actionSet"
+            label="AnalyzeTool"
+            visible="true">
+         <action
+               class="com.nokia.s60tools.analyzetool.ui.actions.ActivateMainView"
+               icon="icons/analyzetool.png"
+               id="com.nokia.s60tools.analyzetool.ui.actions.ActivateMainView"
+               label="AnalyzeTool"
+               menubarPath="com.nokia.carbide.cpp.ui.CarbideMenu/CarbideExtensions"
+               tooltip="1">
+         </action>
+         <menu
+         		id="com.nokia.carbide.cpp.ui.CarbideMenu"
+       			label="&amp;Carbide"
+       			path="additions">
+       			<groupMarker name="additions"/>
+       	</menu>
+       	</actionSet>
+       </extension>
+  <extension
+      point="org.eclipse.core.runtime.products"
+      id="product">
+      <product name="AnalyzeTool" application="org.eclipse.ui.ide.workbench" >
+          <property name="appName" value="Carbide.c++ Extensions - AnalyzeTool"/>
+     </product>
+   </extension>
+ 	<extension
+         id="analyzeToolPreBuilder"
+         name="AnalyzeTool Pre-Builder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            hasNature="true">
+         <run
+               class="com.nokia.s60tools.analyzetool.builder.CustomPreBuilder">
+         </run>
+      </builder>
+   </extension>
+
+   <extension
+         id="preNature"
+         name="AnalyzeTool Custom Build Pre Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="com.nokia.s60tools.analyzetool.builder.PreNature">
+         </run>
+      </runtime>
+      <builder
+            id="com.nokia.s60tools.analyzetool.analyzeToolPreBuilder">
+      </builder>
+   </extension>
+
+   <extension
+         id="analyzeToolPostBuilder"
+         name="AnalyzeTool Post-Builder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+             hasNature="true">
+         <run
+               class="com.nokia.s60tools.analyzetool.builder.CustomPostBuilder">
+         </run>
+      </builder>
+   </extension>
+
+    <extension
+         id="postNature"
+         name="AnalyzeTool Custom Build Post Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="com.nokia.s60tools.analyzetool.builder.PostNature">
+         </run>
+      </runtime>
+      <builder
+            id="com.nokia.s60tools.analyzetool.analyzeToolPostBuilder">
+      </builder>
+
+   </extension>
+
+  <extension
+         point="org.eclipse.ui.startup">
+      <startup class="com.nokia.s60tools.analyzetool.ActivateTrace"/>
+   </extension>
+  <extension
+        point="org.eclipse.ui.propertyPages">
+     <page
+           category="com.nokia.carbide.cpp.preferences.ExtensionsPropertiesPage"
+           class="com.nokia.s60tools.analyzetool.properties.PropertiesPage"
+           id="com.nokia.s60tools.analyzetool.properties.PropertiesPage"
+           name="AnalyzeTool"
+           objectClass="org.eclipse.core.resources.IProject">
+           >
+     </page>
+  </extension>
+
+</plugin>

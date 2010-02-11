@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 1.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="content-style-type" content="text/css">
+<title>AnalyzeTool preferences</title>
+<link href="../nokia.css" type="text/css" rel="StyleSheet">
+</head>
+<body>
+
+<h2>AnalyzeTool preferences</h2>
+<p>You can change the AnalyzeTool preferences by selecting <b>Window > Preferences...> Carbide Extensions > AnalyzeTool</b>.</p>
+<p><img src="../images/AT_preferences.png" alt="Setting preferences"></p>
+<p>The AnalyzeTool preferences are described in the following table:</p>
+<table width="615" border="1" cellspacing="1" cellpadding="2">
+<colgroup>
+<col width="250*">
+<col width="356*"></colgroup>
+<tbody>
+<tr>
+<th>Options</th>
+<th align="center">Description</th>
+</tr>
+<tr>
+<td>AnalyzeTool Engine</td>
+<td>AnalyzeTool uses the command line utility <i>atool.exe</i> which is used for instrumenting and uninstrumenting the project and analysing captured data.
+<ul>
+<li>
+Use internal engine. This option uses the built-in version of <i>atool.exe</i>.
+</li>
+<li>
+Use external command line engine. This options uses <i>atool.exe</i> from a user-defined location.
+</li>
+<ul>
+</ul>
+</td>
+</tr>
+<!--<tr>
+<td>Generate statistics</td>
+<td>Enables AnalyzeTool to generate memory statistics.</td>
+</tr>-->
+<tr>
+<td>Verbose output</td>
+<td>Enables command line engine debug information to the <b>Console</b> view.</td>
+</tr>
+<tr>
+<td>Engine version</td>
+<td>Displays selected engine version number.</td>
+</tr>
+<tr>
+<td>Data gathering mode</td>
+<td>Specifies the data gathering mode for AnalyzeTool build.
+<ul>
+<li>Monitored External or External: This option will send the memory analysis data through tracing utility connection. For more information, see <a href="../tasks/capture.htm#capture_external">Capturing data in external data gathering mode</a>.</li>
+<li>Internal: This option will create a data file to the target hardware. The data file name is the same as the project name. If you select the <b>Name from the user</b> option, you must define a name for the data file. For more information, see <a href="../tasks/capture.htm#capture_s60_file">Capturing data in internal data gathering mode</a>
+<ul>
+<li>Name from the process: This option will a use data file name which is the same as application target name.</li>
+<li>Name from the user: This option will ask a data file name every time a project is built with the <i>atool.exe</i>.</li>
+</ul>
+</li>
+<li>Ask always: This option will ask before each build which data gathering mode to use, External or Internal</li>
+</ul></td>
+</tr>
+<tr>
+<td>Stored callstack size</td>
+<td>
+<ul>
+<li>No items. This option does not store any callstack items.</li>
+<li>40 items. This option stores forty callstack items.</li>
+<li>100 items. This option stores hundred callstack items</li>
+<li>Custom callstack size. This option provides possibility to define custom size of callstack items. Custom size of callstack items is limited to 0-255</li>
+
+</ul>
+<b>Note!</b> The callstack size affects the speed of hooked process, lower callstack size is faster.
+</td>
+</tr>
+<tr>
+<td>Report level</td>
+<td>Specifies the report level of memory leak analysis results.
+<ul>
+<li>Show every detail: This option displays all the call stack information.</li>
+<li>Show only known code lines: This option displays all the known line numbers of call stack information.</li>
+<li>Show only topmost memory allocation code line: This option displays the first known line of call stack information.</li>
+</ul></td>
+</tr>
+</tbody>
+</table>
+
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

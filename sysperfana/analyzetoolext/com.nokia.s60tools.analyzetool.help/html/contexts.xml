@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.contexts"?>
+<contexts>
+
+<context id="ANALYZETOOL_VIEW_MEM_LEAKS">
+	<description>Setting AnalyzeTool preferences</description>
+	<topic label="Setting AnalyzeTool preferences" href="html/concepts/preferences.htm" />
+</context> 
+<context id="ANALYZETOOL_MAIN">
+	<description>AnalyzeTool Help</description>
+	<topic label="AnalyzeTool introduction" href="html/gettingstarted/overview.htm" />
+	<topic label="AnalyzeTool basic walk-through" href="html/gettingstarted/basic.htm" />
+	<topic label="AnalyzeTool toolbar buttons" href="html/reference/toolbar.htm" />
+</context>   
+<context id="ANALYZETOOL_GRAPH" title="AnalyzeTool Graph Help">
+	<topic label="AnalyzeTool Memory Activity Graph" href="html/tasks/viewactivitygraph.htm" />
+</context>   
+ 
+</contexts>
