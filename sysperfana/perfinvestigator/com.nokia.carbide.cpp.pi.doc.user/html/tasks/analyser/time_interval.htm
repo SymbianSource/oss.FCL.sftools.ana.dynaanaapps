@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Setting the Time Interval</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Setting the Time Interval</h2>
+<div class="step">
+  <ol>
+    <li>Click and drag your mouse across the graph to select a time period</li>
+  <p class="note"><strong>NOTE</strong> You may have to slightly move your mouse back and forth at the end of the graph to continue scrolling.</p>
+  <li>Click the Zoom to Selected Time Interval icon <img src="../../reference/analyzer/images/icon_zoom_to_selected_int.png" width="18" height="16" align="absmiddle"></li>
+  </ol>
+  <blockquote>
+    <p>OR</p>
+</blockquote>
+  <ol>
+    <li>Select the Start - End icon <img src="images/start_end.png" width="16" height="17" align="absmiddle">to open the Select Time Interval dialog</li>
+    <li>Enter a start and end time in seconds and click OK</li>
+  <p>The display graph updates to show the selected start and end times.</p>
+</ol>
+</div>
+<p>You can select time in any of the graphs (CPU load, power, memory) or enter values in the  Select Time Interval dialog. When clicking and dragging inside the graph, if you start inside the graph and then drag outside the graph, the end time will be set to the maximum sample time. If you start dragging outside the graph and end the drag operation inside the graph, then the end time is set to the maximum sample time. If you start and end dragging from outside the graph, then the start time and end time are set to zero (0); no samples are chosen.</p>
+<p>In the Select Time Interval dialog, a message in black stating &quot;Start time and end time maximum is XX.XXX seconds&quot; is displayed when legitimate start and end times are entered, and     the OK button is enabled.</p>
+<p>If the End time is less than or equal to the Start time, the dialog box will contain a message in red stating that &quot;End time must be greater than start time&quot;. The OK button will be disabled. If start time or end time is greater than the maximum sample time, the dialog box contains a message in red that states the maximum time. The OK button is disabled.</p>
+<p align="center"><img src="images/time_interval.png" alt="time interval" width="309" height="155"></p>
+<p>If start time or end time is less than zero or contains a bad float number format, the dialog box will contain a message in red stating that &quot;Start time and end time must be positive values&quot;.</p>
+<h5>Related references</h5>
+<ul>
+  <li><a href="../../reference/analyzer/GUI_tour.htm">Analyzer GUI Controls</a></li>
+<li><a href="../../reference/analyzer/context_menu.htm">Context Menu Options</a></li>
+</ul>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

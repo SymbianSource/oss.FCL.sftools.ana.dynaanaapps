@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema">
+
+    <element name="buttonEventProfileList">
+    	<complexType>
+    		<sequence>
+    			<element maxOccurs="unbounded" minOccurs="0" name="buttonEventProfile">
+    				<complexType>
+    					<sequence>
+    						<element maxOccurs="unbounded" minOccurs="1" name="mapping">
+    							<complexType>
+    								<sequence/>
+    								<attribute name="keyCode" type="unsignedInt">
+    								</attribute>
+    								<attribute name="enumString" type="string">
+    								</attribute>
+    								<attribute name="label" type="string">
+    								</attribute>
+    							</complexType>
+    						</element>
+    					</sequence>
+    					<attribute name="profileId" type="string"/>
+    					    				</complexType>
+        </element>
+    		</sequence>
+    		<attribute name="buttonEventProfileVersion" type="decimal">
+    		</attribute>
+    	</complexType>
+    </element>
+</schema>

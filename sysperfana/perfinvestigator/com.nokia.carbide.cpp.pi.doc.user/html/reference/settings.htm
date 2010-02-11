@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Profiler Settings File</title>
+<link href="../../book.css" rel="stylesheet" type="text/css">
+<meta http-equiv="Content-Type">
+<style type="text/css">
+<!--
+body,td,th {
+	color: #000000;
+}
+.style2 {color: #FFFFFF}
+-->
+</style>
+</head>
+<body>
+<h2>Profiler Settings File </h2>
+<p>The Profiler command-line  tool that executes on a target device reads its settings from a Profiler settings file. The GUI version creates a settings file from user imput, and then calls the command-line executable. The commands that a settings file can contain are shown in Table 1.</p>
+<h5>Syntax</h5>
+<ul>
+  <li>whitespaces at the start and end of lines are ignored</li>
+  <li>comments start with a semicolon (;) and the rest of the line is ignored</li>
+</ul>
+<h5>Limitations</h5>
+<ul>
+  <li>settings file contents are case sensitive </li>
+  <li>the settings file is limited to a maximum of 4096 characters</li>
+</ul>
+<p>The settings file contents must conform to the syntax described above. You can generate a valid configuration file by starting the Carbide.c++ Profiler GUI, selecting suitable settings, and then exiting the GUI. By default, the settings file created is called <span class="code">C:\Data\CProfSettings.txt</span>.</p>
+<h5>Table 1. Settings file options</h5>
+<table class="MsoNormalTable"
+ style="border: 1pt solid rgb(153, 153, 153); margin-left: 10pt; width: 69%;"
+ cellspacing="0" cellpadding="0" width="99%" border="1">
+  <tr>
+    <th width="13%" scope="col"><p class="style2">Option</p></th>
+    <th width="38%" scope="col">Syntax</th>
+    <th width="49%" scope="col"><span class="style2">Description</span></th>
+  </tr>
+  <tr>
+    <td><b>Profiler</b></td>
+    <td class="code" >version <i>version</i> </td>
+    <td >Restrict your settings file to a particular Profiler version. For example: <span class="code">version 1.60</span> </td>
+  </tr>
+  <tr>
+    <td rowspan="6"><b>Traces</b></td>
+    <td class="code" >button trace on|off </td>
+    <td >Enables or disables button capture trace. </td>
+  </tr>
+  <tr>
+    <td class="code" >call trace on|off </td>
+    <td >Enables or disables function call capture trace. </td>
+  </tr>
+  <tr>
+    <td class="code" >dynamic trace on|off </td>
+    <td >Enables or disables dynamic binary support trace. </td>
+  </tr>
+  <tr>
+    <td class="code">memory trace on|off </td>
+    <td >Enables or disables memory usage trace. </td>
+  </tr>
+  <tr>
+    <td class="code">power trace on|off </td>
+    <td >Enables or disables power usage trace. </td>
+  </tr>
+  <tr>
+    <td class="code">priority trace on|off </td>
+    <td >Enables or disables priority capture trace. </td>
+  </tr>
+  <tr>
+    <td rowspan="3"><b>Intervals</b></td>
+    <td class="code"><p>memorypriority interval <i>interval<br>
+    </i>prioritymemory interval <i>interval</i></p>
+      </td>
+    <td ><p>Set the interval between each check of memory usage and thread priorities.</p>
+    <p><i class="code"> interval</i> is the number of msecs, in decimal, between successive checks. 
+The minimum interval is 50 msec. </p>
+    </td>
+  </tr>
+  <tr>
+    <td class="code">addressthread interval <i>interval</i></td>
+    <td ><p>Set the interval between each check of the 					program counter address and current thread.</p>
+    <p><em> interval</em> is between 1 and 10000, and specifies 					the number of msecs between successive 					address and thread checks.</p></td>
+  </tr>
+  <tr>
+    <td class="code">power  interval <i>interval</i></td>
+    <td ><p>Set the interval between checks of power usage.</p>
+    <p><i class="code">interval</i> is the number of msecs, in decimal, between successive checks. The minimum interval is 250 msec. </p></td>
+  </tr>
+  <tr>
+    <td rowspan="3"><b>Files</b></td>
+    <td class="code"><p>output file phone|external<br>
+                        output debug</p>    </td>
+    <td >Set where output is written, either to a file on the phone, to a file on an external memory card, or to the debug port.
+    <p class="note"> <b>NOTE</b> On the phone, the file directory is <span class="code">C:\Data\PI</span>; on an external memory card, the file directory is <span class="code">E:\PI</span>.</p>    </td>
+  </tr>
+  <tr>  </tr>
+  <tr>
+    <td class="code">prefix <i>prefix</i> </td>
+    <td ><p>Set the output file prefix.</p>
+    <p><i class="code"> prefix </i> is a base file name of up to a 31 characters. It may contain at most one <span class="code">#</span> character. In the actual output file name, the Profiler will substitute an integer for the <span class="code">#</span>. </p></td>
+  </tr>
+  <tr>
+    <td rowspan="3"><b>SISA</b></td>
+    <td class="code">&nbsp;</td>
+    <td >If your code executes on a SISA single chip, then the Profiler needs to know whether a task is a Symbian OS task or an ISA OS task. The Profiler needs the addresses of the start and end of ISA code space, as well as where in ISA code space to find the start of ISA tasks.</td>
+  </tr>
+  <tr>
+    <td class="code">isa codespace <i>start end </i></td>
+    <td > <p>Change the ISA code space address range.</p>
+      <ul>
+        <li><span class="code"><i>start</i></span>- 
+
+
+a 32-bit hexadecimal number, optionally prefixed with &ldquo;0x &rdquo; or &ldquo;0X &rdquo;, for the start address of ISA code space.</li>
+        <li><span class="code"><i>end</i></span>-
+
+
+a 32-bit hexadecimal number, optionally prefixed with &ldquo;0x &rdquo; or &ldquo;0X &rdquo;, for the end address of ISA code space.</li>
+    </ul></td>
+  </tr>
+  <tr>
+    <td class="code">isa taskstart <i>start</i> <br>
+      isa taskoffset <i>offset</i> </td>
+    <td > <p>Change the address of the lowest addressed ISA task.</p>
+      <ul>
+        <li><span class="code"><i>start</i></span>- a 32-bit hexadecimal number, optionally prefixed with &ldquo;0x &rdquo; or &ldquo;0X &rdquo;, for the start of the lowest addressed ISA task.</li>
+        <li><span class="code"><i>offset</i></span>- a 32-bit hexadecimal number, optionally prefixed with &ldquo;0x &rdquo; or &ldquo;0X &rdquo;, for the offset to the lowest addressed ISA task from the start of ISA code space.</li>
+      </ul>      
+      <p class="note"> <b>NOTE</b> The ISA task address must be within the current ISA code space range. The sum of the ISA task offset plus the current ISA code space start must be less than or equal to the current ISA code space end. </p></td>
+  </tr>
+</table>
+<div class="step">
+  <h4>Default Settings File</h4>
+  <p class="listing">; Carbide.c++ Profiler Settings File<br>
+    <br>
+  ; Profiler version (use this command to restrict settings file to a particular version)<br>
+  version 1.60<br>
+  <br>
+  ; dynamic binary support on or off<br>
+  dynamic trace on<br>
+  <br>
+  ; function call capture on or off<br>
+  call trace off<br>
+  <br>
+  ; button press capture on or off<br>
+  button trace off<br>
+  <br>
+  ; memory usage capture on or off<br>
+  memory trace off<br>
+  <br>
+  ; thread priority capture on or off<br>
+  priority trace off<br>
+  <br>
+  ; power usage capture on or off<br>
+  power trace off<br>
+  <br>
+  ; &quot;output file phone&quot; writes *.dat file to phone<br>
+  ; &quot;output file external&quot; writes *.dat file to external memory<br>
+  ; &quot;output debug&quot; outputs to debug port<br>
+  output file external<br>
+  <br>
+  ; if writing to file, prefix of the *.dat file<br>
+  ; first '#' in the prefix is replaced with an integer<br>
+  prefix PI_#<br>
+  <br>
+  ; interval, in ms, at which memory usage and thread priorities are checked <br>
+  memorypriority interval 1000<br>
+  <br>
+  ; interval, in ms, at which power usage is checked <br>
+  power interval 250<br>
+  <br>
+  ; for ISA OS, the code space start and end addresses, separated by spaces or tabs <br>
+  ; addresses are in hex (optional prefix is 0x)<br>
+  isa codespace 0 0<br>
+  <br>
+  ; for ISA OS, the offset from the start of code space to the first ISA task <br>
+  ; address is in hex (optional prefix is 0x)<br>
+    isa taskoffset 0<br>
+  </p>
+</div>
+<p>addressthread interval &lt;number&gt;&quot;, where &lt;number&gt; is between 1 and 10000 inclusive</p>
+<h5>Other references</h5>
+<ul>
+  <li>   <a href="profiler/cmd_line_overview.htm"> Using the Command-line</a></li>
+</ul>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

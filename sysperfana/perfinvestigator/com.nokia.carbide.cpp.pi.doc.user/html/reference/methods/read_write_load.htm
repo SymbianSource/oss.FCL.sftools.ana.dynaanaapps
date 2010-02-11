@@ -1,0 +1,23 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Read/Write Load Characteristics</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h3>Read/Write Load Characteristics</h3>
+<p>Memory and file system share the same conceptual function &ndash; they are used for storing and retrieving information. However, from a software point of view they operate on a completely different level of abstraction.</p>
+<P LANG="en-GB" ALIGN=JUSTIFY>Memory is a compulsory and fundamental property of information processing systems such as computers. In practice it can be said that the capability to process information is based on the ability to store and retrieve information from memory.</P>
+<P LANG="en-GB" ALIGN=JUSTIFY>A file system on the other hand, is a software construction that controls certain hardware peripheral or peripherals that have the ability to store information. This peripheral can also be the same memory as used by the processor. The software construct that implements the file system introduces a well-known abstraction, according to which collections of data can be considered as files.</P>
+<P LANG="en-GB" ALIGN=JUSTIFY> Both memory and file system (if present) have an important role within the performance of almost any software system. For that reason, their performance characteristics are important to be considered when analysing software performance.</P>
+<P LANG="en-GB" ALIGN=JUSTIFY>Similar kinds of tests suit testing both memory and file system performance. To put it simple &ndash; in a basic test for performance, data blocks of specific sizes are rapidly either written or read to/from the file system or memory. By varying the sizes of the blocks, different characteristics of the memory and the file system can be found out. By making the amount of blocks large, the statistical values produced by the measurements can be made more reliable.</P>
+<P LANG="en-GB" ALIGN=JUSTIFY>Even though performing these kinds of characteristic measurements is quite easy, their interpretation should consider several issues that can make things a bit more complicated. First of all, memory performance is dependent on several factors that cannot be seen directly from the software. Such factors are the operation of MMU (Memory Management Unit), the operation of data cache(s) between the processor and memory, and the operation and load within the data bus between the memory and the processor.</P>
+<P LANG="en-GB" ALIGN=JUSTIFY>Secondly, operation of the file system is similarly complicated by disturbing factors such as the activity of other processing within the system, and interrupt load caused by other peripherals or other similar activity. For example, the load within the bus through which the data is transferred to the peripheral storing the information and disturbance caused by concurrent write or read requests.</P>
+<P LANG="en-GB" ALIGN=JUSTIFY>Therefore the performance measurements related to either memory or file system should be made under as undisturbed conditions as possible. Sometimes the measurements should be made repeatable so that the performance changes caused by possible modifications in certain properties of the system could be easily resolved.</P>
+<P LANG="en-GB" ALIGN=JUSTIFY>On the other hand, it may be handy to have measurement results of practical performance of memory/file system as it is seen by the applications. For that purpose it can be possible to use a technique similar to the sampling, as described earlier. In that approach very short tests are performed periodically and changes in their respective results are investigated with the other activities performed within the system. Through such kind of investigation it can be possible to identify which activities within the system are those that cause actual performance loss in say, the file system.</P>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Address/Thread Trace</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Address/Thread Trace</h2>
+<p> This is a statistical trace for analyzing thread, binary, and function CPU load. All other traces are in synch with this trace, therefore, there has to be a address/thread trace in each measurement.</p>
+<p> The address/thread trace sampler records information about the current location of program execution and the currently executing thread with a sampling rate between 1ms and 10000ms (10 seconds).</p>
+<p>When the sampling interval is greater than 1ms, tables, graphs, and graph tooltips will display differently. When you select a time interval on a graph, the samples included will be from 1ms after the start time up to and including the end time. So if the interval=1ms, the time period is 3ms to 10ms, the samples will be 4, 5, 6, 7, 8, 9, and 10. If interval=2ms, the samples included will be 4, 6, 8, and 10. If interval=3, the samples will be 6 and 9.</p>
+<p>The Samples columns in Analyzer tables will reflect the amount of samples based on the profiler sampling rate. The thread, binary, and function graphs bundle together 100 samples and then draw their lines. Assume that  EKern.exe[1]::Null_0 has:<br>
+&nbsp;&nbsp;50 samples out of 100, followed by<br>
+ &nbsp;&nbsp;75 samples out of 100, followed by<br>
+ &nbsp;&nbsp;10 samples out of 100</p>
+<p>You will see EKern Null's graph has:<br>
+&nbsp;&nbsp; line segment starting at 50% and ending at 75% followed by<br>
+&nbsp;&nbsp; line segnmet starting at 75% and ending at 10%</p>
+<p>If interval=1ms, line segments start and end at multiples of 100ms (1/10 of a second). If interval=2ms, line segment endpoints are at multiples of 200ms. If interval=3ms line segment endpoints are at multiples of 300ms, etc.</p>
+<p>When you show individual samples, they will be spaced out by interval. When you move your cursor across a graph with individual samples, the tooltip will change half as frequently if the interval=2ms, etc.</p>
+<p>When a trace, such as priority trace, samples on an extended interval, it will be sampled at the time of the next address/thread interval. For example, if the priority period is 900 and the address/thread period is 25, priorities are sampled at 900 (actually 895). If the address/thread time interval is 40, however, priorities are sampled at 920 (really 915), because 900 is not a multiple of 40.</p>
+<p>Key presses will be given the last address/thread time. So if sampling interval=1000ms (1 second), and you press two keys quickly, they will be recorded as either 1 second apart or as being pressed at the same time.</p>
+<h3>Trace Data Modes </h3>
+<p>Address/Thread trace data can be visualized in different modes, depending on whether the items of interest are threads, binaries, or functions. For the elements associated with each mode, you can calculate the average CPU load within a selected time period, and display that information in tables and graphs.</p>
+<p>In all modes, address/thread trace graphs share the same semantics:</p>
+<ul>
+  <li>Colors represent different trace items, such as threads, binaries, and functions</li>
+<li>Time is represented on the horizontal axis</li>
+<li>CPU load is represented on the vertical axis</li>
+</ul>
+<p>The address/thread trace data can be visualized in different ways. In graphs, 100 samples are averaged in order to create a visual representation with temporal precision of 1/10 second. In contrast to the averaged graph, address/thread trace bar graph mode visualizes the samples individually without averaging (Figure 1). Bar graph mode shows address/thread trace information with each sample shown as a colored bar. With this visualization it is much easier to see different patterns that take place in the device, and to estimate more precisely the time of events. Select <strong>Investigator &gt; CPU Load Graphs &gt; Show Individual Samples</strong> to display bar graph mode.</p>
+<p align="center"><img src="images/gpp_bargraph.png" width="577" height="448"></p>
+<p align="center" class="figure">Figure 1. Address/Thread Trace - Bar graph mode</p>
+<p align="left"><strong>Related references</strong></p>
+<ul>
+  <li><a href="GFC_trace.htm">Function Call Trace</a>  </li>
+</ul>
+<p></p>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

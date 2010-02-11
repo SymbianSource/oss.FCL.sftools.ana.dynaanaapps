@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+  <title>Loading Sample Trace File for Analysis</title>
+  <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<h2>Importing Profiler Data Files</h2>
+<p>After capturing run-time information from your application on the
+target device, saving the profiler data file, and transfering the file
+to your PC, you must then import the profiler data (.dat) file.
+Importing the data file converts the file into a format that can be
+displayed by the analyzer (a .NPI file).</p>
+<p class="note"><strong>NOTE</strong> If a large .dat file is imported, the graph and table response time will slow down   until the  large NPI file is saved. Saving the NPI file will be performed in the background and  cannot be canceled.</p>
+<p>Importing a profiler data file will vary depending on if your
+application was built by Carbide.c++ or is a standalone application. To
+find the binaries in your application, the importer will need the *.pkg
+file created when your application was built, or you will need to list
+all application binaries. If you wish to analyze applications that
+execute at a static address, you will need the ROM image .symbol file
+that represents your phone. For dynamically loaded binaries stored in a
+phone&#8217;s ROFS or ROM, a .oby file can be used to describe and list
+binaries.</p>
+<p>Unless your application executes from a fixed address in phone
+memory (e.g., is part of the flashed phone image), enable dynamic
+binary support in the Profiler application when capturing your
+application data in a profiler data file.</p>
+<p>To import your profiler data file, perform the following steps.</p>
+<div class="step">
+<h4>Importing a Profiler Data File</h4>
+<ol>
+  <li><a name="Select_Performance_Investigator_Data"></a>Select
+Performance Investigator Data</li>
+  <p>Select <strong>File &gt; Import...</strong> from Carbide.c++ to
+display Import dialog box (Figure 1), and select Performance
+Investigator Data and click <strong>Next</strong>.</p>
+  <p align="center"><img src="images/importdatfile_step1.png"
+ width="470" height="550"></p>
+  <p align="center" class="figure">Figure 1. Carbide.c++ Import window </p>
+  <li><a name="Select_Profiler_Data_File"></a>Select Profiler Data File</li>
+  <p>Click <strong>Profiler Sample File...</strong>   and select the .dat file you transferred to your PC. The
+.dat file will be converted to a format displayable by the Carbide.c++
+analyzer and assigned the .npi extension (Figure 2). Click <strong>Next</strong>
+to continue.</p>
+  <p align="center"><img src="images/CB_import_step2.PNG" width="541"
+ height="385"></p>
+  <p align="center" class="figure">Figure 2. Select Profiler Data File</p>
+  <li><a name="Select_Known_Available_Information"></a>Select Known Available information </li>
+  <p align="left">Use the <strong>Available Information</strong> page to choose how the
+    profiler session is imported. The options include:</p>
+  <ul>
+    <li>Project importer &#8212; select this option if you have a Carbide project that has a PKG file or if you have a standalone PKG file (a PKG file that has absolute paths)</li>
+    <li>Project and ROM importer &#8212; select this option if you have both a Carbide project / package file for the profiled application as well as the ROM image symbol file and OBY file for the profiled device </li>
+    <li>ROM importer &#8212; select this option if you have  the ROM image symbol file and the OBY file for the profiled device</li>
+    <li>Unknown importer &#8212; select this option when you have neither a project or a ROM image </li>
+  </ul>
+  <p align="left">Click <strong>Next</strong> to continue.</p>
+  <p align="left" class="note"><strong>NOTE</strong> You can also click the Finish button (if enabled) to fill in the remaining wizard pages  with persisted values from the last .dat file import. In a new workspace or first time a workspace is used, you will need to define related information in remaining pages, since there is no previous import related to the new workspace. For a new imported .dat file, a new output file name will be generated base on this input file name (+ _digit + .npi).</p>
+  <p align="center"><img src="images/import_dat_file_step3.png"
+ width="629" height="705"></p>
+  <p align="center" class="figure">Figure 3. Enter known Available
+    Information</p>
+  <li><a name="ROM_files"></a>If  <strong>Both</strong> or <strong>the ROM image symbol file</strong> option is selected, the <strong>Select build files from ROM</strong> dialog appears. (optional) </li>
+  <p>Use the <strong><a href="../../reference/analyzer/import_rom_build_files.htm">Select build files from ROM</a></strong> dialog to select the build files that correspond to the ROM on the device. Start by selecting the SDK, then the ROM OBY file as well as the ROM symbol file. When done, clickc Next. </p>
+  <p align="center"><img src="../../images/wnd_import_rom_build_files.png" width="629" height="705"></p>
+  <p class="figure">Figure 4. Select build files from ROM dialog</p>
+  <li><a name="Select_Associated_Project_and_Package"></a>Select
+    Associated Project and Package (.pkg) File</li>
+  <p align="left">Use the Associated Project and Package (.pkg) File
+    page to select one or more projects to associate with the imported .dat
+    file as well as choosing its project configuration. Use the Add PKG
+    File control to add a .pkg file during the import operation or the
+    Remove PKG Files control to remove a PKG file from the imported
+    profiler session. Click <strong>Next</strong> to continue.</p>
+  <p align="center"><img src="images/import_dat_file_step4.png"
+ width="517" height="496"></p>
+  <p align="center" class="figure">Figure 5. Enter Associated Project
+    and Pakage (.pkg) File Information</p>
+  <li>Select Key Press Mapping Profile (requires button trace information)</li>
+  <p>If the DAT file has button trace enable, the <b>Select Key Press Mapping Profile</b> page appears. Select either a Carbide builtin Key Map Profile or user defined profile (if available) for the target device  key map. The  key map profile selected in the  <strong>Window &gt; Preferences &gt; Carbide.c++ &gt; Performance Investigator</strong> preference panel is highlighted as the suggested default. </p>
+  <p>A suggested key profile will also be selected if only one ROM kit/SDK is selected previously in this import wizard or the profile XML file in the ROM kit/SDK contains only   one key map profile.</p>
+  <p align="center"><img src="images/importdatfile_keyprofile.png" alt="keymap profile" width="541" height="516"></p>
+  <p align="center" class="figure">Figure 6. Select Key Press Mapping Profile </p>
+  <li><a name="Select_Output_File_and_Project"></a>Select Output File
+    and Project </li>
+
+  <p>Use the Output File and Project page to import the .dat file into
+an existing project or create a new empty project. In addition, use the
+Output file name field to specify the name output file name for the
+imported .dat file.</p>
+
+  <p align="center"><img src="images/import_dat_file_step5.png"
+ width="517" height="496"></p>
+  <p align="center" class="figure">Figure 7. Enter Output File and
+Project Information</p>
+  <li>Click Finish to create the *.npi file and open it with the
+Analyzer (Figure 8).</li>
+  <p align="center"><img src="images/importdatfile_step7.png"
+ width="708" height="653"></p>
+  <p align="center" class="figure">Figure 8. Performance Investigator
+Analyzer</p>
+</ol>
+</div>
+<p align="left"><strong>Related references</strong></p>
+<ul>
+  <li><a href="../../reference/analyzer/main_view.htm" align="left">Analyzer
+View</a></li>
+  <li><a href="key_profile_pref.htm">Key Press Profile</a> </li>
+</ul>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

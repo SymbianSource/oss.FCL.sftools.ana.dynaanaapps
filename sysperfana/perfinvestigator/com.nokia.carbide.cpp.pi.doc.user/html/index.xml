@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.index"?>
+
+<index>
+
+	<!-- AAAAAA  -->
+
+	<entry keyword="Advanced options" >
+		<topic href="html/reference/profiler/advanced_options.htm" />
+	</entry>
+
+	<entry keyword="Analyzer" >
+		<topic href="html/Getting_Started/example_project.htm" />
+		<topic title="Analyzer view" href="html/reference/analyzer/main_view.htm" />
+		<topic title="Binary Load" href="html/reference/analyzer/binary_load.htm" />
+		<topic title="Function Calls"	href="html/reference/analyzer/function_calls.htm" />
+		<topic title="Function Load" href="html/reference/analyzer/function_load.htm" />
+		<topic title="Thread Load" href="html/reference/analyzer/thread_load.htm" />
+		<topic href="html/reference/analyzer/analyzing_table_data.htm" />
+	</entry>
+	
+	<entry keyword="Analyzer GUI Controls" >
+	 	<topic href="html/reference/analyzer/GUI_tour.htm" />
+	</entry>
+	
+	<entry keyword="Analyzer View" >
+		<topic href="html/reference/analyzer/main_view.htm" />
+	</entry>
+	
+
+	<!-- BBBBBB  -->
+	
+	<entry keyword="Binary Load" >
+		<topic href="html/reference/analyzer/binary_load.htm" />
+	</entry>
+
+	<entry keyword="Bluetooth connection" >
+		<topic href="html/tasks/profiler/bluetooth_connection.htm" />
+	</entry>
+	
+	<entry keyword="Button Press Capture" >
+		<topic href="html/concepts/button_press_capture.htm" />
+	</entry>
+	
+	
+	<!-- CCCCCC  -->
+	
+	<entry keyword="colors, changing graph" >
+		<topic href="html/tasks/analyser/chng_graphcolor.htm" />
+	</entry>
+
+	<entry keyword="connecting" >
+		<topic href="html/tasks/profiler/bluetooth_connection.htm" />
+		<topic href="html/tasks/profiler/usb_connection.htm" />
+	</entry>
+
+	<entry keyword="Context menu options" >
+		<topic href="html/reference/analyzer/context_menu.htm" />
+	</entry>
+
+	<entry keyword="command-line tool" >
+		<topic href="html/reference/profiler/cmd_line_overview.htm" />
+	</entry>
+	
+	<entry keyword="copy" >
+		<topic href="html/reference/analyzer/analyzing_table_data.htm" />
+	</entry>
+
+	<!-- DDDDDD  -->
+	
+	<entry keyword="data file, importing profiler" >
+		<topic href="html/tasks/analyser/an_load_trace_files.htm" />
+	</entry>
+
+	<entry keyword="dialogs" >
+		<topic href="html/reference/analyzer/wnd_power_graph_settings.htm" />
+		<topic href="html/reference/analyzer/wnd_power_usage_statistics.htm" />
+		<topic href="html/reference/analyzer/threshold.htm" />
+	</entry>
+
+
+	<!-- EEEEEE  -->
+	<!-- FFFFFF  -->
+	
+	<entry keyword="Function Calls"	>
+		<topic href="html/reference/analyzer/function_calls.htm" />
+	</entry>
+	
+	<entry keyword="Function Load" >
+		<topic href="html/reference/analyzer/function_load.htm" />
+	</entry>
+
+	<!-- GGGGGG  -->
+	<!-- HHHHHH  -->
+	<!-- IIIIII  -->
+	
+	<entry keyword="importing profiler data file" >
+		<topic href="html/tasks/analyser/an_load_trace_files.htm" />
+	</entry>
+
+	<entry keyword="installation" >
+		<topic label="Installing the Analyzer" href="html/reference/analyzer/an_installation.htm" />
+		<topic title="Installing the Profiler" href="html/tasks/profiler/prof_installation.htm" />
+	</entry>
+
+	<entry keyword="Investigator menu" >
+		<topic href="html/reference/analyzer/investigator_menu.htm" />
+	</entry>
+
+	<!-- JJJJJJ  -->
+	<!-- KKKKKK  -->
+	<entry keyword="Key Map Profile" >
+		<topic href="html/tasks/analyser/key_profile_pref.htm" label="Key Map Profile Settings"/>
+		<topic href="html/tasks/analyser/key_profile_exp.htm" label="Export Key Map Profile"/>
+        <topic href="html/tasks/analyser/key_profile_imp.htm" label="Import Key Map Profile"/>
+        <topic href="html/tasks/analyser/key_profile_switch.htm" label="Switch Key Map Profile"/>
+	</entry>
+
+	<!-- LLLLLL  -->
+	<!-- MMMMMM  -->
+
+	<entry keyword="requirements, memory" >
+		<topic href="html/reference/analyzer/an_installation.htm" />
+	</entry>
+
+	<entry keyword="menus" >
+		<topic href="html/reference/profiler/advanced_options.htm" />
+		<topic href="html/reference/analyzer/context_menu.htm" />
+		<topic href="html/reference/analyzer/investigator_menu.htm" />
+		<topic href="html/reference/analyzer/menu_memory_graph.htm" />
+		<topic href="html/reference/profiler/output_settings.htm" />
+		<topic href="html/reference/analyzer/menu_power_graph.htm" />
+		<topic href="html/reference/profiler/tracing_options.htm" />
+	</entry>
+	
+	<!-- NNNNNN  -->
+	<!-- OOOOOO  -->
+	
+	<entry keyword="Output Settings" >
+		<topic href="html/reference/profiler/output_settings.htm" />
+	</entry>
+
+	<entry keyword="Open Source for Function" >
+		<topic href="html/tasks/analyser/source_lookup.htm" />
+	</entry>
+
+	<!-- PPPPPP  -->
+
+	<entry keyword="installing, profiler to target device" >
+		<topic href="html/tasks/profiler/prof_installation.htm" />
+	</entry>		
+
+	<entry keyword="Profile" >
+		<topic href="html/tasks/analyser/key_profile_pref.htm" label="Key Map Profile Settings" />
+		<topic href="html/tasks/analyser/key_profile_exp.htm" label="Export Key Map Profile"/>
+        <topic href="html/tasks/analyser/key_profile_imp.htm" label="Import Key Map Profile"/>		
+	</entry>
+
+	<entry keyword="Profiler" >
+		<topic href="html/reference/profiler/advanced_options.htm" />
+		<topic href="html/reference/profiler/output_settings.htm" />
+		<topic href="html/reference/profiler/profiler.htm" />
+		<topic href="html/reference/settings.htm" />
+		<topic href="html/reference/profiler/tracing_options.htm" />
+		<topic href="html/reference/profiler/prof_using.htm" />
+		<topic href="html/reference/profiler/cmd_line_overview.htm" />
+	</entry>
+
+
+	<entry keyword="projects" >
+		<topic title="examining" href="html/Getting_Started/example_project.htm" />
+		<topic title="profiling" href="html/reference/profiler/prof_using.htm" />
+	</entry>
+
+	<entry keyword="Power Graph menu" >
+		<topic href="html/reference/analyzer/menu_power_graph.htm" />
+	</entry>
+
+	<entry keyword="Power Usage Interval" >
+		<topic href="html/reference/profiler/advanced_options.htm" />
+	</entry>
+
+	<entry keyword="Power Usage Graph Settings" >
+		<topic title="Power Usage Settings" href="html/reference/analyzer/wnd_power_graph_settings.htm" />
+		<topic title="Power Graph menu" href="html/reference/analyzer/menu_power_graph.htm" />
+	</entry>
+
+	<entry keyword="Power Usage Statistics" >
+		<topic title="Power Usage Statistics" href="html/reference/analyzer/wnd_power_usage_statistics.htm" />
+		<topic title="Power Graph menu" href="html/reference/analyzer/menu_power_graph.htm" />
+	</entry>
+
+	<!-- QQQQQQ  -->
+	<!-- RRRRRR  -->
+	<!-- SSSSSS  -->
+	
+	<entry keyword="save" >
+		<topic href="html/reference/analyzer/analyzing_table_data.htm" />
+	</entry>
+
+	<entry keyword="save table" >
+		<topic href="html/reference/analyzer/save_table.htm" />
+	</entry>
+		
+	<entry keyword="Set Thread, Binary, or Function Thresholds" >
+		<topic href="html/reference/analyzer/threshold.htm" />
+	</entry>
+
+	<entry keyword="Selected Interval Average Power Line" >
+		<topic href="html/reference/analyzer/menu_power_graph.htm" />
+	</entry>
+
+	<entry keyword="Scale to Graph" >
+		<topic href="html/reference/analyzer/menu_power_graph.htm" />
+	</entry>
+
+	<entry keyword="Scale to Current Selected Interval" >
+		<topic href="html/reference/analyzer/menu_power_graph.htm" />
+	</entry>
+
+	<entry keyword="Source Lookup" >
+		<topic href="html/tasks/analyzer/source_lookup.htm" />
+	</entry>
+	
+	<!-- TTTTTT  -->
+
+	<entry keyword="tables" >
+		<topic href="html/reference/analyzer/analyzing_table_data.htm" />
+	</entry>
+	
+	<entry keyword="Thread Load" >
+		<topic href="html/reference/analyzer/thread_load.htm" />
+	</entry>
+
+	<entry keyword="Threshold Limits" >
+		<topic href="html/reference/analyzer/threshold.htm" />
+	</entry>
+
+	<entry keyword="time interval, setting" >
+		<topic href="html/tasks/analyser/time_interval.htm" />
+	</entry>
+
+	<entry keyword="Tracing options" >
+		<topic href="html/reference/profiler/tracing_options.htm" />
+	</entry>
+
+
+	<!-- UUUUUU  -->
+	
+	<entry keyword="USB connection" >
+		<topic href="html/tasks/profiler/usb_connection.htm" />
+	</entry>
+
+	<entry keyword="UIQ" >
+		<topic href="html/concepts/overview/overview.htm" />
+		<topic href="html/reference/profiler/prof_using.htm" />
+		<topic href="html/reference/profiler/tracing_options.htm" />
+		<topic href="html/reference/profiler/output_settings.htm" />
+		<topic href="html/reference/profiler/advanced_options.htm" />
+	</entry>
+	
+	<!-- VVVVVV  -->
+	
+	<entry keyword="views" >
+		<topic title="Analyzer" href="html/reference/analyzer/main_view.htm" />
+		<topic title="Power Usage Graph"  href="html/reference/analyzer/view_power_usage.htm" />
+		<topic title="Memory Usage Graph" href="html/reference/analyzer/view_memory_usage.htm" />
+	</entry>
+
+	
+	<!-- XXXXXX  -->
+	<!-- YYYYYY  -->
+	<!-- ZZZZZZ  -->
+	
+</index>

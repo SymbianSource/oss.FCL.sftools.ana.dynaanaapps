@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Function Call Trace</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Function Call Trace</h2>
+<p>This is a statistical trace that records function caller/callee relationships during execution. The trace is based on periodically sampling link register values. With the link register value, it is possible to resolve the caller function for the currently executing function.</p>
+<p>Because the link register value is recorded periodically rather than each time a function call occurs, the Function Call trace will not have information about all function calls. In general, the longer the profiling session, the more complete the function call information will be.</p>
+<p>A second problem with periodically recording link register values is that a function may preserve the link register value on the stack and then use the link register for computations or for sequential branch and link intructions within a function. In the former case, the caller of the function appears to be a function at a small address such as 0x1; in the latter case, the caller of the function appears to be the function itself.</p>
+<p>Analysis of Function Call trace data depends on the importer to determine the names, and start and end addresses of functions from information such as that in a .symbol file.</p>
+<p><strong>Related references</strong></p>
+<ul>
+  <li><a href="GPP_trace.htm">Address/Thread Trace</a></li>
+</ul>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

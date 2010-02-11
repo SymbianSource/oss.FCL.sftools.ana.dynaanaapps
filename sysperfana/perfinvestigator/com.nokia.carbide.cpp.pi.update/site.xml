@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/com.nokia.carbide.cpp.pi_1.0.0.jar" id="com.nokia.carbide.cpp.pi" version="1.0.0"/>
+</site>

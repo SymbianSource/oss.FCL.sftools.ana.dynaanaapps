@@ -1,0 +1,33 @@
+/*
+ * Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies). 
+ * All rights reserved.
+ * This component and the accompanying materials are made available
+ * under the terms of the License "Eclipse Public License v1.0"
+ * which accompanies this distribution, and is available
+ * at the URL "http://www.eclipse.org/legal/epl-v10.html".
+ *
+ * Initial Contributors:
+ * Nokia Corporation - initial contribution.
+ *
+ * Contributors:
+ *
+ * Description: 
+ *
+ */
+
+/*
+ * GenericThread.java
+ */
+package com.nokia.carbide.cpp.internal.pi.model;
+
+import java.io.Serializable;
+
+public class GenericThread implements Serializable
+{
+	private static final long serialVersionUID = 4939943291132317194L;
+	
+	public Integer threadId;
+	public String threadName;
+	public Integer processId;
+	public String processName;
+}

@@ -1,0 +1,15 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Periodic Interrupt</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h3>Periodic Interrupt</h3>
+<p>Symbian OS provides periodic interrupts that occur each millisecond or its multiples. The benefit of employing a periodic interrupt in performance measurements is that when the interrupt occurs, the processor is switched to a privileged mode before the measurement software interrupt gets executed. In a privileged mode it is possible to gather information from the operating system in ways that would not be possible while in user mode. Disadvantage of periodic interrupts is that activities within them cannot last for too long in order not to disturb other processing. Therefore the recorded information has to be gathered in a memory buffer and written to an external output or file system at a later time, for example in a DFC.</p>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

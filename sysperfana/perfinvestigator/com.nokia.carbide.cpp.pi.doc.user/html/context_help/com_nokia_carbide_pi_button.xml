@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contexts>
+   <context id="btnPressChangeContext">
+      <description>Change button event information</description>
+      <topic label="Button event information" href="html/tasks/analyser/btn_press_change.htm" />
+   </context>
+   <context id="btnPressMapPrefTab">
+      <description>Select or create new Key Map Profile</description>
+      <topic label="Key Press Profile" href="html/tasks/analyser/key_profile_pref.htm" />
+   </context>
+   <context id="btnPressAddProfileDialog">
+      <description>Create Key Map Profile from copy of builtin profile</description>
+      <topic label="Define new key map profile" href="html/tasks/analyser/key_profile_pref.htm#newkeyprof" />
+   </context>
+   <context id="btnPressMapAddDialog">
+      <description>Add Key Map Entry for Profile</description>
+      <topic label="Define key map entry" href="html/tasks/analyser/key_profile_pref.htm#addkeymap" />
+   </context>
+   <context id="btnPressMapEditDialog">
+      <description>Edit Key Map Entry</description>
+      <topic label="Edit selected key map entry" href="html/tasks/analyser/key_profile_pref.htm#editkeyentry" />
+   </context>
+   <context id="btnPressEditProfileDialog">
+      <description>Define Key Map Profile</description>
+      <topic label="Add, Remove, Edit key map entries" href="html/tasks/analyser/key_profile_pref.htm#editkeymap" />
+   </context>
+   <context id="import_key_map_wizard_overlap_context">
+      <description>Import Key Map Profile</description>
+      <topic label="Existing profiles to be overwritten" href="html/tasks/analyser/key_profile_imp.htm#overlap" />
+   </context>
+   <context id="export_key_map_wizard_xml_context">
+      <description>Export Key Map Profile</description>
+      <topic label="Export to XML file" href="html/tasks/analyser/key_profile_exp.htm" />
+   </context>
+   <context id="import_key_map_wizard_xml_context">
+      <description>Import Key Map Profile</description>
+      <topic label="Import from XML file" href="html/tasks/analyser/key_profile_imp.htm" />
+   </context>
+   <context id="import_key_map_switch_dialog_context">
+      <description>Switch Key Press Profile</description>
+      <topic label="Change NPI File Key Map" href="html/tasks/analyser/key_profile_switch.htm" />
+   </context>
+
+</contexts>

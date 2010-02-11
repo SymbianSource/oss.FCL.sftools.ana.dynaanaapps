@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Memory Usage Capture</title>
+    <link href="../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Memory Usage Capture</h2>
+<p> Use the Profiler application's <b>Memory usage capture</b> <a href="../reference/profiler/tracing_options.htm">option</a> to capture memory usage data on the target device. The data is stored in the profiler data file during a trace operation and can later be viewed in the Analyzer (Figure 1).</p>
+<p align="center"><img src="images/con_memory_usage.png" width="708" height="653"></p>
+<p class="figure">Figure 1. Memory Usage Capture information displayed in an analyser view. </p>
+<p>The Symbian OS API allocates memory in chunks. A chunk is a region of RAM mapped into contiguous linear addresses. At creation, a process has one to three chunks: </p>
+<ul>
+  <li>a stack/heap chunk contains the stack and heap used in the main thread of the process</li>
+  <li>a code chunk exists if the process is loaded into RAM</li>
+  <li>a data chunk exists if the process has static data</li>
+</ul>
+<p> A process can create more chunks, including global chunks accessible by other processes. When a chunk is created, is owned by the current process or the current thread.</p>
+<h5>Related references</h5>
+<ul>
+  <li><a href="../reference/analyzer/view_memory_usage.htm">Memory Usage View</a></li>
+  <li><a href="../reference/analyzer/menu_memory_graph.htm">Memory Graph Menu </a> </li>
+</ul>
+<h5>Related tasks</h5>
+<ul>
+  <li><a href="../reference/profiler/tracing_options.htm">Setting Tracing Options</a></li>
+</ul>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

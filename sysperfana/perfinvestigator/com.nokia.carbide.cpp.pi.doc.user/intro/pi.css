@@ -1,0 +1,2 @@
+a#pi-app img { background-image : url(../html/images/icons/pi.gif); }
+a#pi-app:hover img { background-image : url(../html/images/icons/pi_hov.gif); }

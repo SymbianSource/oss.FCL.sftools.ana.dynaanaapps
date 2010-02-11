@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<introContent>
+  <!-- Extension to the SDK Tutorial Page. -->
+	<extensionContent alt-style="css/swt.properties" style="css/tutorials.css" path="tutorials/page-content/carbideAnchor">
+		  
+        <group id="tutorials-group" label="Performance Investigator tutorials" style-id="tutorials-group" >
+			
+		<link label="PI tutorial#1" url="http://org.eclipse.ui.intro/showHelpTopic?id=/com.nokia.carbide.cpp.pi.doc.user/tutorials/piTutorial.html" id="carbideapp" style-id="tutorials-link" >
+			<text>Create a birthday tracking program that demonstrates S60 UI, proper UI and data separation, and simple persistent storage.</text>
+		</link>
+
+		</group>
+		
+	</extensionContent>
+
+</introContent>

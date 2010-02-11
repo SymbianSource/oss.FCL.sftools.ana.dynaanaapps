@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Memory Usage View</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Memory Usage View</h2>
+<p>Use  the <strong>Memory  Usage</strong> view to display thread&#8217;s chunk usage, stack/heap usage, or both, of the profiled software running on a device. The graph portion of the Memory Usage view shows the amount of memory used along the same time interval as the thread load. A list of each thread or process appears at the bottom of the view showing the chunks, stack/heap, and total memory for each thread.</p>
+<p>Data in the Memory Usage view is layered with the stack/heap data overlaying the chunk data. Stack/heap data is represented by the color blue, while chunk data is represented by gold. The display is different depending upon the view option selected in the context menu (section A in Figure 1):</p>
+<ul>
+  <li>Show Chunk Usage &#8212; gold box only</li>
+  <li>Show Stack/Heap Usage &#8212; blue box only </li>
+  <li>Show Chunk and Stack/Heap Usage (Figure 1) &#8212; show gold box (chunk data) and a blue line (stack/heap data) </li>
+</ul>
+<p>When both are selected for display and the amounts are also equal, only a blue box will appear in the view. If the amounts are not equal, the chunk data is shown as a gold box and the stack/heap data is shown as a blue line. </p>
+<p class="note"><b>NOTE</b> The Memory Usage view is synchronized with the Thread Load view along the horizontal axis. </p>
+<p align="center"><img src="images/view_memory_usage.png" width="705" height="652"></p>
+<p class="figure">Figure 1. Memory Usage graph and thread list </p>
+<p>Description of table columns (section B in Figure 1):</p>
+<ul>
+  <li>The <b>Thread/Process</b> column name contains a wealth of data and is composed of:<ul>
+    <li>Chunks appear as: <span class="code">&lt;process&gt;::&lt;chunk name&gt; [&lt;hex start address&gt;]</span> </li>
+      <li>Threads appear as: <span class="code">&lt;process&gt;::&lt;thread name&gt;_&lt;thread ID&gt; </span></li>
+      <li> If no name is returned by the OS, the entry may appear as undetermined, e.g. &quot;<span class="code">::_</span>&quot;. </li>
+      </ul>
+  </li>
+  <li>The <b>Chunks</b> column displays the  amount of memory used by each chunk.</li>
+  <li>The <b>Stack/Heap</b> column displays the  amount  of memory used by the thread in its stack/heap.</li>
+  <li>The <b>Memory Total</b> column displays the  sum of the Chunks and Stack/Heap columns. </li>
+</ul>
+<p>Columns may be reordered, resized, and sorted by clicking or dragging column headers.</p>
+<p><strong>Related references </strong></p>
+<ul>
+  <li><a href="main_view.htm">Analyzer View</a></li>
+<li><a href="menu_memory_graph.htm">Memory Usage Menu </a></li>
+<li><a href="wnd_memory_usage_statistics.htm">Memory Usage Statistics</a> </li>
+</ul>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

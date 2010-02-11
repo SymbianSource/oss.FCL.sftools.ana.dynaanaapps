@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+   <extension
+         point="com.nokia.carbide.cpp.pi.piPluginData">
+      <plugin pluginClass="com.nokia.carbide.cpp.pi.button.ButtonReturnPlugin"/>
+   </extension>
+	<extension
+       point="org.eclipse.ui.preferencePages">
+		<page
+            name="Performance Investigator"
+            category="com.nokia.carbide.cpp.project.ui.preferences.CarbidePreferencePage"
+            class="com.nokia.carbide.cpp.internal.pi.button.ui.ButtonPreferencePage"
+            id="com.nokia.carbide.cpp.pi.button.ui.ButtonPreferencePage">
+     <keywordReference
+           id="com.nokia.carbide.pi.common">
+     </keywordReference>
+     <keywordReference
+           id="com.nokia.carbide.pi.keybuttons">
+     </keywordReference>
+		</page>
+	</extension>
+ <extension
+       point="org.eclipse.ui.importWizards">
+       <wizard
+            category="com.nokia.carbide.cpp.importWizards.pi"
+            class="com.nokia.carbide.cpp.internal.pi.button.ui.ImportBupMapWizard"
+            icon="icons/PI_Meter_16x16.png"
+            id="com.nokia.carbide.cpp.pi.button.ui.ImportBupMapWizard"
+            name="Performance Investigator Key Press Profile">
+         <description>
+            Import Carbide.c++ Profiler Key Press Profile.
+         </description>
+      </wizard>
+ </extension>
+ <extension
+       point="org.eclipse.ui.exportWizards">
+       <wizard
+            category="com.nokia.carbide.cpp.exportWizards.pi"
+            class="com.nokia.carbide.cpp.internal.pi.button.ui.ExportBupMapWizard"
+            icon="icons/PI_Meter_16x16.png"
+            id="com.nokia.carbide.cpp.pi.button.ui.ExportBupMapWizard"
+            name="Performance Investigator Key Press Profile">
+         <description>
+            Export Carbide.c++ Profiler Key Press Profile.
+         </description>
+      </wizard>
+ </extension>
+ <extension
+       point="org.eclipse.ui.popupMenus">
+		<objectContribution
+        adaptable="true"
+        id="com.nokia.carbide.cpp.pi.button.BupMapSwitchAction"
+        nameFilter="*.npi"
+        objectClass="org.eclipse.core.resources.IResource">
+			<action
+				class="com.nokia.carbide.cpp.pi.button.BupMapSwitchAction"
+				definitionId="com.nokia.carbide.cpp.pi.button.BupMapSwitchAction"
+				enablesFor="1"
+				icon="icons/PI_Meter_16x16.png"
+				id="com.nokia.carbide.cpp.pi.button.BupMapSwitchAction"
+				label="Switch Key Press Profile"
+				menubarPath="buildGroup">
+			</action>
+		</objectContribution>
+ </extension>
+ <extension
+       point="org.eclipse.ui.keywords">
+    <keyword
+          id="com.nokia.carbide.pi.common"
+          label="%piPreference.common">
+    </keyword>
+    <keyword
+          id="com.nokia.carbide.pi.keybuttons"
+          label="%piPreference.keyButtons">
+    </keyword>
+ </extension>
+
+</plugin>

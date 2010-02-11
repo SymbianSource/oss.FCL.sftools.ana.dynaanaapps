@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Analyzer" href="html/reference/analyzer/an_use_case_features.htm" >
+	
+	<topic label="Analyzer Overview" 						href="html/reference/analyzer/analyser.htm" >
+		<topic label="Performance Investigator Analyzer" 	href="html/concepts/analyser.htm" />
+		<topic label="Basic Operation"  					href="html/concepts/basic_operation.htm" />
+		<topic label="Controls" 							href="html/reference/analyzer/GUI_tour.htm" />
+		<topic label="Graph views" 							href="html/reference/analyzer/main_view.htm" >
+			<topic label="Thread Load"    					href="html/reference/analyzer/thread_load.htm" />
+			<topic label="Binary Load"    					href="html/reference/analyzer/binary_load.htm" />
+			<topic label="Function Load"  					href="html/reference/analyzer/function_load.htm" />
+			<topic label="Function Calls"  					href="html/reference/analyzer/function_calls.htm" />
+		</topic>
+		<topic label="Threshold Limits for Traced Data"  	href="html/reference/analyzer/threshold.htm" />
+	</topic>
+	
+	<topic label="Importing Profiler Data Files"		href="html/tasks/analyser/an_load_trace_files.htm" >
+		<topic label="Select Build Files for ROM" 		href="html/reference/analyzer/import_rom_build_files.htm" />
+	</topic>
+	<topic label="Examining a Profiling Project"  		href="html/Getting_Started/example_project.htm" />
+
+	<topic label="Memory Usage" href="html/concepts/memory_usage_capture.htm" >
+		<topic label="Memory Usage view" 	href="html/reference/analyzer/view_memory_usage.htm" />
+		<topic label="Memory Usage Statistics" 	href="html/reference/analyzer/wnd_memory_usage_statistics.htm" />
+		<topic label="Memory Usage menu" 	href="html/reference/analyzer/menu_memory_graph.htm" />
+	</topic>
+
+	<topic label="Menus">
+		<topic label="Context Menu Options" 	href="html/reference/analyzer/context_menu.htm" />
+		<topic label="Save Table" 				href="html/reference/analyzer/save_table.htm" />
+		<topic label="Investigator menu" 		href="html/reference/analyzer/investigator_menu.htm" />
+		<topic label="Memory Graph" 			href="html/reference/analyzer/menu_memory_graph.htm" />
+		<topic label="Power Graph" 				href="html/reference/analyzer/menu_power_graph.htm" />
+		<topic label="Show Button Events" 		href="html/tasks/analyser/btn_press_show.htm" />
+	</topic>
+
+	<topic label="Options"  >
+		<topic label="Changing Button Event Information" 	href="html/tasks/analyser/btn_press_change.htm" />
+		<topic label="Changing Graph Colors" 				href="html/tasks/analyser/chng_graphcolor.htm" />
+		<topic label="Setting Thresholds" 					href="html/tasks/analyser/set_thresholds.htm" />
+		<topic label="Setting Time Interval" 				href="html/tasks/analyser/time_interval.htm" />
+		<topic label="Setting Key Press Profile" 			href="html/tasks/analyser/key_profile_pref.htm" />
+
+	</topic>
+
+	<topic label="Power Usage" 					href="html/reference/analyzer/view_power_usage.htm" >
+		<topic label="Power Usage Settings" 	href="html/reference/analyzer/wnd_power_graph_settings.htm" />
+		<topic label="Power Usage Statistics" 	href="html/reference/analyzer/wnd_power_usage_statistics.htm" />
+		<topic label="Power Graph menu" 		href="html/reference/analyzer/menu_power_graph.htm" />
+	</topic>
+
+	<topic label="Using Source Lookup" 					href="html/tasks/analyser/source_lookup.htm" />
+	<topic label="Analyzing Table Data" 				href="html/reference/analyzer/analyzing_table_data.htm" />
+
+</toc>

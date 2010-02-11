@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<!-- Define help for Debug Perspective default views -->
+<!-- plugin="com.nokia.carbide.cpp.pi.wizards" -->
+
+<contexts>
+
+	<context id="import_wizard_selection_wizard_page_context" >
+		<description>Profiler data files contain run-time performance information of your test runs.</description>
+		<topic label="Importing Profiler Data Files"		href="html/tasks/analyser/an_load_trace_files.htm" />
+	</context>
+
+	<context id="import_wizard_config_selector_page_context" >
+		<description>With varying amount of information available, Performance Investigator can resolve data to varying detail.</description>
+		<topic label="Select Known Available Information"		href="html/tasks/analyser/an_load_trace_files.htm#Select_Known_Available_Information" />
+	</context>
+
+	<context id="import_wizard_input_page_context" >
+		<description>Profiler data files contain run-time performance information of your test runs.</description>
+		<topic label="Select Profiler Data File"		href="html/tasks/analyser/an_load_trace_files.htm#Select_Profiler_Data_File" />
+	</context>
+
+	<context id="import_wizard_output_page_context" >
+		<description>Profiler output need to be named and placed into a project in the workspace.</description>
+		<topic label="Select Output File and Project"		href="html/tasks/analyser/an_load_trace_files.htm#Select_Output_File_and_Project" />
+	</context>
+
+	<context id="import_wizard_pkg_list_page_context" >
+		<description>Profiler data may be associated with projects.</description>
+		<topic label="Select Associated Project and Package"		href="html/tasks/analyser/an_load_trace_files.htm#Select_Associated_Project_and_Package" />
+	</context>
+	
+	<context id="import_wizard_rom_sdk_page_context" >
+		<description>Profiler data files contain run-time performance information of your test runs.</description>
+		<topic label="Importing Profiler Data Files"		href="html/tasks/analyser/an_load_trace_files.htm" />
+	</context>
+
+	<context id="import_wizard_rom_page_context" >
+		<description>Profiler data files contain run-time performance information of your test runs.</description>
+		<topic label="Importing Profiler Data Files"		href="html/tasks/analyser/an_load_trace_files.htm" />
+	</context>
+
+	<context id="import_wizard_custom_page_context" >
+		<description>Profiler data files contain run-time performance information of your test runs.</description>
+		<topic label="Importing Profiler Data Files"		href="html/tasks/analyser/an_load_trace_files.htm" />
+	</context>
+
+	<context id="import_wizard_bup_map_page_context" >
+        <description>Select key press mapping for target device</description>
+        <topic label="Select Key Map Profile" href="html/tasks/analyser/key_profile_select.htm" />
+	</context>
+
+	<context id="import_key_map_wizard_xml_context" >
+        <description>Import Key Map Profile</description>
+        <topic label="Import key press mapping" href="html/tasks/profiler/key_profile_imp.htm" />
+	</context>
+
+</contexts>

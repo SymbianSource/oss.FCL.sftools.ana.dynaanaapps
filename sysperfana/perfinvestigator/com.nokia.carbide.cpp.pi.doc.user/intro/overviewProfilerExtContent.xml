@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<introContent>
+
+	 	<extensionContent 
+		  id="com.nokia.carbide.cpp.pi.doc.user-overview" 
+		  style="pi.css" 
+		  alt-style="pi.properties" 
+		  name="Performance Investigator" 
+		  path="overview/@">
+		  
+		<group style-id="content-group" id="pi">
+       		<link 
+				   label="Performance Investigator" 
+				   url="http://org.eclipse.ui.intro/showHelpTopic?id=/com.nokia.carbide.cpp.pi.doc.user/html/Getting_Started/GS_index.htm" 
+				   id="pi-app" 
+				   style-id="content-link">
+				   <text>Get started using the Performance Investigator feature</text>
+       		</link>
+       	</group>
+  	</extensionContent>
+
+</introContent>

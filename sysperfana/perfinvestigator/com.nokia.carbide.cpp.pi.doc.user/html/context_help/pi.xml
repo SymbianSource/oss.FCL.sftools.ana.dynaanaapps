@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<!-- Define help for PI default views -->
+<!-- plugin="org.eclipse.cdt.debug.ui" -->
+
+<contexts>
+
+	<!--  NOTE - PLACEHOLDERS ONLY -->
+
+	<!-- ANALYZER VIEW
+	<context id="modules_view_context" >
+		<topic label="Analyzer view" 					href="html/reference/analyzer/main_view.htm" />
+		<topic label="Using the Analyzer"  				href="html/reference/analyzer/an_use_case_features.htm" />
+		<topic label="Examining a Profiling Project"  	href="html/Getting_Started/example_project.htm" />
+		<topic label="Changing Graph Colors" 			href="html/tasks/analyser/chng_graphcolor.htm" />
+	</context>
+
+	<context id="modules_view_context" >
+		<topic label="Threshold Limits for Traced Data"  	href="html/reference/analyzer/threshold.htm" />
+   		<topic label="Setting Thresholds" 					href="html/tasks/analyser/set_thresholds.htm" />
+	</context>
+	-->
+
+</contexts>

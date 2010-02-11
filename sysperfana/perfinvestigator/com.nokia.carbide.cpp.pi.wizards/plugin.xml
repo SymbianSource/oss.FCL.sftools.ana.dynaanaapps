@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="com.nokia.carbide.cpp.importWizards.pi"
+            name="Performance Investigator">
+      </category>
+      <wizard
+            category="com.nokia.carbide.cpp.importWizards.pi"
+            class="com.nokia.carbide.cpp.internal.pi.wizards.ui.NewPIWizard"
+            icon="icons/PI_Meter_16x16.png"
+            id="com.nokia.carbide.cpp.pi.wizards.ui.NewPIWizard"
+            name="Performance Investigator Data">
+         <description>
+            Import a Carbide.c++ Profiler data file (*.dat).
+         </description>
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.exportWizards">
+      <category
+            id="com.nokia.carbide.cpp.exportWizards.pi"
+            name="Performance Investigator">
+      </category>
+	</extension>
+</plugin>

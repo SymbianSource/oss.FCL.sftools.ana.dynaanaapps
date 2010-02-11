@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Overview</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Overview</h2>
+<p>The Performance Investigator is a software performance measurement tool. The Performance Investigator collects run-time information from your application and other software running on a Symbian OS enabled device, such as a Nokia S60 phone, or a SEMC device running UIQ. The recorded information is then analyzed in the Performance Investigator analyzer software running on a PC.</p>
+<p>Performance Investigator currently supports the following:</p>
+<ul>
+  <li>Nokia devices running S60 3.0 and 3.1 </li>
+  <li>SEMC devices running UIQ 3.0</li>
+  <li>Symbian TechView for Symbian OS 9.2, 9.3, 9.4, and 9.5</li>
+</ul>
+<p>The Performance Investigator collects performance data. It interrupts software execution at regular intervals and copies to memory the contents of some processor registers and the results of some Symbian OS calls.</p>
+<p>The Performance Investigator contains two main parts:</p>
+<ul>
+  <li>First, on the target device is a user application called the Profiler. Installed with the Profiler is a device driver component that collects information from low-level (kernel and hardware-level) sources that are not generally accessed by application software. The Profiler acts as an interface to the device driver component and is required for its configuration, activation, and deactivation.</li>
+  <li>Second, on the PC there is Performance Investigator code integrated with Carbide.c++. This software consists of an importer for processing profiler data and the Analyzer, which provides a user-friendly way to examine and analyze the run-time performance information.</li>
+</ul>
+<p>The following figure illustrates the basic scenario to gather and analyze software performance data. The target device contains the actual performance measurement instrumentation referred to as the Profiler. The data file imported by Carbide.c++ is analyzed on a PC workstation independent of the target device.</p>
+<p align="center"><img src="../../images/overview.png" width="537" height="336"></p>
+<p class="figure">Figure 1. Performance Investigator Tool: profiler and analyzer</p>
+<p>Performance measurements follow a pattern in which separate performance related activities are recorded to a profiler data file within the target device as distinct traces. Each trace represents an independent performance characteristic of the target device. When the profiler data file is imported by Carbide.c++, more information can be derived from the traces. Each trace can be independently analyzed. Furthermore, information gathered from the software at compile-time can be used in the analysis in order to exploit the cross-relations between elements of information available exclusively at run-time or at compile-time.</p>
+<p><strong>Related references </strong></p>
+<ul>
+  <li><a href="sw_performance.htm">Software Performance</a></li>
+<li><a href="../../reference/profiler/profiler.htm">Profiler</a></li>
+<li><a href="../../reference/analyzer/analyser.htm">Analyzer</a></li>
+<li><a href="../../reference/abbrev.htm">Acronyms</a></li>
+</ul>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

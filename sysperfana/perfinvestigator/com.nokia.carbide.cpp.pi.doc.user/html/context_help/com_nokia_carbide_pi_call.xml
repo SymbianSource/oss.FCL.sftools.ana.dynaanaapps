@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<!-- Define help for Debug Perspective default views -->
+<!-- plugin="com.nokia.carbide.cpp.pi.call" -->
+
+<contexts>
+
+	<!-- BINARIES TAB -->
+	<context id="functionCallsPageContext" >
+		<description>Show information about the function call relationships during the selected time period.</description>
+		<topic label="Function Calls"  					href="html/reference/analyzer/function_calls.htm" />
+		<topic label="Setting Time Interval"  			href="html/tasks/analyser/time_interval.htm" />
+	</context>
+
+</contexts>

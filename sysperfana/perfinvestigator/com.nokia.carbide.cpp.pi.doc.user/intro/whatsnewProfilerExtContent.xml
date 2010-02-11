@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<introContent>
+	
+  	<extensionContent 
+		  id="com.nokia.carbide.cpp.pi.doc.user-whatsnew" 
+		  style="pi.css" 
+		  alt-style="pi.properties" 
+		  name="Performance Investigator Release Notes" 
+		  path="whatsnew/@">
+		<group style-id="content-group" id="pi">
+       		<link 
+				   label="Performance Investigator Release Notes" 
+ 				   url="http://org.eclipse.ui.intro/showHelpTopic?id=/com.nokia.carbide.cpp.pi.doc.user/html/release_notes.htm" 
+				   id="pi-app" 
+				   style-id="content-link">
+          		<text>Read these important engineering notes for the Performance Investigator feature</text>
+       		</link>
+       	</group>
+  	</extensionContent>
+
+</introContent>

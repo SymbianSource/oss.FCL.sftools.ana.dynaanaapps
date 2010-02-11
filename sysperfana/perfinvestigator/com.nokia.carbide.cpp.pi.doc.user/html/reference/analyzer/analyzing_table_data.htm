@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Analyzing Table Data</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Analyzing Table Data </h2>
+<p>Performance Investigator (PI) files collect and store a wealth of data which is then displayed in several panes for  analysis. However, it is sometimes more convenient to transfer the data to a  spreadsheet where better numerical functions and additional charting options are available. To accomplish that you must transfer the data in the PI file to the spreadsheet program. You can do this using the clipboard.</p>
+<p>Once a profiler data file is open and visible in an  active  view, the Edit menu and context menus include the following  commands:</p>
+<p>Note that additional Menu options are available for saving more precise data; depending on the table in which the context menu is activated. </p>
+<table width="90%" border="0" cellpadding="2" cellspacing="0" >
+  <tr>
+    <th width="210" scope="col">Menu Option </th>
+    <th width="461" scope="col">Description</th>
+  </tr>
+  <tr>
+    <td><strong>Copy</strong></td>
+    <td>Copies the contents of the current selection to the clipboard. The current selection is made by highlighting specific cells in a table or by <a href="../../tasks/analyser/time_interval.htm">selecting</a> a time interval on a graph. </td>
+  </tr>
+  <tr>
+    <td><strong>Copy Data for Selected Function </strong></td>
+    <td>Copies the function data, as well as the calling and called associated with the selected function, to the clipboard. </td>
+  </tr>
+  <tr>
+    <td><strong>Copy Drilldown Table</strong></td>
+    <td>Copies the  contents of the entire <a href="../../Getting_Started/example_project.htm">drilldown</a>, including column titles, to the clipboard. </td>
+  </tr>
+  <tr>
+    <td><strong>Copy Table</strong></td>
+    <td>Copies the  contents of the active table, including column titles, to the clipboard. The table contents do not have to be selected for a table copy to occur. </td>
+  </tr>
+  <tr>
+    <td><strong>Save Data for Selected Function...</strong></td>
+    <td>Saves the function data, as well as the calling and called associated with the selected function, to a file (.csv). </td>
+  </tr>
+  <tr>
+    <td><strong>Save Drilldown Table...</strong></td>
+    <td>Saves the  contents of the entire drilldown table (e.g. Threads &gt; Binaries &gt; Functions), including column titles, to a file (.csv). </td>
+  </tr>
+  <tr>
+    <td><strong>Save Table...</strong></td>
+    <td>Saves the  contents of the active table, including column titles, to a file (.csv).  </td>
+  </tr>
+  <tr>
+    <td><strong>Select All</strong></td>
+    <td>Selects the entire table in the current pane. When followed by  Copy, the entire contents of the table minus the column titles are copied to the clipboard. </td>
+  </tr>
+</table>
+<p>When copied to the clipboard, the clipboard data is stored in tab delimited format, which can be pasted into other programs for analysis. For example, if Copy Drilldown Table is used, the pasted output may look something like  Figure 1. You can then utilize the spreadsheet functions on the data to better understand it. </p>
+<p align="center"><img src="../../images/copy_drilldown_table.png" alt=" " width="725" height="342"></p>
+<p class="figure">Figure 1. Copy Drilldown Table data pasted into a spreadsheet for analysis</p>
+<h5>Related references</h5>
+<ul>
+  <li><a href="context_menu.htm">Context Menu</a></li>
+  <li><a href="../../Getting_Started/example_project.htm">Examining a Profiling Project</a> </li>
+</ul>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

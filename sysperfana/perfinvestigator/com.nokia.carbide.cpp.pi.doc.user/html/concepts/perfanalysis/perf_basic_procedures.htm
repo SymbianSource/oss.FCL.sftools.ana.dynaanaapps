@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Basic Analysis Procedure</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Basic Analysis Procedure</h2>
+<p>The following gives basic guidelines how to proceed and find possible problems in the system during the actual analyzing work using the analyzer&rsquo;s capabilities. </p>
+<h4>Overall CPU load graph
+</h4>
+<blockquote>
+  <p>Scale the time line (i.e. x-axis) in the CPU load graph such that you can see all essential activity from start to end of the measurement. Display all threads. This gives an overview of overall CPU load during your use case.</p>
+</blockquote>
+<h4>NULL thread overview
+</h4>
+<blockquote>
+  <p>Examine overall NULL thread execution. Time frames in which the NULL thread does not gain any CPU time are potential bottlenecks and need more detailed analysis. On the other hand, when the NULL thread has 100% of the CPU time, the system does not have anything to do. If this occurs, for example in the middle of intensive processing, available resources might be used non-optimally.</p>
+</blockquote>
+<h4>Overview of other threads
+</h4>
+<blockquote>
+  <p>Find out thread(s) causing most of the CPU load. There are typically 1-3 high-load threads within the selected time frame. Study time frames that contain potential bottlenecks one by one. </p>
+</blockquote>
+<h4>Application characteristics overview
+</h4>
+<blockquote>
+  <p>Take an overview of CPU load characteristics of the specific application(s) running in the use case. Focus on time frames in which the application(s) consume more CPU time than assumed. The binaries executing during those time frames tell you where time is being spent in user and system code.</p>
+  <p>Within the time frames requiring a more detailed analysis, try to determine at a high level what the application has been doing. When getting into a more detailed analysis, it is essential to know the origin causing the activity chain. For example, the end-user has completed a menu selection, which triggers playback of an audio file. The event has to be associated with a specific point in time in the CPU load profile.</p>
+</blockquote>
+<h4>Function-level analysis</h4>
+<blockquote>
+  <p>Examine the set of functions called within high-load threads during selected time frames. Keep in mind that your use case will determine which threads are relevant to analysis. As a rule of thumb, threads consuming more than 10% of available CPU time are rational candidates to be analysed.</p>
+  <p>When you analyze the binaries and functions in which the application spends most of its execution time, it is recommended that you analyze based on a single thread at a time.</p>
+  <p>For a high-load function, examine the code for an explanation (e.g., computation-intensive loop) as to why significant time was spent in the function. If you have captured function call data, examine the functions calling the high-load function to determine whether so many calls were necessary.</p>
+</blockquote>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Carbide.c++ Performance Investigator Power Usage
+Bundle-SymbolicName: com.nokia.carbide.cpp.pi.power;singleton:=true
+Bundle-Version: 1.5.0.qualifier
+Bundle-Activator: com.nokia.carbide.cpp.pi.power.PowerPlugin
+Bundle-Vendor: Nokia
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.jface.text,
+ org.eclipse.ui.editors,
+ org.eclipse.ui.workbench.texteditor,
+ org.eclipse.core.resources,
+ org.eclipse.ui.ide,
+ org.eclipse.draw2d,
+ com.nokia.carbide.cpp.pi,
+ com.nokia.carbide.cpp.pi.address,
+ com.nokia.carbide.cpp.pi.core,
+ com.nokia.carbide.cpp.pi.util
+Bundle-ActivationPolicy: lazy
+Export-Package: com.nokia.carbide.cpp.pi.power;x-friends:="com.nokia.carbide.cpp.pi.power.tests"

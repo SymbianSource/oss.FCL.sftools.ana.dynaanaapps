@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension
+         id="pinature"
+         name="Carbide.c++ Performance Investigator Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run class="com.nokia.carbide.cpp.pi.core.PIProjectNature"/>
+      </runtime>
+      <builder id="com.nokia.carbide.cpp.pi.core.PIProjectNature"/>
+   </extension>
+
+</plugin>

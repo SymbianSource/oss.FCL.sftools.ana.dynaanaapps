@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Thresholds</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Threshold Limits for Traced Data</h2>
+<p>The Set Thread, Binary, or Function Thresholds dialog box allows you to group items that meet the specified threshold into one item that is listed as the last item in the Threads, Binaries, or Functions table, as shown in Figure 1. Basically, you are specifying items that are consuming a percentage of the CPU load and grouping them into a &quot;I don't care to view&quot; category. The threshold represents items you want to set aside;  meaning everything below the percent specified is grouped into one item.</p>
+<p>The titles included in the Thread column contain a wealth of data and are composed of:</p>
+<ul>
+  <li>Process name &#8212; name of the binary as identified by the OS</li>
+  <li>Process ID (PID) &#8212;  the process ID that uniquely identifies the process to the OS </li>
+  <li>Thread name  &#8212;the name of the thread</li>
+  <li>Thread ID (TID) &#8212;  the thread ID that uniquely identifies the thread </li>
+</ul>
+<p>You specify a percent of the total CPU load, which equates to a fraction of the total samples for each item specified; either threads, binaries, or functions. Total samples refers to all samples covering the entire time of the profile; not a selected time interval.</p>
+<p class="note"><strong>Note:</strong> Notice that the % Load and Samples columns indicate zero. This is because no time interval is selected on the graph for this particular example.</p>
+<p align="center"><img src="images/chng_threshold1.png" width="707" height="419"></p>
+<p align="center" class="figure">Figure 1. Grouped Items Matching Specified Threshold</p>
+<p>If you enter zero in the &quot;Average load &lt;&quot; fields, then all items are displayed on the graph. If you select a threshold of 100 percent, then all  items will be compacted as one item, which will most likely not be very useful for performance evaluation; but mentioned as reference to the action that is performed. If you enter a threshold of .10 percent (1/10th of a percent) in each Average load field, then all trace items that consume a tenth of the CPU load or less will be grouped into one item. The remaining items listed in the table represent items that consumed more than a tenth of the CPU load.</p>
+<p>For example, if you have a total of 15,000 samples for all threads and you want to set aside all threads that used a tenth of the CPU load or less (which equals to 15 samples in this case), then you would enter 0.10. Refer to Figure 2. As shown in Figure 1, this example found 30 threads that consumed less than a tenth of the CPU load and were sampled less than 269 times.</p>
+<p>If you now select a time interval on the graph, you will notice the Threads, Binaries, and Functions tables has updated to reflect the items that were sampled within that time interval and their percentage of CPU usage. You can also check or uncheck items you wish to display on the graph.</p>
+<p align="center"><img src="images/chng_threshold.png" width="578" height="221"></p>
+<p align="center" class="figure">Figure 2. Set Thresholds Dialog Box</p>
+<p><strong>Related Task</strong></p>
+<p><a href="../../tasks/analyser/set_thresholds.htm">Setting Thresholds For Threads, Binaries, and Functions</a></p>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

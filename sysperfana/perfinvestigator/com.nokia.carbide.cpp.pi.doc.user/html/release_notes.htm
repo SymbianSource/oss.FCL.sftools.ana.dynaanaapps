@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+<title>Release Notes</title>
+<link href="../book.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+<!--
+.style2 {font-size: 13px}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF">
+<h2>Performance Investigator Release Notes</h2>
+<ul>
+  <li><a href="#whatsNew">What's new </a></li>
+  <li><a href="#agent" >Target Performance Investigator Agent</a></li>
+  <li><a href="#pi_bugs">Fixed bugs and workarounds</a></li>
+  <li><a href="#support">Technical support</a></li>
+</ul>
+<h3><a name="whatsNew" id="whatsNew"></a>What's New </h3>
+<p>The Performance Investigator (PI) provides the means to measure program performance on a device running the Symbian OS. The new PI features provided with this release include:</p>
+<ul>
+  <li><b>Key Press profiles support</b> &#8212; PI now supports changing the key press map profile associated with a NPI file. Once changed using any of the pre-built profiles for TechView, S60, MOAP, UIQ, and PI pre-2.0, you can customize the key presses as desired to match new device functionality requirements.</li>
+  <li><b>Performance  improvements</b> &#8212; Several graphic routines have been rewritten to decrease the time it takes to draw and manipulate large data sets, making the process of changing graph sizes and scrolling them much more responsive. Also, the time to import a DAT file has been decreased. </li>
+  <li><b>Memory usage improvements</b> &#8212; Memory usage has has been significantly lowered. </li>
+</ul>
+<p><b>1.3.1</b></p>
+<ul>
+  <li><b>Copy tables and paste into spreadsheets</b> &#8212; copy displayed information in Threads, Binaries, Functions, and Function Calls tables to the clipboard and paste into a spreadsheet application, such as Microsoft Excel</li>
+  <li><b>Save tables</b> &#8212; save information displayed in tables into a comma delimited .csv file format that can be opened in a spreadsheet application</li>
+  <li><strong>Save more precise data in tables</strong> &#8212; save specific information about selected data within a table. For example, save samples for Threads that are checked in the Thread table or save the priority setting for Threads that are checked. You can also save data for one or more selected binaries, checked functions in Functions table, a single selected function in Function Calls table, checked memory samples, all button events for specified time interval, and all Power samples for time interval.</li>
+</ul>
+<p><b>1.5.0</b></p>
+<ul>
+  <li><b>PI Profiler 2.02 support added.</b> &#8212; Support for more detailed event based memory model added.</li>
+  <li><b>Touch Event support</b> &#8212; Button plug-in is now able to recognize touch events.</li>
+  <li><b>Some minor usability improvements and bug fixes</b></li>
+</ul>
+<h3><a name="agent"></a>Target Performance Investigator Profiler </h3>
+<ul>
+  <li>To produce a Profiler data file, you need to install one of these profiler agents: 
+    <ul>
+      <li><span class="code">Carbide Profiler 2.0 Installer</span> - for S60 3.0 (3rd Edition, initial release) devices</li>
+      <li><span class="code">Carbide Profiler 2.0 (Dual CPU) Installer </span>- for S60 3.1 (3rd Edition, Feature Pack 1) devices with dual CPUs, such as the N95 and N96</li>
+      <li><span class="code">Carbide Profiler 2.0 (Single CPU)Installer</span> - for S60 3.1 (3rd Edition, Feature Pack 1) devices with a single CPU, such as the E71, N76,  6290, N78 and 5320
+    </ul>
+    <p>Those files and others can be can be downloaded and installed using the <b>On-Device Connections &gt; New Connection Wizard &gt;</b><a href="PLUGINS_ROOT/com.nokia.carbide.cpp.doc.user/html/reference/trk/wnd_new_connection_wizard.htm"> Install remote agents</a> pane.</p>
+  </li>
+</ul>
+<h3><a name="pi_bugs"></a>Fixed bugs and workarounds</h3>
+<ul>
+  <li>Complete list of Carbide.c++ <a href="bugs_fixed.htm">bugs fixed</a></li>
+  <li>Workarounds for known issues:</li>
+</ul>
+<table width="100%"  border="0" cellpadding="2" cellspacing="0" >
+  <tr>
+    <th width="27%" scope="col">Item</th>
+    <th width="62%" scope="col">Explanation</th>
+  </tr>
+  <tr>
+    <td style="vertical-align: top;"><span class="style2">The Investigator menu item does not appear on the menu toolbar after an invalid format error occurs while opening an NPI file.</span></td>
+    <td style="vertical-align: top;"><p>Workaround:  To show the Investigator menu item, give focus to any non-NPI file or to any view other than the editor view (e.g., to the Symbian Project Navigator view).</p>
+    </td>
+  </tr>
+  <tr>
+    <td style="vertical-align: top;"><p>[3005] Profiling an application with all traces enabled and using the maximum sample rates (50ms and 250ms) may cause Profiler to exhibit strange behaviors</p></td>
+    <td style="vertical-align: top;"><p>Symptoms:</p>
+        <ul>
+          <li>S60 - You may get unusual errors such loss of icons in lists.</li>
+          <li>UIQ 3.0 - The generated .dat file is corrupted and when imported into the Analyzer can cause a crash.</li>
+        </ul>
+      <p>Workaround: Do not use maximum sampling rates, if all traces must be enabled, to avoid a high CPU overload condition. You can do this by either upping the time interval to 100ms/500ms or by disabling some traces.</p></td>
+  </tr>
+  <tr >
+    <td valign="top">[3049] Profiler sampling application closes when power usage sampling is requested on a device without power management</td>
+    <td valign="top"><p >On devices, such the N93, that do not have power management hardware, attempting to sample power usage will fail, and the application that samples, CProfApp, will close. </p>
+        <p >There is no workaround.</p></td>
+  </tr>
+  <tr>
+    <td style="vertical-align: top;">Carbide.c++ may run out of memory If you open or import several large profiler data files, the Java Virtual Machine may run out of memory.</td>
+    <td style="vertical-align: top;"><p>The workaround is to allocate more memory in the Carbide.c++.ini file (typically in the Carbide.c++ folder that contains Carbide.c++.exe). For example, to allocate 1GB, edit the Carbide.c++.ini to contain &ldquo;-Xmx1024m&rdquo; and then restart Carbide.c++.</p>
+        <p class="note"><b>NOTE</b> The eclipse.ini file was renamed Carbide.c++.ini for purposes of this product.</p></td>
+  </tr>
+  <tr>
+    <td style="vertical-align: top;">Host cannot import debug output from the target device You can send sampling data to the debug port of your device. However, this release cannot import the .base64 file that contains this data.</td>
+    <td style="vertical-align: top;">No workaround. </td>
+  </tr>
+</table>
+<h3><a name="support" id="support"></a>Technical support </h3>
+<p>The following support services are available:</p>
+<ul>
+  <li>Licensed technical support - submit service requests at <a href="https://pro.forum.nokia.com/loadServiceRequest.do">Forum Nokia Developer Programs</a> (<i>not available for Express users</i>) </li>
+  <li>License issues - send questions to <a href="mailto:license.carbide@nokia.com">license.carbide@nokia.com</a> to resolve any licensing issues </li>
+  <li>Visit the <a href="http://discussion.forum.nokia.com/forum/forumdisplay.php?s=&amp;forumid=95">Forum Nokia Developer Discussion Board</a> for lively Carbide.c++ discussions </li>
+  <li>Forum Nokia Wiki - visit <a href="http://wiki.forum.nokia.com/index.php/Carbide.c++">wiki.forum.nokia.com/index.php/Carbide.c++</a> for updated information, downloads and tips </li>
+  <li>Customer feedback - send your comments and suggestions to <a href="mailto:feedback.carbide@nokia.com">feedback.carbide@nokia.com</a></li>
+</ul>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+
+</body>
+</html>

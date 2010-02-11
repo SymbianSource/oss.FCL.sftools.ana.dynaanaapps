@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension-point id="piPluginData" name="piPluginData" schema="schema/piPluginData.exsd"/>
+
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            objectClass="org.eclipse.core.resources.IFile"
+            name="PI Properties"
+            nameFilter="*.npi"
+            class="com.nokia.carbide.cpp.internal.pi.properties.PIPropertyPage"
+            id="com.nokia.carbide.cpp.pi.properties.NPIPropertyPage">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            objectClass="org.eclipse.core.resources.IFile"
+            name="PI Properties"
+            nameFilter="*.bap"
+            class="com.nokia.carbide.cpp.internal.pi.properties.PIPropertyPage"
+            id="com.nokia.carbide.cpp.pi.properties.PIPropertyPageID">
+      </page>
+   </extension>
+  <extension
+     point="com.nokia.carbide.cpp.pi.piPluginData">
+      <plugin pluginClass="com.nokia.carbide.cpp.pi.PiReturnPlugin"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.nokia.carbide.cpp.pi.editors.PIPageEditor"
+            contributorClass="com.nokia.carbide.cpp.pi.editors.PIPageEditorContributor"
+            extensions="bap,npi"
+            icon="icons/PI_Meter_16x16.png"
+            id="com.nokia.carbide.cpp.pi.openEditor"
+            name="Carbide.c++ Performance Investigator"/>
+      <editor
+            class="com.nokia.carbide.cpp.pi.editors.PIPageEditor"
+            contributorClass="com.nokia.carbide.cpp.pi.editors.PIPageEditorContributor"
+            filenames=".picfg"
+            icon="icons/PI_Meter_16x16.png"
+            id="com.nokia.carbide.cpp.pi.ImportEditor"
+            name="Carbide.c++ Performance Investigator"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+   </extension>
+
+</plugin>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+   <extension
+         point="com.nokia.carbide.cpp.pi.piPluginData">
+      <plugin pluginClass="com.nokia.carbide.cpp.pi.memory.MemoryReturnPlugin"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            label="Memory Graph"
+            visible="false"
+            id="com.nokia.carbide.cpp.pi.memory.graphActionSet">
+         <menu
+               label="Memory Graph"
+               path="window/additions"
+               id="com.nokia.carbide.cpp.pi.memory.viewMenu">
+            <separator name="show"/>
+            <separator name="scale"></separator>
+            <separator name="additions"></separator>
+         </menu>
+         <action
+               class="com.nokia.carbide.cpp.internal.pi.memory.actions.ShowTotalDelegate"
+               id="com.nokia.carbide.cpp.pi.memory.showTotalAction"
+               label="Show Total Memory Usage"
+               menubarPath="window/com.nokia.carbide.cpp.pi.memory.viewMenu/show"
+               state="true"
+               style="radio"/>
+         <action
+               class="com.nokia.carbide.cpp.internal.pi.memory.actions.ShowStackDelegate"
+               id="com.nokia.carbide.cpp.pi.memory.showStackAction"
+               label="Show Stack Usage"
+               menubarPath="window/com.nokia.carbide.cpp.pi.memory.viewMenu/show"
+               state="false"
+               style="radio"/>
+         <action
+               class="com.nokia.carbide.cpp.internal.pi.memory.actions.ShowHeapDelegate"
+               id="com.nokia.carbide.cpp.pi.memory.showHeapAction"
+               label="Show Heap Usage"
+               menubarPath="window/com.nokia.carbide.cpp.pi.memory.viewMenu/show"
+               state="false"
+               style="radio"/>
+         <action
+               class="com.nokia.carbide.cpp.internal.pi.memory.actions.DynamicScaleDelegate"
+               id="com.nokia.carbide.cpp.pi.memory.dynamicScaleAction"
+               label="Dynamic visualization scale"
+               menubarPath="window/com.nokia.carbide.cpp.pi.memory.viewMenu/scale"
+               state="false"
+               style="toggle"/>
+      </actionSet>
+   </extension>
+
+</plugin>

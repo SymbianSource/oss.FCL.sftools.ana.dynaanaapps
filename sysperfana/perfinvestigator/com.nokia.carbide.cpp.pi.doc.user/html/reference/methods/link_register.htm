@@ -1,0 +1,16 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Link Register Value</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h3>Link Register Value</h3>
+<p>Link register as presented here is specific to the instruction set of the ARM architecture, even though similar solutions can be found from other processor families. Purpose of the link register is to store the value of the address following an executed Branch and Link instruction. Purpose of storing the value is to be able to continue the execution from the next instruction following the branch and link instruction, after returning from a subroutine. In practice this takes place by storing the value from the link register back to the program counter. Link register is a banked register, thus each of the processor modes refer to a dedicated physical register. In performance measurements, link register values can be inspected in order to resolve addresses from which the execution has branched to the currently executing function. A problem in this resolution is that the link register value is usually stored to the stack after entering a custom subroutine, and therefore the values in it do not have to be preserved. The correct link register value is always retrieved from the stack just before returning from the subroutine. This permits the subroutine to trash the value present in the link register during its execution. The trashing usually takes place when a sequential branch and link command is executed within a subroutine. It leaves the link register with a value of the address next to the most recent branch and link command instead of the original value (stored to the stack) that would point to the return address outside the subroutine.</p>
+<P LANG="en-GB" ALIGN=JUSTIFY>In performance measurements, link register values can be used to resolve the caller / callee relations between the functions or methods at run-time. In a practical arrangement, this can be done for example during a periodic interrupt. The explained limitations within the correctness of the link register value have to be taken into account in the analysis, but by following a certain logic the correct values can be distinguished from the values in which the link register has already trashed. In simple terms, the values that point outside the function that are currently under execution can be considered as correct return values for the function, thus revealing the caller of that function. The values that point inside the same function result from subsequent branches that have taken place within the function before the investigation, and cannot be considered correct return values.</P>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

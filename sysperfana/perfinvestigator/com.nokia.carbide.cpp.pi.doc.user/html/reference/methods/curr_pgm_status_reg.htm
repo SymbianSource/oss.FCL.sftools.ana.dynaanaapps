@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Current Program Status Register Value</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h3>Current Program Status Register Value</h3>
+<p> In ARM architecture, the current
+			program status register (CPSR) is an unbanked register, thus it
+			refers to the same physical register in all processor
+			modes. It contains condition code flags, interrupt disable bits,
+			the current processor mode, and other status and control
+			information. The state of the processor reflects changes in the
+			flags and values within the CPSR. CPSR cannot be changed while
+			in user mode, thus preventing the software from accessing privileged resources. However, CPSR values
+			can be investigated within user mode, making it possible to
+			distinguish the current processor mode at all times. Performance
+			measurements may require such investigation of the CPSR in order
+			to distinguish the modes and to select appropriate actions
+			according to the mode. Without such precautions, exceptions or
+fault situations might take place.</p>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

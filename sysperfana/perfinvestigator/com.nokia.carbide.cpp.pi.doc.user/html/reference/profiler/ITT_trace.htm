@@ -1,0 +1,19 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>DLL Support Trace</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Dynamic Binary Support Trace</h2>
+<p>During sampling, the dynamic binary support trace records the full path names, starting locations, and lengths of binaries loaded on the target device. That data is used to determine which binaries and functions are associated with address/thread trace samples taken in dynamic binaries.</p>
+<p>Dynamic binary support trace is needed only if you had dynamic binaries present in the device during the use case. In practice, this is if you were using applications that were installed after you flashed the device, or if the device uses ROFS. For the importer to perform dynamic binary support trace analysis, you MUST have the binaries that were actually executed on the device. In addition, you MUST have correct .map files produced during their compilation. Each binary file and its corresponding .map file has to be found by the importer in the same directory.</p>
+<p>When you import a Profiler data file (*.dat) that contains dynamic binary support trace information, the importer needs to locate the compiled dynamic binary files. The importer relies on .pkg, .oby, and .iby files for mapping the fullpath binary names on the target device to the compiled dynamic binaries.</p>
+<p>If you specified a Carbide.c++ project for importing, the associated .pkg file will be automatically added. On the other hand, you may have a .oby or .iby file, such as the ROFS .oby file, that contains a list of binaries to be included. If an oby/iby file is added to the list, the importer automatically leaves out files that are known not to be binary executable data.   If you specified a Carbide.c++ project or EPOCROOT, the importer will try to help you find oby/iby files to add.</p>
+<p>If you have custom files in your oby/iby file that are not binary executables and should not take part in the analysis, you might consider removing them from the oby/iby before continuing with the analysis. If those files are very large, processing might take longer.</p>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

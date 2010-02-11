@@ -1,0 +1,227 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title></title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+    <style type="text/css">
+<!--
+.style1 {
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-weight: bold;
+}
+-->
+    </style>
+</head>
+
+<body>
+<h2>Context Menu Options </h2>
+<p>Right-clicking within the Analyzer graph and tables will display context popup menus that will vary slightly depending on where you initiated the popup menu. The following table lists and defines Analyzer context menu options.</p>
+<p class="note"><strong>Note </strong>Several menu options allow you to save information to a .csv file that can be opened in a text editor or system editor (such as Excel). Beware that the default filename to save information is <span class="style1">new_file.csv</span>. Specify a unique filename if you do not want the default file to be overwritten each time you save information. </p>
+<h5>Table 1. Analyzer context menu options</h5>
+<table width="90%" border="0" cellpadding="2" cellspacing="0" >
+  <tr>
+    <th width="25%" scope="col">Menu Option </th>
+    <th width="581" scope="col">Description</th>
+  </tr>
+  <tr>
+    <td><b>Binary -&gt; Function -&gt; Thread </b></td>
+    <td>Displays the Binary, Function, and Thread tables. The graph will display the Threads from which the selected binaries were executed. The functions within the binaries that were called are listed in the functions table. </td>
+  </tr>
+  <tr>
+    <td><b>Binary -&gt; Thread </b></td>
+    <td>Displays the Binary and Thread tables. The graph will display the threads where the selected binaries were executed.</td>
+  </tr>
+  <tr>
+    <td><b>Binary -&gt; Thread -&gt; Function </b></td>
+    <td>Displays the Binary, Thread, and Function tables. The graph will display the functions that were called in the selected binaries. The threads table lists the threads where the selected binaries were executed.</td>
+  </tr>
+  <tr>
+    <td><b>Binary -&gt;Function </b></td>
+    <td>Displays the Binary and Function tables. The graph will display the functions that were called from within the selected binaries. </td>
+  </tr>
+  <tr>
+    <td><b>Binary Only </b></td>
+    <td>Displays the Binary table and all selected binaries in the graph view. </td>
+  </tr>
+  <tr>
+    <td><span class="style1">Change Event Information...</span> </td>
+    <td>Right-click on a button event marker in the Thread Load, Binary Load, or Function Load graph and select this menu option to display a dialog to <a href="../../tasks/analyser/btn_press_change.htm">change related event information</a>.</td>
+  </tr>
+  <tr>
+    <td><b>Change Threshold Limits... </b></td>
+    <td>Displays the <a href="threshold.htm">Set Thread, Binary, or Function Thresholds</a> dialog box.</td>
+  </tr>
+  <tr>
+    <td><b>Check All Rows </b></td>
+    <td>All rows will be checked and represented on the graph.</td>
+  </tr>
+  <tr>
+    <td><b>Check Highlighted Rows </b></td>
+    <td>This option will place a check mark in all highlighted rows. You can use the shift key and mouse button to select and highlight a continuous sequence  of rows. Use the control key to select and highlight random rows. Checked rows will be visible on the graph.</td>
+  </tr>
+  <tr>
+    <td><b>Copy</b></td>
+    <td>Copies the contents of the selected data from the table to the clipboard.  </td>
+  </tr>
+  <tr>
+    <td><b>Copy Drilldown Tables</b></td>
+    <td>Copies the contents of the entire drilldown table to the clipboard including column titles for easy identification when pasted into a spreadsheet for analysis. </td>
+  </tr>
+  <tr>
+    <td><b>Copy Table</b></td>
+    <td>Copies the contents of the entire table in the current pane to the clipboard including column titles for easy identification when pasted into a spreadsheet for analysis. The table contents do not have to be selected for the table copy to occur.</td>
+  </tr>
+  <tr>
+    <td><span class="style1">Dynamically Rescale Based on Selected Threads </span></td>
+    <td>Right-click in Memory Usage graph and select this option to rescale the graph based on selected threads. </td>
+  </tr>
+  <tr>
+    <td><span class="style1">Function Only </span></td>
+    <td>Displays Functions only. </td>
+  </tr>
+  <tr>
+    <td class="style1">Function -&gt; Thread </td>
+    <td>Displays Functions and related Threads. The graph will display threads containing the function calls. </td>
+  </tr>
+  <tr>
+    <td class="style1">Function -&gt; Thread -&gt; Binary </td>
+    <td>Displays Functions and related Threads and Binaries containing the functions called.</td>
+  </tr>
+  <tr>
+    <td><span class="style1">Memory Usage Statistics </span></td>
+    <td>Right-click in Memory Usage graph and select this menu option to open a Memory Usage Statistics dialog box that reports memory use for the selected time interval.</td>
+  </tr>
+  <tr>
+    <td class="style1">Open Source for Function </td>
+    <td>Opens the source code file containing the selected function in the editor window.</td>
+  </tr>
+  <tr>
+    <td><span class="style1">Power Usage Settings...</span></td>
+    <td>Right-click in the Power Usage graph and select this menu option to display a dialog box that reports the voltage and battery capacity. The values can be modifed as mentioned in <a href="wnd_power_graph_settings.htm">Power Usage Settings</a>.</td>
+  </tr>
+  <tr>
+    <td><span class="style1">Power Usage Statistics </span></td>
+    <td>Right-click in the Power Usage graph and select this option to display a dialog that reports detailed power information for the selected time interval.</td>
+  </tr>
+  <tr>
+    <td><b>Recolor Highlighted Binaries...</b></td>
+    <td>Displays a color swatch for you to choose a different color for a highlighted row. If multiple rows are selected, then multiple color swatch windows will appear. Change or accept current color for each row selected. Selected rows appear grey.</td>
+  </tr>
+  <tr>
+    <td><b>Recolor Highlighted Functions...</b></td>
+    <td>Displays a color swatch for you to choose a different color for a highlighted row. If multiple rows are selected, then multiple color swatch windows will appear. Change or accept current color for each row selected. Selected rows appear grey.</td>
+  </tr>
+  <tr>
+    <td><b>Recolor Highlighted Threads...</b></td>
+    <td>Displays a color swatch for you to choose a different color for a highlighted row. If multiple rows are selected, then multiple color swatch windows will appear. Change or accept current color for each row selected. Selected rows appear grey.</td>
+  </tr>
+  <tr>
+    <td class="style1">Save All Call Samples for Interval... </td>
+    <td>Right-click in one of the Function Call Analysis tables (when Function Calls tab is selected) and choose this option to save all function calls to a .csv file for the selected time interval. Information provided includes the time, caller address, caller function, caller binary, callee address, callee function, and callee binary.</td>
+  </tr>
+  <tr>
+    <td class="style1">Save All Event Samples for Interval... </td>
+    <td>Right-click on a button event marker in the Thread Load, Binary Load, or Function Load graph and choose this option to save all button events for the selected time interval. </td>
+  </tr>
+  <tr>
+    <td><span class="style1">Save All Power Samples for Interval... </span></td>
+    <td>Right-click in the Power Usage graph and select this option to save all collected power samples for the selected time interval.</td>
+  </tr>
+  <tr>
+    <td class="style1">Save Data for Selected Function... </td>
+    <td>Select a function in the Select One Function table (when Function Calls tab is selected) and right-click to choose this option. Detailed information is saved to a .csv file for the selected function. </td>
+  </tr>
+  <tr>
+    <td><b>Save Drilldown Tables...</b></td>
+    <td>Saves the contents of the entire drilldown table (e.g. Thread -&gt; Binary -&gt; Function) to a specified file including column titles for easy identification when opened in a spreadsheet for analysis.</td>
+  </tr>
+  <tr>
+    <td><span class="style1">Save Priority Samples for Checked Threads...</span></td>
+    <td>Saves the priority setting for Threads that are checked in the Thread table. The first entry in the file shows the last value recorded before entering the selected time interval. Subsequent entries show a change in the priority during the interval. Priority settings are detected when a change is made; thus they are not sampled every millisecond.</td>
+  </tr>
+  <tr>
+    <td><span class="style1">Save Samples for Checked Binaries... </span></td>
+    <td>Right-click in the Binary table (when Binaries tab is selected) and choose this option to save samples for binaries that are checked.</td>
+  </tr>
+  <tr>
+    <td><span class="style1">Save Samples for Checked Threads... </span></td>
+    <td>When Threads tab is selected, save samples for Threads that are checked in the Thread table to a .csv file.</td>
+  </tr>
+  <tr>
+    <td><span class="style1">Save Memory Samples for Checked Table Entries...</span> </td>
+    <td>This option is enabled when a time interval is selected. Save memory samples that are checked in the Memory Usage table to a .csv file. The first entry in the file shows the last value recorded before entering the selected time interval. Subsequent entries show changes made during the interval. Memory samples are detected when a change is made; thus they are not sampled every millisecond.</td>
+  </tr>
+  <tr>
+    <td><b>Save Table...</b></td>
+    <td>Saves the contents of the entire table in the current pane to a specified file including column titles for easy identification when opened in a spreadsheet for analysis. The table contents do not have to be selected for the table to be saved.</td>
+  </tr>
+  <tr>
+    <td><b>Select All</b></td>
+    <td>Selects the entire table in the current pane.</td>
+  </tr>
+  <tr>
+    <td><b>Show Entire Graph </b></td>
+    <td>Displays all profiled data in graph.</td>
+  </tr>
+  <tr>
+    <td><b>Show highlighted function's call info </b></td>
+    <td>This context menu option appears in the top and bottom tables of the Function Calls table - <strong>Functions calling the selected function</strong> and <strong>Functions called by the selected function</strong>. Select a function in one of these two tables, right-click and select this option to move the selected function into middle table labeled <strong>Select One Function</strong>. Functions calling and called by the selected function will be displayed in top and bottom tables.</td>
+  </tr>
+  <tr>
+    <td class="style1">Show Selected Interval Average Power Line </td>
+    <td>This option appears when you right-click in the Power Usage graph. Check this option to display the average power for the selected time interval.</td>
+  </tr>
+  <tr>
+    <td><b>Sort by Binary Path, then Binary Name </b></td>
+    <td>In the Binaries and Functions table views, this option will alphabetically sort the path of binaries, then alphabetically sort the binary files by name. Binary path and binary file names are listed in the Binary and Path columns (Binaries table), and In Binary and Path of Binary columns (Functions table). </td>
+  </tr>
+  <tr>
+    <td><strong>Switch Key Press Profile</strong> </td>
+    <td>Opens a dialog that allows you to change the<a href="../../tasks/analyser/key_profile_switch.htm"> key map profile</a> associated with the current NPI file.</td>
+  </tr>
+  <tr>
+    <td><b>Thread -&gt; Binary</b></td>
+    <td>Displays the Thread and Binary tables. The graph will display the binaries that have executed in the selected Thread(s); in relation to the selected time interval. </td>
+  </tr>
+  <tr>
+    <td><b>Thread -&gt; Binary -&gt; Function </b></td>
+    <td>Displays the Thread, Binary, and Function tables. The graph will display the functions that have been called in the selected binaries that exist in the selected threads. </td>
+  </tr>
+  <tr>
+    <td><b>Thread -&gt; Function</b></td>
+    <td>Displays the Thread and Function tables. The graph will display the functions that have been called in the selected threads; in relation to the selected time interval. </td>
+  </tr>
+  <tr>
+    <td><b>Thread -&gt; Function -&gt; Binary </b></td>
+    <td>Displays the Thread, Function, and Binary tables. The graph will display the binaries executed in the selected threads. The functions within the binaries that were called are listed in the functions table.</td>
+  </tr>
+  <tr>
+    <td><b>Thread Only </b></td>
+    <td>Displays the Thread table and all selected threads in the graph view.</td>
+  </tr>
+  <tr>
+    <td><b>Uncheck All Rows </b></td>
+    <td>All rows will be unchecked and all related items will be removed from the graph. </td>
+  </tr>
+  <tr>
+    <td><b>Uncheck Highlighted Rows </b></td>
+    <td>Unchecks highlighted rows and removes the  represented item(s) from the graph. </td>
+  </tr>
+  <tr>
+    <td><b>Zoom In </b></td>
+    <td>Zooms in on the graph view to display more detail. </td>
+  </tr>
+  <tr>
+    <td><b>Zoom Out </b></td>
+    <td>In the graph view, zooms out to display less detail of the selected time interval. </td>
+  </tr>
+  <tr>
+    <td><b>Zoom to Selected Time Interval </b></td>
+    <td>Locates the graph's selected time interval and displays it in center of graph. </td>
+  </tr>
+</table>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

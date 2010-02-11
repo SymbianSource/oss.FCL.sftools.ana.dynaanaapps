@@ -1,0 +1,16 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Kernel Hook</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h3>Kernel Hook</h3>
+<P LANG="en-GB" ALIGN=JUSTIFY>The information and execution flow within the Symbian kernel contains lots of useful information that can be used to trace sources of performance problems. The only problem with that information is that it is difficult to be stored at real time with any external user-mode software, since it has no access to the data that is private to the kernel executable. One way to gain access to the private data of the kernel is to add small modifications to selected locations of the kernel. Those modifications are referred to as the kernel hooks.</P>
+<P LANG="en-GB" ALIGN=JUSTIFY>When execution reaches a kernel hook, a small part of kernel hook code is executed. The kernel hook code stores selected important information that may be available only at a small fraction of time in the processing that takes place at the immediate vicinity of the hook. The collected few bytes of data are then stored sequentially into a large memory array. The process takes place quickly and should not disturb the kernel activities very much.</P>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

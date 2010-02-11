@@ -1,0 +1,23 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Server Threads Analysis</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h3>Server Threads Analysis</h3>
+<p>  A typical Symbian application implementation pattern is based on a client-server model. The client requests a service, and the server does the actual work. As a result, the server parts of the application cause most of the CPU load.</p>
+<p>The Symbian OS provides several system servers, such as file, font bitmap and database servers, which might be used by several applications concurrently. There might also be other application framework specific servers. In order to analyze the application characteristics properly, find out which servers the application uses. In addition, recognize how extensively the application under analysis really uses the servers, especially system ones.</p>
+<p>If the thread overview shows that server threads cause high CPU load, the problem is not necessarily in the server implementation. If a more detailed analysis of the server implementation does not reveal any major improvement items, more focus has to be put on overall application characteristics. Things to consider include the following:</p>
+<ul>
+  <li>Is client-server interaction rational? For example, frequently exchanged small messages cause overhead and decrease the application performance.</li>
+  <li>Are there nested client-server call chains? A long chain of servers utilizing services of other servers should be studied. For example, a top-level client makes a simple service request to a server that forwards the request to another server in multiple requests. As a result, a simple service request has been split up into several small requests resulting in a potential bottleneck in overall application performance.</li>
+</ul>
+<p>In general, the goal should be to minimize unnecessary calls to servers. Multiple application requests should be grouped in a single server request whenever possible.<br>
+</p>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

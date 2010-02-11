@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="build" default="feature_export">
+	<target name="feature_export">
+		<pde.exportFeatures features="com.nokia.carbide.cpp.profiler" destination="C:\rudy-build" filename="rudy.zip" exportType="zip" exportSource="false"/>
+	</target>
+</project>

@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Performance Measurement Methods</title>
+    <link href="../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Performance Measurement Methods</h2>
+<p> Characteristics of the software being analyzed will set rules and freedoms for performance measurements. Similarly, characteristics of the hardware architecture play a significant role in the mechanisms that can be used in performance measurement. If performing computations without a multitasking operating system, a thread-load distribution does not exist since there would be no threads. Computational load within a system that bases heavily on external interrupts is more unpredictable and complex from the software point of view than the load of a system in which most of the interrupts are caused by internal mechanisms known to the system. Therefore the measurement mechanisms have to suit the particular dynamics of the software being measured. Those mechanisms have to be feasible within the particular hardware. This makes things a bit more complicated for software based performance measurements since the same measurement software cannot necessarily be used for two systems with different run-time or input/output dynamics or hardware architecture. The methods and building blocks used in performance measurements include:</p>
+<ul>
+  <li><a href="../reference/methods/compile_time.htm">Compile-Time Symbolic Information</a></li>
+  <li><a href="../reference/methods/delayed_fn_call.htm">DFC, Delayed Function Call</a></li>
+  <li><a href="../reference/methods/dynamic_bin_res.htm">Dynamic Binary Resolution</a></li>
+  <li><a href="../reference/methods/file_sys_storing.htm">File System</a></li>
+  <li><a href="../reference/methods/int_stack.htm">Interrupt Stack</a></li>
+  <li><a href="../reference/methods/kernel_containers.htm">Kernel Containers</a></li>
+  <li><a href="../reference/methods/kernel_hook.htm">Kernel Hook</a></li>
+  <li><a href="../reference/methods/link_register.htm">Link Register value</a></li>
+  <li><a href="../reference/methods/os_thread.htm">OS Thread Name and ID</a></li>
+  <li><a href="../reference/methods/periodic_int.htm">Periodic Interrupt</a></li>
+  <li><a href="../reference/methods/pgm_counter.htm">Program Counter value</a></li>
+  <li><a href="../reference/methods/read_write_load.htm">Read/Write Load Characteristics (Memory and File system)</a></li>
+  <li><a href="../reference/methods/rofs.htm">ROFS</a></li>
+</ul>
+<p class="note"> <strong>NOTE:</strong> Many of these methods and building blocks are specific to the OMAP/ARM architecture and Symbian OS actually used.</p>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Dynamic Memory Characteristics</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h3>Dynamic Memory Characteristics</h3>
+<p>  Symbian programming guidelines instruct that memory should be handled as a scarce resource. Basically, memory should be allocated on demand and freed as soon as possible. Based on gathered empirical data, a typical characteristic of a dynamic memory implementation pattern in an Symbian application is the following:</p>
+<ol>
+  <li>Allocate memory</li>
+  <li>Reset contents of memory</li>
+  <li>Do something</li>
+  <li>Free the allocated memory</li>
+</ol>
+<p>If the sequential functional trace shows the above pattern and it occurs frequently in the application, try to determine why it happens. Determine whether allocation and free operations for objects of the same type and size could be replaced with a simple cache.</p>
+<p>If an application uses dynamic memory extensively, it is beneficial to know statistics of utilized block sizes. Very small block sizes used frequently are potential performance bottlenecks.</p>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

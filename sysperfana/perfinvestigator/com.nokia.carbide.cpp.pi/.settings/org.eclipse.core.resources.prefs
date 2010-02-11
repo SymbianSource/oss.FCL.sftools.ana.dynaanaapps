@@ -1,0 +1,12 @@
+#Tue Feb 10 11:22:02 CST 2009
+eclipse.preferences.version=1
+encoding//src/com/nokia/carbide/cpp/internal/pi/actions/messages.properties=8859_1
+encoding//src/com/nokia/carbide/cpp/internal/pi/analyser/messages.properties=8859_1
+encoding//src/com/nokia/carbide/cpp/internal/pi/model/messages.properties=8859_1
+encoding//src/com/nokia/carbide/cpp/internal/pi/perspectives/messages.properties=8859_1
+encoding//src/com/nokia/carbide/cpp/internal/pi/properties/messages.properties=8859_1
+encoding//src/com/nokia/carbide/cpp/internal/pi/test/messages.properties=8859_1
+encoding//src/com/nokia/carbide/cpp/internal/pi/visual/messages.properties=8859_1
+encoding//src/com/nokia/carbide/cpp/pi/editors/messages.properties=8859_1
+encoding//src/com/nokia/carbide/cpp/pi/plugin/manager/messages.properties=8859_1
+encoding//src/com/nokia/carbide/cpp/pi/util/messages.properties=8859_1

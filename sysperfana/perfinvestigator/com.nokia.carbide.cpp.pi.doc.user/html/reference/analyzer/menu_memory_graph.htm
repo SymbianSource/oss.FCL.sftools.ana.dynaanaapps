@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Memory Graph Menu</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Memory Graph Menu </h2>
+<p>The <strong>Memory Graph</strong> menu is available whenever a <span class="code">.npi</span> or <span class="code">.bap</span> data file is opened that contains memory usage trace data. Use it to modify how the graph is calculated, view memory statistics, and control how the memory information is displayed. </p>
+<p align="center"><img src="images/menu_memory_usage.png" width="412" height="151"></p>
+<p class="figure">Figure 1. Memory Graph menu items </p>
+<h5>Table 1. Memory Graph &mdash;menu items
+</h5>
+<table width="778"
+border="0" cellpadding="2" cellspacing="0">
+  <tr valign="top">
+    <th width="236" class="Cell">Menu Item </th>
+    <th width="532" class="Cell">Description</th>
+  </tr>
+  <tr valign="top">
+    <td class="Cell"><b>Memory Usage Statistics </b></td>
+    <td class="Cell">Open the <a href="wnd_memory_usage_statistics.htm">Memory Usage Statistics</a> dialog. </td>
+  </tr>
+  <tr valign="top">
+    <td class="Cell"><p><b>Show Chunk Usage </b></p></td>
+    <td class="Cell"><p>Select<b> Show Chunk Usage</b> to show  chunks allocated to threads. Heap threads are not included. The graph refreshes and scales the vertical axis to cover the maximum non-heap chunk usage of the entire graph or the current selected threads. </p></td>
+  </tr>
+  <tr valign="top">
+    <td class="Cell"><b>Show Stack/Heap Usage </b></td>
+    <td class="Cell">Select<b> Show Stack/Heap Usage</b> to show thread heap chunks.</td>
+  </tr>
+  <tr valign="top">
+    <td class="Cell"><b>Show Current and Stack/Heap Usage </b></td>
+    <td class="Cell">This is the default setting showing both the current and stack/heap usage portions of the graph.</td>
+  </tr>
+  <tr valign="top">
+    <td class="Cell"><b>Dynamically Rescale to Selected Threads </b></td>
+    <td class="Cell">Enable to rescale the vertical axis of the graph to
+
+
+the maximum memory usage in the entire graph by the threads currently checked in the CPU load table. When disabled, rescale the vertical axis to the maximum memory usage of all threads in the entire graph. The default settings is disabled. </td>
+  </tr>
+</table>
+<p><strong>Related references </strong></p>
+<ul>
+  <li><a href="main_view.htm">Analyzer View</a></li>
+<li><a href="view_memory_usage.htm">Memory Usage View</a></li>
+<li><a href="wnd_memory_usage_statistics.htm">Memory Usage Statistics</a> </li>
+</ul>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

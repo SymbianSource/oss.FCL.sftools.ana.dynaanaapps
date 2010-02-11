@@ -1,0 +1,20 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>BUP Trace</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Button Press Trace</h2>
+<p>This provides an exact trace that records data about buttons pressed during the trace.</p>
+<p> It is often useful to see the positions where different buttons were pressed during the trace. The mechanism for collecting BUP traces is simple. The data is collected from the user side. The trace mechanism creates a new <span class="code">RwindowGroup</span> object and a <span class="code">RwsSession</span> object to interact with the Window Server. The window group is hidden from the display, and it is made to receive all of the needed key presses. When received, a key press event is then stored to the trace, along with the time the event took place.</p>
+<p><strong>Related Reference </strong></p>
+<ul>
+  <li><a href="../../tasks/analyser/key_profile_pref.htm">Key Press Profile</a></li>
+</ul>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

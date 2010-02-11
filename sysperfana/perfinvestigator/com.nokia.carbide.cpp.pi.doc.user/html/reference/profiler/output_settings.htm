@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Setting Output Settings</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+    <style type="text/css">
+<!--
+.style1 {font-family: "Courier New", Courier, mono}
+-->
+    </style>
+</head>
+
+<body>
+<h2>Setting Output Settings</h2>
+<p>Use the <b>Output settings </b>  menu in the Profiler to specify the characteristics of the  sampled data file. The output settings include:</p>
+<table width="650" border="1" align="center">
+  <tr>
+    <td width="33"><b>S60</b></td>
+    <td width="593"><div align="center">&nbsp;<img src="images/screen_output_settings.png" width="264" height="312">&nbsp;<img src="images/screen_output_settings_02.png" width="264" height="312"></div></td>
+  </tr>
+  <tr>
+    <td><b>UIQ</b></td>
+    <td><div align="center"><img src="images/uiq_setting_output_settings.png" width="240" height="320"></div></td>
+  </tr>
+</table>
+<p class="figure">Figure 1. Output Settings options for file system and debug mode (S60 and UIQ) </p>
+<h5>Table 1. Output Settings Options</h5>
+<table width="90%" border="0" cellpadding="2" cellspacing="0">
+  <tr>
+    <th width="147" scope="col">Menu Option </th>
+    <th width="640" scope="col">Description</th>
+  </tr>
+  <tr>
+    <td><b>Output to </b></td>
+    <td><p>Specify either the target device's <span class="style1">File system</span> or <span class="style1">Debug port</span> to store the sampled data.</p>
+    <p class="note"><b>NOTE </b>Not available in UIQ version. </span></p></td>
+  </tr>
+  <tr>
+    <td><b>Save file in </b></td>
+    <td>If you selected <span class="style1">File system</span> in the <span class="style1">Output to</span> menu option, then you can save the data file to a memory card or the target device's C:\ drive.
+    <p class="note"><b>NOTE</b> Not available in UIQ version. </span></p></td>
+  </tr>
+  <tr>
+    <td><b>File prefix </b></td>
+    <td><p>Specify the file prefix for data files. The name of the profiler data file is formed from the prefix and ends with a .dat extension. If you perform multiple traces and use the file output option, include a hash mark (#) in your file prefix. Subsequent traces will then be saved with different file names. The hash mark will be replaced with an incremented number starting from one.</p>
+    <p><span class="note">Files names must be 19 characters or less.</span></p>
+    <p class="note"><b>NOTE</b> See<a href="advanced_options.htm"> Setting Advanced Options</a> for UIQ Mem, Pri sample interval information. </p></td>
+  </tr>
+</table>
+<div>
+  <h4>Setting the Output Settings </h4>
+  <ol>
+    <li>Launch the Profiler application on the target device </li>
+    <li>Open the Output Settings options screen: </li>
+    <ul>
+      <li>S60 - Select the Output Settings menu</li>
+        <li>UIQ - Select the Misc Settings... menu</li>
+    </ul>
+    <li>Set the sampled data file informaton</li>
+  <li>Exit the screen </li>
+  </ol>
+</div>
+<h5>Related references</h5>
+<ul>
+  <li><a href="prof_using.htm">Using the Profiler</a></li>
+</ul>
+<h5>Related tasks</h5>
+<ul>
+  <li><a href="advanced_options.htm">Setting Advanced Options</a></li>
+  <li><a href="tracing_options.htm">Setting Tracing Options</a></li>
+</ul>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

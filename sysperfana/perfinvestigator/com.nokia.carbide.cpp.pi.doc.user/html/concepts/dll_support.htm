@@ -1,0 +1,16 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>DLL Support Trace and Analysis EKA1 version</title>
+    <link href="../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Dynamic Binary Support Trace and Analysis</h2>
+<p>Dynamic binary support  trace analysis is dedicated to performing function level performance analysis on binaries that have been uploaded to the device at run-time, at least in the operating system&rsquo;s point of view. In those cases, the address of the binary is not known at compile-time. If sampled with any of the previously mentioned methods, it is impossible to tell the binary from an address that is not found from the symbol file, which is produced at run-time. One solution to resolve the problem is to store small pieces of the executed binary code at run-time and store them along with the trace taken.</p>
+<p>Performance Investigator suppports  EKA2 dynamic support trace and analysis. Dynamic binary support trace in EKA2 works on a different principle than in EKA1. This is facilitated by certain changes in the kernel. In the EKA2 version, the collected information provides a semantically similar result as the EKA1 version, thus information about dynamically loaded binaries and their locations in memory is provided as the result of the analysis. However, the information collected from the system is much more straightforward in the EKA2 version.</p>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

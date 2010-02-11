@@ -1,0 +1,21 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Dynamic Binary Resolution</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h3>Dynamic Binary Resolution</h3>
+<p>In some products, location of binaries can change at run-time. This is especially true if the product allows software modules to be uploaded through any medium of information transfer, which is in practice a common use case nowadays. Problem with dynamic binaries in performance tracking is that the actual binary that has been under execution at any particular time cannot be resolved by examining only the PC value. There are at least two alternatives to fight the problem.</p>
+<OL>
+  <LI>
+    <P LANG="en-GB" ALIGN=JUSTIFY>Location of binaries have to be stored at run-time so that each code address can then be bound to its respective binary at each particular time, or</P>
+  <LI>
+    <P LANG="en-GB" ALIGN=JUSTIFY>The actual binary code is sampled during execution so that small pieces of executable binaries can be known to have resided at a certain address at a certain time. After sampling the execution, it is then possible to solve the puzzle of many small pieces of code/address/time elements during the analysis phase. This approach requires quite complicated processing.</P>
+</OL>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

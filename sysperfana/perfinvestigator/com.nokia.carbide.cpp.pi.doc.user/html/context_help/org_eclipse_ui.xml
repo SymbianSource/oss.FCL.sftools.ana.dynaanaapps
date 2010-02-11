@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Define help for Debug Perspective default views -->
+<!-- plugin="org.eclipse.ui" -->
+
+<contexts>
+	<!-- WIZARDs -->
+	
+	<!-- NEW WIZARD
+	<context id="new_wizard_selection_wizard_page_context" >
+		<description>Use the Console view to show the output of a process and provide keyboard input to a process.</description>
+		<topic label="Creating New Projects" 					href="html/tasks/CreatingNewProjects.html"/>
+	</context>
+	-->
+	
+	<!-- IMPORT WIZARD -->
+	<context id="import_wizard_selection_wizard_page_context" >
+		<topic label="Importing Profiler Data Files"		href="html/tasks/analyser/an_load_trace_files.htm" />
+	</context>
+
+    <context id="save_table_page_context" >
+	   <description>Save selected samples to a comma separated file that can be opened in a spreadsheet application.</description>
+		<topic label="Save table data to csv file"  			href="html/reference/analyzer/save_table.htm" />
+	</context>
+
+    <context id="PI_SAVE_SAMPLES_WIZARD_PAGE" >
+	   <description>Save selected samples to a comma separated file that can be opened in a spreadsheet application.</description>
+		<topic label="Save checked samples to csv file"  			href="html/reference/analyzer/save_table.htm" />
+	</context>
+
+	<!-- EXPORT WIZARD
+	<context id="export_wizard_selection_wizard_page_context" >
+		<description>Use the Console view to show the output of a process and provide keyboard input to a process.</description>
+		<topic label="Console view"  			href="html/reference/view_log.htm" />
+	</context>
+	-->
+
+	<!-- PREFERENCE PANELS -->
+
+	<!-- KEYS
+	<context id="keys_preference_page_context" >
+		<description>Use the Console view to show the output of a process and provide keyboard input to a process.</description>
+		<topic label="Console view"  			href="html/reference/view_log.htm" />
+	</context>
+	-->
+
+</contexts>

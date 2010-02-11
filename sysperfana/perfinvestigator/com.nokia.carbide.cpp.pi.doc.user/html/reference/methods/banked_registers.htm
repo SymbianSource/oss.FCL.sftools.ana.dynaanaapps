@@ -1,0 +1,16 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Banked Registers</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h3>Banked Registers </h3>
+<P LANG="en-GB" ALIGN=JUSTIFY>Current ARM processor architecture has a total of 37 registers. The registers are arranged into overlapping banks. Each of the banks represents a set of 16 general-purpose registers, a current program status register and an optional stored program status register (which is present only in the exception mode banks). There is one bank of registers for each of the processor modes. Some of the registers between the register banks refer to the same physical register, and some of the registers are private for each of the banks respectively. </P>
+<P LANG="en-GB" ALIGN=JUSTIFY>Purpose of the banks is to reduce the amount of data to be stored to the stack when the processor mode is changed. User mode registers can be accessed from the privileged modes through a specific form of the STM (store multiple) and LDM (load multiple) instructions. Information within the user mode registers are valuable in performance measurements when analyzing the operation of the user mode software from a privileged mode, such as during a periodic interrupt</P>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>SWI, Software Interrupt</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h3>SWI, Software Interrupt</h3>
+<p>In the ARM instruction set, software interrupts are software-generated exceptions that cause the processor mode to change to the supervisor mode, normal interrupts to disable, and the execution to branch into the location corresponding to the software interrupt exception (0xFFFF0008 or 0x00000008, depending on the configuration). The type of the interrupt can be defined with a 24-bit value.</p>
+<P LANG="en-GB" ALIGN=JUSTIFY>A software interrupt is issued with the SWI instruction. Software interrupts are used generally to implement operating system calls, since they enable a quick and controlled context switch to a privileged mode. When performing software performance measurements, the use of software interrupts can become very useful, as they provide a way to record run-time information about the current state of the software by using the resources available within the kernel while being in a privileged mode.</P>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Using the Command-line</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Using the Command-line</h2>
+<p>Performance Investigator can be launched from the command line using <span class="code">eShell</span> or  other device resident command-line tool to facilitate program testing. Using <span class="code">eShell</span>, you can start, stop, or perform timed actions on any application you want to profile. </p>
+<p align="center"><img src="images/cmd_line_eshell_example.png" width="267" height="109"></p>
+<p class="figure">Figure 1. eShell ready to start a 30-second timed Profiler session. </p>
+<p>Calls of the command line version of the Carbide.c++ Profiler have the following forms:</p>
+<p class="listing">
+  CProfApp_SISX start [<i>settings_file</i>]<br>
+  CProfApp_SISX end [<i>settings_file</i>]<br>
+  CProfApp_SISX timed <i>seconds</i> [<i>settings_file</i>]<br>
+  CProfApp_SISX timed <i>settings_file</i> <i>seconds</i></p>
+<p>where:</p>
+<ul>
+  <li><span class="code">start </span>&#8212; starts a Profiler session based on the settings file</li>
+  <li><span class="code">end </span>&#8212; ends a Profiler session based on the settings file</li>
+  <li><span class="code">timed </span>&#8212; starts a timed Profiler session based on the settings file</li>
+  <li><i>settings_file</i> </span>&#8212; a file containing the session <a href="../settings.htm">settings</a>. The file name may be enclosed in double quote (") characters. If no settings file is specified, the default is <span class="code">C:\Data\CProfSettings.txt</span>.</li>
+  <li><i>seconds</i> </span>&#8212; the decimal time in seconds for a timed Profiler session. It must be present for a timed session, and it must be greater than 0.</li>
+</ul>
+<p class="note"><b>NOTE</b> You can generate a valid configuration file by starting the Carbide.c++ Profiler GUI, selecting suitable settings, and then exiting the GUI. The settings file created is called <span class="code">C:\Data\CProfSettings.txt</span>.</p>
+<h5>Command examples</h5>
+<p>Starting and stopping a session:</p>
+<blockquote>
+  <p class="listing"> cprofapp_sisx start c:\Data\cprofsettings.txt<br>
+    cprofapp_sisx end c:\Data\cprofsettings.txt</p>
+</blockquote>
+<p>Executing a 30 second session:</p>
+<blockquote>
+  <p class="listing"> cprofapp_sisx timed 30 c:\Data\cprofsettings.txt</p>
+</blockquote>
+<p><strong>Related references </strong></p>
+<ul>
+  <li><a href="../settings.htm">Profiler Settings File </a></li>
+</ul>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

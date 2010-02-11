@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html><head>
+<title>Examining a Profiling Project</title>
+<link href="../../book.css" rel="stylesheet" type="text/css" />
+</head><body>
+<h2><a name="example" id="example"></a>Examining a Profiling Project</h2>
+<p>The purpose of creating a profiling use case is to analyze the performance of Symbian OS applications. In general, the objective is to define the behavior of an application and its environment when they are interacting. When designing a profiling use case, it helps to document the process and save log files.</p>
+<p>Existing test cases created by application developers or test personnel can be used as a template. However, consider the following when designing and preparing a test of a profiling use case.</p>
+<p>High Profiler sampling rates can cause trace files to grow excessively large, especially if the test lasts for a long time. Therefore, it is recommended that the duration of the test be as short as possible. The maximum duration of a profiling test is typically two to three minutes. There should also be reasonable gaps between input events so that specific events can be easily detected and distinguished from the trace log.</p>
+<p>The following example describes in a high-level how to search for performance bottlenecks. Refer to Figure 1 to illustrate an example of determining time spent in a particular application and the related functions consuming most of the CPU time.</p>
+<p align="center"><img src="../images/GS_example_figure1.png" width="679" height="574" /></p>
+<p align="center" class="figure">Figure 1. Examining a Specific Application</p>
+<p align="left">As shown in Figure 1, examine the thread load graph and select the time interval of interest. In this example, the selected time interval is 21.010 to 21.970 seconds.</p>
+<p align="left">Figure 1 indicates the three most CPU time consuming threads in the time frame 21-22 seconds:</p>
+<ul>
+  <li>23.02% Null</li>
+  <li>16.56% Wserv_36 </li>
+  <li>15.31% Main_295</li>
+</ul>
+<p>Notice that only <span class="code">Null (ekern.exe[1]::Null_0)</span> and<span class="code"> Wserv_36</span> are checked and thus are shown in the graph. To add or remove threads from the graph, use the shift and control keys to check or uncheck multiple lines. Right-click to display a context menu for more options.</p>
+<p>You can determine which binaries are executed by the threads during the 21-22 second interval by right-clicking inside the table and selecting <strong>Thread &gt; Binary</strong>. This will change the graph displayed to the binary load graph in Figure 2.</p>
+<p align="center"><img src="../images/GS_example_figure2.png" width="679" height="574" /></p>
+<p align="center" class="figure">Figure 2. Binary Load Graph </p>
+<p>As shown in Figure 2, this application spends 21.25% of the time in the <span class="code">_reka2_ekern.exe</span> binary. At the lowest level, you can find out which functions are executed by the binaries that execute during the 21-22 second interval by right-clicking inside either table and selecting <strong>Thread &gt; Binary &gt; Function</strong>. This will change the graph displayed to the function load graph in Figure 3.</p>
+<p class="note"><strong>NOTE:</strong> For each selected binary in Figure 2, the Analyser graphs all of
+that binary's samples, just as if you had selected that binary in the Binaries tab. The graph does not only
+show binary samples that are also associated with threads
+<span class="code">ekern.exe[1]::Null_0</span> and<span class="code"> Wserv_36</span>.
+We expect to deliver that functionality in a future release. 
+Keep this in mind as you drill down into a specific thread, binary, or function.</p>
+<p align="center"><img src="../images/GS_example_figure3.png" width="679" height="574" /></p>
+<p align="center" class="figure">Figure 3. Function Load Graph</p>
+<p>Figure 3 shows that 9.90% of the execution time was spent in a single function called NKern::RestoreInterrupts(int), within the _reka2_ekern.exe binary. In the Function table scroll to see the <strong>In Binary</strong> column to determine the binary containing the function.</p>
+<p>Select the Function Calls tab to view the Function Call Analysis tables, as shown in Figure 4.</p>
+<p align="center"><img src="../images/GS_example_figure4.png" width="682" height="574" /></p>
+<p align="center" class="figure">Figure 4. Function Call Analysis</p>
+<p align="left">Individual functions can be selected to determine, within the time frame 21-22 seconds, which functions called the selected function and which functions were called by the selected function. You can sort functions by clicking the headings provided for each column.</p>
+<p align="left"><strong>Related references</strong></p>
+<ul>
+  <li><a href="../reference/analyzer/GUI_tour.htm">Analyzer GUI Controls </a></li>
+  <li><a href="../reference/analyzer/analyzing_table_data.htm">Analyzing Table Data</a> </li>
+  <li><a href="../reference/analyzer/thread_load.htm">Thread Load</a></li>
+  <li><a href="../reference/analyzer/binary_load.htm">Binary Load</a></li>
+  <li><a href="../reference/analyzer/function_load.htm">Function Load</a></li>
+  <li><a href="../reference/analyzer/function_calls.htm">Function Calls</a></li>
+</ul>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br />License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+
+</body>
+</html>

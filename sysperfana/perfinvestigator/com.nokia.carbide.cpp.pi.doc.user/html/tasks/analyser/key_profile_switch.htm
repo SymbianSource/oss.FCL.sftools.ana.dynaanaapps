@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="keywords" content="Performance Investigator">
+	<title>Switch Key Map Profile</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Switch Key Map  Profile</h2>
+<p>When a profiler .dat file is imported and converted to a NPI file you can assign a key map profile. After importing a profiler .dat file,  the key map profile associated with a NPI file can be changed.</p>
+<p>To switch the key map profile, do either of the following:</p>
+<ul>
+  <li>Select an open NPI file to bring it into focus and select <strong>Investigator &gt; Apply New Key Press Profile</strong>.</li>
+  <li>Right-click on a NPI file in the Project Explorer view and select <strong>Switch Key Press Profile</strong>. (If NPI file is not open it will be opened.)</li>
+</ul>
+<p>The following dialog will appear.</p>
+<p align="center"><img src="images/switch_key_profile.png" alt="switch key profile" width="438" height="309"></p>
+<p align="center" class="figure">Figure 1. Switch Key Press Profile for Selected NPI File </p>
+<p>Select the desired key profile and click the <strong>Switch To New Profile</strong> button. The <strong>PI pre-2.0</strong> key map profile is used when a NPI file based on the older Carbide.c++ 1.3 format is opened.</p>
+<p>Check the option: <strong>Overwrite all modified key labels</strong> if you want all button events to be assigned the  labels defined in the selected profile, and which correspond with the same hex and TKeyCode values. For example, if the labels in the current profile and profile you are switching to have the same keycode, the labels are assumed to be unmodified. Any unmodified label will be changed to the label in the new  profile. Any modified label will remain unchanged if the check box is not  selected. So you must check this option to change all modified labels along with unmodified labels. </p>
+<p>Save the NPI file to accept the changes. You must close and reopen the file for the change to appear in the Current Profile field of the Switch Key Press Profile dialog.</p>
+<p>Right-click on a NPI file in the Project Explorer and select Properties to display key profile and other related profiler information.</p>
+<p align="center"><img src="images/npi_prop.png" alt="NPI properties" width="569" height="391"></p>
+<p align="center" class="figure">Figure 2. PI Property Information</p>
+<p><strong>Related concepts </strong></p>
+<ul>
+  <li><a href="../../reference/profiler/prof_using.htm">Button Press Capture</a> </li>
+</ul>
+<p><strong>Related references</strong></p>
+<ul>
+  <li><a href="key_profile_pref.htm">Key Press Profile</a></li>
+  <li><a href="../profiler/btn_press_enable.htm">Setting the Button Press Capture Option</a></li>
+  <li><a href="btn_press_show.htm">Showing/Hiding Button Events</a></li>
+</ul>
+<p><strong>Related task</strong></p>
+<ul>
+  <li><a href="btn_press_change.htm">Changing Button Event Information</a> </li>
+</ul>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

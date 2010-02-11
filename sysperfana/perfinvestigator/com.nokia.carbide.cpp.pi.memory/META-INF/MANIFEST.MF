@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Carbide.c++ Performance Investigator Memory Usage
+Bundle-SymbolicName: com.nokia.carbide.cpp.pi.memory;singleton:=true
+Bundle-Version: 1.5.0.qualifier
+Bundle-Activator: com.nokia.carbide.cpp.pi.memory.MemoryPlugin
+Bundle-Vendor: Nokia
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.ui.ide,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ com.nokia.carbide.cpp.pi,
+ com.nokia.carbide.cpp.pi.util,
+ com.nokia.carbide.cpp.pi.priority,
+ org.eclipse.draw2d
+Bundle-ActivationPolicy: lazy
+Export-Package: com.nokia.carbide.cpp.pi.memory;x-friends:="com.nokia.carbide.cpp.pi.memory.tests"

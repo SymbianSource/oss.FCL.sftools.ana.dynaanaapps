@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="keywords" content="Saving Selected Samples">
+	<title>Save table</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Save Table</h2>
+<p>The Save Table dialog allows you to save the contents of the entire table in the current pane to a specified (.csv) file. Column titles will be included for easy identification when opened in an spreadsheet for analysis. The table contents do not have to be selected for the table to be saved. Figure 1 shows the Save Table dialog. You can select an existing project and folder in which to add the .csv file or select the <strong>Create Empty Project...</strong> button to create a new empty project to contain the new .csv file.</p>
+<p align="center"><img src="images/savetable1.png" alt="Save Table dialog" width="438" height="415"></p>
+<p align="center" class="figure">Figure 1 - Saving Table Data Dialog</p>
+<p>If you select the <strong>Create Empty Project...</strong> button, the New Project dialog will appear as shown in Figure 2. Enter a project name and specify a workspace location to store the project. Click Next to specify project dependencies or click Finish to create the new project. If you select Finish at this point, then you can select the new project (in the list of projects) as the project to contain the .csv file.</p>
+<p align="center"><img src="images/savetable2.png" alt="Create empty project" width="438" height="415"></p>
+<p align="center" class="figure">Figure 2 - New Project Dialog</p>
+<p>If you select Next the Project References page will appear. In Project <SPAN name="resultofMatch"><SPAN name="resultofMatch">Referenc</SPAN>es</SPAN>, you can set <SPAN name="resultofMatch">project</SPAN> dependencies for   the new <SPAN name="resultofMatch">project</SPAN>. In the   list of other <SPAN name="resultofMatch">project</SPAN>s in   the Workspace, you can select one or more <SPAN name="resultofMatch">project</SPAN>s on which you want the new <SPAN name="resultofMatch">project</SPAN> to depend upon. Click Finish to return to the main Save Table dialog and select the new project as the project to contain the .csv file. Click Finish in the main dialog to create and open the new file in your default spreadsheet program.</p>
+<p align="center"><img src="images/savetable3.png" alt="Reference project" width="438" height="415"></p>
+<p align="center" class="figure">Figure 3 - Select Referenced Projects (if applicable)</p>
+<h4>Related Information</h4>
+<h5>Save Drilldown Tables</h5>
+<p>The Save Drilldown Tables command is similar to the Save Table command and related dialogs. The difference being that the .csv file will include Thread, Binary, and/or Function information; as displayed in the analyzer. For example, if Thread -&gt; Binary -&gt; Function is selected by the user and displayed in the analyzer, then Thread, Binary, and Function related information will be saved in the .csv file.</p>
+<h5>Save Samples for Checked Threads</h5>
+<p>When the Threads tab is selected, this command saves samples of checked threads. A dialog similar to the Save Table dialog will appear for you to save threads checked  in the Thread table to a comma separated .csv file. This file can be opened in a spreadsheet application.</p>
+<h5>Save Samples for Checked Binaries</h5>
+<p>When the Binaries tab is selected, this command saves samples of checked binaries. A dialog similar to the Save Table dialog will appear for you to save binaries checked in the Binaries table to a comma separated .csv file. This file can be opened in a spreadsheet application.</p>
+<h5>Save Samples for Checked Functions</h5>
+<p>When the Functions tab is selected, this command saves samples of checked functions. A dialog similar to the Save Table dialog will appear for you to save functions checked in the Functions table to a comma separated .csv file. This file can be opened in a spreadsheet application.</p>
+<h5>Save All Call Samples for Interval</h5>
+<p>When the Function Calls tab is selected, this command saves all function calls for the selected time interval. A dialog similar to the Save Table dialog will appear for you to save all function calls made during the selected time interval to a comma separated .csv file. This file can be opened in a spreadsheet application.</p>
+<p></p>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

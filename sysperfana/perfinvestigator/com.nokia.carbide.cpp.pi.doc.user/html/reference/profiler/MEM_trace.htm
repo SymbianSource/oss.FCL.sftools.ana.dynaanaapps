@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>MEM Trace</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Memory Trace</h2>
+<p>This trace takes samples of memory consumption of processes and threads. It records the free and total amount of memory on the device, the amount of memory allocated to kernel chunks, and the amount of memory allocated to stack/heap of each individual thread.</p>
+<p>The memory trace measurement is performed periodically in a DFC function with interrupts disabled during the critical time of gathering data. Due to the large number of calculations involved in the memory sampling procedure, the minimum sampling frequency a user may request is 50 milliseconds. If several other traces are on, even a 50 millisecond memory sampling frequency may cause system instability because of the time spent in the interrupts disabled mode. </p>
+<p>The memory sampling procedure performs a loop in which each index in the kernel Chunk container is read. All normal system-level memory allocation takes place through Chunks, so it is a natural place to investigate system-level memory utilization. The chunks that contain thread heaps are explicitly sought (in EKA-2, the Chunks containing a thread’s heap have a name <span class="code">$HEAP</span>, which is used as the indicator). After being found, names of the threads owning the newly found chunks are added to the data stream. After that, the heap allocation status of both old and new heaps is pushed to the data stream, along with the information about the current stack size of the thread owning the heap.</p>
+<p class="note"><strong>NOTE</strong> A chunk whose name contains the   string “$HEAP” has a chunk   size and does not have a heap/stack size.</p>
+<p>In EKA-2 kernel, the memory allocated internally by the kernel is divided into three main regions, represented by:</p>
+<ul>
+  <li> <span class="code">SvData</span> (containing the kernel binary image)</li>
+  <li><span class="code">SvHeap</span> (containing the bulk of kernel memory)</li>
+  <li><span class="code">SvStack</span>, containing the supervisor stacks (used only in EKA-2) </li>
+</ul>
+<p>for all threads in the system. In its current form, tracing the allocation status of those chunks (mainly the <span class="code">SvHeap</span> and <span class="code">SvStack</span>, since <span class="code">SvData</span> is static) has not been implemented.</p>
+<p>The memory trace cannot determine the amount of memory being used within an allocated chunk or stack/heap.
+<h5>Related references</h5>
+<ul>
+  <li><a href="../analyzer/view_memory_usage.htm"> Memory Usage View</a></li>
+<li><a href="../analyzer/wnd_memory_usage_statistics.htm">Memory Usage Statistics </a></li>
+</ul>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

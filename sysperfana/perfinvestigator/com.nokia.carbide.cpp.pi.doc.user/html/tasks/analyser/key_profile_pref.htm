@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="keywords" content="Performance Investigator">
+	<title>Key Press Mapping</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Key Press Profile</h2>
+<p>If the Button Push Capture profile option was on during a profiling session, then Key presses are traced and saved in the profiler's .dat file as hex numbers. When a .dat file is imported, key press events are converted to key label strings and saved in the NPI file; and loses the original hex number.</p>
+<p>Key profiles vary depending on the SDK used and device targeted. Therefore, you can select the desired key profile for development.</p>
+<p class="note"><strong>NOTE</strong> The key profile selected in the Manage Profiles list serves as the suggested global default for profiler .dat files that are imported. When importing a .dat file (File &gt; Import &gt; Performance Investigator &gt; Performance Investigator Data) this default profile will be highlighted in the <strong>Select Key Press Mapping Profile</strong> wizard page.</p>
+<p>The key layout mapping  is maintained in a XML file. You can select from predefined built-in profiles or create your own key profile and save it to a XML file.</p>
+<p>A preference dialog is provided to create, delete, edit, import, or export a user defined workspace profile. Select <strong>Window &gt; Preferences &gt; Carbide.c++ &gt; Performance Investigator</strong> to open the Key Press Trace preference window.</p>
+<p align="center"><img src="images/pi_pref.png" alt="PI Preference" width="663" height="563"></p>
+<p align="center" class="figure">Figure 1. Key Profile Mapping </p>
+<p>In the Manage Profiles group you can select a user-defined or built-in key map profile for the device targeted by your current development. Developing for  different devices may require different key layouts. Built-in key profiles are displayed as Read only. New profiles you create can be edited.</p>
+<table width="100%"  border="0" cellpadding="2" cellspacing="0" >
+  <tr>
+    <th width="27%" scope="col">Item</th>
+    <th width="62%" scope="col">Explanation</th>
+  </tr>
+  <tr>
+    <td style="vertical-align: top;"><p><strong>Duplicate</strong></p></td>
+    <td style="vertical-align: top;"><p>Opens a Duplicate Profile dialog for you to define a name for a new key map profile and select a built-in profile to base it on.</p>    </td>
+  </tr>
+  <tr >
+    <td valign="top"><strong>Remove</strong></td>
+    <td valign="top"><p >This button is enabled when a user defined workspace profile is selected and will delete the currently selected user profile. A confirmation dialog will appear before removing the profile. </p>    </td>
+  </tr>
+  <tr>
+    <td style="vertical-align: top;"><strong>Edit...</strong></td>
+    <td style="vertical-align: top;"><p>This button is enabled when a user defined workspace profile is selected and will open an Editing Profile dialog. You can Add, Remove, and Edit key map entries for your profile. </p>    </td>
+  </tr>
+  <tr>
+    <td style="vertical-align: top;"><strong><a href="key_profile_imp.htm">Import Profiles...</a></strong></td>
+    <td style="vertical-align: top;">Opens a Key Press Profile Import Wizard to allow you to enter or select path and filename of a key profile XML file. If a profile exists in the workspace with the same name of a profile defined in imported XML file (identified by <strong>profileID</strong> argument) then a warning screen appears and lists the profile(s) that will be overwritten in the workspace.</td>
+  </tr>
+  <tr>
+    <td style="vertical-align: top;"><strong><a href="key_profile_exp.htm">Export Profiles...</a></strong></td>
+    <td style="vertical-align: top;">Opens a Key Press Profile Export Wizard to allow you to define or select a key profile XML file that will store user defined profiles. All user defined workspace profiles will be exported to one XML file. The Export function does not export built-in key profiles. By exporting all your profiles to one XML file you can provide a single XML file for a family of devices.</td>
+  </tr>
+  <tr>
+    <td style="vertical-align: top;"><strong>Restore Defaults</strong> </td>
+    <td style="vertical-align: top;">This button sets the profile to the Symbian TechView (carbide built-in) profile.</td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<p><a name="newkeyprof"></a>Click <strong>Duplicate</strong> to create a new profile. Enter a name for the profile and select a built-in profile to base your new profile on. After creating a new profile, it will appear in the Key Press Trace window. You can then click <strong>Edit...</strong> to make changes to the new profile.</p>
+<p align="center"><img src="images/pi_pref_new.png" alt="new key profile" width="366" height="198"></p>
+<p align="center" class="figure">Figure 2. Create New Profile</p>
+<p>&nbsp;</p>
+<p><a name="editkeymap"></a>Click <strong>Edit...</strong> to open a dialog for modifying key map entries for the profile. An Add, Remove, and Edit... button are provided to create a key mapping, delete a single selected entry, or modify a single key map entry. New or edited entries appear as Bold text in the table until you click the <strong>Save</strong> button. Click <strong>Save</strong> to accept all entries in the table and close the dialog box.</p>
+<p class="note"><strong>NOTE</strong> Once hex values have been entered, they cannot be edited. However, you can remove an entry and recreate it.</p>
+<p>Click <strong>Clear Profile</strong> if you want to clear all entries. A confirmation dialog will appear before erasing all profile entrys.</p>
+<p>Click the <strong>Remove</strong> button to delete a selected kep map entry from the profile.</p>
+<p align="center"><img src="images/pi_pref_edit.png" alt="Edit key profile" width="515" height="340"></p>
+<p align="center" class="figure">Figure 3. Key Map Editor</p>
+<p align="left"><a name="addkeymap"></a>Click the <strong>Add</strong> button in the <strong>Editing Profile <em>name</em></strong> dialog to open a dialog to define a key map entry. </p>
+<p align="center"><img src="images/pi_pref_add.png" alt="Add key map" width="293" height="186"></p>
+<p align="center" class="figure">Figure 4. Add Key Map Entry </p>
+<p align="left"><a name="editkeyentry"></a>Click the <strong>Edit...</strong> button in the <strong>Editing Profile <em>name</em></strong> dialog to open a dialog to edit a selected key map entry.</p>
+<p align="center"><img src="images/pi_pref_edit_entry.png" alt="Edit map entry" width="293" height="158"> </p>
+<p align="center" class="figure">Figure 5. Edit Key Map Entry </p>
+<p align="left">&nbsp;</p>
+<p><strong>Related concepts </strong></p>
+<ul>
+  <li><a href="../../reference/profiler/prof_using.htm">Button Press Capture</a> </li>
+</ul>
+<p><strong>Related references</strong></p>
+<ul>
+  <li><a href="../profiler/btn_press_enable.htm">Setting the Button Press Capture Option</a></li>
+  <li><a href="btn_press_show.htm">Showing/Hiding Button Events</a></li>
+</ul>
+<p><strong>Related task</strong></p>
+<ul>
+  <li><a href="key_profile_switch.htm">Switch Key Map Profile</a></li>
+  <li><a href="btn_press_change.htm">Changing Button Event Information</a> </li>
+</ul>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

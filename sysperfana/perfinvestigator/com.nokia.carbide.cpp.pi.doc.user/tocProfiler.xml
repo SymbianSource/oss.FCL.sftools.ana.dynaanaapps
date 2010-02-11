@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Profiler" >
+
+	<topic label="Profiler" 					href="html/reference/profiler/profiler.htm" />
+	
+	<topic label="Installing the Profiler"  			href="html/tasks/profiler/prof_installation.htm" >
+		<topic label="Connecting by Bluetooth" 			href="html/tasks/profiler/bluetooth_connection.htm" />
+		<topic label="Connecting by Serial Interface" 	href="html/tasks/profiler/serial_connection.htm" />
+		<topic label="Connecting by USB" 				href="html/tasks/profiler/usb_connection.htm" />
+	</topic>
+
+	<topic label="Using the Profiler" 					href="html/reference/profiler/prof_using.htm" />
+	
+	<topic label="Profiler options"  >
+		<topic label="Setting Tracing options" 		href="html/reference/profiler/tracing_options.htm" />
+		<topic label="Setting Output Settings" 		href="html/reference/profiler/output_settings.htm" />
+		<topic label="Setting Advanced options" 	href="html/reference/profiler/advanced_options.htm" />
+	</topic>
+
+	<topic label="Trace items"  						href="html/reference/profiler/Trace_Items.htm" >
+		<topic label="Address/Thread Trace"				href="html/reference/profiler/GPP_trace.htm" />
+		<topic label="Button Press Trace" 				href="html/reference/profiler/BUP_trace.htm" />
+		<topic label="Dynamic Binary Support Trace" 	href="html/reference/profiler/ITT_trace.htm" />
+		<topic label="Function Call Trace" 				href="html/reference/profiler/GFC_trace.htm" />
+		<topic label="Memory Trace" 					href="html/reference/profiler/MEM_trace.htm" />
+		<topic label="Power Usage Trace" 				href="html/reference/profiler/PWR_trace.htm" />
+		<topic label="Thread Priority Trace" 			href="html/reference/profiler/PRI_trace.htm" />
+	</topic>
+	
+	<topic label="Using the Command-line" 			href="html/reference/profiler/cmd_line_overview.htm" >
+		<topic label="Profiler Settings File" 		href="html/reference/settings.htm" />
+	</topic>
+	
+</toc>

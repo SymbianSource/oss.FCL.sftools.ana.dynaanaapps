@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Change Threshold Limits</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Setting Thresholds For Threads, Binaries, and Functions</h2>
+<p>Thresholds can be set to group threads, binaries, and/or functions according to their amount of CPU usage into a pile you do not care about. For example, you can specify all functions using less than 5 percent of the CPU load to be ignored. Then you can focus on other functions in the graph that occupy more than 5 percent of the CPU.</p>
+<p class="note"><strong>Note:</strong> You must select a time interval on the graph to view statistics for an item; such as the percent of CPU usage and number of times sampled.</p>
+<p align="center" class="figure"><img src="images/set_threshold.png" width="578" height="221"></p>
+<p align="center" class="figure">Figure 1. Set Thresholds Dialog Box</p>
+<h5>Table 1. <span class="figure">Set Thresholds</span> options</h5>
+<table width="90%" border="0" cellpadding="2" cellspacing="0" >
+  <tr>
+    <th width="273" scope="col">Options</th>
+    <th width="520" scope="col">Description</th>
+  </tr>
+  <tr>
+    <td><b>Average load &lt;</b></td>
+    <td>Enter a percentage between .10 and 100 percent of the CPU load </td>
+  </tr>
+  <tr>
+    <td><b>Total samples </b></td>
+    <td>Enter number of samples to use as threshold. All items sampled less than the number specified will be grouped into one item. The Average load will be calculated based on the Total samples threshold and number of total samples for the item: threads, binaries, or functions.</td>
+  </tr>
+  <tr>
+    <td><b>Use thread threshold for binaries and functions also </b></td>
+    <td>Check this box to apply the thread threshold value to binaries and functions.</td>
+  </tr>
+</table>
+<p><strong>Related references</strong></p>
+<p><a href="../../reference/analyzer/threshold.htm"> Threshold Limits for Traced Data</a></p>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

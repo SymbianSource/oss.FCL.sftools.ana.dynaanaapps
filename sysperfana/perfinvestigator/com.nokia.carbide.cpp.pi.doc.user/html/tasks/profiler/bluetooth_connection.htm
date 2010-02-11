@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Bluetooth Connection</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+    <style type="text/css">
+<!--
+.style1 {font-family: "Courier New", Courier, mono}
+-->
+    </style>
+</head>
+
+<body>
+<h2>Connecting by Bluetooth</h2>
+<p>The Profiler agent can be wirelessly transferred to and from Bluetooth enabled Nokia S60 devices. Our overall goal is to:</p>
+<ol>
+  <li>Enable Bluetooth devices on the target device and PC.</li>
+  <li>Allow the target’s Bluetooth device to find and connect to the PC’s Bluetooth device, and vice versa.</li>
+  <li>Transfer the Performance Investigator Profiler .sisx files to the target device, and install them.</li>
+  <li>After profiling your application, transfer, import and analyze the profiler (.dat) data file.</li>
+</ol>
+<p>To enable communication with a Bluetooth device, a connection must be established between the PC and the device. Follow the steps below for a typical Bluetooth connection with a Bluetooth enabled device.</p>
+<p class="note">This example shows how to setup a Bluetooth connection on a PC running Windows XP SP2. The actions to setup Bluetooth connections may be different on your version of Windows. Refer to the OS documentation and your Bluetooth installation for information on configuring Bluetooth connections.</p>
+<div class="step">
+  <h4>Steps to Setup a Bluetooth Connection</h4>
+    <ol>
+      <li>
+      Enable Bluetooth on the Symbian OS target device</li>
+      <p> For example, select the Communications application on the device, then select Bluetooth. </p>
+      <li>On your PC, start the Bluetooth device</li>
+      <p>For example,  right-click the Bluetooth icon in your task bar and select <span class="style1">Start the Bluetooth device</span>. </p>
+      <li>Open your Bluetooth Configuration window</li>
+      <p> For example, select Bluetooth configuration from the control panel or double-click My Bluetooth Places icon on your Desktop.</p>
+      <li>Click the Accessibility tab and verify the following settings (Figure 1)</li>
+      <p>Check the option <span class="style1">Let other Bluetooth devices discover this computer</span>. Set the option <span class="style1">Allow</span> to <span class="style1">All Devices</span>.<br>
+        Click OK. 
+      <p align="center"><img src="../images/wnd_bluetooth_config.png" width="462" height="438"></p>
+      <p class="figure">Figure 1. Bluetooth Configuration window's Accessibility panel</p>
+      <li>
+        <p>Search for Devices in Range </p>
+      </li>
+     <p>Under Bluetooth Tasks select <span class="style1">Search for devices in range</span> (Figure 2).<br>
+          After devices are found, select your target device, right-click and select <span class="style1">Pair Device</span>.</p>
+      <p align="center"><img src="images/srch_devices.png" width="387" height="250"> </p>
+      <p align="center" class="figure">Figure 2. Bluetooth Devices in Range </p>
+      <li>Enter Unique Code</li>
+    
+        <p>Enter a unique Bluetooth PIN code. It can be any number you choose, such as 123456.</p>
+   
+      <li>Enter code on Target Device</li>
+        <p>The target device will prompt you to enter the same code. Enter code to connect devices.</p>
+      <li>
+        List Functions      </li>
+      <p>On your PC, double-click your device to list available functions.</p>
+      <li>
+      Run File Transfer Program      </li>
+       <p>Double-click <span class="style1">OBEX File Transfer</span> to display <span class="code">C:</span> drive folder on target device.</p>
+      <li>Browse to Transfer Location on Target Device</li>
+        <p> Browse to the location on the device to transfer Profiler agent SISX file. For example, create a folder on the device called <span class="code">C:\Data\CarbidePI Installer</span>.</p>
+      <li>
+       Transfer Performance Investigator .sisx files to Target Device</li>
+      <p>Locate the Profiler agent SISX file on your PC that you saved from  the <b><a href="prof_installation.htm">Install remote agents</a></b> pane in the <b>On-device Connections</b> wizard and drag it to the Window representing the <span class="code">C:\Data\CarbidePI Installer</span> folder on the device. Leave this window open for transferring your profiler data file.</p>
+    </ol>
+</div>
+<div class="step">
+      <h4>Transfering a DAT File</h4>
+      <p>Once you've collected some data from a profiler run, you'll need to transfer the DAT file back to your PC for analysis.</p>
+      <ol>
+      <li>Connect to the Device using Bluetooth (as described above)</li>
+      <li>Locate Profiler Data File</li>
+      <p>On your PC, in your Bluetooth connection window (used previously) navigate to <span class="code">C:\root</span> folder on phone and select <strong>View &gt; Refresh</strong> to update the list of files.</p>
+      <li>Transfer Profiler Data File to PC</li>
+    <p>Your new profiler data file should be listed. Drag this file to your PC.</p>
+    </ol>
+</div>
+<p>After you have the profiler data file on your PC you can import it into Carbide.c++ to analyze the captured data.</p>
+<p><strong>Related references</strong></p>
+<ul>
+  <li><a href="prof_installation.htm">Installing the Profiler on the Target Device</a></li>
+  <li><a href="../../reference/profiler/prof_using.htm">Using the Profiler</a></li>
+  <li><a href="../analyser/an_load_trace_files.htm">Importing Profiler Data File for Analysis</a></li>
+  <li><a href="serial_connection.htm">Connecting by Serial Interface </a></li>
+  <li><a href="usb_connection.htm">Connecting by USB</a></li>
+</ul>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

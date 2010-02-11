@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Power Usage Trace</title>
+    <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Power Usage Trace</h2>
+<p> The Power Usage trace sampler uses a specific ISC channel to gather information about energy consumption from the Energy Management (EM) server running on the domestic OS. The sampler collects battery voltage, current, and capacity values, but it does not change any EM settings. The default sampling frequency is 4Hz (250ms), and the minimum allowed is 20Hz (50ms). Requesting an interval faster than the hardware supports will result in return values being identical to the previously sampled values.</p>
+<p> Battery capacity and voltage values are assumed to be constant over a short measurement period. If longer periods are measured the slower 0.25 to 1 Hz sampling rate is recommended. </p>
+<h5>Related references</h5>
+<ul>
+  <li><a href="../analyzer/view_power_usage.htm"> Power Usage View</a></li>
+<li><a href="../analyzer/wnd_power_graph_settings.htm">Power Usage Settings</a> </li>
+<li><a href="../analyzer/wnd_power_usage_statistics.htm">Power Usage Statistics </a></li>
+</ul>
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

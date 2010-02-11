@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xsd2ecore:XSD2EcoreMappingRoot xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsd2ecore="http://www.eclipse.org/emf/2002/XSD2Ecore" inputs="PIConfig.xsd#/"
+    outputs="PIConfig.ecore#/" topToBottom="true">
+  <nested inputs="bundleentry://257/cache/www.w3.org/2001/XMLSchema.xsd#//string;XSDSimpleTypeDefinition=9"
+      outputs="http://www.eclipse.org/emf/2003/XMLType#//String"/>
+  <nested inputs="bundleentry://257/cache/www.w3.org/2001/XMLSchema.xsd#//unsignedInt;XSDSimpleTypeDefinition=49"
+      outputs="http://www.eclipse.org/emf/2003/XMLType#//UnsignedInt"/>
+  <nested inputs="PIConfig.xsd#//buttonEventProfileList;XSDElementDeclaration/XSDComplexTypeDefinition/XSDParticle/XSDModelGroup/XSDParticle/buttonEventProfile;XSDElementDeclaration/XSDComplexTypeDefinition/XSDParticle/XSDModelGroup/XSDParticle/mapping;XSDElementDeclaration/XSDComplexTypeDefinition"
+      outputs="PIConfig.ecore#//MappingType">
+    <nested inputs="PIConfig.xsd#//buttonEventProfileList;XSDElementDeclaration/XSDComplexTypeDefinition/XSDParticle/XSDModelGroup/XSDParticle/buttonEventProfile;XSDElementDeclaration/XSDComplexTypeDefinition/XSDParticle/XSDModelGroup/XSDParticle/mapping;XSDElementDeclaration/XSDComplexTypeDefinition/XSDAttributeUse=1"
+        outputs="PIConfig.ecore#//MappingType/enumString"/>
+    <nested inputs="PIConfig.xsd#//buttonEventProfileList;XSDElementDeclaration/XSDComplexTypeDefinition/XSDParticle/XSDModelGroup/XSDParticle/buttonEventProfile;XSDElementDeclaration/XSDComplexTypeDefinition/XSDParticle/XSDModelGroup/XSDParticle/mapping;XSDElementDeclaration/XSDComplexTypeDefinition/XSDAttributeUse"
+        outputs="PIConfig.ecore#//MappingType/keyCode"/>
+    <nested inputs="PIConfig.xsd#//buttonEventProfileList;XSDElementDeclaration/XSDComplexTypeDefinition/XSDParticle/XSDModelGroup/XSDParticle/buttonEventProfile;XSDElementDeclaration/XSDComplexTypeDefinition/XSDParticle/XSDModelGroup/XSDParticle/mapping;XSDElementDeclaration/XSDComplexTypeDefinition/XSDAttributeUse=2"
+        outputs="PIConfig.ecore#//MappingType/label"/>
+  </nested>
+  <nested inputs="PIConfig.xsd#//buttonEventProfileList;XSDElementDeclaration/XSDComplexTypeDefinition/XSDParticle/XSDModelGroup/XSDParticle/buttonEventProfile;XSDElementDeclaration/XSDComplexTypeDefinition"
+      outputs="PIConfig.ecore#//ButtonEventProfileType">
+    <nested inputs="PIConfig.xsd#//buttonEventProfileList;XSDElementDeclaration/XSDComplexTypeDefinition/XSDParticle/XSDModelGroup/XSDParticle/buttonEventProfile;XSDElementDeclaration/XSDComplexTypeDefinition/XSDParticle/XSDModelGroup/XSDParticle"
+        outputs="PIConfig.ecore#//ButtonEventProfileType/mapping"/>
+    <nested inputs="PIConfig.xsd#//buttonEventProfileList;XSDElementDeclaration/XSDComplexTypeDefinition/XSDParticle/XSDModelGroup/XSDParticle/buttonEventProfile;XSDElementDeclaration/XSDComplexTypeDefinition/XSDAttributeUse"
+        outputs="PIConfig.ecore#//ButtonEventProfileType/profileId"/>
+  </nested>
+  <nested inputs="bundleentry://257/cache/www.w3.org/2001/XMLSchema.xsd#//decimal;XSDSimpleTypeDefinition=13"
+      outputs="http://www.eclipse.org/emf/2003/XMLType#//Decimal"/>
+  <nested inputs="PIConfig.xsd#//buttonEventProfileList;XSDElementDeclaration/XSDComplexTypeDefinition"
+      outputs="PIConfig.ecore#//ButtonEventProfileListType">
+    <nested inputs="PIConfig.xsd#//buttonEventProfileList;XSDElementDeclaration/XSDComplexTypeDefinition/XSDParticle/XSDModelGroup/XSDParticle"
+        outputs="PIConfig.ecore#//ButtonEventProfileListType/buttonEventProfile"/>
+    <nested inputs="PIConfig.xsd#//buttonEventProfileList;XSDElementDeclaration/XSDComplexTypeDefinition/XSDAttributeUse"
+        outputs="PIConfig.ecore#//ButtonEventProfileListType/buttonEventProfileVersion"/>
+  </nested>
+  <nested inputs="PIConfig.xsd#//buttonEventProfileList;XSDElementDeclaration" outputs="PIConfig.ecore#//DocumentRoot/buttonEventProfileList"/>
+</xsd2ecore:XSD2EcoreMappingRoot>
