@@ -1,0 +1,105 @@
+<h1>FBSCLI</h1>
+<p>
+Panics raised by clients of the font and bitmap server.
+</p>
+<code>1</code>
+<p>
+No connection has been made to the font and bitmap server.
+</p>
+<code>2</code>
+<p>
+Attempted to pass a command to the font and bitmap server, but no
+connection has been made.
+</p>
+<code>3</code>
+<p>
+Not used.
+</p>
+<code>4</code>
+<p>
+Not used.
+</p>
+<code>5</code>
+<p>
+Not used.
+</p>
+<code>6</code>
+<p>
+Internal typeface store error: the list of accessed fonts
+(<code>CTypefaceStore::iFontAccess</code>) is inconsistent with the font cache
+(<code>CFbsTypefaceStore::iTwipsCache</code>).
+</p>
+<code>7</code>
+<p>
+The typeface store was unable to create a font due to a NULL font
+handle or address.
+</p>
+<code>8</code>
+<p>
+Attempted to access a NULL font pointer (debug builds only).
+</p>
+<code>9</code>
+<p>
+Invalid bitmap format (debug builds only).
+</p>
+<code>10</code>
+<p>
+Invalid bitmap display mode (<a href="../reference-cpp/GDI/TDisplayModeEnum.html#%3a%3aTDisplayMode" title="enum TDisplayMode"><code class="ApiItem">TDisplayMode</code></a>). 
+</p>
+<code>11</code>
+<p>
+Invalid bitmap compression value
+(<a href="../reference-cpp/FBSERV/TBitmapfileCompressionEnum.html#%3a%3aTBitmapfileCompression" title="enum TBitmapfileCompression"><code class="ApiItem">TBitmapfileCompression</code></a>), or an unsupported operation was
+attempted on a compressed bitmap.
+</p>
+<code>12</code>
+<p>
+Bitmap decompression error (debug builds only).
+</p>
+<code>13</code>
+<p>
+Memory addressing error.
+</p>
+<code>14</code>
+<p>
+Either the display mode of the destination bitmap is not
+<code>EColor256</code>, or the two bitmaps are different sizes in
+<a href="../reference-cpp/FBSERV/CFbsColor256BitmapUtilClass.html#%3a%3aCFbsColor256BitmapUtil%3a%3aCopyBitmap%28%29" title="function CFbsColor256BitmapUtil::CopyBitmap()"><code class="ApiItem">CFbsColor256BitmapUtil::CopyBitmap()</code></a>.
+</p>
+<code>15</code>
+<p>
+An error occurred when constructing a hardware bitmap (debug builds
+only).
+</p>
+<code>16</code>
+<p>
+Not used.
+</p>
+<code>17</code>
+<p>
+Memory alignment error in a bitmap loaded from ROM.
+</p>
+<code>18</code>
+<p>
+Not used.
+</p>
+<code>19</code>
+<p>
+New display mode not supported by
+<code>CBitwiseBitmap::ChangeDisplayMode()</code> (debug builds only).
+</p>
+<code>20</code>
+<p>
+New display mode not supported by
+<code>CBitwiseBitmap::ChangeDisplayMode()</code> (debug builds only).
+</p>
+<code>21</code>
+<p>
+When swapping a bitmap's width and height, the size of the new
+bitmap would exceed the amount of memory allocated.
+</p>
+<code>22</code>
+<p>
+<code>CFbsBitmap::LockHeap()</code> has not been called prior to
+calling <code>CFbsBitmap::DataAddress()</code> (debug builds only).
+</p>	   

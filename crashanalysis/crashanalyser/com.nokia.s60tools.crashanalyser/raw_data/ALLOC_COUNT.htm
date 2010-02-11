@@ -1,0 +1,10 @@
+<h1>ALLOC COUNT</h1>
+<p>These panics are only raised in debug builds and are caused when the heap debugging functions detect a
+memory leak.</p>
+<code> ALLOC COUNT 1 Expected aaaa Allocated bbbb Ln: ccc ddddd</code>
+<p>This panic is raised by  <code class="ApiItem">RHeap::__DbgMarkCheck()</code>  and 
+<a href="../reference-cpp/E32_EKA2/UserClass.html#%3a%3aUser%3a%3a__DbgMarkCheck%28%29" title="function User::__DbgMarkCheck()"><code class="ApiItem">User::__DbgMarkCheck()</code></a> when the current number of allocated heap cells is not as expected.
+</p><p><code>aaa</code> is the expected number of heap cells.</p><p><code>
+bbb</code> is the allocated number of heap cells.</p><p><code>
+ccc</code> is a line number; typically the source statement line containing the call to <code>__DbgMarkCheck()</code>.</p><p><code>
+ddddd</code> is a file name; typically the file containing the source statement containing the call to <code>__DbgMarkCheck()</code>.</p>	   

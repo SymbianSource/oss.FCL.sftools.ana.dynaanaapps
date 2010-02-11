@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+	<extension point="org.eclipse.ui.startup"> 
+		<startup class="com.nokia.s60tools.crashanalyser.model.StartupHandler"/>
+	</extension>
+
+    <extension
+      point="org.eclipse.core.runtime.products"
+      id="product">      
+      <product name="Crash Analyser" application="org.eclipse.ui.ide.workbench" > 
+          <property name="appName" value="Carbide.c++ Extensions - Crash Analyser"/> 
+     </product> 
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="Carbide Extensions"
+            id="com.nokia.s60tools">
+      </category>
+      <view
+            name="%view.Label"
+            icon="icons/crash_analyser_16.png"
+            category="com.nokia.s60tools"
+            class="com.nokia.s60tools.crashanalyser.ui.views.MainView"
+            id="com.nokia.s60tools.crashanalyser.ui.views.MainView">
+      </view>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+      		description="Crash Analyser Tool"
+            id="com.nokia.s60tools.crashanalyser.actionSet"
+            label="Crash Analyser Tool"
+            visible="true">
+         <menu
+               id="com.nokia.carbide.cpp.ui.CarbideMenu"
+               label="&amp;Carbide">
+            <separator name="com.nokia.s60tools.ToolsMenuGroup"/>
+         </menu>
+         <action
+               class="com.nokia.s60tools.crashanalyser.ui.actions.ToolbarShortcutAction"
+               icon="icons/crash_analyser_16.png"
+               id="com.nokia.s60tools.crashanalyser.ui.actions.ToolbarShortcutAction"
+               label="%view.Label"
+               menubarPath="com.nokia.carbide.cpp.ui.CarbideMenu/CarbideExtensions"
+               tooltip="%view.Tooltip"/>
+      </actionSet>
+   </extension>
+   
+	<extension
+		point="org.eclipse.ui.preferencePages">
+		<page
+			name="Crash Analyser"
+			class="com.nokia.s60tools.crashanalyser.ui.preferences.CrashAnalyserPreferences"
+			category="com.nokia.carbide.cpp.preferences.ExtensionsPreferencesPage"
+			id="com.nokia.s60tools.crashanalyser.ui.preferences.CrashAnalyserPreferences">
+		</page>
+	</extension>
+	<extension
+		point="org.eclipse.core.runtime.preferences">
+		<initializer
+			class="com.nokia.s60tools.crashanalyser.ui.preferences.CrashAnalyserPreferenceInitializer">
+		</initializer>
+	</extension>
+	
+	<extension
+		point="org.eclipse.ui.editors">
+		<editor
+			name="Crash Visualiser"
+			extensions="crashxml"
+			icon="icons/crash_analyser_16.png"
+			class="com.nokia.s60tools.crashanalyser.ui.editors.MultiPageEditor"
+			id="com.nokia.s60tools.crashanalyser.ui.editors.MultiPageEditor">
+		</editor>
+	</extension>
+	
+	<extension point="org.eclipse.ui.commands">
+    	<category id="com.nokia.s60tools.crashanalyser.commands"
+            name="No Name">
+    	</category>
+   	 	<command categoryId="com.nokia.s60tools.crashanalyser.commands"
+            defaultHandler="com.nokia.s60tools.crashanalyser.handlers.SdkSelectionHandler"
+            description="Not Used"
+            id="com.nokia.s60tools.crashanalyser.commands.SdkSelection"
+            name="Not Used">
+    	</command>
+    </extension>	
+    
+    <extension-point id="traceprovider" name="Trace Data Provider" schema="schema/traceprovider.exsd"/>
+    <extension-point id="fileprovider" name="Crash File Provider" schema="schema/fileprovider.exsd"/>
+		   
+</plugin>

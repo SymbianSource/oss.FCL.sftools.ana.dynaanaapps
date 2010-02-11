@@ -1,0 +1,49 @@
+<h1>CommsDbServer</h1>
+<p>CommDb panics:</p>
+<code>1</code>
+<p><code>CCommsDbTableView::InsertRecord()</code> called when
+<code>InsertRecord()</code> or <code>UpdateRecord()</code> has already been
+made.</p>
+<code>2</code>
+<p><code>CCommsDbTableView::UpdateRecord()</code> called when
+<code>InsertRecord()</code> or <code>UpdateRecord()</code> has already been
+made.</p>
+<code>3</code>
+<p><code>CCommsDbTableView::DeleteRecord()</code> called when a
+previous call to <code>InsertRecord()</code> or <code>UpdateRecord()</code> has
+been made</p>
+<code>4</code>
+<p><code>CCommsDbTableView::PutRecordChanges()</code> called
+without previous call to <code>InsertRecord()</code> or
+<code>UpdateRecord()</code></p>
+<code>5</code>
+<p><code>CCommsDbTableView::CancelRecordChanges()</code> called
+without previous call to <code>InsertRecord()</code> or
+<code>UpdateRecord()</code></p>
+<code>6</code>
+<p><code>CCommsDbTableView::GotoFirstRecord()</code> called while
+an operation involved in inserting or updating a record is still outstanding,
+or when the view has been closed.</p>
+<code>7</code>
+<p><code>CCommsDbTableView::GotoNextRecord()</code> called while
+an operation involved in inserting or updating a record is still outstanding,
+or when the view has been closed.</p>
+<code>8</code>
+<p><code>CCommsDbTableView::GotoPreviousRecord()</code> called
+while an operation involved in inserting or updating a record is still
+outstanding, or when the view has been closed.</p>
+<code>10</code>
+<p>Attempt made to read from a column before either
+<code>PutRecordChanges()</code> or <code>CancelRecordChanges()</code> has been
+called to complete a record insertion or update
+operation.</p>
+<code>12</code>
+<p>Attempt is made to write to a column without calling
+<code>CCommsDbTableView::InsertRecord()</code> or
+<code>CCommsDbTableView::UpdateRecord()</code></p>
+<code>13</code>
+<p>Attempt to write to table ID column with
+<code>CCommsDbTableView::WriteUintL()</code>.</p>
+<code>14</code>
+<p><code>CCommDbOverrideSettings::GetLongDesOverride()</code>
+called with too small <code>aValue</code> buffer.</p>

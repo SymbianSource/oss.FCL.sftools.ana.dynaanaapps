@@ -1,0 +1,587 @@
+<h1>KERN-EXEC</h1>
+<p>
+These panics represent program errors which are detected by the Kernel
+Executive. Typically, they are caused by passing bad or contradictory
+parameters to functions. Threads which cause exceptions also raise a KERN-EXEC
+panic. 
+</p>
+<p>
+The thread causing the panic is terminated. 
+</p>
+<code>0</code>
+<p>
+This panic is raised when the Kernel cannot find an object in the
+object index for the current process or current thread using the specified
+object index number (the raw handle number). 
+</p>
+<p>
+The most common reason for this is trying to use a kernel-side
+resource without first having sucessfully created it or sucessfully opened it.
+Typically, such resources are created or opened through user side handles,
+which are instances of classes derived from <a href="../reference-cpp/E32_EKA2/RHandleBaseClass.html#%3a%3aRHandleBase" title="class RHandleBase"><code class="ApiItem">RHandleBase</code></a>,
+for example, <a href="../reference-cpp/E32_EKA2/RLibraryClass.html#%3a%3aRLibrary" title="class RLibrary"><code class="ApiItem">RLibrary</code></a>, <a href="../reference-cpp/E32_EKA2/RThreadClass.html#%3a%3aRThread" title="class RThread"><code class="ApiItem">RThread</code></a>,
+<a href="../reference-cpp/E32_EKA2/RProcessClass.html#%3a%3aRProcess" title="class RProcess"><code class="ApiItem">RProcess</code></a>, <a href="../reference-cpp/E32_EKA2/RSemaphoreClass.html#%3a%3aRSemaphore" title="class RSemaphore"><code class="ApiItem">RSemaphore</code></a> etc. [Note that
+this list is not exhaustive].
+</p>
+<p>
+For example, a call to <a href="../reference-cpp/E32_EKA2/RLibraryClass.html#%3a%3aRLibrary%3a%3aLookup%28%29" title="function RLibrary::Lookup()"><code class="ApiItem">RLibrary::Lookup()</code></a>
+panics with KERN-EXEC 0 if not preceded by a successful call to
+<a href="../reference-cpp/E32_EKA2/RLibraryClass.html#%3a%3aRLibrary%3a%3aLoad%28%29" title="function RLibrary::Load()"><code class="ApiItem">RLibrary::Load()</code></a>. 
+</p>
+<code>1</code>
+<p>
+This is a general panic raised as a result of trying an
+unauthorised activity such as trying to suspend a thread, to set the priority
+of a thread or to set the priority of a process, when not authorised to do so. 
+</p>
+<code>2</code>
+<p>
+This panic is raised by the kernel when opening a kernel side
+object, a <a href="../reference-cpp/E32_EKA2/DObjectClass.html#%3a%3aDObject" title="class DObject"><code class="ApiItem">DObject</code></a> type, and the fullname is invalid. 
+</p>
+<p>
+The fullname is deemed to be invalid if it contains a character
+that is not one of the printable characters lying between 0x20 and 0x7e
+inclusive, or it contains an asterisk or a question mark. 
+</p>
+<p>
+See also <a href="../reference-cpp/E32_EKA2/KernClass.html#%3a%3aKern%3a%3aValidateFullName%28%29" title="function Kern::ValidateFullName()"><code class="ApiItem">Kern::ValidateFullName()</code></a>. 
+</p>
+<code>3</code>
+<p>
+This panic is raised when an unhandled exception occurs. Exceptions
+have many causes, but the most common are access violations caused, for
+example, by dereferencing NULL. Among other possible causes are: general
+protection faults, executing an invalid instruction, alignment checks, etc. 
+</p>
+<code>4</code>
+<p>
+This panic is not used. 
+</p>
+<code>5</code>
+<p>
+This panic is not used. 
+</p>
+<code>6</code>
+<p>
+This panic is raised by the kernel when a handle to a code segment
+is invalid. 
+</p>
+<code>7</code>
+<p>
+This panic is not used. 
+</p>
+<code>8</code>
+<p>
+This panic is not used. 
+</p>
+<code>9</code>
+<p>
+This is a general type of panic that is usually raised by a device
+driver when dealing with an asynchronous request, and it finds that an
+asynchronous request is already outstanding. For an example of the context in
+which this is raised, see
+<code class="filename">...\cedar\e32test\examples\driver1\driver1_ldd.cpp</code>. 
+</p>
+<p>
+This panic is also raised when trying to subscribe to a property
+through a call to <a href="../reference-cpp/E32_EKA2/RPropertyClass.html#%3a%3aRProperty%3a%3aSubscribe%28%29" title="function RProperty::Subscribe()"><code class="ApiItem">RProperty::Subscribe()</code></a> and there is
+already an outstanding subscription on this property handle. 
+</p>
+<code>10</code>
+<p>
+This panic is raised by
+<a href="../reference-cpp/E32_EKA2/DLogicalChannelClass.html#%3a%3aDLogicalChannel%3a%3aRequest%28%29" title="function DLogicalChannel::Request()"><code class="ApiItem">DLogicalChannel::Request()</code></a> when the request number passed
+to the function is smaller than the permitted minimum. 
+</p>
+<p>
+See also <a href="../reference-cpp/E32_EKA2/DLogicalChannelClass.html#%3a%3aDLogicalChannel%3a%3aEMinRequestId" title="field DLogicalChannel::EMinRequestId"><code class="ApiItem">DLogicalChannel::EMinRequestId</code></a>. 
+</p>
+<code>11</code>
+<p>
+This panic is raised when creating a logical channel, and the unit number is outside the permitted range: 
+</p>
+<p>
+If unit numbers are not permitted, the unit number value must
+be <a href="../reference-cpp/E32_EKA2/e32const.hVariables.html#%3a%3aKNullUnit" title="field KNullUnit"><code class="ApiItem">KNullUnit</code></a>. 
+</p>
+<p>
+If unit numbers are permitted, the unit number value must be
+less than <a href="../reference-cpp/E32_EKA2/e32const.hVariables.html#%3a%3aKMaxUnits" title="field KMaxUnits"><code class="ApiItem">KMaxUnits</code></a>. 
+</p>
+<p>
+A logical channel is created as a result of a call to
+<a href="../reference-cpp/E32_EKA2/RBusLogicalChannelClass.html#%3a%3aRBusLogicalChannel%3a%3aDoCreate%28%29" title="function RBusLogicalChannel::DoCreate()"><code class="ApiItem">RBusLogicalChannel::DoCreate()</code></a>. 
+</p>
+<code>12</code>
+<p>
+This panic is raised by the kernel if an event capture hook has already been designated. 
+</p>
+<code>13</code>
+<p>
+This panic is raised by the kernel if the current thread is not the designated event capture hook. 
+</p>
+<code>14</code>
+<p>
+This panic is raised when an attempt is made to set the priority of
+a thread or process to an illegal value. 
+</p>
+<p>
+The permitted priority values for a user process are a subset of
+the values defined by the <a href="../reference-cpp/E32_EKA2/TProcessPriorityEnum.html#%3a%3aTProcessPriority" title="enum TProcessPriority"><code class="ApiItem">TProcessPriority</code></a> enum. The
+permitted values are: 
+</p>
+<code> EPriorityLow
+</code>
+<p>
+<code>EPriorityBackground
+</code>
+</p>
+<p>
+<code>EPriorityForeground
+</code>
+</p>
+<p>
+<code>EPriorityHigh
+</code>
+</p>
+<p>
+The permitted priority values for a user thread are a subset of the
+values defined by the <a href="../reference-cpp/E32_EKA2/TThreadPriorityEnum.html#%3a%3aTThreadPriority" title="enum TThreadPriority"><code class="ApiItem">TThreadPriority</code></a> enum. The permitted
+values are: 
+</p>
+<p>
+<code> EPriorityMuchLess
+</code>
+</p>
+<p>
+<code> EPriorityLess
+</code>
+</p>
+<p>
+<code> EPriorityNormal
+</code>
+</p>
+<p>
+<code>EPriorityMore
+</code>
+</p>
+<p>
+<code> EPriorityMuchMore
+</code>
+</p>
+<code>EPriorityRealTime
+</code>
+</p>
+<p>
+<code>EPriorityAbsoluteVeryLow
+</code>
+</p>
+<p>
+<code> EPriorityAbsoluteLow
+</code>
+</p>
+<p>
+<code> EPriorityAbsoluteBackground
+</code>
+</p>
+<p>
+<code> EPriorityAbsoluteForeground
+</code>
+</p>
+<p>
+<code> EPriorityAbsoluteHigh
+</code>
+</p>
+<code>15</code>
+<p>
+This panic is raised when a timer event is requested from an
+asynchronous timer service, an <a href="../reference-cpp/E32_EKA2/RTimerClass.html#%3a%3aRTimer" title="class RTimer"><code class="ApiItem">RTimer</code></a>, and a timer event
+is already outstanding. It is caused by calling either the <code>At()</code>,
+<code>After()</code> or <code>Lock()</code> member functions after a previous
+call to any of these functions, but before the timer event requested by those
+functions has completed. 
+</p>
+<code>16</code>
+<p>
+This panic is not used. 
+</p>
+<code>17</code>
+<p>
+The panic is raised if kernel heap checking has failed. 
+</p>
+<code>18</code>
+<p>
+This panic is not used. 
+</p>
+<code>19</code>
+<p>
+This panic is raised by the Kernel when a server program makes a
+request to receive a message, i.e. when it calls the <code>Receive()</code>
+member function of <code>RServer2</code>, the handle to the Kernel side server
+object. The panic occurs when a receive message request has previously been
+made and is still outstanding. 
+</p>
+<p>
+Note that <code>RServer2</code> is internal to Symbian 
+</p>
+<code>20</code>
+<p>
+This panic is raised by the Kernel when a request for an event, as
+originated by a call to <code>UserSvr::RequestEvent()</code>, defined in
+<code class="filename">e32svr.h</code>, is made while a previously made request is still
+outstanding. 
+</p>
+<code>21</code>
+<p>
+This panic is not used. 
+</p>
+<code>22</code>
+<p>
+This panic is not used. 
+</p>
+<code>23</code>
+<p>
+This panic is raised in a call to
+<a href="../reference-cpp/E32_EKA2/RSessionBaseClass.html#%3a%3aRSessionBase%3a%3aShareAuto%28%29" title="function RSessionBase::ShareAuto()"><code class="ApiItem">RSessionBase::ShareAuto()</code></a> or
+<a href="../reference-cpp/E32_EKA2/RSessionBaseClass.html#%3a%3aRSessionBase%3a%3aShareProtected%28%29" title="function RSessionBase::ShareProtected()"><code class="ApiItem">RSessionBase::ShareProtected()</code></a>, i.e. when attempting to
+create a session with a server that can be shared, and the server does not
+allow or support shared sessions. 
+</p>
+<code>24</code>
+<p>
+This panic is raised when writing global DLL data, and the length
+of data to be written is greater than the space available. 
+</p>
+<code>25</code>
+<p>
+This panic is raised when searching for objects, using the internal
+function <code>TFindHandleBase::NextObject()</code>, and an invalid type of
+object is specified; i.e. it is not a thread, process, chunk, mutex etc. etc. 
+</p>
+<code>26</code>
+<p>
+This panic is raised by kernel side code that implements heap
+debugging behaviour, when a specific debug request is not recognised. 
+</p>
+<code>27</code>
+<p>
+This panic is raised when an executive call is made with an invalid
+call number. 
+</p>
+<code>28</code>
+<p>
+This panic is not used. 
+</p>
+<code>29</code>
+<p>
+This panic is not used. 
+</p>
+<code>30</code>
+<p>
+This panic is raised when an attempt is being made to send a
+synchronous message to a server more than once, using the current thread's
+dedicated synchronous message. 
+</p>
+<code>31</code>
+<p>
+This panic is not used. 
+</p>
+<code>32</code>
+<p>
+This panic is called by <code>DProcess::Resume()</code> when trying
+to resume a process that is still being loaded. 
+</p>
+<code>33</code>
+<p>
+This panic is raised in a call to
+<a href="../reference-cpp/E32_EKA2/KernClass.html#%3a%3aKern%3a%3aKUDesInfo%28%29" title="function Kern::KUDesInfo()"><code class="ApiItem">Kern::KUDesInfo()</code></a>, <a href="../reference-cpp/E32_EKA2/KernClass.html#%3a%3aKern%3a%3aKUDesPut%28%29" title="function Kern::KUDesPut()"><code class="ApiItem">Kern::KUDesPut()</code></a>
+etc, when an invalid descriptor is passed. 
+</p>
+<code>34</code>
+<p>
+This panic is raised in a call to
+<a href="../reference-cpp/E32_EKA2/KernClass.html#%3a%3aKern%3a%3aKUDesSetLength%28%29" title="function Kern::KUDesSetLength()"><code class="ApiItem">Kern::KUDesSetLength()</code></a> &amp;
+<a href="../reference-cpp/E32_EKA2/KernClass.html#%3a%3aKern%3a%3aKUDesPut%28%29" title="function Kern::KUDesPut()"><code class="ApiItem">Kern::KUDesPut()</code></a> when the descriptor passed to it is not a
+modifiable type; i.e. is derived from <a href="../reference-cpp/E32_EKA2/TDesCTypedef.html#%3a%3aTDesC" title="typedef TDesC"><code class="ApiItem">TDesC</code></a> but not
+derived from <a href="../reference-cpp/E32_EKA2/TDesTypedef.html#%3a%3aTDes" title="typedef TDes"><code class="ApiItem">TDes</code></a>. 
+</p>
+<code>35</code>
+<p>
+This panic is raised in a call to
+<a href="../reference-cpp/E32_EKA2/KernClass.html#%3a%3aKern%3a%3aKUDesSetLength%28%29" title="function Kern::KUDesSetLength()"><code class="ApiItem">Kern::KUDesSetLength()</code></a> &amp;
+<a href="../reference-cpp/E32_EKA2/KernClass.html#%3a%3aKern%3a%3aKUDesPut%28%29" title="function Kern::KUDesPut()"><code class="ApiItem">Kern::KUDesPut()</code></a> when the length of the source descriptor
+is longer than the maximum length of the target descriptor. 
+</p>
+<code>36</code>
+<p>
+This panic is raised by the kernel side code that implements the
+setting of the currency symbol when the length of the currency symbol is
+greater than <a href="../reference-cpp/E32_EKA2/e32const.hVariables.html#%3a%3aKMaxCurrencySymbol" title="field KMaxCurrencySymbol"><code class="ApiItem">KMaxCurrencySymbol</code></a>. 
+</p>
+<code>37</code>
+<p>
+This panic is raised by kernel code when it tries to acquire the
+process DLL lock just before a load, and the wait DLL lock is invalid. 
+</p>
+<code>38</code>
+<p>
+This panic is raised by internal kernel code when an illegal
+attempt is made to attach to a library. 
+</p>
+<code>39</code>
+<p>
+This panic is raised when extracting a list of DLL entry points,
+and the number exceeds the maximum permitted. 
+</p>
+<code>40</code>
+<p>
+This panic is raised by internal kernel code when an illegal
+attempt is made to detach a library. 
+</p>
+<code>41</code>
+<p>
+This panic is raised by internal kernel code when an illegal
+attempt is made to attach to a library. 
+</p>
+<code>42</code>
+<p>
+This panic is raised by internal kernel code when an illegal
+attempt is made to detach a library. 
+</p>
+<code>43</code>
+<p>
+This panic is raised by kernel code when it tries to release the
+process DLL lock when a load fails, and the release DLL lock is invalid. 
+</p>
+<code>44</code>
+<p>
+This panic is raised when a bad message handle is passed to the
+kernel. This usually occurs when using functions called on the
+<a href="../reference-cpp/E32_EKA2/RMessagePtr2Class.html#%3a%3aRMessagePtr2" title="class RMessagePtr2"><code class="ApiItem">RMessagePtr2</code></a> or <a href="../reference-cpp/E32_EKA2/RMessage2Class.html#%3a%3aRMessage2" title="class RMessage2"><code class="ApiItem">RMessage2</code></a> classes
+after the message has been completed; or when the <code>iHandle</code> data
+member of the base class <a href="../reference-cpp/E32_EKA2/RHandleBaseClass.html#%3a%3aRHandleBase" title="class RHandleBase"><code class="ApiItem">RHandleBase</code></a> has become corrupt. 
+</p>
+<code>45</code>
+<p>
+This panic is not used. 
+</p>
+<code>46</code>
+<p>
+This panic can be raised as a result of a call to one of a large
+number of functions. In general, the panic indicates an attempt to perform an
+operation on a thread or process by code running in another process - violating
+the security principle of process isolation. 
+</p>
+<p>
+There are exceptions to this general rule, for example, where the
+panic is raised because the calling process has insufficient capability. The
+precise reason is stated with the function(s). 
+</p>
+<p>
+The panic is raised on a call to the following function if the
+process owning the thread performing the call is not the creator of the target
+process or, if a handle is specified, the handle is not local. 
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/RProcessClass.html#%3a%3aRProcess%3a%3aSetParameter%28%29" title="function RProcess::SetParameter()"><code class="ApiItem">RProcess::SetParameter()</code></a>
+</p>
+<p>
+The panic is raised on a call to the following functions if the
+process owning the thread performing the call is not the same as the target
+process. 
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/RProcessClass.html#%3a%3aRProcess%3a%3aKill%28%29" title="function RProcess::Kill()"><code class="ApiItem">RProcess::Kill()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/RProcessClass.html#%3a%3aRProcess%3a%3aTerminate%28%29" title="function RProcess::Terminate()"><code class="ApiItem">RProcess::Terminate()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/RProcessClass.html#%3a%3aRProcess%3a%3aPanic%28%29" title="function RProcess::Panic()"><code class="ApiItem">RProcess::Panic()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/RProcessClass.html#%3a%3aRProcess%3a%3aSetJustInTime%28%29" title="function RProcess::SetJustInTime()"><code class="ApiItem">RProcess::SetJustInTime()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/RProcessClass.html#%3a%3aRProcess%3a%3aResume%28%29" title="function RProcess::Resume()"><code class="ApiItem">RProcess::Resume()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/RThreadClass.html#%3a%3aRThread%3a%3aKill%28%29" title="function RThread::Kill()"><code class="ApiItem">RThread::Kill()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/RThreadClass.html#%3a%3aRThread%3a%3aTerminate%28%29" title="function RThread::Terminate()"><code class="ApiItem">RThread::Terminate()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/RThreadClass.html#%3a%3aRThread%3a%3aPanic%28%29" title="function RThread::Panic()"><code class="ApiItem">RThread::Panic()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/RThreadClass.html#%3a%3aRThread%3a%3aSuspend%28%29" title="function RThread::Suspend()"><code class="ApiItem">RThread::Suspend()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/RThreadClass.html#%3a%3aRThread%3a%3aResume%28%29" title="function RThread::Resume()"><code class="ApiItem">RThread::Resume()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/RThreadClass.html#%3a%3aRThread%3a%3aSetPriority%28%29" title="function RThread::SetPriority()"><code class="ApiItem">RThread::SetPriority()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/RThreadClass.html#%3a%3aRThread%3a%3aRequestComplete%28%29" title="function RThread::RequestComplete()"><code class="ApiItem">RThread::RequestComplete()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/RThreadClass.html#%3a%3aRThread%3a%3aRequestSignal%28%29" title="function RThread::RequestSignal()"><code class="ApiItem">RThread::RequestSignal()</code></a>
+</p>
+<p>
+NOTE: the creator of a new process can kill or panic the new
+process, change the new process priority and set the new process startup
+parameters until the process is resumed (which the creator can also do). After
+the new process has been resumed, then it becomes totally independent of its
+creator, and any attempt to panic it, kill it etc will raise the KERN-EXEC 46
+panic. 
+</p>
+<p>
+The panic is raised on call to the following (Symbian partner
+only) functions if the calling process does not have the <em>PowerMgmt</em>
+capability (<code class="ApiItem">TCapability::ECapabilityPowerMgmt</code>): 
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/PowerClass.html#%3a%3aPower%3a%3aPowerDown%28%29" title="function Power::PowerDown()"><code class="ApiItem">Power::PowerDown()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/PowerClass.html#%3a%3aPower%3a%3aEnableWakeupEvents%28%29" title="function Power::EnableWakeupEvents()"><code class="ApiItem">Power::EnableWakeupEvents()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/PowerClass.html#%3a%3aPower%3a%3aDisableWakeupEvents%28%29" title="function Power::DisableWakeupEvents()"><code class="ApiItem">Power::DisableWakeupEvents()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/PowerClass.html#%3a%3aPower%3a%3aRequestWakeupEventNotification%28%29" title="function Power::RequestWakeupEventNotification()"><code class="ApiItem">Power::RequestWakeupEventNotification()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/PowerClass.html#%3a%3aPower%3a%3aCancelWakeupEventNotification%28%29" title="function Power::CancelWakeupEventNotification()"><code class="ApiItem">Power::CancelWakeupEventNotification()</code></a>
+</p>
+<p>
+The panic is raised on call to the following functions if the
+calling process does not have the <em>WriteDeviceData</em> capability
+(<code class="ApiItem">TCapability::ECapabilityWriteDeviceData</code>): 
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/UserClass.html#%3a%3aUser%3a%3aSetMachineConfiguration%28%29" title="function User::SetMachineConfiguration()"><code class="ApiItem">User::SetMachineConfiguration()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/UserClass.html#%3a%3aUser%3a%3aSetHomeTime%28%29" title="function User::SetHomeTime()"><code class="ApiItem">User::SetHomeTime()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/UserClass.html#%3a%3aUser%3a%3aSetUTCTime%28%29" title="function User::SetUTCTime()"><code class="ApiItem">User::SetUTCTime()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/UserClass.html#%3a%3aUser%3a%3aSetUTCOffset%28%29" title="function User::SetUTCOffset()"><code class="ApiItem">User::SetUTCOffset()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/UserClass.html#%3a%3aUser%3a%3aSetUTCTimeAndOffset%28%29" title="function User::SetUTCTimeAndOffset()"><code class="ApiItem">User::SetUTCTimeAndOffset()</code></a>
+</p>
+<p>
+The panic is raised on call to the following function if the
+calling process does not have the <em>ReadDeviceData</em> capability
+(<code class="ApiItem">TCapability::ECapabilityReadDeviceData</code>): 
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/UserClass.html#%3a%3aUser%3a%3aMachineConfiguration%28%29" title="function User::MachineConfiguration()"><code class="ApiItem">User::MachineConfiguration()</code></a>
+</p>
+<code>47</code>
+<p>
+This panic is raised when the user issues a request to be notified
+of messages or the availability of space, when a request has already been
+issued and is still outstanding. 
+</p>
+<p>
+See <a href="../reference-cpp/E32_EKA2/RMsgQueueClass.html#%3a%3aRMsgQueue" title="class RMsgQueue"><code class="ApiItem">RMsgQueue</code></a>, asynchronous message queues. 
+</p>
+<code>48</code>
+<p>
+This panic is raised when creating a message queue, and the size of
+the template parameter is invalid. 
+</p>
+<p>
+See <a href="../reference-cpp/E32_EKA2/RMsgQueueClass.html#%3a%3aRMsgQueue" title="class RMsgQueue"><code class="ApiItem">RMsgQueue</code></a>, asynchronous message queues. 
+</p>
+<code>49</code>
+<p>
+This panic is raised when creating a message queue, and the
+specified number of slots is not positive. 
+</p>
+<p>
+See <a href="../reference-cpp/E32_EKA2/RMsgQueueClass.html#%3a%3aRMsgQueue" title="class RMsgQueue"><code class="ApiItem">RMsgQueue</code></a>, asynchronous message queues. 
+</p>
+<code>50</code>
+<p>
+This panic is raised if an attempt is made to cancel an outstanding
+request to be notified of messages or the availability of space, and the cancel
+is being made by a thread in a different process to the one from which the
+request was originally made. 
+</p>
+<p>
+See <a href="../reference-cpp/E32_EKA2/RMsgQueueClass.html#%3a%3aRMsgQueue" title="class RMsgQueue"><code class="ApiItem">RMsgQueue</code></a>, asynchronous message queues. 
+</p>
+<code>51</code>
+<p>
+This panic is raised by <code>RProcess::Setparameter()</code> if a
+slot value is invalid. 
+</p>
+<code>52</code>
+<p>
+This panic is raised by <code>RProcess::Setparameter()</code> if a
+slot is in use. 
+</p>
+<code>53</code>
+<p>
+This panic is raised by <code>RProcess::Setparameter()</code> if
+the length of the data passed is negative. 
+</p>
+<code>54</code>
+<p>
+This panic is raised by <a href="../reference-cpp/E32_EKA2/RCondVarClass.html#%3a%3aRCondVar%3a%3aWait%28%29" title="function RCondVar::Wait()"><code class="ApiItem">RCondVar::Wait()</code></a> when
+the current thread does not hold the specified mutex. 
+</p>
+<code>55</code>
+<p>
+This panic is raised when a call is made to <code>RThread::GetDesMaxLength()</code>, which is now obsolete. 
+</p>
+<code>56</code>
+<p>
+This panic is raised on a process which has not yet been resumed,
+and whose creator has died. 
+</p>
+<code>57</code>
+<p>
+This panic is raised when a session receives a message to connect
+to a server when the session is already connected to that server. 
+</p>
+<code>58</code>
+<p>
+This panic is raised during an attempt to connect to a server. As
+part of this process, a pointer to an instance of the
+<a href="../reference-cpp/E32_EKA2/CSession2Class.html#%3a%3aCSession2" title="class CSession2"><code class="ApiItem">CSession2</code></a> derived class is saved in the instance of the
+<a href="../reference-cpp/E32_EKA2/CServer2Class.html#%3a%3aCServer2" title="class CServer2"><code class="ApiItem">CServer2</code></a> derived class. 
+</p>
+<p>
+The panic is caused when the pointer to the session object is NULL.
+</p>
+<code>59</code>
+<p>
+This panic is raised during an attempt to connect to a server. As
+part of this process, a pointer to an instance of the
+<a href="../reference-cpp/E32_EKA2/CSession2Class.html#%3a%3aCSession2" title="class CSession2"><code class="ApiItem">CSession2</code></a> derived class is saved in the instance of the
+<a href="../reference-cpp/E32_EKA2/CServer2Class.html#%3a%3aCServer2" title="class CServer2"><code class="ApiItem">CServer2</code></a> derived class. 
+</p>
+<p>
+This panic is caused when a pointer to the session has previously
+been set. 
+</p>
+<code>60</code>
+<p>
+This panic is raised during an attempt to connect to a server. As
+part of this process, a pointer to an instance of the
+<a href="../reference-cpp/E32_EKA2/CSession2Class.html#%3a%3aCSession2" title="class CSession2"><code class="ApiItem">CSession2</code></a> derived class is saved in the instance of the
+<a href="../reference-cpp/E32_EKA2/CServer2Class.html#%3a%3aCServer2" title="class CServer2"><code class="ApiItem">CServer2</code></a> derived class. 
+</p>
+<p>This panic is caused when a pointer to a session is being set, and
+the message is not the connect message.</p>

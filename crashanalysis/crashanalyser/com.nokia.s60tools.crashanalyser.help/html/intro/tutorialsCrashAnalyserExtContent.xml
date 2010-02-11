@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<introContent>
+<!-- Extension to the Tutorials page. -->
+
+	<extensionContent 
+		id="com.nokia.s60tools.crashanalyser.help-tutorials" 
+		alt-style="crashanalyser.properties" 
+		style="crashanalyser.css" 
+		path="tutorials/@">
+		
+		<group 
+			id="content-group" 
+			style-id="content-group">
+			
+		<link 
+			label="Crash Analyser tutorial" 
+			url="http://org.eclipse.ui.intro/showStandby?partId=org.eclipse.platform.cheatsheet&amp;input=com.nokia.s60tools.crashanalyser.quickstart" 
+			id="crashanalyser"
+			style-id="content-link">
+				<text>Start analyzing crashes by following step-by-step instructions.</text>
+    	</link>
+			
+		</group>
+		
+	</extensionContent>
+  
+</introContent>

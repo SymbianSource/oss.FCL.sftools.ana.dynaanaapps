@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<introContent>
+<!-- Extension to the Overview page. -->
+
+	<extensionContent 
+		id="com.nokia.s60tools.crashanalyser.help-overview" 
+		alt-style="crashanalyser.properties" 
+		style="crashanalyser.css" 
+		path="overview/@">
+		
+		<group 
+			id="content-group" 
+			style-id="content-group">
+			
+			<link 
+				label="Crash Analyser Overview" 
+	       		url="http://org.eclipse.ui.intro/showHelpTopic?id=/com.nokia.s60tools.crashanalyser.help/html/gs_index.htm" 
+				id="crashanalyser"
+				style-id="content-link"> 
+          		<text>Learn about Crash Analyser and what it can do to improve your development efforts.</text>
+			</link>
+			
+		</group>
+		
+	</extensionContent>
+  
+</introContent>

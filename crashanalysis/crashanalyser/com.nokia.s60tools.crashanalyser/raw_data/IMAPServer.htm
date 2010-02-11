@@ -1,0 +1,47 @@
+<h1>IMAPServer</h1>
+<p>
+IMAPServer panics are raised by the IMAP server-side MTM. They are used
+to signal errors in the implementation of the MTM, and are raised in debug
+builds. The panic codes are divided into a number of ranges, each of which
+relates to a particular area of functionality in the MTM: 
+</p>
+<code>0-999</code>
+<p>
+Session logic, which relates to the set up and management of an
+individual session to an IMAP server
+</p>
+<code>1000 - 1999</code>
+<p>
+IMAP settings loading and storage
+</p>
+<code>2000 - 2999</code>
+<p>
+Server MTM class implementation
+</p>
+<code>3000 - 3999</code>
+<p>
+Character set conversion
+</p>
+<code>4000 - 4999</code>
+<p>
+Storage and manipulation of messages
+</p>
+<code>5000 - 5999</code>
+<p>
+Controlling logic for handling client commands
+</p>
+<code>6000 - 6999</code>
+<p>
+Transport handler, which handles reading and writing of data to
+connected sockets
+</p>
+<code>7000 - 7999</code>
+<p>
+Synchronisation manager, which handles the synchronisation of
+mailbox folders between the locally persisted mailbox store and a remote
+mailbox store
+</p>
+<code>8000 - 8999</code>
+<p>
+Server MTM class
+</p>

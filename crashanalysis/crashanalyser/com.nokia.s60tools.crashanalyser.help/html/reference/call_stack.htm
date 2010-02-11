@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>Call stack</title>
+<link href="../../book.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+
+<h2>Call stack</h2>
+
+<h5>Stack Background</h5>
+<p>Symbian OS stacks are fixed in size. They are allocated during the creation of a thread and they do not grow. Once the stack is exhausted there is no dynamic capability for extension &ndash; which means it tends to be a very scarce and finite resource that must be treated with care (and used sparingly).</p>
+<p>Each user-side thread has two associated stacks. One for when the processor is executing user-side code, and another when the processor executes kernel-side code on behalf of your thread.</p>
+<p>The stack is used as temporary scratch storage inside functions or methods. As the processor executes your program, the stack data is added and removed from the stack. When one method calls another, the return address of the instruction which should be executed upon return from the called function may also be pushed onto the stack &ndash; this is one of the reasons why crash analysis tools such as Crash Analyser are able to obtain a call stack when a thread panics or generates an exception.</p>
+<img src="images\stack.png">
+<p>Stacks are usually placed at the top of a page boundary and the current stack pointer is set to the highest address within the stack. Therefore, stacks can be considered to flow backwards. That is to say, they start at some high memory address, and as data is pushed onto the stack, the current stack pointer address is decremented. The stack pointer always represents the high water mark of current stack usage within any given stack. Therefore, if you start interpreting the stack data at the current stack pointer, and work towards the highest stack address it is possible to build up a picture of function flow and also observe the data that has been pushed onto the stack (for example, Symbian OS descriptors and other local variables).</p>
+<p>In ARM devices, R13 is also known as the current stack pointer. As mentioned above, as data is pushed and popped from the stack, the value of R13 is adjusted accordingly.</p>
+<p> Should the stack usage be so high as to cause the stack pointer to underflow off the top of the stack, a page fault exception will be raised. This typically is represented in User-land by a Kern-Exec 3.</p>
+<p>In EKA2, each thread also has a kernel-side stack, called the supervisor stack. This stack is used for:</p>
+<ul>
+<li>executive calls</li>
+<li>if a hardware interrupt occurs whilst the thread is running and the interrupt queues IDFCs and/or DFCs</li>
+<li>rescheduling. A reschedule always occurs as a result of the current thread calling the scheduler. Inside the scheduler, the current thread&rsquo;s register state is saved on its supervisor stack and the final stack pointer value is saved in the thread control block. Then the stack pointer is loaded using the new thread&rsquo;s saved stack pointer value and its register state is restored from the stack (which is now the new thread&rsquo;s supervisor stack).</li>
+</ul>
+<p>For more detailed information on Symbian OS stacks, see the following references:</p>
+<ul>
+<li>ARM EABI: <a href="http://www.arm.com/products/DevTools/ABI.html">http://www.arm.com/products/DevTools/ABI.html</a></li>
+<li>Symbian OS Internals: <a href="http://www.amazon.com/Symbian-OS-Internals-Real-time-Programming/dp/0470025247">http://www.amazon.com/Symbian-OS-Internals-Real-time-Programming/dp/0470025247</a></li>
+</ul>
+
+<h5>Call Stack pane in Crash Analyser</h5>
+<p>The <b>Call Stack</b> pane shows the reconstructed call stack from the time of the panic/exception. The call stack appears in a similar layout as you might expect to see with a typical Symbian OS debugger (for example Carbide.c++). The most recently executing function appears near the top of the stack, and the oldest or initial functions appear at the bottom.</p>
+<p>Every four bytes of stack data are displayed as a line within the stack viewer. Color coding is used to indicate attributes of the stack line.</p>
+<img src="images\stack.1.png">
+<p><b>PC, and LR</b>: Represents a register value.</p>
+<p><b>00406848</b>: Represents the line that corresponds to the value of the current stack pointer.</p>
+<img src="images\stack2.png">
+<p>Additionally, the top of the stack view also contains some additional entries that are outside of the current stack range. These values provide contextual information that may be relevant to the crash diagnosis. For example, if the crash occurred whilst a large call stack was unwinding, then these values that are de-emphasized (in grey) at the top of the call stack correspond to functions that may have previously executed as the call stack unwound to it&rsquo;s current stack pointer location.</p>
+<p>The following additional notes describe the various attributes of the <b>Call Stack</b> pane.</p>
+
+<table width="667" border="1" cellspacing="1" cellpadding="2">
+<colgroup>
+<col width="50*">
+<col width="141*">
+</colgroup>
+<thead>
+<tr>
+<td><b>Column</b></td>
+<td><b>Description</b></td>
+</tr>
+<tr>
+<td><b>The first column (no name)</b></td>
+<td><p>This column has dual purposes:</p>
+<ul>
+<li>It typically reflects the stack address of the data that has been interpreted/displayed by the Crash Analyser UI. If the stack data range is 0x00402000 &ndash; 0x0040A000 then the first column will contain address values within this stack range.</li>
+<li>Crash Analyser will also include the current values for R14 (link register) and R15 (program counter) at the top of the stack. These register entries are colored light blue to differentiate them from the normal stack address entries.</li>
+</ul>
+</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><b>Symbol</b></td>
+<td>When the address of the data stored on the stack matches a function address, the symbol column will contain the name of the associated symbol, for example, a function or method name. If the data does not match the address of a symbolic, this line will typically be empty.</td>
+</tr>
+<tr>
+<td><b>Address</b></td>
+<td> In Symbian OS ARM devices, the data that is stored on the stack is in little endian notation which means that an address such as 0xABCDEF01 would appear as 0x01EFCDAB within the stack data. This column contains the address in converted form, that is, as 0xABCDEF01.</td>
+</tr>
+<tr>
+<td><b>Offset</b></td>
+<td>Whilst the symbol column shows the name of a function or method, the offset shows the location of the exact instruction that was executing when the function address was pushed onto the stack. In conjunction with assembly listing files for the function in question, it&rsquo;s possible to use the offset to identify the executing instruction.</td>
+</tr>
+<tr>
+<td><b>Object</b></td>
+<td>This represents the name of the binary or object file that contained the corresponding symbolic information that was shown in the symbol column. This information is typically obtained from the map or symbol file</td>
+</tr>
+<tr>
+<td><b>Data</b></td>
+<td>The data column shows an ASCII interpreted visualization of the stack data. Depending on the data that was stored at the stack location, this can make it possible to observer descriptors that have been stored on the stack.</td>
+</tr>
+</tbody>
+</table>
+
+<h5>How to Interpret the Stack</h5>
+<p>Start at the top of the stack &ndash; at the program counter and link register entries. Work downwards, checking each stack entry in turn. To hide any entries which did not match a function address, you can select the option as shown:</p>
+<p></p>
+<img src="images\stack_int.png">
+<p></p>
+<p>Any stack entries which do not match functions, for example, those that relate to data (for example descriptors, integers etc.) are hidden.</p>
+<p>The crash occurs at the program counter location, and then typically the previous function to be executed prior to this is contained within the link register. After this, the stack data must be used to reconstruct the crash location. Work from the current stack pointer downwards and inspect each function in question.</p>
+<p>Note that typically Crash Analyser performs a heuristic match that compares the stack data with supplied symbolic information. In some situations, the stack can contain the addresses of previous function calls that are not relevant to the current call stack. This is called &ldquo;ghosting&rdquo; and usually arises because an unintialised area of memory is reserved from the stack (for example, Symbian OS descriptors behave in this way). In such situations, since the stack memory is not wiped, any prior function addresses within the reserved stack area may contain references to old call chains. As such, it is important to use common sense and basic understanding of the component source code in conjunction with the call stack data in order to rule out irrelevant ghost entries.</p>
+<p>It is also important to verify if the value of the current stack pointer (R13) falls within or outside of the bounds of the stack. If the value of R13 is outside, or then very close to the stack boundary, then it may indicate a stack overflow which will result in an exception, typically reported in Symbian OS as a KERN-EXEC 3 panic.</p>
+
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

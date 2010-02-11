@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.contexts"?>
+<contexts>
+
+	<context id="CRASH_ANALYSER_HELP_TOC">
+      <description>Crash Analyser - Help</description>	   
+		<topic label="Crash Analyser Help" href="html/toc.html" >		
+	    </topic>
+    </context>	  
+
+	<context id="CRASH_ANALYSER_HELP_PREFERENCES">
+      <description>Crash Analyser - Preferences</description>	   
+		<topic label="Crash Analyser preferences" href="html/concepts/preferences.htm" >		
+	    </topic>
+		<topic label="Enabling automatic crash logging" href="html/tasks/enable_auto_crash_logging.htm" >		
+	    </topic>
+    </context>	  
+
+	<context id="CRASH_ANALYSER_HELP_MAIN_VIEW">
+      <description>Crash Analyser - Main View</description>	   
+		<topic label="Crash Analyser main view" href="html/concepts/main_view.htm" >		
+	    </topic>
+		<topic label="Browsing error library" href="html/tasks/browsing_error_library.htm" >		
+	    </topic>
+		<topic label="Importing crash files" href="html/tasks/import_crash_files.htm" >		
+	    </topic>
+		<topic label="Exporting crash files" href="html/tasks/export_crash_files.htm" >		
+	    </topic>
+		<topic label="Decoding crash files" href="html/tasks/decode_crash_files.htm" >		
+	    </topic>
+    </context>	  
+
+	<context id="CRASH_ANALYSER_HELP_IMPORT">
+      <description>Crash Analyser - Importing Crash Files</description>	   
+		<topic label="Importing crash files" href="html/tasks/import_crash_files.htm" >		
+	    </topic>
+		<topic label="Symbol files, Map files and Image files" href="html/concepts/selge_vs_symbol.htm" >		
+	    </topic>
+		<topic label="MobileCrash file and D_ECX file" href="html/concepts/mc_file.htm" >		
+	    </topic>
+		<topic label="Analysis file" href="html/concepts/analysis_file.htm" >		
+	    </topic>
+    </context>	  
+
+	<context id="CRASH_ANALYSER_HELP_DECODE">
+      <description>Crash Analyser - Decoding Crash Files</description>	   
+		<topic label="Decoding crash files" href="html/tasks/decode_crash_files.htm" >		
+	    </topic>
+		<topic label="Symbol files, Map files and Image files" href="html/concepts/selge_vs_symbol.htm" >		
+	    </topic>
+    </context>	  
+
+	<context id="CRASH_ANALYSER_HELP_ERROR_LIBRARY">
+      <description>Crash Analyser - Error Library</description>	   
+		<topic label="Browsing error library" href="html/tasks/browsing_error_library.htm" >		
+	    </topic>
+    </context>	  
+
+	<context id="CRASH_ANALYSER_HELP_ANALYSE_CRASH">
+      <description>Crash Analyser - Analysing Crashes</description>	   
+		<topic label="How to analyse a crash" href="html/concepts/how_to_analyse_crash.htm" >		
+	    </topic>
+    </context>	  
+</contexts>

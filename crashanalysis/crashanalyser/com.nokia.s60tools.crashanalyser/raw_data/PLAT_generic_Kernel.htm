@@ -1,0 +1,48 @@
+<h1>PLAT (generic Kernel)</h1>
+<p>These panics represent represent errors which are detected by  generic Kernel code.
+Typically, they are caused by passing bad or contradictory parameters to functions.</p><p>The thread causing the panic is terminated.</p>
+<code>0</code>
+<p>This panic is raised at system startup time if the secondary process cannot be created.</p>
+<code>2</code>
+<p>This panic is raised when a semaphore, a <code>DPlatSemaphore</code>, is created and a negative count value is passed to the member function creating it.</p>
+<code>3</code>
+<p>This panic is raised when a semaphore, a <code>DPlatSemaphore</code>, is signalled and the count value, if specified, is negative.</p>
+<code>6</code>
+<p>This panic is raised when fetching the home address of a specified address relative to the thread's process and the specified address is invalid.</p>
+<code>7-9</code>
+<p>These panics are raised when an illegal attempt is made to kill a thread, a <code>DPlatThread</code>; the thread may already be dead or its status may be unknown.</p>
+<code>12</code>
+<p>This panic is raised when an attempt is made to resume the first thread in a process, a <code>DPlatProcess</code>, when that process has not been loaded.</p>
+<code>15</code>
+<p>This panic is raised when looking up a function by ordinal in a library, a <code>DPlatLibrary</code>. The panic occurs when the specified ordinal number is zero or negative.</p>
+<code>16</code>
+<p>This panic is raised because of a failure in the initialization of the Hardware Abstraction Layer (the HAL); specifically, the startup reason is not recognized.</p>
+<code>17</code>
+<p>This panic is raised because of a failure in the initialization of the Hardware Abstraction Layer (the HAL); specifically, the keyboard could not be initialized.</p>
+<code>18</code>
+<p>This panic is raised because of a failure in the initialization of the Hardware Abstraction Layer (the HAL); specifically, the x-y input device could not be initialized.</p>
+<code>19-21</code>
+<p>These panics are raised by failures during system startup.</p>
+<code>22</code>
+<p>This panic is raised when a failure occurs in dispatching an exception.</p>
+<code>64</code>
+<p>This panic is raised when an attempt is made to create a hardware chunk when that chunk has already been created.</p>
+<code>80</code>
+<p>This panic is raised when a Kernel fixed heap is being created and the specified maximum length is negative.</p>
+<code>81</code>
+<p>This panic is raised when the Kernel attempts to mutate a fixed heap into a chunk heap and the specified minimum length is different from the current minimum length.</p>
+<code>83</code>
+<p>This panic is raised in debug builds only.</p><p>This panic is raised by the millisecond timer when a call back has already been queued.</p>
+<code>87</code>
+<p>This panic is raised in debug builds only.</p>
+<p>This panic is raised during debugging when handling an exception via <code>Debug::HandleException</code> and a write operation to the remote thread running the monitor program fails.</p>
+<code>88</code>
+<p>This panic is raised when setting up the context for a newly created thread and the specified thread type, which defines the context, is not recognized.</p>
+<code>90</code>
+<p>This panic is raised if there is no screen-switch-on handler.</p>
+<code>91</code>
+<p>This panic is raised if a system thread has been panicked.</p>
+<code>92</code>
+<p>This panic is raised when an attempt is made to move a fixed address chunk.</p>
+<code>93-99</code>
+<p>These panics are raised during initialization of the MMU if creation of various components fails; for example, the domain allocator or the page table linear allocator.</p>

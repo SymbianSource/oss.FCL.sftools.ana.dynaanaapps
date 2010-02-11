@@ -1,0 +1,85 @@
+<h1>BAFL</h1>
+<p>Basic Application Framework Library (BFL.lib) panics. A number of APIs raise these panics.
+</p>
+<p>These are:</p>
+<p>Application Utilities
+</p>
+<p>Command Line Parsing
+</p>
+<p>Environment Change Notifier
+</p>
+<p>Incremental Matcher
+</p>
+<p>Interface to Resource Files
+</p>
+<code>1</code>
+<p><i>This panic is raised in debug builds only.</i>
+</p>
+<p>This panic is raised by <a href="../reference-cpp/BAFL/RResourceFileClass.html#%3a%3aRResourceFile%3a%3aReadL%28%29" title="function RResourceFile::ReadL()"><code class="ApiItem">RResourceFile::ReadL()</code></a>, when the length of the resource is greater than the maximum length of the target descriptor
+</p>
+<code>2</code>
+<p>Out of range index passed to <code>RIncrMatcherBase::FirstMatchingIndex()</code>
+</p>
+<code>3</code>
+<p>Maximum length passed to <code>RTextBuf::SetMaxLengthL()</code> was &lt;=0
+</p>
+<code>4</code>
+<p>This panic is raised by the <code>Read...()</code>  member functions and the <code>Advance()</code>  member function of <a href="../reference-cpp/BAFL/TResourceReaderClass.html#%3a%3aTResourceReader" title="class TResourceReader"><code class="ApiItem">TResourceReader</code></a>, when the current position  in the resource buffer is moved  beyond the end of the buffer.
+</p>
+<code>5</code>
+<p>This panic is raised by <a href="../reference-cpp/BAFL/TResourceReaderClass.html#%3a%3aTResourceReader%3a%3aRewind%28%29" title="function TResourceReader::Rewind()"><code class="ApiItem">TResourceReader::Rewind()</code></a>, when the current position  in the resource buffer is moved before the start of the buffer.
+</p>
+<code>6</code>
+<p>Unused
+</p>
+<code>7</code>
+<p>Unused
+</p>
+<code>8</code>
+<p>Unused
+</p>
+<code>9</code>
+<p>Unused
+</p>
+<code>10</code>
+<p>Unused
+</p>
+<code>11</code>
+<p>Unused
+</p>
+<code>12</code>
+<p>Unused
+</p>
+<code>13</code>
+<p>Unused
+</p>
+<code>14</code>
+<p>No path specified in sound info passed to <code>CBaSystemSoundArray::SetSoundL()</code>
+</p>
+<code>15</code>
+<p><i>This panic is raised in debug builds only.</i></p><p>This panic is raised by <a href="../reference-cpp/BAFL/TResourceReaderClass.html#%3a%3aTResourceReader%3a%3aReadTPtrC16%28%29" title="function TResourceReader::ReadTPtrC16()"><code class="ApiItem">TResourceReader::ReadTPtrC16()</code></a>, when it detects that the alignment of Unicode strings within the  resource is incorrect, i.e. the buffer is of an incorrect length for reading  a Unicode string.
+</p>
+<code>16</code>
+<p>Unsupported old resource file format</p>
+<code>17</code>
+<p>No system sound category set for new system sound
+</p>
+<code>18</code>
+<p>Invalid system sound priority set
+</p>
+<code>19</code>
+<p>NULL UID passed to <code>CBaNamedPlugins::IndexOfUid()</code>
+</p>
+<code>20</code>
+<p>Bad resource file format found when constructing a <code>CBaNamedPlugins</code> object.
+</p>
+<code>21</code>
+<p>The array position at which the text representing the choice of no plug-in is to  be inserted, is invalid. The panic is raised by <code>CBaNamedPlugins::ConstructL()</code>.
+</p>
+<code>22</code>
+<p>An invalid comparison algorithm or no comparison algorithm supplied when sorting the plug-in names in the implementation of <code>CBaNamedPlugins::ConstructL()</code>.
+</p>
+<code>23</code>
+<p>Unused.
+</p>
+	   

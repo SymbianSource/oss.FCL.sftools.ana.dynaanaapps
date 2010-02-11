@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>Crash Analyser preferences</title>
+<link href="../../book.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+
+<h2>Crash Analyser preferences</h2>
+<p>In the Crash Analyser preferences dialog, you can define if Crash Analyser should listen for MobileCrash files while tracing (with TraceViewer Carbide.c++ Excension) or panics while debugging with emulator. You can open the Crash Analyser preference dialog by selecting <b>Window > Preferences... > Carbide Extensions > Crash Analyser.</b></p>
+<p>If you want to see the details of a panic in the Crash Analyser main view when debugging in an emulator, check the <b>Listen panics from epocwind.out</b> check box.</p>
+<img src="images\panics.png">
+<p></p>
+<p>Check the <b>Listen MobileCrash panics via TraceViewer</b> check box if you want the Crash Analyser to listen trace data provided by the TraceViewer Carbide.c++ Extension.</p>
+<ul>
+<li>If the <b>Show Crash Visualiser when crash occurs</b> is not checked, then crash files received via TraceViewer will be displayed in the Crash Analyser main view in <b>Undecoded</b> state.</li>
+<li>If the <b>Show Crash Visualiser when crash occurs</b> check box is checked, the files received via TraceViewer are automatically decoded and displayed in the <b>Crash Visualiser.</b></li>
+</ul>
+<img src="images\trace.png">
+<p><b>Note!</b> In case of a panic or mobile crash, you get automatically an undecoded MobileCrash file to the <b>Crash file</b> list in Carbide.c++ view.</p>
+<p>See the workflow examples in <a href="../tasks/enable_auto_crash_logging.htm">Enabling automatic crash logging.</a></p>
+
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

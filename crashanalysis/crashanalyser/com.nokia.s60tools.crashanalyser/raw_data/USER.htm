@@ -1,0 +1,1473 @@
+<h1>USER</h1>
+<p>Panics with this category are raised on the user side by member functions
+of T type and R type classes which reside in <code class="filename">euser.dll</code>.</p>
+<p>They are also raised by some static member functions of the
+<code>User</code>, <code>UserHeap</code> and <code>RHeap</code> classes.
+Typically, they are caused by passing bad or contradictory values to class
+constructors or member functions.</p>
+<p>
+The thread causing the panic is terminated. 
+</p>
+<code>0</code>
+<p>
+This panic is raised when a thread calls
+<a href="../reference-cpp/E32_EKA2/UserClass.html#%3a%3aUser" title="class User"><code class="ApiItem">User</code></a><code>::Invariant()</code>. 
+</p>
+<p>
+Typically, <code>User::Invariant()</code> is called when a test for
+a class invariant fails, i.e. when a test which checks that the internal data
+of an object is self-consistent, fails. </p>
+<p>
+Check the design and implementation of your class. 
+</p>
+<code>3</code>
+<p>
+This panic is raised when a <a href="../reference-cpp/E32_EKA2/TDateTimeClass.html#%3a%3aTDateTime" title="class TDateTime"><code class="ApiItem">TDateTime</code></a> object
+is constructed with an invalid date or time field. 
+</p>
+<code>7</code>
+<p>
+This panic is raised by the <code>Ptr()</code> member function of a
+16-bit variant descriptor if the descriptor is invalid. 
+</p>
+<p>
+Check for ways in which the descriptor may have become corrupted,
+including an unsafe use of cast. 
+</p>
+<code>8</code>
+<p>
+This panic is raised when a length value passed to a 16-bit variant
+descriptor member function is invalid. It may be raised by some descriptor
+constructors and, specifically, by the <code>Replace()</code> and
+<code>Set()</code> descriptor member functions. 
+</p>
+<code>9</code>
+<p>
+This panic is raised when the index value passed to the 16-bit
+variant descriptor <code>Operator[]</code> is out of bounds 
+</p>
+<code>10</code>
+<p>
+This panic is raised when the position value passed to a 16-bit
+variant descriptor member function is out of bounds. It may be raised by the
+<code>Left()</code>, <code>Right()</code>, <code>Mid()</code>,
+<code>Insert()</code>, <code>Delete()</code> and <code>Replace()</code> member
+functions of <a href="../reference-cpp/E32_EKA2/TDes16Class.html#%3a%3aTDes16" title="class TDes16"><code class="ApiItem">TDes16</code></a>. 
+</p>
+<code>11</code>
+<p>
+This panic is raised when any operation that moves or copies data
+to a 16-bit variant descriptor, causes the length of that descriptor to exceed
+its maximum length. 
+</p>
+<p>
+It may be caused by any of the copying, appending or formatting
+member functions and, specifically, by the <code>Insert()</code>,
+<code>Replace()</code>, <code>Fill()</code>, <code>Fillz()</code> and
+<code>ZeroTerminate()</code> descriptor member functions. It can also be caused
+by the <code>SetLength()</code> function. See <a href="../reference-cpp/E32_EKA2/TDes16Class.html#%3a%3aTDes16" title="class TDes16"><code class="ApiItem">TDes16</code></a>. 
+</p>
+<code>12</code>
+<p>
+This panic is raised when the format string passed to the 16-bit
+variant descriptor member functions <code>Format()</code> and
+<code>AppendFormat()</code> has invalid syntax. 
+</p>
+<p>
+See <a href="../reference-cpp/E32_EKA2/TDes16Class.html#%3a%3aTDes16%3a%3aFormat%28%29" title="function TDes16::Format()"><code class="ApiItem">TDes16::Format()</code></a> and
+<a href="../reference-cpp/E32_EKA2/TDes16Class.html#%3a%3aTDes16%3a%3aAppendFormat%28%29" title="function TDes16::AppendFormat()"><code class="ApiItem">TDes16::AppendFormat()</code></a>. 
+</p>
+<code>13</code>
+<p>
+<em>This panic is raised in debug builds only.</em>
+</p>
+<p>
+It is raised by the <code>AppendFormatList()</code> member function
+of the 16-bit variant descriptor <a href="../reference-cpp/E32_EKA2/TDes16Class.html#%3a%3aTDes16" title="class TDes16"><code class="ApiItem">TDes16</code></a>, if an invalid
+variable list is passed to the function when the format is <code>%S</code> or <code>%s</code>. 
+</p>
+<code>14</code>
+<p>
+This panic is raised when expanding or contracting an
+<a href="../reference-cpp/E32_EKA2/HBufC16Class.html#%3a%3aHBufC16" title="class HBufC16"><code class="ApiItem">HBufC16</code></a> buffer using the <code>ReAlloc()</code> or
+<code>ReAllocL()</code> descriptor member functions. Specifically, the panic
+occurs if the new length being specified is too small to contain the data. 
+</p>
+<code>16</code>
+<p>
+This panic is raised by the <code>Replace()</code> member function
+of the 16-bit variant descriptor <a href="../reference-cpp/E32_EKA2/TDes16Class.html#%3a%3aTDes16" title="class TDes16"><code class="ApiItem">TDes16</code></a> when the length of
+the source descriptor is negative or exceeds the maximum length of the target
+descriptor. 
+</p>
+<code>17</code>
+<p>
+This panic is raised when 16-bit variant descriptors are
+constructed with negative length values. It may also be raised if the
+<code>Set()</code>, <code>Repeat()</code> and the <code>Find()</code> member
+functions are passed negative length values. 
+</p>
+<code>18</code>
+<p>
+This panic is raised when 16-bit variant descriptors are
+constructed with negative maximum length values. 
+</p>
+<code>19</code>
+<p>
+This panic is raised by the <code>Ptr()</code> member function of
+an 8 bit variant descriptor if the descriptor is invalid. Check for ways in
+which the descriptor may have become corrupted, including an unsafe use of
+cast. 
+</p>
+<code>20</code>
+<p>
+This panic is raised when a length value passed to an 8 bit variant
+descriptor member function is invalid. It may be raised by some descriptor
+constructors and, specifically, by the <code>Replace()</code> and
+<code>Set()</code> descriptor member functions. 
+</p>
+<code>21</code>
+<p>
+This panic is raised when the index value passed to the 8 bit
+variant descriptor <code>Operator[]</code> is out of bounds. 
+</p>
+<code>22</code>
+<p>
+This panic is raised when the position value passed to an 8 bit
+variant descriptor member function is out of bounds. It may be raised by the
+<code>Left()</code>, <code>Right()</code>, <code>Mid()
+</code>,
+<code>Insert()</code>, <code>Delete()</code> and <code>Replace()
+</code>
+descriptor member functions. 
+</p>
+<code>23</code>
+<p>
+This panic is raised when any operation that moves or copies data
+to an 8 bit variant descriptor, causes the length of that descriptor to exceed
+its maximum length. 
+</p>
+<p>
+It may be caused by any of the copying, appending or formatting
+member functions and, specifically, by the <code>Insert()</code>,
+<code>Replace()</code>, <code>Fill()</code>, <code>Fillz()</code> and
+<code>ZeroTerminate()</code> descriptor member functions. It can also be caused
+by the <code>SetLength()</code> function. See <a href="../reference-cpp/E32_EKA2/TDes8Class.html#%3a%3aTDes8" title="class TDes8"><code class="ApiItem">TDes8</code></a>. 
+</p>
+<code>24</code>
+<p>
+This panic is raised when the format string passed to the 8 bit
+variant descriptor member functions <code>Format()</code> and
+<code>AppendFormat()</code> has invalid syntax. 
+</p>
+<p>
+See <a href="../reference-cpp/E32_EKA2/TDes8Class.html#%3a%3aTDes8%3a%3aFormat%28%29" title="function TDes8::Format()"><code class="ApiItem">TDes8::Format()</code></a> and
+<a href="../reference-cpp/E32_EKA2/TDes8Class.html#%3a%3aTDes8%3a%3aAppendFormat%28%29" title="function TDes8::AppendFormat()"><code class="ApiItem">TDes8::AppendFormat()</code></a>. 
+</p>
+<code>25</code>
+<p>
+<em>This panic is raised in debug builds only.</em>
+</p>
+<p>
+This panic is raised by the <code>AppendFormatList()</code> member
+function of the 8-bit variant descriptor <a href="../reference-cpp/E32_EKA2/TDes8Class.html#%3a%3aTDes8" title="class TDes8"><code class="ApiItem">TDes8</code></a>, if an
+invalid variable list is passed to the function when the format is
+<code>%S</code> or <code>%s</code>. 
+</p>
+<code>26</code>
+<p>
+This panic is raised when expanding or contracting an
+<a href="../reference-cpp/E32_EKA2/HBufC8Class.html#%3a%3aHBufC8" title="class HBufC8"><code class="ApiItem">HBufC8</code></a> buffer using the <code>ReAlloc()</code> or
+<code>ReAllocL()</code> descriptor member functions. Specifically, the panic
+occurs if the new length being specified is too small to contain the data. 
+</p>
+<code>28</code>
+<p>
+This panic is raised by the <code>Replace()</code> member function
+of the 8-bit variant descriptor <a href="../reference-cpp/E32_EKA2/TDes8Class.html#%3a%3aTDes8" title="class TDes8"><code class="ApiItem">TDes8</code></a>, when the length of
+the source descriptor is negative or exceeds the maximum length of the target
+descriptor. 
+</p>
+<code>29</code>
+<p>
+This panic is raised when 8-bit variant descriptors are constructed
+with negative length values. It may also be raised if the <code>Set()</code>,
+<code>Repeat()</code> and the <code>Find()</code> member functions are passed
+negative length values. 
+</p>
+<code>30</code>
+<p>
+This panic is raised when 8-bit variant descriptors are constructed
+with negative maximum length values. 
+</p>
+<code>32</code>
+<p>
+<em>This panic is raised in debug builds only.</em>
+</p>
+<p>
+It is raised by the <code>Pos()</code> member function of a
+<code>TRawEvent</code>. The function returns the mouse/pen position
+encapsulated by the <code>TRawEvent</code>. The panic is raised when the event
+is not a mouse/pen type event. 
+</p>
+<code>33</code>
+<p>
+<em>This panic is raised in debug builds only.</em>
+</p>
+<p>
+It is raised by the <code>ScanCode()</code> member function of a
+<code>TRawEvent</code>. The function returns the scan code associated with a
+key down or key up event encapsulated by the <code>TRawEvent</code>. The panic
+is raised when the event is not a key down or key up event. 
+</p>
+<code>34</code>
+<p>
+<em>This panic is raised in debug builds only.</em>
+</p>
+<p>
+It is raised by the <code>Modifiers()</code> member function of a
+<code>TRawEvent</code>. The function returns the modifers associated with a
+modifiers update event encapsulated by the <code>TRawEvent</code>. The panic is
+raised when the event is not a modifier update event. 
+</p>
+<code>35</code>
+<p>
+This panic is raised by the default <code>At()</code> virtual
+member function of <a href="../reference-cpp/E32_EKA2/TKeyClass.html#%3a%3aTKey" title="class TKey"><code class="ApiItem">TKey</code></a>. The function is intended to be
+overridden by a derived class. 
+</p>
+<code>36</code>
+<p>
+This panic is raised by the default <code>Swap()</code> virtual
+member function of <a href="../reference-cpp/E32_EKA2/TSwapClass.html#%3a%3aTSwap" title="class TSwap"><code class="ApiItem">TSwap</code></a>. The function is intended to be
+overridden by a derived class. 
+</p>
+<code>37</code>
+<p>
+This panic is raised by the <code>operator[]</code> of a
+<a href="../reference-cpp/E32_EKA2/TUidTypeClass.html#%3a%3aTUidType" title="class TUidType"><code class="ApiItem">TUidType</code></a> when the index value passed to the operator is
+either negative or is greater than or equal to the constant
+<code>KMaxCheckedUid</code> defined in <code class="filename">e32const.h</code>. 
+</p>
+<code>38</code>
+<p>
+This panic is raised by the <code>Set(TDesC8&amp;)</code> member
+function of <code>TCheckedUid</code> when the length of the descriptor passed
+to the function is not equal to the size of a <code>TCheckedUid</code> object. 
+</p>
+<code>41</code>
+<p>
+This panic is caused by the
+<a href="../reference-cpp/E32_EKA2/UserHeapClass.html#%3a%3aUserHeap%3a%3aChunkHeap%28%29" title="function UserHeap::ChunkHeap()"><code class="ApiItem">UserHeap::ChunkHeap()</code></a> static function when the value
+defining the minimum length of the heap is greater than the value defining the
+maximum length to which the heap can grow. 
+</p>
+<code>42</code>
+<p>
+This panic is raised by a number of <a href="../reference-cpp/E32_EKA2/RHeapClass.html#%3a%3aRHeap" title="class RHeap"><code class="ApiItem">RHeap</code></a>
+member functions, <code>AllocLen()</code>, <code>Free()</code>,
+<code>FreeZ()</code>, <code>ReAlloc()</code>, <code>ReAllocL()</code>,
+<code>Adjust()</code> and <code>AdjustL()</code> when a pointer passed to these
+functions does not point to a valid cell. 
+</p>
+<code>43</code>
+<p>
+This panic is raised by the <code>Adjust()</code> and
+<code>AdjustL()</code> member functions of an <a href="../reference-cpp/E32_EKA2/RHeapClass.html#%3a%3aRHeap" title="class RHeap"><code class="ApiItem">RHeap</code></a>. It is
+caused when a heap cell is being shrunk and the amount by which the cell is
+being shrunk is less than the current length of the cell. 
+</p>
+<code>44</code>
+<p>
+This panic is raised by the <code>Free()</code> and
+<code>FreeZ()</code> member functions of an <a href="../reference-cpp/E32_EKA2/RHeapClass.html#%3a%3aRHeap" title="class RHeap"><code class="ApiItem">RHeap</code></a>. It is
+caused when the cell being freed overlaps the next cell on the free list (i.e.
+the first cell on the free list with an address higher than the one being
+freed). 
+</p>
+<code>45</code>
+<p>
+This panic is raised by the <code>Free()</code> and
+<code>FreeZ()</code> member functions of an <a href="../reference-cpp/E32_EKA2/RHeapClass.html#%3a%3aRHeap" title="class RHeap"><code class="ApiItem">RHeap</code></a>. It is
+caused when the cell being freed overlaps the previous cell on the free list
+(i.e. the last cell on the free list with an address lower than the one being
+freed). 
+</p>
+<code>46</code>
+<p>
+This panic is raised by the <code>ReAlloc()</code> and
+<code>ReAllocL()</code> member functions of an <a href="../reference-cpp/E32_EKA2/RHeapClass.html#%3a%3aRHeap" title="class RHeap"><code class="ApiItem">RHeap</code></a>. It
+is caused when the cell being reallocated overlaps the next cell on the free
+list (i.e. the first cell on the free list with an address higher than the one
+being reallocated). 
+</p>
+<code>47</code>
+<p>
+This panic is raised by the <code>Alloc()</code>,
+<code>AllocL()</code> or <code>AllocLC()</code> member functions of
+<a href="../reference-cpp/E32_EKA2/RHeapClass.html#%3a%3aRHeap" title="class RHeap"><code class="ApiItem">RHeap</code></a>. It is caused by trying to allocate a cell from a
+heap, specifying an unsigned size value which is greater than or equal to the
+value of <code>KMaxTInt/2</code>. The constant <code>KMaxTInt</code> is defined
+in <code class="filename">e32std.h</code>. 
+</p>
+<p>
+This panic may also be raised by the heap walker when it finds a
+bad allocated heap cell size. 
+</p>
+<code>48</code>
+<p>
+This panic is raised by the heap walker when it finds a bad
+allocated heap cell address. 
+</p>
+<code>49</code>
+<p>
+This panic is raised by the heap walker when it finds a bad free
+heap cell address. 
+</p>
+<code>51</code>
+<p>
+<em>This panic is raised in debug builds only.</em>
+</p>
+<p>
+It is raised by the <code>__DbgMarkEnd()</code> member function of
+<a href="../reference-cpp/E32_EKA2/RHeapClass.html#%3a%3aRHeap" title="class RHeap"><code class="ApiItem">RHeap</code></a> in debug builds when there has been no corresponding
+call to the <code>__DbgMarkStart()</code> member function; it is also caused
+when there are more calls to <code>__DbgMarkEnd()</code> than to
+<code>__DbgMarkStart()</code>. These functions are part of the debug assistance
+provided by the <a href="../reference-cpp/E32_EKA2/RHeapClass.html#%3a%3aRHeap" title="class RHeap"><code class="ApiItem">RHeap</code></a> class. 
+</p>
+<code>52</code>
+<p>
+This panic is raised by the <code>Adjust()</code> and
+<code>AdjustL()</code> member functions of an <a href="../reference-cpp/E32_EKA2/RHeapClass.html#%3a%3aRHeap" title="class RHeap"><code class="ApiItem">RHeap</code></a>. It is
+caused when the offset from the start of the cell being stretched or shrunk is
+a negative value. 
+</p>
+<code>54</code>
+<p>
+This panic is raised by the <code>ReAlloc()</code> and
+<code>ReAllocL()</code> member functions of an <a href="../reference-cpp/E32_EKA2/RHeapClass.html#%3a%3aRHeap" title="class RHeap"><code class="ApiItem">RHeap</code></a>. It
+is caused when the new size for the cell being reallocated is a negative value.
+</p>
+<code>55</code>
+<p>
+This panic is caused by the
+<a href="../reference-cpp/E32_EKA2/UserHeapClass.html#%3a%3aUserHeap" title="class UserHeap"><code class="ApiItem">UserHeap</code></a><code>::ChunkHeap()</code> static function when
+the value defining the minimum length of the heap is negative. 
+</p>
+<code>56</code>
+<p>
+This panic is caused by the
+<a href="../reference-cpp/E32_EKA2/UserHeapClass.html#%3a%3aUserHeap" title="class UserHeap"><code class="ApiItem">UserHeap</code></a><code>::ChunkHeap()</code> static function when
+the value defining the maximum length to which the heap can grow, is negative. 
+</p>
+<code>57</code>
+<p>
+This panic is raised when closing a shared heap using the
+<code>Close()</code> member function of <a href="../reference-cpp/E32_EKA2/RHeapClass.html#%3a%3aRHeap" title="class RHeap"><code class="ApiItem">RHeap</code></a> and the
+access count is zero or negative. A zero or negative access count suggests that
+an attempt is being made to close the heap too many times. 
+</p>
+<code>58</code>
+<p>
+This panic is raised when opening a heap for shared access using
+the <code>Open()</code> member function of <a href="../reference-cpp/E32_EKA2/RHeapClass.html#%3a%3aRHeap" title="class RHeap"><code class="ApiItem">RHeap</code></a> and the
+heap type is not <code>EChunkNormal</code>. 
+</p>
+<code>59</code>
+<p>
+This panic is raised by the <code>UnGet()</code> member function of
+the 8-bit variant lexical analyzer, <a href="../reference-cpp/E32_EKA2/TLex8Class.html#%3a%3aTLex8" title="class TLex8"><code class="ApiItem">TLex8</code></a>, if the
+character position is already at the start of the string. 
+</p>
+<code>60</code>
+<p>
+This panic is raised by the <code>Inc()</code> member function of
+the 8-bit variant lexical analyzer, <a href="../reference-cpp/E32_EKA2/TLex8Class.html#%3a%3aTLex8" title="class TLex8"><code class="ApiItem">TLex8</code></a>, if the
+resulting character position lies before the start of the string or after the
+end of the string. 
+</p>
+<code>61</code>
+<p>
+This panic is raised by the <code>SkipAndMark()</code> member
+function of the 8-bit variant lexical analyzer, <a href="../reference-cpp/E32_EKA2/TLex8Class.html#%3a%3aTLex8" title="class TLex8"><code class="ApiItem">TLex8</code></a>, if
+the resulting character position lies before the start of the string or after
+the end of the string. 
+</p>
+<code>63</code>
+<p>
+This panic is raised by the <code>ValidateMark()</code> member
+function of the 8-bit variant lexical analyzer, <a href="../reference-cpp/E32_EKA2/TLex8Class.html#%3a%3aTLex8" title="class TLex8"><code class="ApiItem">TLex8</code></a>, if
+the position of the extraction mark lies before the start of the string or
+after the end of the string. 
+</p>
+<code>64</code>
+<p>
+This panic is raised by the <code>UnGet()</code> member function of
+the 16-bit variant lexical analyzer, <a href="../reference-cpp/E32_EKA2/TLex16Class.html#%3a%3aTLex16" title="class TLex16"><code class="ApiItem">TLex16</code></a>, if the
+character position is already at the start of the string. 
+</p>
+<code>65</code>
+<p>
+This panic is raised by the <code>Inc()</code> member function of
+the 16-bit variant lexical analyzer, <a href="../reference-cpp/E32_EKA2/TLex16Class.html#%3a%3aTLex16" title="class TLex16"><code class="ApiItem">TLex16</code></a>, if the
+resulting character position lies before the start of the string or after the
+end of the string. 
+</p>
+<code>66</code>
+<p>
+This panic is raised by the <code>SkipAndMark()</code> member
+function of the 16-bit variant lexical analyzer, <a href="../reference-cpp/E32_EKA2/TLex16Class.html#%3a%3aTLex16" title="class TLex16"><code class="ApiItem">TLex16</code></a>,
+if the resulting character position lies before the start of the string or
+after the end of the string. 
+</p>
+<code>68</code>
+<p>
+This panic is raised by the <code>ValidateMark()</code> member
+function of the 16-bit variant lexical analyzer, <a href="../reference-cpp/E32_EKA2/TLex16Class.html#%3a%3aTLex16" title="class TLex16"><code class="ApiItem">TLex16</code></a>,
+if the position of the extraction mark lies before the start of the string or
+after the end of the string. 
+</p>
+<code>69</code>
+<p>
+This panic is raised by the <a href="../reference-cpp/E32_EKA2/TDateSuffixClass.html#%3a%3aTDateSuffix" title="class TDateSuffix"><code class="ApiItem">TDateSuffix</code></a>
+constructor or its <code>Set()</code> member function when the suffix index
+specified is negative or is greater than or equal to the value
+<code>KMaxSuffixes</code> defined in <code class="filename">e32std.h</code>. The index is used
+to access a locale dependent table of suffix characters which can be appended
+to the dates of the month (e.g. the characters &quot;st&quot; for 1st, &quot;nd&quot; for 2nd, &quot;st&quot;
+for 31st). 
+</p>
+<code>70</code>
+<p>
+<em>Introduced in 6.0:</em> This panic is raised when
+attempting to complete a client/server request and the <code>RMessagePtr</code>
+is null. 
+</p>
+<p>
+<em>Withdrawn in 6.0:</em> This panic is raised by the
+<code>SetRetry()</code> member function of <a href="../reference-cpp/E32_EKA2/RSessionBaseClass.html#%3a%3aRSessionBase" title="class RSessionBase"><code class="ApiItem">RSessionBase</code></a>,
+the client interface for communication with a server, when the specified delay
+time between resending a message to the server is either negative or a value
+greater than KMaxTint (defined in e32std.h). 
+</p>
+<code>71</code>
+<p>
+<em>Withdrawn in 6.0:</em> This panic is raised by the
+<code>SetRetry()</code> member function of <a href="../reference-cpp/E32_EKA2/RSessionBaseClass.html#%3a%3aRSessionBase" title="class RSessionBase"><code class="ApiItem">RSessionBase</code></a>,
+the client interface for communication with a server, when the specified number
+of attempts to resend a message to the server is either negative or a value
+greater than <code>KMaxTint</code> (defined in <code class="filename">e32std.h</code>). 
+</p>
+<code>72</code>
+<p>
+<em>Withdrawn in 6.0:</em> This panic is raised by the
+<code>SetRetry()</code> member function of <a href="../reference-cpp/E32_EKA2/RSessionBaseClass.html#%3a%3aRSessionBase" title="class RSessionBase"><code class="ApiItem">RSessionBase</code></a>,
+the client interface for communication with a server, when the specified
+operation code identifying the required service is either negative or a value
+greater than <code>KMaxTint</code> (defined in <code class="filename">e32std.h</code>). 
+</p>
+<p>
+<em>Introduced in 6.0:</em> This panic is raised by the
+<code>Send()</code> and <code>SendReceive()</code> member functions of
+<a href="../reference-cpp/E32_EKA2/RSessionBaseClass.html#%3a%3aRSessionBase" title="class RSessionBase"><code class="ApiItem">RSessionBase</code></a>, the client interface for communication with
+a server, when the specified operation code identifying the required service is
+either negative or a value greater than <code>KMaxTint</code> (defined in
+<code class="filename">e32std.h</code>). 
+</p>
+<code>73</code>
+<p>
+This panic is raised by the <code>Receive()</code> member function
+of <code>RServer</code>, the handle to the server, when the attempt to receive
+a message for the server, synchronously, fails. 
+</p>
+<code>75</code>
+<p>
+This panic is raised by the constructor of a singly linked list
+header, a <a href="../reference-cpp/E32_EKA2/TSglQueClass.html#%3a%3aTSglQue" title="class TSglQue"><code class="ApiItem">TSglQue</code></a> or by the <code>SetOffset()</code>
+member function when the specified offset is not 4 byte aligned, i.e. when it
+is not divisible by 4. 
+</p>
+<code>76</code>
+<p>
+This panic is raised when attempting to remove an object from a
+singly linked list, using the <code>Remove()</code> member function of
+<a href="../reference-cpp/E32_EKA2/TSglQueClass.html#%3a%3aTSglQue" title="class TSglQue"><code class="ApiItem">TSglQue</code></a>, when that object is not in the list. 
+</p>
+<code>78</code>
+<p>
+This panic is raised by the constructor of a doubly linked list
+header, a <a href="../reference-cpp/E32_EKA2/TDblQueClass.html#%3a%3aTDblQue" title="class TDblQue"><code class="ApiItem">TDblQue</code></a> or by the <code>SetOffset()</code>
+member function, when the specified offset is not 4 byte aligned, i.e. when it
+is not divisible by 4. 
+</p>
+<code>79</code>
+<p>
+<em>This panic is raised in debug builds only.</em>
+</p>
+<p>
+It is raised by a call to either the <code>First()</code> and
+<code>Last()</code> member functions of a doubly linked list, a
+<a href="../reference-cpp/E32_EKA2/TDblQueClass.html#%3a%3aTDblQue" title="class TDblQue"><code class="ApiItem">TDblQue</code></a>, which return pointers to the first and last
+element in the list respectively; the panic occurs when the list is empty. 
+</p>
+<code>80</code>
+<p>
+<em>This panic is raised in debug builds only.</em>
+</p>
+<p>
+It is raised by the post increment operator,
+<code>operator++</code>, the post decrement operator, <code>operator&mdash;
+</code>
+and the return current element operator, <code>operator T*</code>, of the
+doubly linked list iterator, a <a href="../reference-cpp/E32_EKA2/TDblQueIterClass.html#%3a%3aTDblQueIter" title="class TDblQueIter"><code class="ApiItem">TDblQueIter</code></a>; the panic
+occurs when the element returned by these operators is not in the list.
+Typically, this is caused by the removal of the element from the list prior to
+calling these operators. 
+</p>
+<code>81</code>
+<p>
+This panic is raised by the get rectangle operator,
+<code>operator[]</code>, of a clipping region, derived from the abstract base
+class <a href="../reference-cpp/E32_EKA2/TRegionClass.html#%3a%3aTRegion" title="class TRegion"><code class="ApiItem">TRegion</code></a>. The panic occurs when the index, which
+refers to the specific rectangle within the region, is greater than or equal to
+the number of rectangles contained within the region (as returned by the
+<code>Count()</code> member function). 
+</p>
+<p>
+The index must be strictly less than the number of contained
+rectangles. 
+</p>
+<code>82</code>
+<p>
+<em>This panic is raised in debug builds only.</em>
+</p>
+<p>
+It is raised when sorting the rectangles within a clipping region,
+derived from the abstract base class <a href="../reference-cpp/E32_EKA2/TRegionClass.html#%3a%3aTRegion" title="class TRegion"><code class="ApiItem">TRegion</code></a>, using the
+<code>Sort()</code> member function of <a href="../reference-cpp/E32_EKA2/TRegionClass.html#%3a%3aTRegion" title="class TRegion"><code class="ApiItem">TRegion</code></a>. The panic
+occurs when the region is invalid. 
+</p>
+<code>83</code>
+<p>
+This panic occurs when the Kernel sends a message to the Kernel
+server and this completes with an error, i.e. an error code which is not
+<code>KErrNone</code>. 
+</p>
+<code>84</code>
+<p>
+This panic is raised by the <code>Panic()</code> member function of
+<code>RTest</code>, the test class. 
+</p>
+<code>85</code>
+<p>
+This panic is raised by the <code>CheckConsoleCreated()</code>
+member functions of <code>RTest</code> and <code>RTestJ</code>, the test
+classes, when the creation of a console, as derived from a
+<code>CConsoleBase</code>, fails. 
+</p>
+<code>86</code>
+<p>
+This panic is raised by the static function
+<a href="../reference-cpp/E32_EKA2/UserClass.html#%3a%3aUser%3a%3aAfter%28%29" title="function User::After()"><code class="ApiItem">User::After()</code></a> which is used to suspend the current thread
+until the specified time interval, in microseconds, has expired. The panic
+occurs when the specified time interval is negative. 
+</p>
+<code>87</code>
+<p>
+This panic is raised when a relative timer event is requested from
+an asynchronous timer service, an <a href="../reference-cpp/E32_EKA2/RTimerClass.html#%3a%3aRTimer" title="class RTimer"><code class="ApiItem">RTimer</code></a>, using the
+<code>After()</code> member function. The panic occurs when the requested time
+interval is negative. 
+</p>
+<code>88</code>
+<p>
+<em>This panic is raised in debug builds only.</em>
+</p>
+<p>
+This panic is raised by <a href="../reference-cpp/E32_EKA2/MemClass.html#%3a%3aMem%3a%3aCompare%28%29" title="function Mem::Compare()"><code class="ApiItem">Mem::Compare()</code></a>,
+<a href="../reference-cpp/E32_EKA2/MemClass.html#%3a%3aMem%3a%3aCompareC%28%29" title="function Mem::CompareC()"><code class="ApiItem">Mem::CompareC()</code></a> and <a href="../reference-cpp/E32_EKA2/MemClass.html#%3a%3aMem%3a%3aCompareF%28%29" title="function Mem::CompareF()"><code class="ApiItem">Mem::CompareF()</code></a>,
+which compare two areas of memory. The panic occurs when the length of the area
+of memory designated as the left hand area, is negative. 
+</p>
+<code>89</code>
+<p>
+<em>This panic is raised in debug builds only.</em>
+</p>
+<p>
+This panic is raised by <a href="../reference-cpp/E32_EKA2/MemClass.html#%3a%3aMem%3a%3aCompare%28%29" title="function Mem::Compare()"><code class="ApiItem">Mem::Compare()</code></a>,
+<a href="../reference-cpp/E32_EKA2/MemClass.html#%3a%3aMem%3a%3aCompareC%28%29" title="function Mem::CompareC()"><code class="ApiItem">Mem::CompareC()</code></a> and <a href="../reference-cpp/E32_EKA2/MemClass.html#%3a%3aMem%3a%3aCompareF%28%29" title="function Mem::CompareF()"><code class="ApiItem">Mem::CompareF()</code></a>,
+which compare two areas of memory. The panic occurs when the length of the area
+of memory designated as the right hand area, is negative. 
+</p>
+<code>90</code>
+<p>
+<em>This panic is raised in debug builds only.</em>
+</p>
+<p>
+This panic is raised by <a href="../reference-cpp/E32_EKA2/MemClass.html#%3a%3aMem%3a%3aCopy%28%29" title="function Mem::Copy()"><code class="ApiItem">Mem::Copy()</code></a>, which
+copies the content of one area of memory to another. The panic occurs when the
+length of the area of memory to be copied, is negative 
+</p>
+<code>91</code>
+<p>
+<em>This panic is raised in debug builds only.</em>
+</p>
+<p>
+This panic is raised by <a href="../reference-cpp/E32_EKA2/MemClass.html#%3a%3aMem%3a%3aMove%28%29" title="function Mem::Move()"><code class="ApiItem">Mem::Move()</code></a>, which
+moves the content of one area of memory to another. The panic occurs when the
+length of the area of memory to be moved, is not a multiple of 4. 
+</p>
+<code>92</code>
+<p>
+<em>This panic is raised in debug builds only.</em>
+</p>
+<p>
+This panic is raised by <a href="../reference-cpp/E32_EKA2/MemClass.html#%3a%3aMem%3a%3aMove%28%29" title="function Mem::Move()"><code class="ApiItem">Mem::Move()</code></a>, which
+moves the content of one area of memory to another. The panic occurs when the
+address of the source for the move operation, is not aligned on a 4 byte
+boundary. 
+</p>
+<code>93</code>
+<p>
+<em>This panic is raised in debug builds only.</em>
+</p>
+<p>
+This panic is raised by <a href="../reference-cpp/E32_EKA2/MemClass.html#%3a%3aMem%3a%3aMove%28%29" title="function Mem::Move()"><code class="ApiItem">Mem::Move()</code></a>, which
+moves the content of one area of memory to another. The panic occurs when the
+address of the target for the move operation, is not aligned on a 4 byte
+boundary. 
+</p>
+<code>94</code>
+<p>
+<em>This panic is raised in debug builds only.</em>
+</p>
+<p>
+This panic is raised by <a href="../reference-cpp/E32_EKA2/MemClass.html#%3a%3aMem%3a%3aSwap%28%29" title="function Mem::Swap()"><code class="ApiItem">Mem::Swap()</code></a>, which
+swaps the content of one area of memory with another. The panic occurs when the
+length of the area of memory to be swapped, is negative. 
+</p>
+<code>95</code>
+<p>
+<em>This panic is raised in debug builds only.</em>
+</p>
+<p>
+This panic is raised by <a href="../reference-cpp/E32_EKA2/MemClass.html#%3a%3aMem%3a%3aFill%28%29" title="function Mem::Fill()"><code class="ApiItem">Mem::Fill()</code></a> and
+<a href="../reference-cpp/E32_EKA2/MemClass.html#%3a%3aMem%3a%3aFillZ%28%29" title="function Mem::FillZ()"><code class="ApiItem">Mem::FillZ()</code></a>, both of which fill an area of memory. The
+panic occurs when the length of the area of memory to be filled, is negative. 
+</p>
+<code>96</code>
+<p>
+This panic is raised by <a href="../reference-cpp/E32_EKA2/UserClass.html#%3a%3aUser%3a%3aQuickSort%28%29" title="function User::QuickSort()"><code class="ApiItem">User::QuickSort()</code></a>,
+when the value for the number of records to be sorted, is negative. 
+</p>
+<code>97</code>
+<p>
+This panic is raised by <a href="../reference-cpp/E32_EKA2/UserClass.html#%3a%3aUser%3a%3aBinarySearch%28%29" title="function User::BinarySearch()"><code class="ApiItem">User::BinarySearch()</code></a>,
+when the value for the number of records taking part in the search, is
+negative. 
+</p>
+<code>98</code>
+<p>
+This panic is raised by the constructor of the base key class,
+<a href="../reference-cpp/E32_EKA2/TKeyClass.html#%3a%3aTKey" title="class TKey"><code class="ApiItem">TKey</code></a>. It occurs when the offset value passed to the
+constructor is negative.As <code>TKey</code> is an abstract class, i.e. objects
+of type <code>TKey</code> are not intended to be explicitly constructed, look
+at the offset value passed to the constructors of derived classes such as
+<a href="../reference-cpp/E32_EKA2/TKeyArrayFixClass.html#%3a%3aTKeyArrayFix" title="class TKeyArrayFix"><code class="ApiItem">TKeyArrayFix</code></a>, <a href="../reference-cpp/E32_EKA2/TKeyArrayVarClass.html#%3a%3aTKeyArrayVar" title="class TKeyArrayVar"><code class="ApiItem">TKeyArrayVar</code></a> and
+<a href="../reference-cpp/E32_EKA2/TKeyArrayPakClass.html#%3a%3aTKeyArrayPak" title="class TKeyArrayPak"><code class="ApiItem">TKeyArrayPak</code></a> for the cause of the panic. 
+</p>
+<code>99</code>
+<p>
+This panic is raised when a local or global chunk is created using
+the <a href="../reference-cpp/E32_EKA2/RChunkClass.html#%3a%3aRChunk" title="class RChunk"><code class="ApiItem">RChunk</code></a> member functions: <code>CreateLocal()</code>,
+<code>CreateGlobal()</code>, <code>CreateDoubleEndedLocal()</code> and
+<code>CreateDoubleEndedGlobal()</code>. It occurs when the value for the
+maximum size to which this chunk can be adjusted, is negative. 
+</p>
+<code>100</code>
+<p>
+This panic is raised when a local or global chunk is created using
+the <a href="../reference-cpp/E32_EKA2/RChunkClass.html#%3a%3aRChunk" title="class RChunk"><code class="ApiItem">RChunk</code></a> member functions: <code>CreateLocal()</code>
+and <code>CreateGlobal()</code>. It occurs when the value for the number of
+bytes to be committed to this chunk on creation, is negative. 
+</p>
+<code>101</code>
+<p>
+This panic is raised when a local or global chunk is created using
+the <a href="../reference-cpp/E32_EKA2/RChunkClass.html#%3a%3aRChunk" title="class RChunk"><code class="ApiItem">RChunk</code></a> member functions: <code>CreateLocal()</code>
+and <code>CreateGlobal()</code>. It occurs when the value for the number of
+bytes to be committed to this chunk on creation is greater than the value for
+the maximum size to which this chunk can be adjusted. 
+</p>
+<code>102</code>
+<p>
+This panic is raised when changing the number of bytes committed to
+a chunk by calling the <code>Adjust()</code> member function of
+<a href="../reference-cpp/E32_EKA2/RChunkClass.html#%3a%3aRChunk" title="class RChunk"><code class="ApiItem">RChunk</code></a>. The panic occurs when the value passed to the
+function is negative. 
+</p>
+<code>103</code>
+<p>
+<em>Withdrawn in 6.0:</em> The panic is raised by the
+<code>CreateSession()</code> member function of the abstract session base class
+<code>RSessionBase</code>. <code>CreateSession()</code> is a protected function
+and can only be called by member functions of derived classes. The panic occurs
+when the delay time interval passed to this function is negative. 
+</p>
+<code>104</code>
+<p>
+<em>Withdrawn in 6.0:</em> The panic is raised by the
+<code>CreateSession()</code> member function of the abstract session base class
+<code>RSessionBase</code>. <code>CreateSession()</code> is a protected function
+and can only be called by member functions of derived classes. The panic occurs
+when the retry count passed to this function is negative. 
+</p>
+<code>105</code>
+<p>
+This panic is raised when a local or global semaphore is created
+using the <a href="../reference-cpp/E32_EKA2/RSemaphoreClass.html#%3a%3aRSemaphore" title="class RSemaphore"><code class="ApiItem">RSemaphore</code></a> member functions:
+<code>CreateLocal()</code> and <code>CreateGlobal()</code>. It occurs when the
+value for the initial semaphore count is negative. 
+</p>
+<code>106</code>
+<p>
+This panic is raised when a semaphore, an
+<a href="../reference-cpp/E32_EKA2/RSemaphoreClass.html#%3a%3aRSemaphore" title="class RSemaphore"><code class="ApiItem">RSemaphore</code></a>, is signaled using the <code>Signal(TInt
+aCount)</code> member function and the count value is negative. 
+</p>
+<code>107</code>
+<p>
+This panic is raised when a critical section, an
+<a href="../reference-cpp/E32_EKA2/RCriticalSectionClass.html#%3a%3aRCriticalSection" title="class RCriticalSection"><code class="ApiItem">RCriticalSection</code></a>, is signalled using the
+<code>Signal()</code> member function. The panic occurs when the
+<code>Signal()</code> is not matched by an earlier call to <code>Wait()
+</code>
+and suggests that this is a stray signal. 
+</p>
+<code>108</code>
+<p>
+This panic is raised when creating a thread using the
+<code>Create()</code> member functions of <a href="../reference-cpp/E32_EKA2/RThreadClass.html#%3a%3aRThread" title="class RThread"><code class="ApiItem">RThread</code></a>. The
+panic only occurs for those variants of <code>Create()</code> which take a
+pointer to an <a href="../reference-cpp/E32_EKA2/RHeapClass.html#%3a%3aRHeap" title="class RHeap"><code class="ApiItem">RHeap</code></a> as one of the arguments and is caused
+if the heap referred to here is neither of type
+<code class="ApiItem">RHeapBase::EChunkNormal</code> nor of type
+<code class="ApiItem">RHeapBase::EChunkStack</code>. 
+</p>
+<code>109</code>
+<p>
+This panic is raised when creating a thread using the
+<code>Create()</code> member functions of <a href="../reference-cpp/E32_EKA2/RThreadClass.html#%3a%3aRThread" title="class RThread"><code class="ApiItem">RThread</code></a>. The
+panic occurs when the value of the stack size passed to these functions is
+negative. 
+</p>
+<code>110</code>
+<p>
+This panic is raised when creating a thread using the
+<code>Create()</code> member functions of <a href="../reference-cpp/E32_EKA2/RThreadClass.html#%3a%3aRThread" title="class RThread"><code class="ApiItem">RThread</code></a>. The
+panic is only raised by those variants of <code>Create()</code> which create a
+new heap for the new thread. The panic occurs if the minimum heap size
+specified is less than <code>KMinHeapSize</code> , defined in
+<code class="filename">e32std.h</code>. 
+</p>
+<code>111</code>
+<p>
+This panic is raised when creating a thread using the
+<code>Create()</code> member functions of <a href="../reference-cpp/E32_EKA2/RThreadClass.html#%3a%3aRThread" title="class RThread"><code class="ApiItem">RThread</code></a>. The
+panic is only raised by those variants of <code>Create()</code> which create a
+new heap for the new thread. The panic occurs if the minimum heap size
+specified is greater than the maximum size to which the heap can grow 
+</p>
+<code>112</code>
+<p>
+This panic is raised by the <code>Alloc()</code> and
+<code>AllocL()</code> member functions of class <code>RRef</code> when the size
+value passed is negative. 
+</p>
+<code>113</code>
+<p>
+This panic is raised by: 
+</p>
+<p>
+the constructor of a time representation object, a
+<a href="../reference-cpp/E32_EKA2/TTimeClass.html#%3a%3aTTime" title="class TTime"><code class="ApiItem">TTime</code></a>, which takes a text string, when the format of that
+text string is incorrect or represents an invalid date/time. 
+</p>
+<p>
+the <code>Parse()</code> member function of a time
+representation object, a <a href="../reference-cpp/E32_EKA2/TTimeClass.html#%3a%3aTTime" title="class TTime"><code class="ApiItem">TTime</code></a>, if the century offset
+value is either negative or is greater than or equal to 100. 
+</p>
+<p>
+the <a href="../reference-cpp/E32_EKA2/TimeClass.html#%3a%3aTime%3a%3aDaysInMonth%28%29" title="function Time::DaysInMonth()"><code class="ApiItem">Time::DaysInMonth()</code></a> function, if an
+invalid month value is passed. 
+</p>
+<code>114</code>
+<p>This panic is raised in debug builds only.
+</p>
+<p>
+This panic is raised by member functions of a
+<code>TBusLocalDrive</code> when no connection has been made to a local drive. 
+</p>
+<code>115</code>
+<p>
+This panic is raised when attempting to connect to a local drive
+using the <code>Connect()</code> member function of <code>TBusLocalDrive</code>
+and the specified drive number is out of range, i.e. the drive number is
+negative or is greater than or equal to <code>KMaxLocalDrives</code>, defined
+in <code class="filename">e32std.h</code>. 
+</p>
+<code>116</code>
+<p>
+This panic is raised by the <code>Lookup()</code> member function
+of an <a href="../reference-cpp/E32_EKA2/RLibraryClass.html#%3a%3aRLibrary" title="class RLibrary"><code class="ApiItem">RLibrary</code></a>, a handle to a dynamically loaded DLL, when
+the ordinal number of the required DLL function, is zero or negative. 
+</p>
+<code>119</code>
+<p>
+This panic is raised when setting a new currency symbol using the
+<a href="../reference-cpp/E32_EKA2/UserClass.html#%3a%3aUser%3a%3aSetCurrencySymbol%28%29" title="function User::SetCurrencySymbol()"><code class="ApiItem">User::SetCurrencySymbol()</code></a> function. The panic occurs when
+the length of the descriptor containing the new symbol is greater than
+<code>KMaxCurrencySymbol</code>, defined in <code class="filename">e32std.h</code>. 
+</p>
+<code>120</code>
+<p>
+This panic is raised by the <code>CreateDoubleEndedLocal()</code>
+and <code>CreateDoubleEndedGlobal()</code> member functions of an
+<a href="../reference-cpp/E32_EKA2/RChunkClass.html#%3a%3aRChunk" title="class RChunk"><code class="ApiItem">RChunk</code></a> when the lower address of the committed region is
+negative. 
+</p>
+<code>121</code>
+<p>
+This panic is raised by the <code>CreateDoubleEndedLocal()</code>
+and <code>CreateDoubleEndedGlobal()</code> member functions of an
+<a href="../reference-cpp/E32_EKA2/RChunkClass.html#%3a%3aRChunk" title="class RChunk"><code class="ApiItem">RChunk</code></a> when the upper address of the committed region is
+negative. 
+</p>
+<code>122</code>
+<p>
+This panic is raised by the <code>CreateDoubleEndedLocal()</code>
+and <code>CreateDoubleEndedGlobal()</code> member functions of an
+<a href="../reference-cpp/E32_EKA2/RChunkClass.html#%3a%3aRChunk" title="class RChunk"><code class="ApiItem">RChunk</code></a> when the upper address of the committed region is
+lower than the lower address of the committed region. 
+</p>
+<code>123</code>
+<p>
+This panic is raised by the <code>CreateDoubleEndedLocal()</code>
+and <code>CreateDoubleEndedGlobal()</code> member functions of an
+<a href="../reference-cpp/E32_EKA2/RChunkClass.html#%3a%3aRChunk" title="class RChunk"><code class="ApiItem">RChunk</code></a> when the upper address of the committed region is
+lower than the maximum size to which this chunk can be adjusted. 
+</p>
+<code>124</code>
+<p>
+This panic is raised by the <code>AdjustDoubleEnded()</code> member
+function of an <a href="../reference-cpp/E32_EKA2/RChunkClass.html#%3a%3aRChunk" title="class RChunk"><code class="ApiItem">RChunk</code></a> when the lower address of the
+committed region is negative. 
+</p>
+<code>125</code>
+<p>
+This panic is raised by the <code>AdjustDoubleEnded()</code> member
+function of an <a href="../reference-cpp/E32_EKA2/RChunkClass.html#%3a%3aRChunk" title="class RChunk"><code class="ApiItem">RChunk</code></a> when the upper address of the
+committed region is negative. 
+</p>
+<code>126</code>
+<p>
+This panic is raised by the <code>AdjustDoubleEnded()</code> member
+function of an <a href="../reference-cpp/E32_EKA2/RChunkClass.html#%3a%3aRChunk" title="class RChunk"><code class="ApiItem">RChunk</code></a> when the upper address of the
+committed region is lower than the lower address of the committed region. 
+</p>
+<code>127</code>
+<p>
+This panic is raised when constructing an array of pointers, an
+<a href="../reference-cpp/E32_EKA2/RPointerArrayClass.html#%3a%3aRPointerArray" title="class RPointerArray"><code class="ApiItem">RPointerArray</code></a>, and specifying a granularity value which is
+one of the following: 
+</p>
+<p>
+zero 
+</p>
+<p>
+negative 
+</p>
+<p>
+greater than <code>0x10000000</code>. 
+</p>
+<code>128</code>
+<p>
+This panic is raised when constructing an array of fixed length
+objects, an <a href="../reference-cpp/E32_EKA2/RArrayClass.html#%3a%3aRArray" title="class RArray"><code class="ApiItem">RArray</code></a>, and specifying a key offset value
+which is one of the following: 
+</p>
+<p>
+negative 
+</p>
+<p>
+not a multiple of 4 
+</p>
+<p>
+greater than or equal to the size of the array elements. 
+</p>
+<code>129</code>
+<p>
+This panic is raised when constructing an array of fixed length
+objects, an <a href="../reference-cpp/E32_EKA2/RArrayClass.html#%3a%3aRArray" title="class RArray"><code class="ApiItem">RArray</code></a>, and the length of the array elements
+is one of the following: 
+</p>
+<p>
+zero 
+</p>
+<p>
+negative 
+</p>
+<p>
+greater than 640. 
+</p>
+<code>130</code>
+<p>
+This panic is raised when an index value passed to a member
+function of a <a href="../reference-cpp/E32_EKA2/RArrayClass.html#%3a%3aRArray" title="class RArray"><code class="ApiItem">RArray</code></a> or a
+<a href="../reference-cpp/E32_EKA2/RPointerArrayClass.html#%3a%3aRPointerArray" title="class RPointerArray"><code class="ApiItem">RPointerArray</code></a> identifying an array element, is out of
+bounds. 
+</p>
+<code>131</code>
+<p>
+This panic is raised when the value identifying the insertion
+position in a call to <a href="../reference-cpp/E32_EKA2/RArrayClass.html#%3a%3aRArray%3a%3aInsert%28%29" title="function RArray::Insert()"><code class="ApiItem">RArray::Insert()</code></a> or
+<a href="../reference-cpp/E32_EKA2/RPointerArrayClass.html#%3a%3aRPointerArray%3a%3aInsert%28%29" title="function RPointerArray::Insert()"><code class="ApiItem">RPointerArray::Insert()</code></a> is either negative or greater than
+the number of elements in the array. 
+</p>
+<code>132</code>
+<p>
+This panic is raised when an index value passed to
+<a href="../reference-cpp/E32_EKA2/MemClass.html#%3a%3aMem%3a%3aCollationMethodByIndex%28%29" title="function Mem::CollationMethodByIndex()"><code class="ApiItem">Mem::CollationMethodByIndex()</code></a> or
+<a href="../reference-cpp/E32_EKA2/MemClass.html#%3a%3aMem%3a%3aCollationMethodId%28%29" title="function Mem::CollationMethodId()"><code class="ApiItem">Mem::CollationMethodId()</code></a> is out of bounds. 
+</p>
+<code>133</code>
+<p>
+This panic is raised when an index value passed to
+<a href="../reference-cpp/E32_EKA2/TFixedArrayClass.html#%3a%3aTFixedArray%3a%3aAt%28%29" title="function TFixedArray::At()"><code class="ApiItem">TFixedArray::At()</code></a> or
+<code class="ApiItem">TFixedArray::operator[]</code> is out of bounds. 
+</p>
+<code>134</code>
+<p>
+Not used. 
+</p>
+<code>135</code>
+<p>
+Not used. 
+</p>
+<code>136</code>
+<p>
+Not used. 
+</p>
+<code>137</code>
+<p>
+This panic is raised internally by the descriptor formatting
+functions during the handling of the variable parameter lists. The panic is
+caused when a parameter is too big. 
+</p>
+<code>138</code>
+<p>
+This panic is raised internally by the descriptor formatting
+functions during the handling of the variable parameter lists when an index
+value for the parameters is outside its permitted range. 
+</p>
+<code>139</code>
+<p>
+<em>This panic is raised in debug builds only.</em>
+</p>
+<p>
+This panic is raised internally by the descriptor formatting
+functions during the handling of the variable parameter lists when an index
+value for the parameters is outside its permitted range.
+</p>
+<code>140</code>
+<p>
+This panic is raised internally by the descriptor formatting
+functions during the handling of the variable parameter lists. 
+</p>
+<code>141</code>
+<p>
+This panic is raised internally by the descriptor formatting
+functions during the handling of the variable parameter lists. 
+</p>
+<code>142</code>
+<p>
+This panic is raised internally by the descriptor formatting
+functions during the handling of the variable parameter lists. 
+</p>
+<code>143</code>
+<p>
+This panic is raised internally by the descriptor formatting
+functions during the handling of the variable parameter lists. 
+</p>
+<code>144</code>
+<p>
+This panic is raised internally by the descriptor formatting
+functions during the handling of the variable parameter lists. 
+</p>
+<code>145</code>
+<p>
+This panic is raised internally by the descriptor formatting
+functions during the handling of the variable parameter lists. 
+</p>
+<code>146</code>
+<p>
+This panic is raised internally by the descriptor formatting
+functions during the handling of the variable parameter lists. 
+</p>
+<code>147</code>
+</p>
+<p>
+This panic is raised internally by the descriptor formatting
+functions during the handling of the variable parameter lists. 
+</p>
+<code>148</code>
+<p>
+This panic is raised internally by the descriptor formatting
+functions during the handling of the variable parameter lists. 
+</p>
+<code>149</code>
+<p>
+This panic is raised internally by the descriptor formatting
+functions during the handling of the variable parameter lists. 
+</p>
+<code>150</code>
+<p>
+This panic is raised internally by the descriptor formatting
+functions during the handling of the variable parameter lists. 
+</p>
+<code>151</code>
+<p>
+This panic is raised internally by the descriptor formatting
+functions during the handling of the variable parameter lists. 
+</p>
+<code>152</code>
+<p>
+This panic is raised internally by the descriptor formatting
+functions during the handling of the variable parameter lists. 
+</p>
+<code>153</code>
+<p>
+This panic is raised internally by the descriptor formatting
+functions during the handling of the variable parameter lists. 
+</p>
+<code>154</code>
+<p>
+This panic is raised internally by the descriptor formatting
+functions during the handling of the variable parameter lists. 
+</p>
+<code>155</code>
+<p>
+Not used. 
+</p>
+<code>156</code>
+<p>
+This panic is raised by the variants of the
+<a href="../reference-cpp/E32_EKA2/RArrayClass.html#%3a%3aRArray" title="class RArray"><code class="ApiItem">RArray</code></a> or <a href="../reference-cpp/E32_EKA2/RPointerArrayClass.html#%3a%3aRPointerArray" title="class RPointerArray"><code class="ApiItem">RPointerArray</code></a> constructors
+that take a value that defines the number of entries for the array. The panic
+is caused when this number is not positive. 
+</p>
+<code>157</code>
+<p>
+This panic is raised by <a href="../reference-cpp/E32_EKA2/RChunkClass.html#%3a%3aRChunk%3a%3aCommit%28%29" title="function RChunk::Commit()"><code class="ApiItem">RChunk::Commit()</code></a> when
+the value of the offset of the committed region is negative. 
+</p>
+<code>158</code>
+<p>
+This panic is raised by <a href="../reference-cpp/E32_EKA2/RChunkClass.html#%3a%3aRChunk%3a%3aCommit%28%29" title="function RChunk::Commit()"><code class="ApiItem">RChunk::Commit()</code></a> when
+the size of the committed region is negative. 
+</p>
+<code>159</code>
+<p>
+This panic is raised by <a href="../reference-cpp/E32_EKA2/RChunkClass.html#%3a%3aRChunk%3a%3aAllocate%28%29" title="function RChunk::Allocate()"><code class="ApiItem">RChunk::Allocate()</code></a>
+when the size of the committed region is negative. 
+</p>
+<code>160</code>
+<p>
+This panic is raised by <a href="../reference-cpp/E32_EKA2/RChunkClass.html#%3a%3aRChunk%3a%3aDecommit%28%29" title="function RChunk::Decommit()"><code class="ApiItem">RChunk::Decommit()</code></a>
+when the value of the offset of the committed region is negative. 
+</p>
+<code>161</code>
+<p>
+This panic is raised by <a href="../reference-cpp/E32_EKA2/RChunkClass.html#%3a%3aRChunk%3a%3aDecommit%28%29" title="function RChunk::Decommit()"><code class="ApiItem">RChunk::Decommit()</code></a>
+when the size of the committed region is negative. 
+</p>
+<code>162</code>
+<p>
+This panic is raised when an invalid chunk type is passed to the
+internal member function <code>RChunk::Create()</code>
+</p>
+<p>
+See <a href="../reference-cpp/E32_EKA2/RChunkClass.html#%3a%3aRChunk" title="class RChunk"><code class="ApiItem">RChunk</code></a>
+</p>
+<code>163</code>
+<p>
+This panic is raised when a global chunk is being created and no
+name has been specified. 
+</p>
+<p>
+See <a href="../reference-cpp/E32_EKA2/RChunkClass.html#%3a%3aRChunk" title="class RChunk"><code class="ApiItem">RChunk</code></a>
+</p>
+<code>164</code>
+<p>
+This panic is raised when creating a 'normal' chunk, and the offset
+of the bottom of the new committed region from the base of the chunk's reserved
+region is not zero. 
+</p>
+<p>
+See <a href="../reference-cpp/E32_EKA2/RChunkClass.html#%3a%3aRChunk" title="class RChunk"><code class="ApiItem">RChunk</code></a>
+</p>
+<code>165</code>
+<p>
+This panic is raised by the internal function
+<code>RLibrary::Init()</code> when the function that constructs static data
+following a DLL load, leaves. 
+</p>
+<p>
+See <a href="../reference-cpp/E32_EKA2/RLibraryClass.html#%3a%3aRLibrary" title="class RLibrary"><code class="ApiItem">RLibrary</code></a>
+</p>
+<code>166</code>
+<p>
+This panic is raised internally, if a call to the static data
+destructors, following closure of a library handle, leaves. 
+</p>
+<code>167</code>
+<p>
+This panic is raised in a call to
+<a href="../reference-cpp/E32_EKA2/RAllocatorClass.html#%3a%3aRAllocator%3a%3aClose%28%29" title="function RAllocator::Close()"><code class="ApiItem">RAllocator::Close()</code></a> when the number of handles is found to
+be greater than the maximum allowed, i.e.
+<a href="../reference-cpp/E32_EKA2/RAllocatorClass.html#%3a%3aRAllocator%3a%3aEMaxHandles" title="field RAllocator::EMaxHandles"><code class="ApiItem">RAllocator::EMaxHandles</code></a>. 
+</p>
+<code>168</code>
+<p>
+This panic is raised by the internal <a href="../reference-cpp/E32_EKA2/RHeapClass.html#%3a%3aRHeap" title="class RHeap"><code class="ApiItem">RHeap</code></a>
+constructor when the offset value is invalid, i.e. is negative or not
+appropriate for the pagesize. 
+</p>
+<code>169</code>
+<p>
+This panic is raised by the Symbian internal function
+<code>RHeap::Reduce()</code> on failure. 
+</p>
+<code>170</code>
+<p>
+This panic is raised by the Symbian internal function
+<code>RHeap::Reset()</code> on failure. 
+</p>
+<code>171</code>
+<p>
+This panic is raised by the Symbian internal function
+<code>RHeap::WalkCheckCell()</code> if it detects a free cell with an invalid
+size. 
+</p>
+<code>172</code>
+<p>
+This panic is raised by the Symbian internal function
+<code>RHeap::Initialise()</code> when an alignment value is invalid, i.e is
+either less than the size of a <code>TAny*</code> type, or is not a power of 2
+(i.e. 2, 4, 8, 16 etc). 
+</p>
+<code>173</code>
+<p>
+Not used. 
+</p>
+<code>174</code>
+<p>
+This panic is raised if any unimplemented pure virtual function is
+called. 
+</p>
+<code>175</code>
+<p>
+This panic is raised when a <a href="../reference-cpp/E32_EKA2/UserClass.html#%3a%3aUser%3a%3aLeave%28%29" title="function User::Leave()"><code class="ApiItem">User::Leave()</code></a> is
+called and there is no <code class="ApiItem">TRAP</code> frame. 
+</p>
+<code>176</code>
+<p>
+This panic is raised when a mathematical function fails with an
+unrecognized exception, i.e. one that is none of:
+<a href="../reference-cpp/E32_EKA2/e32err.hVariables.html#%3a%3aKErrArgument" title="field KErrArgument"><code class="ApiItem">KErrArgument</code></a>, <a href="../reference-cpp/E32_EKA2/e32err.hVariables.html#%3a%3aKErrDivideByZero" title="field KErrDivideByZero"><code class="ApiItem">KErrDivideByZero</code></a>,
+<a href="../reference-cpp/E32_EKA2/e32err.hVariables.html#%3a%3aKErrOverflow" title="field KErrOverflow"><code class="ApiItem">KErrOverflow</code></a> or <a href="../reference-cpp/E32_EKA2/e32err.hVariables.html#%3a%3aKErrUnderflow" title="field KErrUnderflow"><code class="ApiItem">KErrUnderflow</code></a>. 
+</p>
+<code>177</code>
+<p>
+This panic is raised by the Symbian internal function
+<code>RHeap::WalkCheckCell()</code> on a bad cell type. 
+</p>
+<code>178</code>
+<p>
+This panic is raised when descriptors convert integers into text,
+and an invalid radix is passed, i.e. a value that is not one of the
+<a href="../reference-cpp/E32_EKA2/TRadixEnum.html#%3a%3aTRadix" title="enum TRadix"><code class="ApiItem">TRadix</code></a> enum values. 
+</p>
+<code>179</code>
+<p>This panic is raised in debug builds only.
+</p>
+<p>
+This panic is raised when converting and appending numbers in
+descriptors, and buffers are not aligned on even addresses. 
+</p>
+<code>180</code>
+<p>
+Not used. 
+</p>
+<code>181</code>
+<p>
+This is raised by a Symbian internal component related to Huffman
+encoding/decoding. Refer to Symbian 
+</p>
+<code>182</code>
+<p>
+This is raised by a Symbian internal component related to Huffman
+encoding/decoding. Refer to Symbian 
+</p>
+<code>183</code>
+<p>
+This panic is raised by member functions of the internal classes
+<code>RArrayBase</code> and <code>RPointerArrayBase</code>; specifically: 
+</p>
+<p>
+<code> RArrayBase::BinarySearch()
+</code>
+</p>
+<p>
+<code>RArrayBase::BinarySearchUnsigned()
+</code>
+</p>
+<p>
+<code>RArrayBase::BinarySearchSigned()
+</code>
+</p>
+<p>
+<code>RPointerArrayBase::BinarySearch()
+</code>
+</p>
+<p>
+<code>RPointerArrayBase::BinarySearchUnsigned()
+</code>
+</p>
+<p>
+<code>RPointerArrayBase::BinarySearchSigned()
+</code>
+</p>
+<p>
+when the find mode passed to these functions is not recognised. 
+</p>
+<code>184</code>
+<p>
+This panic is raised on a call to
+<a href="../reference-cpp/E32_EKA2/RNotifierClass.html#%3a%3aRNotifier%3a%3aNotify%28%29" title="function RNotifier::Notify()"><code class="ApiItem">RNotifier::Notify()</code></a> when the length of one or more of the
+descriptors containing the displayable text is bigger than the maximum value
+that a <a href="../reference-cpp/E32_EKA2/TUint16Typedef.html#%3a%3aTUint16" title="typedef TUint16"><code class="ApiItem">TUint16</code></a> can hold. 
+</p>
+<code>185</code>
+<p>
+This panic is raised by the following functions when the month or
+day value is outside its permitted range of values: 
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/TMonthNameClass.html#%3a%3aTMonthName%3a%3aSet%28%29" title="function TMonthName::Set()"><code class="ApiItem">TMonthName::Set()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/TMonthNameAbbClass.html#%3a%3aTMonthNameAbb%3a%3aSet%28%29" title="function TMonthNameAbb::Set()"><code class="ApiItem">TMonthNameAbb::Set()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/E32_EKA2/TDayNameClass.html#%3a%3aTDayName%3a%3aSet%28%29" title="function TDayName::Set()"><code class="ApiItem">TDayName::Set()</code></a>
+</p>
+<p>
+<code class="ApiItem"> TDayNameAbb::Set()</code>
+</p>
+<p>
+See also: <a href="../reference-cpp/E32_EKA2/TMonthNameClass.html#%3a%3aTMonthName" title="class TMonthName"><code class="ApiItem">TMonthName</code></a>,
+<a href="../reference-cpp/E32_EKA2/TMonthNameAbbClass.html#%3a%3aTMonthNameAbb" title="class TMonthNameAbb"><code class="ApiItem">TMonthNameAbb</code></a>, <a href="../reference-cpp/E32_EKA2/TDayNameClass.html#%3a%3aTDayName" title="class TDayName"><code class="ApiItem">TDayName</code></a> and
+<a href="../reference-cpp/E32_EKA2/TDayNameAbbClass.html#%3a%3aTDayNameAbb" title="class TDayNameAbb"><code class="ApiItem">TDayNameAbb</code></a>. 
+</p>
+<code>186</code>
+<p>
+This panic is raised internally by the descriptor formatting
+functions during the handling of the variable parameter lists. 
+</p>
+<code>187</code>
+<p>
+This panic is raised in a call to
+<a href="../reference-cpp/E32_EKA2/TDes8Class.html#%3a%3aTDes8%3a%3aExpand%28%29" title="function TDes8::Expand()"><code class="ApiItem">TDes8::Expand()</code></a>, if either the length, or the maximum
+length, or the pointer to the data is not an even number. 
+</p>
+<code>188</code>
+<p>
+This panic is raised in a call to
+<a href="../reference-cpp/E32_EKA2/TDes8Class.html#%3a%3aTDes8%3a%3aCollapse%28%29" title="function TDes8::Collapse()"><code class="ApiItem">TDes8::Collapse()</code></a>, if either the length, or the maximum
+length, or the pointer to the data is not an even number. 
+</p>
+<code>189</code>
+<p>
+This panic is raised in calls to the
+<a href="../reference-cpp/E32_EKA2/TSecurityPolicyClass.html#%3a%3aTSecurityPolicy" title="class TSecurityPolicy"><code class="ApiItem">TSecurityPolicy</code></a> constructors, if the specified capability
+is found to be invalid. 
+</p>
+<p>
+See <a href="../reference-cpp/E32_EKA2/TCapabilityEnum.html#%3a%3aTCapability" title="enum TCapability"><code class="ApiItem">TCapability</code></a>. 
+</p>
+<code>190</code>
+<p>
+This panic is raised in a call to
+<a href="../reference-cpp/E32_EKA2/TSecurityPolicyClass.html#%3a%3aTSecurityPolicy%3a%3aCheckPolicy%28%29" title="function TSecurityPolicy::CheckPolicy()"><code class="ApiItem">TSecurityPolicy::CheckPolicy()</code></a>, if the security policy is
+found to be corrupt. 
+</p>
+<p>
+See <a href="../reference-cpp/E32_EKA2/TSecurityPolicyClass.html#%3a%3aTSecurityPolicy" title="class TSecurityPolicy"><code class="ApiItem">TSecurityPolicy</code></a>. 
+</p>
+<code>191</code>
+<p>
+This panic is raised in a call to:
+</p>
+<p class="CodeBlock"><code>TSecurityPolicy::TSecurityPolicy(TSecPolicyType&nbsp;aType)</code></p>
+<p>
+if <code>aType</code> is neither <code>ETypePass</code> nor
+<code>ETypeFail</code>. 
+</p>
+<p>
+See <a href="../reference-cpp/E32_EKA2/TSecurityPolicyClass.html#%3a%3aTSecurityPolicy" title="class TSecurityPolicy"><code class="ApiItem">TSecurityPolicy</code></a>. 
+</p>
+<code>192</code>
+<p>
+This panic is raised when constructing an
+<a href="../reference-cpp/E32_EKA2/RPointerArrayClass.html#%3a%3aRPointerArray" title="class RPointerArray"><code class="ApiItem">RPointerArray</code></a> or an <a href="../reference-cpp/E32_EKA2/RArrayClass.html#%3a%3aRArray" title="class RArray"><code class="ApiItem">RArray</code></a> if the
+specified minimum growth step is less than or equal to zero or is greater than
+65535. 
+</p>
+<code>193</code>
+<p>
+This panic is raised when constructing an
+<a href="../reference-cpp/E32_EKA2/RPointerArrayClass.html#%3a%3aRPointerArray" title="class RPointerArray"><code class="ApiItem">RPointerArray</code></a> or an <a href="../reference-cpp/E32_EKA2/RArrayClass.html#%3a%3aRArray" title="class RArray"><code class="ApiItem">RArray</code></a> if the
+specified exponential growth factor is less than or equal to 1 or is greater
+than or equal to 128. 
+</p>
+<code>194</code>
+<p>
+This panic is raised if code inside an __ASSERT_ALWAYS_NO_LEAVE
+harness leaves. 
+</p>
+<code>195</code>
+<p>
+This panic is raised when the attempt to grow a cell on the heap
+fails. 
+</p>
+<code>196</code>
+<p>
+This panic is raised when an attempt is made to install a Win32 SE
+handler that is not on the stack. 
+</p>
+<p>
+See the internal class <code>TWin32SEHTrap</code>. 
+</p>
+<code>197</code>
+<p>
+This panic is raised when the caller of an API does not have the
+right capabilities to call that API. You need to consult the documentation for
+the specific API for the capabilities needed to call it.
+</p>
+<code>198</code>
+<p>
+This panic is raised by the constructor of the internal class
+<code>RHashTableBase</code> if a NULL function pointer is passed in as the hash
+function. 
+</p>
+<code>199</code>
+<p>
+This panic is raised by the constructor of the internal class
+<code>RHashTableBase</code> if a NULL function pointer is passed in as the
+identity relation. 
+</p>
+<code>200</code>
+<p>
+This panic is raised by the constructor of the internal class
+<code>RHashTableBase</code> if a negative element size is specified. 
+</p>
+<code>201</code>
+<p>
+This panic is raised by the constructor of the internal class
+<code>RHashTableBase</code> if the specified key offset is inconsistent with
+the specified element size. 
+</p>
+<code>202</code>
+<p>
+This panic is raised by the member function
+<code>VerifyReform()</code> of the internal class <code>RHashTableBase
+</code>
+if a deleted entry still remains after a hash table reform. This panic should
+never occur as it indicates an error in the hash table implementation. 
+</p>
+<code>203</code>
+<p>
+This panic is raised by the member function
+<code>ConsistencyCheck()</code> of the internal class
+<code>RHashTableBase</code>. It indicates an error in the hash table
+implementation. 
+</p>
+<code>204</code>
+<p>
+This panic is raised by the member function
+<code>ConsistencyCheck()</code> of the internal class
+<code>RHashTableBase</code>. It indicates an error in the hash table
+implementation. 
+</p>
+<code>205</code>
+<p>
+This panic is raised by the member function
+<code>ConsistencyCheck()</code> of the internal class
+<code>RHashTableBase</code>. It indicates an error in the hash table
+implementation. 
+</p>
+<code>206</code>
+<p>
+This panic is raised by the member function
+<code>ConsistencyCheck()</code> of the internal class
+<code>RHashTableBase</code>. It indicates an error in the hash table
+implementation. 
+</p>
+<code>207</code>
+</p>
+<p>
+This panic is raised by the member function
+<code>ConsistencyCheck()</code> of the internal class
+<code>RHashTableBase</code>. It indicates an error in the hash table
+implementation. 
+</p>
+<code>208</code>
+<p>
+This panic is raised by the member function <code>Next()</code> of
+the internal class <code>THashTableIterBase</code> if, while attempting to step
+a hash table iterator to the next entry, the iterator is found to point to an
+invalid table entry. This will typically occur if elements have been removed
+from the hash table without resetting the iterator. 
+</p>
+<code>209</code>
+<p>
+This panic is raised by the member function <code>Current()</code>
+of the internal class <code>THashTableIterBase</code> if, while interrogating
+the current position of a hash table iterator, the iterator is found to point
+to an invalid table entry. This will typically occur if elements have been
+added to or removed from the hash table without resetting the iterator. 
+</p>
+<code>210</code>
+<p>
+This panic is raised if an invalid argument is passed to the
+<code>Reserve()</code> function on any of the hash table classes derived from
+the internal class <code>RHashTableBase</code>. 
+</p>
+<code>211</code>
+<p>
+This panic is raised if the Win32 SE handler chain has been
+corrupted. 
+</p>
+<p>
+See the internal class <code>TWin32SEHTrap</code>. 
+</p>
+<code>212</code>
+<p>
+This panic is raised if a negative valued argument is passed to the
+<code>Reserve()</code> member function of the <a href="../reference-cpp/E32_EKA2/RArrayClass.html#%3a%3aRArray" title="class RArray"><code class="ApiItem">RArray</code></a> or
+<a href="../reference-cpp/E32_EKA2/RPointerArrayClass.html#%3a%3aRPointerArray" title="class RPointerArray"><code class="ApiItem">RPointerArray</code></a> classes . 
+</p>
+	   

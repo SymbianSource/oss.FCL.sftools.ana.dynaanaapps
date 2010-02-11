@@ -1,0 +1,46 @@
+<h1>ViewSrv</h1>
+<p>
+The table below lists the View Server panics.</p>
+<code>1</code>
+<p>
+View Server creation failed. 
+</p>
+<code>3</code>
+<p>
+A bad client call was made - i.e. the opcode sent by the client was
+one not defined in <code>TVwsRequestOpcode</code>. 
+</p>
+<code>6</code>
+<p>
+The view that View Server is trying to remove has not been found. 
+</p>
+<code>7</code>
+<p>
+An application tried to add a view with an application UID other
+than its own. 
+</p>
+<code>8</code>
+<p>
+The custom message sent along with a view activation request was
+not copied across to the server properly. 
+</p>
+<code>9</code>
+<p>
+An attempt was made to remove the currently active view. 
+</p>
+<code>10</code>
+<p>
+A client has requested a view event even though it still has an
+outstanding request open. 
+</p>
+<code>11</code>
+<p>
+The most common panic. A view has taken too long to complete its
+implementation of <code>ViewActivatedL()</code> and must, therefore, be
+panicked to stop it from blocking the entire OS. 
+</p>
+<code>13</code>
+<p>
+An attempt was made to activate a view that does not support the
+current screenmode. 
+</p>	   

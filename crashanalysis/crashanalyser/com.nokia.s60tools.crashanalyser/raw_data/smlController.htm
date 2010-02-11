@@ -1,0 +1,96 @@
+<h1>smlController</h1>
+<p>SyncML panics represent program errors which are detected by the
+SyncML framework. Typically, they are caused by passing bad or contradictory
+parameters to functions.</p>
+<p>The thread causing the panic is terminated. </p>
+<code>0</code>
+<p>Invalid parameter.</p>
+<p>This panic is raised if there is an attempt to pass an invalid
+parameter to a SyncML function. </p>
+<p>See <code class="ApiItem">CSmlTask::SetNameL()</code>,
+<code class="ApiItem">CSmlProfile::AddTaskL()</code>,
+<code class="ApiItem">CSmlProfile::SetProfileNameL()</code>.</p>
+<code>1</code>
+<p>Incomplete data.</p>
+<p>This panic is raised if there is a attempt to use a parameter
+which contains incomplete data.</p>
+<p>See <code class="ApiItem">CSmlProfile::AddTaskL()</code>,
+<code class="ApiItem">CSmlController::CreateProfileL()</code>.</p>
+<code>2</code>
+<p>Null task member.</p>
+<p>This panic is raised if there is an attempt to externalise a
+Task object which has not been completely defined.</p>
+<code>3</code>
+<p>Task member not NULL.</p>
+<p>This panic is raised if there is an attempt to internalise Task
+information into a <code>CSmlTask</code> object which is not NULL.</p>
+<code>4</code>
+<p>Null task identifier.</p>
+<p>This panic is raised if there is an attempt to get a task's
+identifier, when this has not previously been set.</p>
+<p>See <code class="ApiItem">CSmlTask::Identifier()</code>.</p>
+<code>5</code>
+<p>Null task provider.</p>
+<p>This panic is raised there is an attempt to get a task's
+content provider information, when this has not previously been set.</p>
+<p>See <code class="ApiItem">CSmlTask::Provider()</code>.</p>
+<code>6</code>
+<p>Null task target.</p>
+<p>This panic is raised if there is an attempt to get a task's
+target database, when this has not previously been set.</p>
+<p>See <code class="ApiItem">CSmlTask::Target()</code>.</p>
+<code>7</code>
+<p>Null task source.</p>
+<p>This panic is raised if there is an attempt to get a task's
+source database, when this has not previously been set.</p>
+<p>See <code class="ApiItem">CSmlTask::Source()</code>. </p>
+<code>8</code>
+<p>Null profile member.</p>
+<p>This panic is raised if there is an attempt to externalise a
+Profile object which has not been completely defined.</p>
+<code>9</code>
+<p>Profile member not NULL.</p>
+<p>This panic is raised if there is an attempt to internalise
+Profile information into a profile object which is not NULL.</p>
+<code>10</code>
+<p>Task list not empty.</p>
+<p>This panic is raised if there is an attempt to internalise Task
+list information into a profile object which is not empty.</p>
+<code>11</code>
+<p>Null profile identifier.</p>
+<p>This panic is raised if there is an attempt to get a profile's
+identifier value, when this has not previously been set.</p>
+<p>See <code class="ApiItem">CSmlProfile::Identifier()</code>.</p>
+<code>12</code>
+<p>Null profile authorisation type.</p>
+<p>This panic is raised if there is an attempt to get a profile's
+authorisation type value, when this has not previously been set.</p>
+<code>13</code>
+<p>Null profile protocol.</p>
+<p>This panic is raised if there is an attempt to get a profile's
+protocol information, when this has not previously been set.</p>
+<p>See <code class="ApiItem">CSmlProfile::Protocol()</code>.</p>
+<code>14</code>
+<p>Null Content provider.</p>
+<p>This panic is raised if there is an attempt to get a profile's
+Content provider information, when this has not previously been set.</p>
+<p>See <code class="ApiItem">CSmlProfile::AddTaskL()</code></p>
+<code>15</code>
+<p>Invalid Protocol.</p>
+<p>This panic is raised if there is an attempt to get a profile's
+transport protocol information, when the protocol does not
+exist.</p>
+<code>16</code>
+<p>Null Controller member.</p>
+<p>This panic is raised if there is an attempt to use one of the
+controller's members if it has not been initialised.</p>
+<code>17</code>
+<p>Controller Member Not Null.</p>
+<p>This panic is raised if there is an attempt to use one of the
+controller members that should be null, e.g. at the start of the
+sync.</p>
+<code>18</code>
+<p>Invalid Profile</p>
+<p>This panic is raised when trying to retrieve a profile that
+does not exist.</p>
+	   

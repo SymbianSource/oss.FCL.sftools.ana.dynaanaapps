@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>Registers</title>
+<link href="../../book.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+
+<h2>Registers</h2>
+<p>When a crash occurs, the processor state is captured and stored to a crash file. For more information on Symbian OS and ARM registers, see the reference links (ARM Architecture Manuals and Symbian OS Internals) in the end of this topic.</p>
+<p>In Crash Analyser, the register values at the time of the crash are partitioned into discrete processor modes that closely mirror the ARM architecture.</p><p>The following ARM processor modes are supported:</p>
+<table width="667" border="1" cellspacing="1" cellpadding="2">
+<colgroup>
+<col width="50*">
+<col width="141*"></colgroup>
+<thead>
+<tr>
+<td><b>Name</b></td>
+<td><b>Description</b></td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>User</td>
+<td> Contains registers associated with the processor whilst it was executing in USER mode. This is the normal execution mode for ARM processors.</td>
+</tr>
+<tr>
+<td>Fast Interrupt (FIQ)</td>
+<td>Registers that are associated with ARM FIQ mode, a privileged mode in which is used for high speed low latency interrupt handling.</td>
+</tr>
+<tr>
+<td>Interrupt (IRQ)</td>
+<td>General purpose ARM interrupt handling mode.</td>
+</tr>
+<tr>
+<td>Supervisor </td>
+<td>Registers that are associated with code executing within the context of the Symbian OS kernel. </td>
+</tr>
+<tr>
+<td>Abort</td>
+<td>Typically used when the processor was unable to access a memory area.</td>
+</tr>
+<tr>
+<td>Undefined</td>
+<td>Indicates that the processor could not interpret an instruction.</td>
+</tr>
+<tr>
+<td>System</td>
+<td>Not used in Symbian OS.</td>
+</tr>
+</tbody>
+</table>
+
+<p>Additionally the ARM banks are supplemented by:</p>
+<table width="667" border="1" cellspacing="1" cellpadding="2">
+<colgroup>
+<col width="50*">
+<col width="141*"></colgroup>
+<thead>
+<tr>
+<td><b>Name</b></td>
+<td><b>Description</b></td>
+</tr>
+<tr>
+<td>Exception</td>
+<td>Contains exception-specific registers, such as the exception code relevant to the exception that occurred.</td>
+</tr>
+<tr>
+<td>Co-processor</td>
+<td>Contains co-processor registers, such as the fault status register.</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>The ARM register modes typically support a register range of R00 to R15. R13, R14 and R15 have special meaning:</p>
+<table width="667" border="1" cellspacing="1" cellpadding="2">
+<colgroup>
+<col width="50*">
+<col width="141*"></colgroup>
+<thead>
+<tr>
+<td><b>Name</b></td>
+<td><b>Description</b></td>
+</tr>
+<tr>
+<td>R13</td>
+<td>Current stack pointer. Adjusted as data is pushed and popped from the stack. </td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R14</td>
+<td>Otherwise known as the link register (LR). Contains the address of the instruction to branch to after returning from a subroutine. Can also contain the address to return to after the processor enters an exception mode (for example Abort, Supervisor, FIQ, IRQ etc).</td>
+</tr>
+<tr>
+<td>R15</td>
+<td>Register 15 is the Program Counter (PC). It can be used in most instructions as a pointer to the instruction which is two instructions after the instruction being executed.</td>
+</tr>
+</tbody>
+</table>
+
+<p>Additionally, some register values are preserved when the processor transitions from one execution mode to another (for example, when the process transitions from User to Supervisor mode in order to fulfill a privileged operation). Full details about this preservation or &ldquo;banking&rdquo; are described in ARM Architecture Manuals. See the link below.</p>
+<p>Finally, the CPSR, or Current Program Status Register is also noteworthy. It is one of several Status Registers that is used to hold details about the current state of the processor at the time of a crash. For example, it can indicate if the processor was executing an ARM or THUMB instruction, or whether interrupts were disabled. Most critically, it describes the execution mode of the processor at the time of the panic/exception &ndash; for example, did the exception occur whilst the processor was executing kernel code (Supervisor Mode) or user code (User Mode)?</p>
+<p>Function call arguments are typically passed to the function within register values (were possible, depending on argument type and number of arguments). If a function signature contains too many arguments then the registers may be supplemented by the stack (arguments are pushed on the stack by the function caller and popped of the stack by the function itself). Typically R00 to R03 are used for function passing.</p>
+<p> Additionally, R00 is often utilized as the &ldquo;this&rdquo; pointer when performing method dispatch on an object. A common related problem can be de-referencing a null this pointer or then de-referencing a deleted object in order to invoke a method. Both issues can often be identified based upon the value of the program counter (R15) and the value of R00 (for example is it 0x00000000).</p>
+<p>For reference information, see the following references:</p>
+<ul>
+<li>ARM EABI: <a href="http://www.arm.com/products/DevTools/ABI.html"> http://www.arm.com/products/DevTools/ABI.html</a></li>
+<li>ARM Architecture Manuals: <a href="http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0100i/ http://www.arm.com/pdfs/ARMv6_Architecture.pdf">http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0100i/ http://www.arm.com/pdfs/ARMv6_Architecture.pdf</a></li>
+<li>Symbian OS Internals: <a href="http://www.amazon.com/Symbian-OS-Internals-Real-time-Programming/dp/0470025247">http://www.amazon.com/Symbian-OS-Internals-Real-time-Programming/dp/0470025247</a></li>
+</ul>
+
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

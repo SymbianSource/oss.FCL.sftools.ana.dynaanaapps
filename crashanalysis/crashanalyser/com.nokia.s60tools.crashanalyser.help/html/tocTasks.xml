@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Tasks">
+	
+	<!-- Enter topic entries here for the Tasks section of help -->
+	
+	<topic label="Importing crash files" href="html/tasks/import_crash_files.htm" />
+	
+	<topic label="Decoding crash files" href="html/tasks/decode_crash_files.htm" />
+	
+	<topic label="Exporting crash files" href="html/tasks/export_crash_files.htm" />	
+
+	<topic label="Enabling automatic crash logging" href="html/tasks/enable_auto_crash_logging.htm" />
+
+	<topic label="Browsing error library" href="html/tasks/browsing_error_library.htm" />
+
+</toc>

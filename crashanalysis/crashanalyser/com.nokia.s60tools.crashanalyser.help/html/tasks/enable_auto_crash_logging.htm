@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>Enabling automatic crash logging</title>
+<link href="../../book.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+
+<h2>Enabling automatic crash logging</h2>
+<p>To enable the automatic crash logging, go to Carbide.c++ preferences:</p>
+<ol>
+<li>Select <b>Window > Preferences... > Carbide Extensions > Crash Analyser.</b></li>
+<li>Follow the steps in the workflow examples below.</li>
+</ol>
+<p></p>
+
+<h4>Workflow example (Listen panics from epocwind.out)</h4>
+<p>Before you start:</p>
+<p>Ensure that you have checked the <b>Listen panics from epocwind.out</b> check box.</p>
+<ol>
+<li>Start debugging your project with an emulator</li>
+<li>In the emulator, run something that creates a panic.</li>
+</ol>
+<p>Expected outcome:</p>
+<p>Emulator panic file is displayed in the main view. When you select a file from the list, panic details and descriptions are displayed.</p>
+
+<h4>Workflow example (Listen MobileCrash panics via TraceViewer)</h4>
+<p>Before you start:</p>
+<ul>
+<li>Ensure that you have checked the <b>Listen MobileCrash panics via TraceViewer</b> check box. If you want that the Crash Visualiser is shown when a crash occurs, check also the <b>Show Crash Visualiser when crash occurs</b> check box.</li>
+<li>Ensure that the TraceViewer view is visible in the Carbide.c++ view. If it is not visible, open it from Carbide.c++ menu: <b>Window > Show View > Other... > Carbide Extensions > TraceViewer.</b></li>
+<li>Ensure that TraceViewer connection settings are OK, and the TraceViewer is able to connect to the device.</li>
+</ul>
+<ol>
+<li>Start tracing by clicking the <b>Connect to trace source</b> button in the <b>TraceViewer</b> view.</li>
+<li>In the device, run something that creates a mobile crash.</li>
+<li>Stop the TraceViewer.</li>
+<li>Open the <b>Crash Analyser</b> view.
+<p><i>Expected outcome</i> if the <b>Show Crash Visualiser when crash occurs</b> is not checked: The crash file generated in step 2 is visible in the Crash Analyser view. The undecoded file is now ready to be decoded with the <b>Decode selected files...</b> functionality.</p>
+<p><i>Expected outcome</i> if the <b>Show Crash Visualiser when crash occurs</b> check box is checked: The crash file generated in step 2 is partially decoded and opened automatically to the Crash Visualiser.</p></li>
+</ol>
+
+<h5>Related tasks</h5>
+<ul>
+	<li><a href="../tasks/import_crash_files.htm">Importing crash files</a></li>
+	<li><a href="../tasks/export_crash_files.htm">Exporting crash files</a></li>
+</ul>
+
+<h5>Related concepts</h5>
+<ul>
+	<li><a href="../concepts/preferences.htm">Crash Analyser preferences</a></li>
+</ul>
+
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

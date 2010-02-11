@@ -1,0 +1,25 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Carbide.c++ Extensions - Crash Analyser
+Bundle-SymbolicName: com.nokia.s60tools.crashanalyser;singleton:=true
+Bundle-Version: 1.2.0
+Bundle-Activator: com.nokia.s60tools.crashanalyser.plugin.CrashAnalyserPlugin
+Bundle-Vendor: Nokia
+Bundle-Localization: plugin
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui.ide,
+ org.eclipse.core.resources,
+ com.nokia.s60tools.ui,
+ com.nokia.s60tools.sdk,
+ com.nokia.s60tools.util,
+ com.nokia.s60tools.crashanalyser.corecomponents,
+ org.eclipse.ui.editors,
+ org.eclipse.ui.workbench.texteditor,
+ org.eclipse.jface.text
+Export-Package: com.nokia.s60tools.crashanalyser.containers;x-friends:="com.nokia.s60tools.crashanalyser.tests",
+ com.nokia.s60tools.crashanalyser.export,
+ com.nokia.s60tools.crashanalyser.model;x-friends:="com.nokia.s60tools.crashanalyser.tests"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+ 

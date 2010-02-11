@@ -1,0 +1,16 @@
+<h1>PLAT (emulator)</h1>
+<p>These panics represent errors which are detected by emulator   specific code.
+Typically, they are caused by passing bad or contradictory parameters to functions.</p>
+<p>The thread causing the panic is terminated.</p>
+<code>0-1</code>
+<p>These panics are raised when a failure occurs running any DLL attach process calls which have been
+registered during startup.</p></td>
+<code>2</code>
+<p>This panic is raised when registering a thread callback.</p>
+<code>3</code>
+<p>This panic is raised if a failure occurs in loading <code class="filename">EKERN.EXE</code></p>
+<code>4</code>
+<p>This panic is raised if any of the <code>_E32Initialise()</code>, <code>_E32DeInitialise()</code> or
+<code>_E32ExitProcess()</code> Kernel functions cannot be found.</p>
+<code>5</code>
+<p>This panic is raised if a leave occurs and there is no trap harness.</p>	   

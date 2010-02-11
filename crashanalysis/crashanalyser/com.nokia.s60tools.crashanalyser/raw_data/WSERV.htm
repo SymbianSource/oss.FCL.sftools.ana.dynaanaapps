@@ -1,0 +1,653 @@
+<h1>WSERV</h1>
+<p>
+The window server runs continuously and brings the machine down if it
+crashes, so it cannot panic its own thread when it detects an error in one of
+its client&#8217;s requests. Instead it panics the client&#8217;s thread using
+<code class="ApiItem">CSession::Panic()</code>. These panics have a category of WSERV. 
+</p>
+<p>
+These panics are defined in the enumeration <code>TClientPanic</code> in
+<code class="filename">w32cmd.h</code>. 
+</p>
+<p>
+Note that some panics are raised in debug builds only. 
+</p>
+<code>1</code>
+<p>
+Out of range opcode. 
+</p>
+<p>
+The client has sent a request opcode that wasn&#8217;t recognised. Each
+server-side object can only handle some of the requests defined in the window
+server, and if the request isn&#8217;t recognised, this panic is raised. 
+</p>
+<p>
+Clients would normally only get this is if they bypass the normal
+Window Server API. 
+</p>
+<code>2</code>
+<p>
+Invalid command buffer. 
+</p>
+<p>
+A corrupt buffer of requests was discovered by the server. This is
+raised when the buffer itself is noticeably broken, and not when the commands
+in it are wrong. 
+</p>
+<code>3</code>
+<p>
+Invalid handle. 
+</p>
+<p>
+The server couldn&#8217;t find the target object for a request in the
+handle index. This can be raised when a command is sent to the handle for a
+window that has been closed, for example. 
+</p>
+<code>4</code>
+<p>
+A handle whose value was NULL was detected. 
+</p>
+<p>
+For example, when Constructing one of the subclasses of the
+client-side <a href="../reference-cpp/WSERV8.1/RWindowBaseClass.html#%3a%3aRWindowBase" title="class RWindowBase"><code class="ApiItem">RWindowBase</code></a> with a client handle argument of
+NULL. 
+</p>
+<p>
+On the server side, a <code>TWsClCmdCreateWindow</code> with a
+client handle field of <code>NULL</code> passed as argument to
+<code>CWsClientWindow::ConstructL()</code> will raise this error. 
+</p>
+<code>5</code>
+<p>
+A single drawing command was too big to fit into the
+<a href="../../guide/Graphics-subsystem-guide/WindowServerClientSide/WindowServerGuide1/ClientSideBuffer.guide.html#WindowServerGuide6%2eClientSideBuffer">client-side buffer</a>. 
+</p>
+<p>
+The size of the buffer may be increased. See
+<a href="../reference-cpp/WSERV8.1/RWsSessionClass.html#%3a%3aRWsSession%3a%3aSetBufferSizeL%28%29" title="function RWsSession::SetBufferSizeL()"><code class="ApiItem">RWsSession::SetBufferSizeL()</code></a> and
+<a href="../reference-cpp/WSERV8.1/RWsSessionClass.html#%3a%3aRWsSession%3a%3aSetMaxBufferSizeL%28%29" title="function RWsSession::SetMaxBufferSizeL()"><code class="ApiItem">RWsSession::SetMaxBufferSizeL()</code></a>. 
+</p>
+<code>6</code>
+<p>
+Invalid window handle. 
+</p>
+<p>
+A handle which should have referred to a window of a particular
+type referred to a window of another type, or the object index didn&#8217;t recognise
+the handle. 
+</p>
+<p>
+On the server side, this panic is ultimately raised by
+<code>CWsClient::HandleToWindow()</code> and
+<code>CWsClient::HandleToClientWindow()</code> during handle conversions. 
+</p>
+<code>7</code>
+<p>
+Invalid bitmap handle. 
+</p>
+<p>
+A corrupt bitmap handle was encountered. This is a common panic
+uncovered when a bitmap handle refers to nothing, or to a server-side object
+that isn&#8217;t a bitmap. 
+</p>
+<p>
+Also: 
+</p>
+<p>
+In response to an <code>EWsGcOpUseBrushPattern</code> request
+if the bitmap parameter couldn&#8217;t be used. On the client side,
+<a href="../reference-cpp/WSERV8.1/CWindowGcClass.html#%3a%3aCWindowGc%3a%3aUseBrushPattern%28%29" title="function CWindowGc::UseBrushPattern()"><code class="ApiItem">CWindowGc::UseBrushPattern()</code></a> sends this request. 
+</p>
+<p>
+In response to an <code>EWsSpriteOpAppendMember</code> request
+when the bitmaps for the sprite member can't be created on the server side. On
+the client side, <a href="../reference-cpp/WSERV8.1/RWsSpriteBaseClass.html#%3a%3aRWsSpriteBase%3a%3aAppendMember%28%29" title="function RWsSpriteBase::AppendMember()"><code class="ApiItem">RWsSpriteBase::AppendMember()</code></a> sends this
+request. 
+</p>
+<p>
+Any failed attempt to duplicate a supplied bitmap. 
+</p>
+<code>8</code>
+<p>
+Event read already outstanding. 
+</p>
+<p>
+<a href="../reference-cpp/WSERV8.1/RWsSessionClass.html#%3a%3aRWsSession%3a%3aEventReady%28%29" title="function RWsSession::EventReady()"><code class="ApiItem">RWsSession::EventReady()</code></a>,
+<a href="../reference-cpp/WSERV8.1/RWsSessionClass.html#%3a%3aRWsSession%3a%3aRedrawReady%28%29" title="function RWsSession::RedrawReady()"><code class="ApiItem">RWsSession::RedrawReady()</code></a>, or
+<a href="../reference-cpp/WSERV8.1/RWsSessionClass.html#%3a%3aRWsSession%3a%3aPriorityKeyReady%28%29" title="function RWsSession::PriorityKeyReady()"><code class="ApiItem">RWsSession::PriorityKeyReady()</code></a> was called again when an
+event read was already outstanding, i.e.. when an event was waiting to be
+delivered by the window server. 
+</p>
+<code>9</code>
+<p>
+Attempted to use a non-active graphics context. 
+</p>
+<p>
+A drawing request was sent to a graphics context when the context
+was not active. 
+</p>
+<p>
+On the server side, this panic is raised by
+<code>CWsGc::CommandL()</code> on all requests received when the context isn&#8217;t
+active except <code>EWsGcOpActivate</code>, <code>EWsGcOpDeactivate</code>,
+<code>EWsGcOpFree</code>, and <code>EWsGcOpTestInvariant</code>. 
+</p>
+<code>10</code>
+<p>
+Attempted to activate an already active graphics context. 
+</p>
+<p>
+On the server side, this is raised by
+<code>CWsGc::Activate()</code> as a response to a <code>EWsGcOpActivate
+</code>
+request. 
+</p>
+<p>
+The request is sent by the client-side method
+<a href="../reference-cpp/WSERV8.1/CWindowGcClass.html#%3a%3aCWindowGc%3a%3aActivate%28%29" title="function CWindowGc::Activate()"><code class="ApiItem">CWindowGc::Activate()</code></a>. 
+</p>
+<code>11</code>
+<p>
+Window already active. 
+</p>
+<p>
+An attempt was made to reactivate an active window. The request is
+sent by the client-side method <a href="../reference-cpp/WSERV8.1/RWindowBaseClass.html#%3a%3aRWindowBase%3a%3aActivate%28%29" title="function RWindowBase::Activate()"><code class="ApiItem">RWindowBase::Activate()</code></a>. 
+</p>
+<p>
+On the server side, this panic is raised by
+<code>CWsClientWindow::Activate()</code> in response to an
+<code>EWsWinOpActivate</code> request. 
+</p>
+<code>12</code>
+<p>
+Already inside a begin/end redraw pair. 
+</p>
+<p>
+A begin-redraw window request was made when the window had already
+begun redrawing. Begin-redraw messages are paired with end-redraw messages, and
+ordering is important. Invoking <a href="../reference-cpp/WSERV8.1/RWindowClass.html#%3a%3aRWindow%3a%3aBeginRedraw%28%29" title="function RWindow::BeginRedraw()"><code class="ApiItem">RWindow::BeginRedraw()</code></a>,
+then <code>RWindow::BeginRedraw()</code> again before the corresponding
+<a href="../reference-cpp/WSERV8.1/RWindowClass.html#%3a%3aRWindow%3a%3aEndRedraw%28%29" title="function RWindow::EndRedraw()"><code class="ApiItem">RWindow::EndRedraw()</code></a> raises this panic. 
+</p>
+<p>
+On the server side, this panic is raised if an
+<code>EWsWinOpBeginRedraw</code> request is sent twice before the closing
+<code>EWsWinOpEndRedraw
+</code>. 
+</p>
+<code>13</code>
+<p>
+Invalid font handle. 
+</p>
+<p>
+On the client-side is raised if
+<a href="../reference-cpp/WSERV8.1/CWindowGcClass.html#%3a%3aCWindowGc%3a%3aUseFont%28%29" title="function CWindowGc::UseFont()"><code class="ApiItem">CWindowGc::UseFont()</code></a> is called with an invalid font
+handle. 
+</p>
+<p>
+On the server side, <code>CWsGc::SetGcAttribute()</code> raises
+this error in response to an <code>EWsGcOpUseFont</code> request. 
+</p>
+<code>14</code>
+<p>
+Printing with no active font. 
+</p>
+<p>
+A command to draw text to a window was sent to a graphics context
+when no font was set. Any of the overloads of
+<a href="../reference-cpp/WSERV8.1/CWindowGcClass.html#%3a%3aCWindowGc%3a%3aDrawTextVertical%28%29" title="function CWindowGc::DrawTextVertical()"><code class="ApiItem">CWindowGc::DrawTextVertical()</code></a> or
+<a href="../reference-cpp/WSERV8.1/CWindowGcClass.html#%3a%3aCWindowGc%3a%3aDrawText%28%29" title="function CWindowGc::DrawText()"><code class="ApiItem">CWindowGc::DrawText()</code></a> might cause the panic to be raised;
+the font should be set using <a href="../reference-cpp/WSERV8.1/CWindowGcClass.html#%3a%3aCWindowGc%3a%3aUseFont%28%29" title="function CWindowGc::UseFont()"><code class="ApiItem">CWindowGc::UseFont()</code></a> first. 
+</p>
+<p>
+On the server side, this panic is raised by
+<code>CWsGc::DoDrawCommand()</code> in response to any of the requests to
+display text defined in <code>TWsGcOpcodes</code>. 
+</p>
+<code>15</code>
+<p>
+Attempted to set an invalid text cursor type, see
+<a href="../reference-cpp/WSERV8.1/RWindowGroupClass.html#%3a%3aRWindowGroup%3a%3aSetTextCursor%28%29" title="function RWindowGroup::SetTextCursor()"><code class="ApiItem">RWindowGroup::SetTextCursor()</code></a>. 
+</p>
+<p>
+Valid types are defined in the <a href="../reference-cpp/WSERV8.1/TTextCursorStruct.html#%3a%3aTTextCursor" title="struct TTextCursor"><code class="ApiItem">TTextCursor</code></a>
+struct. 
+</p>
+<code>16</code>
+<p>
+A drawing command was sent to a graphics context active on a group
+window. 
+</p>
+<code>17</code>
+<p>
+Not used. 
+</p>
+<code>18</code>
+<p>
+Not used. 
+</p>
+<code>19</code>
+<p>
+Attempted to use a patterned brush when the pattern bitmap has not
+yet been set&#0160;&#8212;  <code>UseBrushPattern()</code>. 
+</p>
+<code>20</code>
+<p>
+Not used. 
+</p>
+<code>21</code>
+<p>
+Attempted to do a client destroy function on an illegal handle. 
+</p>
+<p>
+A client tried to destroy or cancel a server-side object by its
+handle on an unrecognised handle, or on a handle of the wrong type for the
+operation. 
+</p>
+<p>
+This panic may be caused by the
+<a href="../reference-cpp/WSERV8.1/RWindowGroupClass.html#%3a%3aRWindowGroup%3a%3aCancelCaptureKeyUpAndDowns%28%29" title="function RWindowGroup::CancelCaptureKeyUpAndDowns()"><code class="ApiItem">RWindowGroup::CancelCaptureKeyUpAndDowns()</code></a> or
+<a href="../reference-cpp/WSERV8.1/RWindowGroupClass.html#%3a%3aRWindowGroup%3a%3aCancelCaptureKey%28%29" title="function RWindowGroup::CancelCaptureKey()"><code class="ApiItem">RWindowGroup::CancelCaptureKey()</code></a> methods. These correspond
+to the <code>EWsWinOpCancelCaptureKeyUpsAndDowns</code> and
+<code>EWsWinOpCancelCaptureKey</code> server requests. In this case, the panic
+means that there is no such capture key object in existence in the target
+window group. 
+</p>
+<code>22</code>
+<p>
+Panic from the Anim DLL. 
+</p>
+<p>
+An animation DLL tried either changing its default or next timing
+interval when its timing mode was set to <code>ESyncNone</code>, or activating
+a graphics context when the context was already activated. 
+</p>
+<p>
+There are a variety of other reasons why this panic might be
+raised, all which are Anim DLL related. The Animation writer can also cause
+functions raise this panic. 
+</p>
+<code>23</code>
+<p>
+Invalid Anim object handle. 
+</p>
+<p>
+A null animation handle was detected in the server on receipt of an
+animation command, possibly because the relevant animation has been deleted.
+This panic may be raised by a subclass of <a href="../reference-cpp/WSERV8.1/RAnimClass.html#%3a%3aRAnim" title="class RAnim"><code class="ApiItem">RAnim</code></a> calling
+<a href="../reference-cpp/WSERV8.1/RAnimClass.html#%3a%3aRAnim%3a%3aCommand%28%29" title="function RAnim::Command()"><code class="ApiItem">RAnim::Command()</code></a> or
+<a href="../reference-cpp/WSERV8.1/RAnimClass.html#%3a%3aRAnim%3a%3aCommandReply%28%29" title="function RAnim::CommandReply()"><code class="ApiItem">RAnim::CommandReply()</code></a>. 
+</p>
+<p>
+On the server side, the <code>EWsAnimDllOpCommandReply</code> and
+<code>EWsAnimDllOpCommand</code> requests can raise this panic in
+<code>CWsAnimDll
+</code>. 
+</p>
+<code>24</code>
+<p>
+Leave from a non-leaving animation function. 
+</p>
+<p>
+Code in an animated DLL called by the server invoked
+<code>Leave()</code>. Animated DLL code is provided by the client and run by
+the server, so unhandled leaves are trapped and the notification is passed on
+as a client panic. 
+</p>
+<code>25</code>
+<p>
+Not used. 
+</p>
+<code>26</code>
+<p>
+Not used. 
+</p>
+<code>27</code>
+<p>
+Not used. 
+</p>
+<code>28</code>
+<p>
+Inconsistent polygon or polyline data was supplied. For example
+when restarting without finishing an old polygon. 
+</p>
+<code>29</code>
+<p>
+A client attempted to set a negative shadow height. 
+</p>
+<p>
+This panic is caused by a call to
+<a href="../reference-cpp/WSERV8.1/RWindowBaseClass.html#%3a%3aRWindowBase%3a%3aSetShadowHeight%28%29" title="function RWindowBase::SetShadowHeight()"><code class="ApiItem">RWindowBase::SetShadowHeight()</code></a> with a negative argument. 
+</p>
+<p>
+On the server side, <code>CWsClientWindow::CommandL()</code> raises
+the panic in response to an invalid <code>EWsWinOpSetShadowHeight</code>
+request. 
+</p>
+<code>30</code>
+<p>
+Not used. 
+</p>
+<code>31</code>
+<p>
+The client tried to construct a window with an invalid redraw type.
+The valid redraw types defined in the enumeration <code>TWinTypes</code> of
+<code class="filename">w32cmd.h
+</code>. 
+</p>
+<p>
+On the server side, this panic is raised by
+<code>CWsClientWindow::ConstructL()</code> in response to an initialisation
+message containing an invalid redraw type. 
+</p>
+<code>32</code>
+<p>
+A server-side redraw region is almost certainly corrupt. 
+</p>
+<p>
+This panic is raised when an <code>EWsWinOpGetInvalidRegion</code>
+is received by a <code>CWsRedrawMsgWindow</code> with a <code>TInt</code>
+parameter of zero or less. 
+</p>
+<code>33</code>
+<p>
+The client failed to provide a reply buffer to a server-side
+function when one was needed. 
+</p>
+<p>
+All server-side functions that need more space for their reply than
+a <code>TInt</code> use the client&#8217;s reply buffer. If the client fails to
+provide space for such replies, this panic will be emitted. 
+</p>
+<p>
+This panic is raised by <code>CWsClient::ReplyBuf()</code> when
+<code>CWsClient</code>&#8217;s reply buffer is null. 
+</p>
+<code>34</code>
+<p>
+Not used. 
+</p>
+<code>35</code>
+<p>
+A client passed an invalid or unrecognised corner type or flag. 
+</p>
+<p>
+This panic is raised in response to a client call to
+<a href="../reference-cpp/WSERV8.1/RWindowBaseClass.html#%3a%3aRWindowBase%3a%3aSetCornerType%28%29" title="function RWindowBase::SetCornerType()"><code class="ApiItem">RWindowBase::SetCornerType()</code></a> when specifying inconsistent
+or non-existent flags. 
+</p>
+<p>
+Valid flags are masked by <a href="../reference-cpp/WSERV8.1/TCornerTypeEnum.html#%3a%3aECornerTypeMask" title="field ECornerTypeMask"><code class="ApiItem">ECornerTypeMask</code></a>, and
+recognised types are defined in <a href="../reference-cpp/WSERV8.1/TCornerTypeEnum.html#%3a%3aTCornerType" title="enum TCornerType"><code class="ApiItem">TCornerType</code></a>. These are all
+defined in <code class="filename">w32std.h</code>. 
+</p>
+<p>
+The server raises this panic as a response to
+<code>EWsWinOpSetCornerType</code> request with an undefined corner type or an
+unrecognised flag in its parameters. 
+</p>
+<code>36</code>
+<p>
+The server was asked to update a region of a backed-up window which
+has not had MaintainBackup called on it. 
+</p>
+<p>
+A client-side call to either form of
+<a href="../reference-cpp/WSERV8.1/RBackedUpWindowClass.html#%3a%3aRBackedUpWindow%3a%3aUpdateScreen%28%29" title="function RBackedUpWindow::UpdateScreen()"><code class="ApiItem">RBackedUpWindow::UpdateScreen()</code></a> may raise this panic. 
+</p>
+<p>
+On the server side, the panic is raised in response to an
+<code>EWsWinOpUpdateScreenRegion</code> or <code>EWsWinOpUpdateScreen
+</code>
+request when not maintaining a full backup of a backed-up window. 
+</p>
+<code>37</code>
+<p>
+Panic raised when it was not possible to read or write data to the
+client thread. The data is usually contained in a descriptor. 
+</p>
+<code>38</code>
+<p>
+The client attempted to access a sprite after the sprite's window
+was destroyed. Note that pointer cursors are implemented as sprites. 
+</p>
+<code>39</code>
+<p>
+A client requested event data without having received an event
+telling it that the data was ready. 
+</p>
+<code>40</code>
+<p>
+The mask for a sprite is smaller than the sprite&#8217;s bitmap. A mask
+is permitted to be larger than its bitmap. 
+</p>
+<code>41</code>
+<p>
+Bad sprite handle. 
+</p>
+<p>
+A null sprite handle was encountered, or a handle which was
+supposed to refer to a sprite referred to something else. 
+</p>
+<p>
+The client-side methods
+<a href="../reference-cpp/WSERV8.1/RWindowTreeNodeClass.html#%3a%3aRWindowTreeNode%3a%3aSetCustomPointerCursor%28%29" title="function RWindowTreeNode::SetCustomPointerCursor()"><code class="ApiItem">RWindowTreeNode::SetCustomPointerCursor()</code></a> and
+<a href="../reference-cpp/WSERV8.1/RWsSessionClass.html#%3a%3aRWsSession%3a%3aSetSystemPointerCursor%28%29" title="function RWsSession::SetSystemPointerCursor()"><code class="ApiItem">RWsSession::SetSystemPointerCursor()</code></a>, amongst others, can
+cause this panic to be raised; they correspond to the server requests
+<code>EWsWinOpSetCustomPointerCursor</code> and
+<code>EWsClOpSetSystemPointerCursor</code>. 
+</p>
+<code>42</code>
+<p>
+A client attempted to set or clear a system pointer cursor without
+first owning the list of system pointer cursors. 
+</p>
+<p>
+<a href="../reference-cpp/WSERV8.1/RWsSessionClass.html#%3a%3aRWsSession%3a%3aSetSystemPointerCursor%28%29" title="function RWsSession::SetSystemPointerCursor()"><code class="ApiItem">RWsSession::SetSystemPointerCursor()</code></a> and
+<a href="../reference-cpp/WSERV8.1/RWsSessionClass.html#%3a%3aRWsSession%3a%3aClearSystemPointerCursor%28%29" title="function RWsSession::ClearSystemPointerCursor()"><code class="ApiItem">RWsSession::ClearSystemPointerCursor()</code></a> can raise this
+panic. See also <a href="../reference-cpp/WSERV8.1/RWsSessionClass.html#%3a%3aRWsSession%3a%3aClaimSystemPointerCursorList%28%29" title="function RWsSession::ClaimSystemPointerCursorList()"><code class="ApiItem">RWsSession::ClaimSystemPointerCursorList()</code></a>
+and <a href="../reference-cpp/WSERV8.1/RWsSessionClass.html#%3a%3aRWsSession%3a%3aFreeSystemPointerCursorList%28%29" title="function RWsSession::FreeSystemPointerCursorList()"><code class="ApiItem">RWsSession::FreeSystemPointerCursorList()</code></a>. 
+</p>
+<p>
+The server requests which can raise this panic are
+<code>EWsClOpSetSystemPointerCursor</code> and
+<code>EWsClOpClearSystemPointerCursor</code>. 
+</p>
+<code>43</code>
+<p>
+A client attempted to enable a pointer move buffer when none was
+allocated. 
+</p>
+<p>
+<a href="../reference-cpp/WSERV8.1/RWindowBaseClass.html#%3a%3aRWindowBase%3a%3aEnablePointerMoveBuffer%28%29" title="function RWindowBase::EnablePointerMoveBuffer()"><code class="ApiItem">RWindowBase::EnablePointerMoveBuffer()</code></a> can
+cause this panic to be emitted; the corresponding server request is
+<code>EWsWinOpEnablePointerMoveBuffer</code>. 
+</p>
+<code>44</code>
+<p>
+Raised in response to commands that send a string, when the string
+has been incorrectly stored in the command buffer. 
+</p>
+<code>45</code>
+<p>
+Not used. 
+</p>
+<code>46</code>
+<p>
+An invalid call or request parameter was detected by
+<code>CWsPassword</code>. This can be caused: 
+</p>
+<p>
+By <a href="../reference-cpp/WSERV8.1/RWindowBaseClass.html#%3a%3aRWindowBase%3a%3aPasswordWindow%28%29" title="function RWindowBase::PasswordWindow()"><code class="ApiItem">RWindowBase::PasswordWindow()</code></a> sending
+an <code>EWsWinOpPasswordWindow</code> server request whose password mode
+parameter is not recognised. 
+</p>
+<p>
+By an attempt to cancel the password window by a client which
+doesn&#8217;t own the window. 
+</p>
+<p>
+By <a href="../reference-cpp/WSERV8.1/RWsSessionClass.html#%3a%3aRWsSession%3a%3aPasswordEntered%28%29" title="function RWsSession::PasswordEntered()"><code class="ApiItem">RWsSession::PasswordEntered()</code></a> sending a
+<code>EWsClOpPasswordEntered</code> server request when no password window has
+been set, or when the client does not own the password window. 
+</p>
+<p>
+Valid password modes are defined in
+<a href="../reference-cpp/WSERV8.1/TPasswordModeEnum.html#%3a%3aTPasswordMode" title="enum TPasswordMode"><code class="ApiItem">TPasswordMode</code></a> of <code class="filename">w32std.h</code>. 
+</p>
+<code>47</code>
+<p>
+An invalid compute mode was sent to the window server. On the
+client side, <a href="../reference-cpp/WSERV8.1/RWsSessionClass.html#%3a%3aRWsSession%3a%3aComputeMode%28%29" title="function RWsSession::ComputeMode()"><code class="ApiItem">RWsSession::ComputeMode()</code></a> can do this, the
+window server request is <code>EWsClOpComputeMode</code>. Valid compute modes
+are defined in the enumeration <a href="../reference-cpp/WSERV8.1/RWsSessionClass.html#%3a%3aRWsSession%3a%3aTComputeMode" title="enum RWsSession::TComputeMode"><code class="ApiItem">RWsSession::TComputeMode</code></a>,
+which is declared in <code class="filename">w32std.h</code>. 
+</p>
+<code>48</code>
+<p>
+A client attempted to set the display mode of a backed-up window.
+This can be done with
+<a href="../reference-cpp/WSERV8.1/RWindowBaseClass.html#%3a%3aRWindowBase%3a%3aSetRequiredDisplayMode%28%29" title="function RWindowBase::SetRequiredDisplayMode()"><code class="ApiItem">RWindowBase::SetRequiredDisplayMode()</code></a> or the
+<code>EWsWinOpRequiredDisplayMode</code> server request. 
+</p>
+<code>49</code>
+<p>
+A client attempted to get a message when has not been signalled in
+the server. 
+</p>
+<p>
+This panic can be raised on a client thread calling
+<code class="ApiItem">RWindowGroup::FetchMessage()</code> or sending the
+<code>EWsWinOpGetMessageSize</code> or <code>EWsWinOpGetMessage
+</code> messages. 
+</p>
+<code>50</code>
+<p>
+A client tried to send a second initialisation message, i.e. to
+call <a href="../reference-cpp/WSERV8.1/RWsSessionClass.html#%3a%3aRWsSession%3a%3aConnect%28%29" title="function RWsSession::Connect()"><code class="ApiItem">RWsSession::Connect()</code></a> twice. 
+</p>
+<code>51</code>
+<p>
+A client attempted to send a message without specifying a target
+window. 
+</p>
+<p>
+This can be raised, for example, in response to
+<a href="../reference-cpp/WSERV8.1/RWsSessionClass.html#%3a%3aRWsSession%3a%3aRequestOffEvents%28%29" title="function RWsSession::RequestOffEvents()"><code class="ApiItem">RWsSession::RequestOffEvents()</code></a>
+</p>
+<code>52</code>
+<p>
+A client attempted to perform and operation on a window that has
+had its parent or ancestor deleted. An operation which might raise this panic
+could be setting the window size, position or extent. 
+</p>
+<p>
+Introduced in v5.1 
+</p>
+<code>53</code>
+<p>
+A client attempted to reset a window group&#8217;s default owning window.
+For example, by calling the function
+<a href="../reference-cpp/WSERV8.1/RWindowGroupClass.html#%3a%3aRWindowGroup%3a%3aDefaultOwningWindow%28%29" title="function RWindowGroup::DefaultOwningWindow()"><code class="ApiItem">RWindowGroup::DefaultOwningWindow()</code></a> twice on the same
+window group. 
+</p>
+<p>
+This is only raised in debug builds. 
+</p>
+<code>54</code>
+<p>
+A client attempted to perform an operation on an invalid screen
+mode. 
+</p>
+<p>
+For example, if the client called the functions
+<a href="../reference-cpp/WSERV8.1/CWsScreenDeviceClass.html#%3a%3aCWsScreenDevice%3a%3aGetScreenModeSizeAndRotation%28%29" title="function CWsScreenDevice::GetScreenModeSizeAndRotation()"><code class="ApiItem">CWsScreenDevice::GetScreenModeSizeAndRotation()</code></a> or
+<a href="../reference-cpp/WSERV8.1/CWsScreenDeviceClass.html#%3a%3aCWsScreenDevice%3a%3aSetScreenMode%28%29" title="function CWsScreenDevice::SetScreenMode()"><code class="ApiItem">CWsScreenDevice::SetScreenMode()</code></a> with an illegal index. 
+</p>
+<p>
+Introduced in v5.1 
+</p>
+<code>55</code>
+<p>
+A client attempted to set an invalid screen enforcement mode. 
+</p>
+<p>
+The valid screen mode enforcement modes are defined in
+<a href="../reference-cpp/WSERV8.1/TScreenModeEnforcementEnum.html#%3a%3aTScreenModeEnforcement" title="enum TScreenModeEnforcement"><code class="ApiItem">TScreenModeEnforcement</code></a>. 
+</p>
+<p>
+Introduced in v5.1 
+</p>
+<code>56</code>
+<p>
+A client specified an event type which was not a pointer event,
+when this is what was required by the operation. e.g.
+<a href="../reference-cpp/WSERV8.1/RWindowGroupClass.html#%3a%3aRWindowGroup%3a%3aSimulatePointerEvent%28%29" title="function RWindowGroup::SimulatePointerEvent()"><code class="ApiItem">RWindowGroup::SimulatePointerEvent()</code></a>. 
+</p>
+<p>
+Introduced in v5.1 
+</p>
+<code>57</code>
+<p>
+A client attempted to specify a screen rotation or orientation that
+is not allowed. Each screen size mode has a list of allowed rotations. 
+</p>
+<p>
+Introduced in v5.1 
+</p>
+<code>58</code>
+<p>
+A client attempted to call a function that can only be called on a
+top level client window on a lower level window. A top level client window is a
+window with a window group as a parent, e.g.
+<a href="../reference-cpp/WSERV8.1/RWindowBaseClass.html#%3a%3aRWindowBase%3a%3aMoveToGroup%28%29" title="function RWindowBase::MoveToGroup()"><code class="ApiItem">RWindowBase::MoveToGroup()</code></a>. 
+</p>
+<p>
+Introduced in v6.0 
+</p>
+<code>59</code>
+<p>
+A client attempted to use a
+<a href="../reference-cpp/WSERV8.1/RDirectScreenAccessClass.html#%3a%3aRDirectScreenAccess" title="class RDirectScreenAccess"><code class="ApiItem">RDirectScreenAccess</code></a> object's member functions in the wrong
+order. 
+</p>
+<p>
+Introduced in v7.0 
+</p>
+<code>60</code>
+<p>
+The handle to a window server resource is already in use (debug
+builds only). 
+</p>
+<p>
+Introduced in v7.0 
+</p>
+<code>61</code>
+<p>
+An attempt was made to set a custom text cursor (using
+<a href="../reference-cpp/WSERV8.1/RWindowGroupClass.html#%3a%3aRWindowGroup%3a%3aSetTextCursor%28%29" title="function RWindowGroup::SetTextCursor()"><code class="ApiItem">RWindowGroup::SetTextCursor()</code></a>) but the cursor's type was
+not recognised. 
+</p>
+<p>
+Introduced in v7.0s. 
+</p>
+<code>62</code>
+<p>
+An attempt was made to set a custom text cursor (using
+<a href="../reference-cpp/WSERV8.1/RWindowGroupClass.html#%3a%3aRWindowGroup%3a%3aSetTextCursor%28%29" title="function RWindowGroup::SetTextCursor()"><code class="ApiItem">RWindowGroup::SetTextCursor()</code></a>) whose alignment value is
+invalid. For valid alignment values see the
+<code class="ApiItem">TCustomTextCursorAlignment</code> enumeration in class
+<a href="../reference-cpp/WSERV8.1/RWsSessionClass.html#%3a%3aRWsSession" title="class RWsSession"><code class="ApiItem">RWsSession</code></a>. 
+</p>
+<p>
+Introduced in v7.0s. 
+</p>
+<code>63</code>
+<p>
+An attempt was made to set a custom text cursor (using
+<a href="../reference-cpp/WSERV8.1/RWindowGroupClass.html#%3a%3aRWindowGroup%3a%3aSetTextCursor%28%29" title="function RWindowGroup::SetTextCursor()"><code class="ApiItem">RWindowGroup::SetTextCursor()</code></a>) that does not have any
+sprite members set. 
+</p>
+<p>
+Introduced in v7.0s.</p>

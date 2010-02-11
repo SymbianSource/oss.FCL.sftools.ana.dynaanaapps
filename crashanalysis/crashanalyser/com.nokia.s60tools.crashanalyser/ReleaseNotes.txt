@@ -1,0 +1,54 @@
+=====================================================================
+RELEASE NOTE for Crash Analyser 1.2.0 (20th October 2009)
+=====================================================================
+
+Product Description:
+====================
+The Crash Analyser Carbide.c++ Extension is a tool for decoding different 
+types of crash files from binary to readable format and analysing crash/panic 
+situations. Crash Analyser provides an error library containing most of the 
+Symbian OS error codes and panic descriptions.
+
+You can activate the Crash Analyser by selecting Carbide > Crash Analyser.
+
+Features:
+=========
+- Decode MobileCrash and D_EXC files from binary to readable format. 
+- UI visualisation for decoding files (CrashVisualiser). 
+- Possibility to create HTML reports about a crash. 
+- Open crash related source files from the UI. 
+- Pick up MobileCrash files via TraceViewer Carbide.c++ Extension. 
+- Error library containing Symbian OS error codes and panic descriptions. 
+
+New Features:
+=============
+- Support for multiple processes
+- ELF core dump support
+- Drag & Drop support
+- Possibility to read files directly from the device via PC Suite connection
+
+Enhancements:
+=============
+- Improved progress reporting while handling crash files
+- Removed last wizard page in order to simplify user experience
+- Bug fixes & UI improvements
+
+System Requirements:
+====================
+
+Basic Requirements:
+
+- Windows 2000 or Windows XP 
+- .NET Framework v2.0.50727 or newer 
+
+Compatibility Issues:
+=====================
+- N/A
+
+Known Issues:
+===============
+- GCCE map files are not supported. Only RVCT map files are supported. 
+
+
+Copyright © 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+License: http://www.symbianfoundation.org/legal/sfl-v10.html.

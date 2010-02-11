@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>Code segments</title>
+<link href="../../book.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+
+<h2>Code segments</h2>
+<p>The code segment list contains a list of binaries (dlls/plugins/exe) that were loaded at the time of the crash.</p>
+<img src="images\code_segments1.png">
+<p></p>
+<p>The kernel creates a code segment for a binary:</p>
+<ul>
+<li>Whenever the binary is explicitly loaded (RLibrary::Load() or ECOM is used)</li>
+<li>When the binary contains global data</li>
+<li>When a process is explicitly created (RProcess::Create())</li>
+<li>When the binary in question is loaded into RAM (for example ROFS/ROFX/User Data Area code)</li>
+</ul>
+<p>This means that in some situations the list may not contain all the dependencies of the code that was executing at the time of the exception/panic. For example, any code that is statically linked to another binary and that resides in an Execute In Place (XIP) location, such as the phone &lsquo;ROM&rsquo;, may not actually appear in the list.</p>
+<p>If you expect a specific binary to be present within the list, and upon inspection you find that it is missing it may indicate that the binary has been unloaded unexpectedly. This in itself can cause an exception &ndash; for example, if a plugin is unloaded before all objects that utlize code from that plugin have been destroyed, then it may lead to an exception were the object code invoked.</p>
+<p>Finally, the list is also color-coded to indicate warnings or errors. For example, items may be highlighted in pink if symbols are unavailable or if the code segment for the binary in question does not align with the code segment information provided by the kernel at the time of the crash. This may indicate that the wrong symbolics have been used to decode the crash file, resulting in incorrect data.</p>
+<p>For reference information, see:</p>
+<ul>
+<li>Symbian OS Internals: <a href="http://www.amazon.com/Symbian-OS-Internals-Real-time-Programming/dp/0470025247">http://www.amazon.com/Symbian-OS-Internals-Real-time-Programming/dp/0470025247</a></li>
+</ul>
+
+<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

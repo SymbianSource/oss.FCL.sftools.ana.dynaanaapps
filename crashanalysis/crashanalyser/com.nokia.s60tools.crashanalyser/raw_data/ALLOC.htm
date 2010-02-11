@@ -1,0 +1,7 @@
+<h1>ALLOC</h1>
+<p>These panics are raised in debug builds only and are caused when the heap debugging functions detect a memory
+leak.</p>
+<code> nnnnnnnn</code>
+<p>This panic is raised by the <code class="ApiItem">RHeap::__DbgMarkEnd()</code>  and <a href="../reference-cpp/E32_EKA2/UserClass.html#%3a%3aUser%3a%3a__DbgMarkEnd%28%29" title="function User::__DbgMarkEnd()"><code class="ApiItem">User::__DbgMarkEnd()</code></a> when the number of heap cells at the current nested level is not as
+expected.
+</p><p>nnnnnnnn is the hexadecimal pointer to the first orphaned heap cell.</p>	   

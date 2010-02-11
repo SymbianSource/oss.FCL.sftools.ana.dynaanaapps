@@ -1,0 +1,241 @@
+<h1>FSCLIENT panic</h1>
+<p>
+Panics with this category are raised on clients requesting services provided by the
+file server. Typically, they are caused by passing bad or contradictory values
+to class constructors or member functions. 
+</p>
+<p>
+The thread causing the panic is terminated.
+</p>
+<p>
+To avoid confusion, we need to emphasise that the panic category is the
+14 character string <em>FSCLIENT panic</em>, and that the word panic is
+part of the panic category.
+</p>
+<code>0</code>
+<p>
+This panic is raised by: 
+</p>
+<p>
+the <code>TDriveUnit(TInt aDrive)</code> variant of the
+<a href="../reference-cpp/F32_EKA2/TDriveUnitClass.html#%3a%3aTDriveUnit" title="class TDriveUnit"><code class="ApiItem">TDriveUnit</code></a> constructor, 
+</p>
+<p>
+the <code>(TInt aDrive)</code> variant of the
+<a href="../reference-cpp/F32_EKA2/TDriveUnitClass.html#%3a%3aTDriveUnit" title="class TDriveUnit"><code class="ApiItem">TDriveUnit</code></a> assignment operator 
+</p>
+<p>
+when the specified drive number is greater than or equal to
+<code>KMaxDrives</code>, i.e. 26. 
+</p>
+<code>1</code>
+<p>
+This panic is raised by: 
+</p>
+<p>
+the <code>TDriveUnit(const TDesC&amp; aDriveText)</code>
+variant of the <a href="../reference-cpp/F32_EKA2/TDriveUnitClass.html#%3a%3aTDriveUnit" title="class TDriveUnit"><code class="ApiItem">TDriveUnit</code></a> constructor, 
+</p>
+<p>
+the <code>(const TDesC&amp; aDriveText)</code> variant of the
+<a href="../reference-cpp/F32_EKA2/TDriveUnitClass.html#%3a%3aTDriveUnit" title="class TDriveUnit"><code class="ApiItem">TDriveUnit</code></a> assignment operator 
+</p>
+<p>
+when the specified drive letter is invalid, i.e. does not
+correspond to a drive number. 
+</p>
+<code>2</code>
+<p>
+This panic is raised when searching for the next file using
+<a href="../reference-cpp/F32_EKA2/TFindFileClass.html#%3a%3aTFindFile%3a%3aFind%28%29" title="function TFindFile::Find()"><code class="ApiItem">TFindFile::Find()</code></a> or
+<a href="../reference-cpp/F32_EKA2/TFindFileClass.html#%3a%3aTFindFile%3a%3aFindWild%28%29" title="function TFindFile::FindWild()"><code class="ApiItem">TFindFile::FindWild()</code></a> before the initial call specifying
+the search method. 
+</p>
+<p>
+Calls to <a href="../reference-cpp/F32_EKA2/TFindFileClass.html#%3a%3aTFindFile%3a%3aFind%28%29" title="function TFindFile::Find()"><code class="ApiItem">TFindFile::Find()</code></a> cannot be made
+until an initial call has been made to either of: 
+</p>
+<p>
+<a href="../reference-cpp/F32_EKA2/TFindFileClass.html#%3a%3aTFindFile%3a%3aFindByDir%28%29" title="function TFindFile::FindByDir()"><code class="ApiItem">TFindFile::FindByDir()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/F32_EKA2/TFindFileClass.html#%3a%3aTFindFile%3a%3aFindByPath%28%29" title="function TFindFile::FindByPath()"><code class="ApiItem">TFindFile::FindByPath()</code></a>
+</p>
+<p>
+Calls to <a href="../reference-cpp/F32_EKA2/TFindFileClass.html#%3a%3aTFindFile%3a%3aFindWild%28%29" title="function TFindFile::FindWild()"><code class="ApiItem">TFindFile::FindWild()</code></a> cannot be made
+until an initial call has been made to either of: 
+</p>
+<p>
+<a href="../reference-cpp/F32_EKA2/TFindFileClass.html#%3a%3aTFindFile%3a%3aFindWildByDir%28%29" title="function TFindFile::FindWildByDir()"><code class="ApiItem">TFindFile::FindWildByDir()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/F32_EKA2/TFindFileClass.html#%3a%3aTFindFile%3a%3aFindWildByPath%28%29" title="function TFindFile::FindWildByPath()"><code class="ApiItem">TFindFile::FindWildByPath()</code></a>
+</p>
+<code>3</code>
+<p>
+<em>Not used.</em>
+</p>
+<code>4</code>
+<p>
+<em>Not used.</em>
+</p>
+<code>5</code>
+<p>
+This panic is raised by a call to
+<a href="../reference-cpp/F32_EKA2/TFileTextClass.html#%3a%3aTFileText%3a%3aSeek%28%29" title="function TFileText::Seek()"><code class="ApiItem">TFileText::Seek()</code></a> when the seek mode passed to the
+function is neither <a href="../reference-cpp/F32_EKA2/TSeekEnum.html#%3a%3aTSeek" title="enum TSeek"><code class="ApiItem">TSeek</code></a><code>::ESeekStart</code> nor
+<a href="../reference-cpp/F32_EKA2/TSeekEnum.html#%3a%3aTSeek" title="enum TSeek"><code class="ApiItem">TSeek</code></a><code>::ESeekEnd</code>. 
+</p>
+<code>6</code>
+<p>
+<em>Not used.</em>
+</p>
+<code>7</code>
+</p>
+<p>
+<em>Not used.</em>
+</p>
+<code>8</code>
+<p>
+<em>Not used.</em>
+</p>
+<code>9</code>
+<p>
+<em>Not used.</em>
+</p>
+<code>10</code>
+<p>
+This panic is raised by the <a href="../reference-cpp/F32_EKA2/CFileManClass.html#%3a%3aCFileMan" title="class CFileMan"><code class="ApiItem">CFileMan</code></a>
+implementation when the operation to be run is undefined. 
+</p>
+<code>11</code>
+<p>
+This panic is raised by
+<a href="../reference-cpp/F32_EKA2/CFileBaseClass.html#%3a%3aCFileBase%3a%3aCurrentEntry%28%29" title="function CFileBase::CurrentEntry()"><code class="ApiItem">CFileBase::CurrentEntry()</code></a> if there is no current entry. 
+</p>
+<code>12</code>
+<p>
+The value returned by the file management observer functions: 
+</p>
+<p>
+<a href="../reference-cpp/F32_EKA2/MFileManObserverClass.html#%3a%3aMFileManObserver%3a%3aNotifyFileManStarted%28%29" title="function MFileManObserver::NotifyFileManStarted()"><code class="ApiItem">MFileManObserver::NotifyFileManStarted()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/F32_EKA2/MFileManObserverClass.html#%3a%3aMFileManObserver%3a%3aNotifyFileManEnded%28%29" title="function MFileManObserver::NotifyFileManEnded()"><code class="ApiItem">MFileManObserver::NotifyFileManEnded()</code></a>
+</p>
+<p>
+<a href="../reference-cpp/F32_EKA2/MFileManObserverClass.html#%3a%3aMFileManObserver%3a%3aNotifyFileManOperation%28%29" title="function MFileManObserver::NotifyFileManOperation()"><code class="ApiItem">MFileManObserver::NotifyFileManOperation()</code></a>
+</p>
+<p>
+is not a valid <a href="../reference-cpp/F32_EKA2/MFileManObserverClass.html#%3a%3aMFileManObserver%3a%3aTControl" title="enum MFileManObserver::TControl"><code class="ApiItem">MFileManObserver::TControl</code></a> enum
+value. 
+</p>
+<code>13</code>
+<p>
+<em>Not used.</em>
+</p>
+<code>14</code>
+<p>
+<em>Not used.</em>
+</p>
+<code>15</code>
+<p>
+<i>This panic is raised in debug builds only.</i>
+</p>
+<p>
+This panic is raised in a call to
+<a href="../reference-cpp/F32_EKA2/CDirScanClass.html#%3a%3aCDirScan%3a%3aSetScanDataL%28%29" title="function CDirScan::SetScanDataL()"><code class="ApiItem">CDirScan::SetScanDataL()</code></a> when the path does not contain at
+least one '\' character. 
+</p>
+<code>16</code>
+<p>
+<em>Not used.</em>
+</p>
+<code>17</code>
+<p>
+This panic is raised by <a href="../reference-cpp/F32_EKA2/RFileClass.html#%3a%3aRFile%3a%3aLock%28%29" title="function RFile::Lock()"><code class="ApiItem">RFile::Lock()</code></a> when the
+number of bytes defining the region to be locked is either zero or negative. 
+</p>
+<code>18</code>
+<p>
+This panic is raised by <a href="../reference-cpp/F32_EKA2/RFileClass.html#%3a%3aRFile%3a%3aUnLock%28%29" title="function RFile::UnLock()"><code class="ApiItem">RFile::UnLock()</code></a> when
+the number of bytes defining the region to be unlocked is either zero or
+negative. 
+</p>
+<code>19</code>
+<p>
+All variants of the <a href="../reference-cpp/F32_EKA2/RFileClass.html#%3a%3aRFile%3a%3aRead%28%29" title="function RFile::Read()"><code class="ApiItem">RFile::Read()</code></a> and
+<a href="../reference-cpp/F32_EKA2/RFileClass.html#%3a%3aRFile%3a%3aWrite%28%29" title="function RFile::Write()"><code class="ApiItem">RFile::Write()</code></a> functions take an argument denoting an
+offset value, in bytes, from the start of a file; the panic is raised by these
+functions when the offset value is negative. 
+</p>
+<code>20</code>
+<p>
+This panic is raised by <a href="../reference-cpp/F32_EKA2/RFileClass.html#%3a%3aRFile%3a%3aSetSize%28%29" title="function RFile::SetSize()"><code class="ApiItem">RFile::SetSize()</code></a> when
+the argument denoting the size of the new file is negative. 
+</p>
+<code>21</code>
+<p>
+This panic is raised by <a href="../reference-cpp/F32_EKA2/RFileClass.html#%3a%3aRFile%3a%3aSetAtt%28%29" title="function RFile::SetAtt()"><code class="ApiItem">RFile::SetAtt()</code></a> and
+<a href="../reference-cpp/F32_EKA2/RFileClass.html#%3a%3aRFile%3a%3aSet%28%29" title="function RFile::Set()"><code class="ApiItem">RFile::Set()</code></a> when the same attribute bit is set in both
+the bitmask that indicates the file attributes to be set and the bitmask that
+indicates the attributes to be cleared. 
+</p>
+<code>22</code>
+<p>
+The panic is raised by the <code>[]</code> operator of
+<a href="../reference-cpp/F32_EKA2/TEntryArrayClass.html#%3a%3aTEntryArray" title="class TEntryArray"><code class="ApiItem">TEntryArray</code></a>, when the index value passed to the operator
+is greater than or equal to the number of elements in the array. 
+</p>
+<code>23</code>
+<p>
+This panic is raised by <a href="../reference-cpp/F32_EKA2/CDirClass.html#%3a%3aCDir%3a%3aSort%28%29" title="function CDir::Sort()"><code class="ApiItem">CDir::Sort()</code></a> when the
+method of sorting, as defined by the single function argument, is none of the
+entries: 
+</p>
+<p>
+<a href="../reference-cpp/F32_EKA2/TEntryKeyEnum.html#%3a%3aTEntryKey" title="enum TEntryKey"><code class="ApiItem">TEntryKey</code></a><code>::ESortNone</code>
+</p>
+<p>
+<a href="../reference-cpp/F32_EKA2/TEntryKeyEnum.html#%3a%3aTEntryKey" title="enum TEntryKey"><code class="ApiItem">TEntryKey</code></a><code>::ESortByDate</code>
+</p>
+<p>
+<a href="../reference-cpp/F32_EKA2/TEntryKeyEnum.html#%3a%3aTEntryKey" title="enum TEntryKey"><code class="ApiItem">TEntryKey</code></a><code>::ESortBySize</code>
+</p>
+<p>
+<a href="../reference-cpp/F32_EKA2/TEntryKeyEnum.html#%3a%3aTEntryKey" title="enum TEntryKey"><code class="ApiItem">TEntryKey</code></a><code>::ESortByExt</code>
+</p>
+<p>
+<a href="../reference-cpp/F32_EKA2/TEntryKeyEnum.html#%3a%3aTEntryKey" title="enum TEntryKey"><code class="ApiItem">TEntryKey</code></a><code>::ESortByUid</code>
+</p>
+<p>
+<a href="../reference-cpp/F32_EKA2/TEntryKeyEnum.html#%3a%3aTEntryKey" title="enum TEntryKey"><code class="ApiItem">TEntryKey</code></a><code>::ESortByName</code>
+</p>
+<code>24</code>
+<p>
+This panic is raised by the <a href="../reference-cpp/F32_EKA2/TParsePtrClass.html#%3a%3aTParsePtr" title="class TParsePtr"><code class="ApiItem">TParsePtr</code></a>
+constructor that takes a reference to a filename, when the name cannot be
+parsed. 
+</p>
+<code>25</code>
+<p>
+This panic is raised by the <a href="../reference-cpp/F32_EKA2/TParsePtrCClass.html#%3a%3aTParsePtrC" title="class TParsePtrC"><code class="ApiItem">TParsePtrC</code></a>
+constructor that takes a const reference to a filename, when the name cannot be
+parsed. 
+</p>
+<code>26</code>
+<p>
+This panic is raised by <a href="../reference-cpp/F32_EKA2/RFsClass.html#%3a%3aRFs%3a%3aReadFileSection%28%29" title="function RFs::ReadFileSection()"><code class="ApiItem">RFs::ReadFileSection()</code></a>
+when the specified number of bytes to be read from the file is greater than the
+maximum length of the target descriptor. 
+</p>
+<code>27</code>
+<p>
+<i>This panic is raised in debug builds only.</i>
+</p>
+<p>
+This panic is raised by the <code class="ApiItem">RFile::Write(const
+TDesC8&amp;,TInt)</code> variant when the specified length is greater than
+the length of the source descriptor. 
+</p>
+	   

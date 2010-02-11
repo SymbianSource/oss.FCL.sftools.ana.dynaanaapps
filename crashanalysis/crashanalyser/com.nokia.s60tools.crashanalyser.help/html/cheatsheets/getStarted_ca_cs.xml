@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet title="CrashAnalyser Quick Start Guide: Capturing and analysing crash data">
+   <intro>
+      <description>
+         This tutorial gives instructions on how to capture and analyse crashes that occur in the mobile device using the CrashAnalyser Carbide.c++ Extension. 
+<br/><br/>
+You can obtain crash data in two ways:
+<br/>
+- by retrieving the files manually and transferring them to the PC
+<br/>
+- by using TraceViewer to automatically transfer the files. 
+<br/><br/>To open a related help page, click the question mark icon at the end of the task title row.
+      </description>
+   </intro>
+<item
+         dialog="false"
+         skip="true"
+         title="(Optional) Obtain the crash files from your device manually">
+      <description>
+         A mobilecrash file is generated to the root of the memory card or the C: directory.
+<br/><br/>
+These files are in binary format and need to be moved to your PC and decoded into readable format before you can analyse what caused the crash. 
+<br/><br/>
+To transfer the files to your PC, you can:  
+<br/><br/>
+- Use USB or Bluetooth connection.
+<br/>
+- Send the file as a message from the device by using the FileBrowser tool.
+<br/>
+- Use a file transfer utility (for example, PC Suite or similar).
+      </description>
+   </item>
+   <item
+         dialog="false"
+         href="/com.nokia.s60tools.crashanalyser.help/html/tasks/enable_auto_crash_logging.htm"
+         skip="true"
+         title="(Optional) Capture crash data with TraceViewer">
+      <description>
+         A faster way to capture crash data from the device to the PC is by using traces.
+<br/><br/>
+To use this option, enable TraceViewer in CrashAnalyser&apos;s Preferences. (It is enabled by default.) 
+<br/><br/>
+When activated, TraceViewer will automatically &quot;listen&quot; to crashes and transfer the panic codes to the PC.
+      </description>
+   </item>
+   <item
+         href="/com.nokia.s60tools.crashanalyser.help/html/tasks/import_crash_files.htm"
+         title="Import the crash files in CrashAnalyser">
+      <description>
+         To start working on the files on your PC, start the CrashAnalyser wizard from the <b>Carbide &gt; CrashAnalyser</b> menu and import the files for decoding. 
+<br/><br/>
+<b>Note!</b> It takes time to decode files, so do not select too many files to be decoded at a time.
+      </description>
+   </item>
+   <item title="View and analyse the crashes" dialog="true" skip="false" href="/com.nokia.s60tools.crashanalyser.help/html/concepts/how_to_analyse_crash.htm">
+      <description>
+         To start analysing an imported file, double-click it on the CrashAnalyser main view. 
+<br/><br/>
+The Crash Visualiser contains four different tabs that help you diagnose what caused the crash in the device; what was the reason (for example, Symbian OS panic or exception), and in which process and in which thread the crash occurred.
+      </description>
+   </item>
+</cheatsheet>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+	<extension point="org.eclipse.help.toc">
+		<toc 
+			file="html/toolTOC.xml" 
+			primary="true">
+		</toc>
+		<toc 
+			file="html/tocConcepts.xml" 
+			primary="false"/>
+		<toc 
+			file="html/tocTasks.xml" 
+			primary="false"/>
+		<toc 
+			file="html/tocReferences.xml" 
+			primary="false"/>
+	</extension>
+
+	<extension point="org.eclipse.help.contexts">
+		<contexts
+			file="html/contexts.xml"
+			plugin="com.nokia.s60tools.crashanalyser.help"/>
+	</extension>
+
+	<extension point="org.eclipse.ui.cheatsheets.cheatSheetContent">
+		<category
+			id="com.nokia.carbide.cpp.tools.cheatsheets" 
+			name="Carbide.c++ Tools" /> 
+		<cheatsheet 
+			category="com.nokia.carbide.cpp.tools.cheatsheets"
+			contentFile="html/cheatsheets/getStarted_ca_cs.xml"
+			composite="false" 
+			id="com.nokia.s60tools.crashanalyser.quickstart"
+			name="CrashAnalyser Quick Start Guide: Capturing and analysing crash data"/>
+	</extension>
+   
+	<extension point="org.eclipse.help.index">
+	</extension>
+
+<!-- =================================================================================== -->
+<!-- Universal Intro support for welcome pages                                           -->
+<!-- =================================================================================== -->
+	<extension point="org.eclipse.ui.intro.configExtension">	
+		<configExtension
+			configId="org.eclipse.ui.intro.universalConfig" 
+			content="html/intro/overviewCrashAnalyserExtContent.xml" />		 
+		<configExtension
+			configId="org.eclipse.ui.intro.universalConfig"
+			content="html/intro/tutorialsCrashAnalyserExtContent.xml" />		 
+	</extension>
+   
+</plugin>

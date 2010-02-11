@@ -1,0 +1,34 @@
+<h1>MATHX</h1>
+<p>These panics represent errors raised by member functions of the <a href="../reference-cpp/E32_EKA2/TRealXClass.html#%3a%3aTRealX" title="class TRealX"><code class="ApiItem">TRealX</code></a> class. Typically, they are the result
+of illegal maths operations, such as dividing by zero, or operations which result in overflow.</p><p>The thread causing the panic is terminated.</p>
+<code>0</code>
+<p>This panic is raised by <code>operator/=</code> of a <a href="../reference-cpp/E32_EKA2/TRealXClass.html#%3a%3aTRealX" title="class TRealX"><code class="ApiItem">TRealX</code></a>, when the divisor is zero</p>
+<code>1</code>
+<p>This panic is raised by <code>operator+=</code>, <code>operator-=</code> and <code>operator*=</code> of a <a href="../reference-cpp/E32_EKA2/TRealXClass.html#%3a%3aTRealX" title="class TRealX"><code class="ApiItem">TRealX</code></a>, when the the
+result of the operation is an overflow.</p>
+<code>2</code>
+<p>This panic is raised by <code>operator+=</code>, <code>operator-=</code> and <code>operator*=</code> of a <a href="../reference-cpp/E32_EKA2/TRealXClass.html#%3a%3aTRealX" title="class TRealX"><code class="ApiItem">TRealX</code></a>, when the the
+result of the operation is an underflow.</p>
+<code>3</code>
+<p>This panic is raised by <code>operator+=</code>, <code>operator-=</code> and <code>operator*=</code> of a <a href="../reference-cpp/E32_EKA2/TRealXClass.html#%3a%3aTRealX" title="class TRealX"><code class="ApiItem">TRealX</code></a>, when the the
+operands are invalid.</p><p>For <code>operator+=</code>, the panic is raised if one of these conditions applies:</p>
+<p>the target operand is not a number,</p>
+<p>the source operand is not a number,</p>
+<p>the target and the source operands are infinite and have different signs.</p>
+<p> For <code>operator-=</code>, the panic is raised if one of these conditions applies:</p>
+<p>the target operand is not a number, </p>
+<p>the source operand is not a number,</p>
+<p>the target and the source operands are infinite and have different signs</p>
+<p>For <code>operator*=</code>, the panic is raised if one of these conditions applies:</p>
+<p>the target operand is not a number, </p>
+<p>the source operand is not a number, </p>
+<p>the target operand is infinite and the source operand is zero </p>
+<p>the target operand is zero and the source operand is infinite.</p>
+<p>For <code>operator/=</code>, the panic is raised if one of these conditions applies:</p>
+<p>the target operand is not a number,</p>
+<p>the source operand is not a number,</p>
+<p>the target operand and the source operand are both infinite,</p>
+<p>the target operand and the source operand are both zero.</p>
+<code>4</code>
+<p>This panic is raised by a number of operations on <a href="../reference-cpp/E32_EKA2/TReal64Typedef.html#%3a%3aTReal64" title="typedef TReal64"><code class="ApiItem">TReal64</code></a> and <a href="../reference-cpp/E32_EKA2/TReal32Typedef.html#%3a%3aTReal32" title="typedef TReal32"><code class="ApiItem">TReal32</code></a> types when they complete with
+an error code other than: <code>KErrArgument</code>, <code>KErrDivideByZero</code>, <code>KErrOverflow</code> or <code>KErrUnderflow</code>.</p>	   

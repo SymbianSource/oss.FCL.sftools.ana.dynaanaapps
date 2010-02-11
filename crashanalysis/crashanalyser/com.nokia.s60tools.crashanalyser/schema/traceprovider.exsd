@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="com.nokia.s60tools.crashanalyser">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="com.nokia.s60tools.crashanalyser" id="traceprovider" name="Trace Data Provider"/>
+      </appInfo>
+      <documentation>
+         This extension point can be used by other plug-ins to provide trace data for CrashAnalyser.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <complexType>
+         <sequence>
+            <element ref="traceprovider"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="traceprovider">
+      <complexType>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn="com.nokia.s60tools.crashanalyser.export.ITraceProvider"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="providerName" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Name of the trace provider
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         1.0.3
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+         Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies). 
+All rights reserved.
+This component and the accompanying materials are made available
+under the terms of the License &quot;Symbian Foundation License v1.0&quot;
+which accompanies this distribution, and is available
+at the URL &quot;http://www.symbianfoundation.org/legal/sfl-v10.html&quot;.
+      </documentation>
+   </annotation>
+
+</schema>

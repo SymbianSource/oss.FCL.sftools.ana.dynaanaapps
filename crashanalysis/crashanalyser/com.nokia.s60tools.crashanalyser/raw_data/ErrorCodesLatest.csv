@@ -1,0 +1,1404 @@
+E32  (E32ERR.H);KErrNotFound;-1;Unable to find the specified object
+E32  (E32ERR.H);KErrGeneral;-2;General (unspecified) error
+E32  (E32ERR.H);KErrCancel;-3;The operation was cancelled
+E32  (E32ERR.H);KErrNoMemory;-4;Not enough memory. Close some applications and try again
+E32  (E32ERR.H);KErrNotSupported;-5;The operation requested is not supported
+E32  (E32ERR.H);KErrArgument;-6;Bad request
+E32  (E32ERR.H);KErrTotalLossOfPrecision;-7;Total loss of precision
+E32  (E32ERR.H);KErrBadHandle;-8;Bad object
+E32  (E32ERR.H);KErrOverflow;-9;Overflow
+E32  (E32ERR.H);KErrUnderflow;-10;Underflow
+E32  (E32ERR.H);KErrAlreadyExists;-11;Already exists
+E32  (E32ERR.H);KErrPathNotFound;-12;Unable to find the specified folder
+E32  (E32ERR.H);KErrDied;-13;Closed
+E32  (E32ERR.H);KErrInUse;-14;The specified object is currently in use by another program
+E32  (E32ERR.H);KErrServerTerminated;-15;Server has closed
+E32  (E32ERR.H);KErrServerBusy;-16;Server busy
+E32  (E32ERR.H);KErrCompletion;-17;Completion error
+E32  (E32ERR.H);KErrNotReady;-18;Not ready
+E32  (E32ERR.H);KErrUnknown;-19;Unknown error
+E32  (E32ERR.H);KErrCorrupt;-20;Corrupt
+E32  (E32ERR.H);KErrAccessDenied;-21;Access denied
+E32  (E32ERR.H);KErrLocked;-22;Locked
+E32  (E32ERR.H);KErrWrite;-23;Failed to write
+E32  (E32ERR.H);KErrDisMounted;-24;Wrong disk present
+E32  (E32ERR.H);KErrEof;-25;Unexpected end of file
+E32  (E32ERR.H);KErrDiskFull;-26;Disk full
+E32  (E32ERR.H);KErrBadDriver;-27;Bad device driver
+E32  (E32ERR.H);KErrBadName;-28;Bad name
+E32  (E32ERR.H);KErrCommsLineFail;-29;Comms line failed
+E32  (E32ERR.H);KErrCommsFrame;-30;Comms frame error
+E32  (E32ERR.H);KErrCommsOverrun;-31;Comms overrun error
+E32  (E32ERR.H);KErrCommsParity;-32;Comms parity error
+E32  (E32ERR.H);KErrTimedOut;-33;Timed out
+E32  (E32ERR.H);KErrCouldNotConnect;-34;Failed to connect
+E32  (E32ERR.H);KErrCouldNotDisconnect;-35;Failed to disconnect
+E32  (E32ERR.H);KErrDisconnected;-36;Disconnected
+E32  (E32ERR.H);KErrBadLibraryEntryPoint;-37;Bad library entry point
+E32  (E32ERR.H);KErrBadDescriptor;-38;Bad descriptor
+E32  (E32ERR.H);KErrAbort;-39;Interrupted
+E32  (E32ERR.H);KErrTooBig;-40;Too big
+E32  (E32ERR.H);KErrDivideByZero;-41;Divide by zero
+E32  (E32ERR.H);KErrBadPower;-42;Batteries too low
+E32  (E32ERR.H);KErrDirFull;-43;Folder full
+E32  (E32ERR.H);KErrHardwareNotAvailable;-44;
+E32  (E32ERR.H);KErrSessionClosed;-45;
+E32  (E32ERR.H);KErrPermissionDenied;-46;Permission denied when attempting operation
+
+ETelFax  (FAXSTD.H);KFaxErrModemNotWorking;-101;Could not connect to the fax machine. The fax modem has failed
+ETelFax  (FAXSTD.H);KFaxErrCannotConnect;-102;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrCSIorCIG;-103;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrDISorDTC;-104;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrFrameFail;-105;The connection to the fax machine has been broken
+ETelFax  (FAXSTD.H);KFaxErrAtNegotiatedSpeed;-106;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrCFR;-107;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrMCF;-108;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrCRP;-109;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrNoDial;-110;Could not connect to the fax machine. Could not dial fax number
+ETelFax  (FAXSTD.H);KFaxErrNoDialTone;-111;Could not connect to the fax machine. No dial tone was detected
+ETelFax  (FAXSTD.H);KFaxErrBusy;-112;Could not connect to the fax machine. The line is busy
+ETelFax  (FAXSTD.H);KFaxErrNoAnswer;-113;Could not connect to the fax machine. The call was not answered
+ETelFax  (FAXSTD.H);KFaxErrNoCarrier;-114;Could not connect to the fax machine. The call was not answered by a fax machine
+ETelFax  (FAXSTD.H);KFaxErrRemoteCannotReceive;-115;Could not send to the fax machine. The fax machine is unable to receive faxes
+ETelFax  (FAXSTD.H);KFaxErrCompression;-116;Panic
+ETelFax  (FAXSTD.H);KFaxErrPageTooLong;-117;Panic
+ETelFax  (FAXSTD.H);KFaxErrDCN;-118;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrRemoteDCN;-119;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrHDLC;-120;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrStopAndWait;-121;Panic
+ETelFax  (FAXSTD.H);KFaxErrTrainStop;-122;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrReceiveTimeout;-123;Could not send to the fax machine. The connection has timed out
+ETelFax  (FAXSTD.H);KFaxErrCannotEndData;-124;The connection to the fax machine has been broken
+ETelFax  (FAXSTD.H);KFaxErrEOP;-125;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrMPS;-126;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrNoReceiveMode;-127;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrCannotAnswer;-128;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrPrematureHangup;-129;Could not receive fax. The fax machine ended the call
+ETelFax  (FAXSTD.H);KFaxErrModemResponse;-130;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrPrematureOK;-131;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrNoFinalOK;-132;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrUnknownPageCode;-133;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrNoHangup;-134;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrNoNegotiate;-135;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrModemDisconnect;-136;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrWrongModemType;-137;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxErrTrainFail;-138;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxTransmitterStalled;-139;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxReceiverOverflow;-140;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxCannotOpenPort;-141;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxCannotCloseStore;-142;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxCannotOpenStore;-143;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxThreadError;-144;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxFileSessionError;-145;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxLogCreateError;-146;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxFileSeeKError;-147;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxPDDError;-148;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxLDDError;-149;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxC32Error;-150;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxCommsServerError;-151;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxCommsPortError;-152;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxCancelRequested;-153;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxNoClass2Xon;-154;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxConfigError;-155;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxCannotAutodetect;-156;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KCannotFindFirstPage;-157;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxBadInitialization;-158;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxOnlyJustAutoDetected;-159;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxBelowMinSpeed;-160;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxPollingUnsupported;-161;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KFaxNothingToPoll;-162;Could not connect to the fax machine
+ETelFax  (FAXSTD.H);KfaxEtelServerError;-163;Could not connect to the fax machine
+
+EmailPop  (MIUT_ERR.H);KPop3CannotConnect;-170;The POP3 server refused to allow a connection
+EmailPop  (MIUT_ERR.H);KPop3InvalidUser;-171;The POP3 server refused to allow a connection. Check your mailbox username
+EmailPop  (MIUT_ERR.H);KPop3InvalidLogin;-172;The POP3 server refused to allow a connection. Check your mailbox username and password
+EmailPop  (MIUT_ERR.H);KPop3CannotCreateApopLogonString;-173;Could not create secure logon string. Mailbox server may not support secure logon
+EmailPop  (MIUT_ERR.H);KPop3ProblemWithRemotePopServer;-174;Problem communicating with POP3 server
+EmailPop  (MIUT_ERR.H);KPop3CannotOpenServiceEntry;-175;Panic
+EmailPop  (MIUT_ERR.H);KPop3CannotSetRequiredFolderContext;-176;Panic
+EmailPop  (MIUT_ERR.H);KPop3InvalidApopLogin;-177;Panic
+
+Email Sockets  (MIUT_ERR.H);KImsKErrorDNSNotFound;-180;Could not find a DNS server. Please check the DNS address in the internet control panel
+Email Sockets  (MIUT_ERR.H);KImsKErrorControlPanelLocked;-181;Could not connect to internet. Please ensure the internet control panel Or equivalent description to internet control panel is closed
+
+Sockets  (INSOCK.H);KErrNetUnreach;-190;Could not connect to the network. Currently unreachable
+Sockets  (INSOCK.H);KErrHostUnreach;-191;Could not connect to the specified server
+Sockets  (INSOCK.H);KErrNoProtocolOpt;-192;The specified server refuses the selected protocol
+Sockets  (INSOCK.H);KErrUrgentData;-193;Panic
+
+Email IMAP4   (MIUT_ERR.H);KErrImapConnectFail;-200;Could not connect to IMAP4 server
+Email IMAP4   (MIUT_ERR.H);KErrImapServerFail;-201;The connection to the IMAP4 server has been broken
+Email IMAP4   (MIUT_ERR.H);KErrImapServerParse;-202;Panic
+Email IMAP4   (MIUT_ERR.H);KErrImapServerBusy;-203;The IMAP4 server refused to allow connection. The server is currently busy
+Email IMAP4   (MIUT_ERR.H);KErrImapServerVersion;-204;Could not connect to the IMAP server. The IMAP server is of the wrong version
+Email IMAP4   (MIUT_ERR.H);KErrImapSendFail;-205;Could not transmit to the IMAP4 server
+Email IMAP4   (MIUT_ERR.H);KErrImapBadLogon;-206;The IMAP4 server refused to allow a connection. Check your mailbox username and password
+Email IMAP4   (MIUT_ERR.H);KErrImapSelectFail;-207;Panic
+Email IMAP4   (MIUT_ERR.H);KErrImapWrongFolder;-208;Could not select an IMAP4 folder
+
+Email SMTP  (MIUT_ERR.H);KSmtpNoMailFromErr;-240;Could not send email due to an invalid return email address. Check your email address in your account settings
+Email SMTP  (MIUT_ERR.H);KSmtpUnknownErr;-241;Problem while sending email
+Email SMTP  (MIUT_ERR.H);KSmtpBadMailFromAddress;-242;"Email message has an invalid ""From"" address"
+Email SMTP  (MIUT_ERR.H);KSmtpBadRcptToAddress;-243;"Email message has an invalid ""To"", ""Cc"" or ""Bcc"" address"
+Email SMTP  (MIUT_ERR.H);KSmtpLoginRefused;-244;SMTP server refused to allow connection
+
+
+;//BaseScript Parser;;
+Bio Messaging  (BSP.H);KBspInvalidMessage;-500;Corrupt message cannot be read.
+Bio Messaging  (BSP.H);KBspSmartMessageInvalidToken;-501;Corrupt message cannot be read.
+Bio Messaging  (BSP.H);KBspSmartMessageNoParserDefined;-502;Unknown message type cannot be read.
+
+;//Access Point Parser;;
+Bio Messaging   (IACPERR.H) ;KIacpUnknownSmsType;-510;Unknown message type cannot be read.
+Bio Messaging   (IACPERR.H) ;KIacpBIOMsgTypeNotSupported;-511;Unknown message type cannot be read.
+Bio Messaging   (IACPERR.H) ;KiacpMandatoryDataNotSet;-512;Corrupt message cannot be read.
+Bio Messaging   (IACPERR.H) ;KIacpUnknownMailProtocol;-513;Mailbox configuration message refers to an unknown protocol.
+Bio Messaging   (IACPERR.H) ;KIacpErrRightToken;-514;Corrupt message cannot be read.
+Bio Messaging   (IACPERR.H) ;KIacpErrLeftToken;-515;Corrupt message cannot be read.
+Bio Messaging   (IACPERR.H) ;KIacpErrSmsDataNotParsed;-516;Corrupt message cannot be read.
+Bio Messaging   (IACPERR.H) ;KIacpErrSmsDataNotRestored;-517;Corrupt message cannot be read.
+Bio Messaging   (IACPERR.H) ;KIacpScriptErrISPNotFound;-518;Mailbox configuration message specifies an unknown Internet Access Point.
+Bio Messaging   (IACPERR.H) ;KIacpErrScriptNotDefined;-519;Message script error.
+Bio Messaging   (IACPERR.H) ;KIacpErrScriptNotFoundInDB;-520;Message script error.
+Bio Messaging   (IACPERR.H) ;KIacpErrScriptAlreadyAdd;-521;Message script error.
+
+
+Sockets  (INSOCK.H);KErrWouldBlock;-1000;Panic
+
+;//Basic Application and Framework Library;;
+BAFL  (BASCHED.H);KErrExtended;-1000;
+BAFL  (BASCHED.H);KErrExtendedWithText;-1001;
+BAFL  (BASCHED.H);KLeaveWithoutAlert;-1002;
+BAFL  (BASCHED.H);KLeaveExit;-1003;
+
+
+;//Telephony Error Codes;;
+Etel  (ETEL.H);KErrEtelNotCallOwner;-2000;Panic
+Etel  (ETEL.H);KErrEtelDuplicatePhoneName;-2001;Panic
+Etel  (ETEL.H);KErrEtelAlreadyCallOwner;-2002;Panic
+Etel  (ETEL.H);KErrEtelNoCarrier;-2003;Problem communicating receiving device. Call was unexpectedly dropped
+Etel  (ETEL.H);KErrEtelBusyDetected;-2004;Phone number is busy. Wait before trying again
+Etel  (ETEL.H);KErrEtelNoClientInterestedInThisCall;-2005;Panic
+Etel  (ETEL.H);KErrEtelInitialisationFailure;-2006;Panic
+Etel  (ETEL.H);KErrEtelCallNotActive;-2007;Panic
+Etel  (ETEL.H);KErrEtelNoAnswer;-2008;Call was not answered
+Etel  (ETEL.H);KErrEtelNoDialTone;-2009;Panic
+Etel  (ETEL.H);KErrEtelConfigPortFailure;-2010;Panic
+Etel  (ETEL.H);KErrEtelFaxChunkNotCreated;-2011;Panic
+Etel  (ETEL.H);KErrEtelNotFaxOwner;-2012;Panic
+Etel  (ETEL.H);KErrEtelPortNotLoanedToClient;-2013;Panic
+Etel  (ETEL.H);KErrEtelWrongModemType;-2014;Panic
+Etel  (ETEL.H);KErrEtelUnknownModemCapability;-2015;Panic
+Etel  (ETEL.H);KErrEtelAnswerAlreadyOutstanding;-2016;Panic
+Etel  (ETEL.H);KErrEtelModemNotDetected;-2017;Panic
+Etel  (ETEL.H);KErrEtelModemSettingsCorrupt;-2018;Panic
+
+
+;// netdial script errors;;
+Networking  (ND_ERR.H);KErrExitNoModem;-3001;No response from phone. Ensure phone is switched on
+Networking  (ND_ERR.H);KErrExitModemError;-3002;Problem communicating with Internet service's modem
+Networking  (ND_ERR.H);KErrExitLoginFail;-3003;Internet username or password is incorrect.
+Networking  (ND_ERR.H);KErrExitScriptTimeOut;-3004;Internet service login script timed out. Internet service login script may be incorrect.
+Networking  (ND_ERR.H);KErrExitScriptError;-3005;Problem with Internet service login script. Internet service login script may be incorrect.
+;;;
+;// netdial database error;;
+Networking  (ND_ERR.H);KErrNetDialDatabaseDefaultUndefined;-3006;
+Networking  (ND_ERR.H);KErrNetDialDatabaseTypeUnknown;-3007;
+Networking  (ND_ERR.H);KErrNetDialDatabaseNotFound;-3008;
+Networking  (ND_ERR.H);KErrNetDialHscsdNotSupported;-3009;
+
+
+TCP/IP  (IN_IFACE.H);KErrIfAuthenticationFailure;-3050;Internet username or password is incorrect
+TCP/IP  (IN_IFACE.H);KErrIfAuthNotSecure;-3051;Internet service server only allows plain text authentication. This is currently disabled.
+TCP/IP  (IN_IFACE.H);KErrIfAccountDisabled;-3052;Could not connect to Internet service. Your account has been disabled
+TCP/IP  (IN_IFACE.H);KErrIfRestrictedLogonHours;-3053;Could not connect to Internet service. Your account is only active during restricted hours
+TCP/IP  (IN_IFACE.H);KErrIfPasswdExpired;-3054;Could not connect to Internet service. Your Internet password has expired
+TCP/IP  (IN_IFACE.H);KErrIfNoDialInPermission;-3055;Could not connect to Internet service. Your do not have dial-in permission
+TCP/IP  (IN_IFACE.H);KErrIfChangingPassword;-3056;Panic
+TCP/IP  (IN_IFACE.H);KErrIfCallbackNotAcceptable;-3057;Could not connect to Internet service. Callback is not supported
+TCP/IP  (IN_IFACE.H);KErrIfDNSNotFound;-3058;Could not find specified Internet server
+TCP/IP  (IN_IFACE.H);KErrIfLRDBadLine;-3059;Bad line to Internet service dropped
+TCP/IP  (IN_IFACE.H);KErrIfNoServerPresent;-3060;Panic
+TCP/IP  (IN_IFACE.H);KErrIfRemoteDisconnected;-3061;Panic
+
+;;;
+;//Multimode telephony errors that will be generated by TSY;;
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelWrongMode;-3201;Client has requested a mode-specific API service and the phone is currently in the wrong mode. 
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelFailedDueToModeChange;-3202;Error code to cater for requests that fail because the mode changes mid-way during servicing that request 
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelRemoteEndTermination;-3203;Remote user (or network) has terminated an ongoing call. 
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelSmsFormatNotSupported;-3204;Client requested a message format that is not supported by TSY anor phone. 
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelFeatureCodeNotSet;-3205;Client requests a service whose feature code has not been programmed e.g. Call Forwarding. 
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelNetworkNotResponding;-3206;"Network has failed to respond to an MS initiated request e.g. ""flash info"""
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelCallForbidden;-3207;Client requests a call to a destination that is forbidden.
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelMaxReached;-3208;The maximum number of entries in astore has been reached. 
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelCallTerminated;-3209;Remote user (or network) has terminated an ongoing call. 
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelFormatNotSupported;-3210;The client requested a message format that is not supported by TSY anor phone. 
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelHiddenEntry ;-3211;The phonebook entry is hidden.This is a USIM phonebook specific error. 
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelFallbacktoVoice ;-3212;The request to answer a multimedia call has failed because the network can now only support voice. 
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelMacVerificationFailed;-3213;Authentication derived MAC does not match locally calculated MAC
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelSqnVerificationFailed;-3214;Authentication derived SQN value is not in the expected range
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelAuthenticateFailed;-3215;Authenticate command failed
+;;;
+;//Error codes for use with Smart card application APIs.;;
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelScMaxApplicationsActive;-3216;Application cannot be activated as maximum number of applications already active.
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelScNoInfoNonVolatileMemoryUnchanged;-3217;No information given, the state of the non-volatile memory is unchanged.
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelScNoInfoNonVolatileMemoryChanged;-3218;No information given, the state of the non-volatile memory is changed.
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelScReturnedDataCorrupt;-3219;Part of the returned data may be corrupt.
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelScEofReached ;-3220;End of file reached before reading requested number of bytes or records have been read. 
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelScFileInvalidated;-3221;Selected file is invalidated.
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelScNoMemory;-3222;The smart card had a memory problem when executing the command. 
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelScWrongLength;-3223;Wrong length 
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelScGeneral;-3224;Technical problem, no precise diagnosis 
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelScIncompatibleFileStructure ;-3225;Command incompatible with file structure
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelScReferencedDataInvalidated ;-3226;Referenced data invalidated 
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelScFunctionNotSupported ;-3227;Function not supported 
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelScFileNotFound;-3228;File not found 
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelScRecordNotFound;-3229;Record not found 
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelScReferencedDataNotFound;-3230;Referenced data not found 
+Multimode Telephony  (ETELMMERR.H);KErrMMEtelScApplicationNotActive;-3231;Application not activate.
+;;;
+;//CDMA network errors that will be generated by networks;;
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsAddressVacant;-3256;SMS destination address is valid but not currently allocated to an SMS terminal. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsAddressTranslationFailure ;-3257;SMS destination address is invalid.
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsNetworkResourceShortage;-3258;Network transmissionfailed due to lack of network resource or link capacity. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsNetworkFailure ;-3259;A network node failed, a link failed or a required operation failed. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsInvalidTeleserviceId;-3260;SMS Teleservice ID is either not known or not supported. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsOtherNetworkProblem;-3261;A network problem other than identified by above error codes. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsNoPageResponse ;-3262;The addressed MS-based SME is known but it does not respond to a page. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsDestinationBusy;-3263;The addressed MS-based SME is SMS capable but is currently engaged in a call, a service or a call mode that precludes the use of SMS. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsNoAcknowledgement;-3264;The destination SME does not acknowledge receipt of the SMS delivery. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsDestinationResourceShortage;-3265;A required terminal resource (e.g.memory) is not available to process this message.
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsDeliveryPostponed;-3266;Delivery is not currently possible but SMS notification is pending. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsOtherNetworkProblem;-3267;The addressed destination is out of service for an extended period of time. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsDestinationNoLongerAtAddress;-3268;The MS based SME is no longer at the temporary SMS routing address. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsOtherTerminalProblem;-3269;A terminal problem other than identified by the above error codes. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsRadioInterfaceResourceShortage;-3320;There is no channel available or there is radio congestion at this time. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsRadioInterfaceIncompatibility;-3321;The MS for an MS-based SME is operating in a mode that does not support SMS at this time.
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsOtherRadioInterfaceProblem ;-3322;A radio interface problem other than identified by the above error codes. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsEncodingProblem;-3352;The size of a parameter or field is not what is expected. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsOriginationDenied;-3353;The originating MIN is not recognized, the originating address is not allowed for the originating MIN, the ESN doesn't match the originating MIN, the origination is not authorized, the originating address is not recognized, etc. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsTerminationDenied;-3354;The destination is not authorized to receive the SMS message, the MC refused the message, the destination SME refused the message, the destination is not authorized for a required supplementary service, etc. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsSupplServiceNotSupported;-3355;The originating supplementary service is not known or supported, the sender is not authorized for an originating supplementary service, etc. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsSmsNotSupported;-3356;SMS is not supported by an addressed functional entity. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsMissingExpectedParameter;-3358;An optional parameter is missing that is required for a particular function. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsMissingMandatoryParameter ;-3359;A parameter is missing that is mandatory for a particular message. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsUnrecognizedParameterValue ;-3360;A known parameter has an unknown or unsupported value. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsUnexpectedParameterValue;-3361;A known parameter has a known, but unexpected value. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsUserDataSizeError;-3362;The User Data size is too large for access technology, transport network, or call mode, etc. The User Data size is not what is expected for the indicated teleservice. 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaSmsOtherGeneralProblem;-3363;Other general problems. 
+;;;
+
+Generic Connection Agent  (GENCONNERROR.H);KErrGenConnDatabaseDefaultUndefined;-3606;CommDb Error
+Generic Connection Agent  (GENCONNERROR.H);KErrGenConnDatabaseTypeUnknown;-3607;CommDb Error
+Generic Connection Agent  (GENCONNERROR.H);KErrGenConnDatabaseNotFound;-3608;CommDb Error
+
+
+TelephonyGSMRadioResourceNetworkErrors  (EXTERROR.H);KErrGsmRRUnspecifedAbnormalRelease;-4001;Temporary network failure. Try again later.
+TelephonyGSMRadioResourceNetworkErrors  (EXTERROR.H);KErrGsmRRChannelUnacceptable;-4002;Temporary network failure. Try again later.
+TelephonyGSMRadioResourceNetworkErrors  (EXTERROR.H);KErrGsmRRTimerExpired;-4003;Temporary network failure. Try again later.
+TelephonyGSMRadioResourceNetworkErrors  (EXTERROR.H);KErrGsmRRNoActivityOnRadioPath;-4004;Temporary network failure. Try again later.
+TelephonyGSMRadioResourceNetworkErrors  (EXTERROR.H);KErrGsmRRPreEmptiveRelease;-4005;Temporary network failure. Try again later.
+TelephonyGSMRadioResourceNetworkErrors  (EXTERROR.H);KErrGsmRRCallAlreadyCleared;-4065;Temporary network failure. Try again later.
+TelephonyGSMRadioResourceNetworkErrors  (EXTERROR.H);KErrGsmRRInvalidMessage;-4095;Temporary network failure. Try again later.
+TelephonyGSMRadioResourceNetworkErrors  (EXTERROR.H);KErrGsmRRNonExistentMessage;-4097;No network support for requested operation.
+TelephonyGSMRadioResourceNetworkErrors  (EXTERROR.H);KErrGsmRRIncompatibleMessageWithCallState;-4098;Temporary network failure. Try again later.
+TelephonyGSMRadioResourceNetworkErrors  (EXTERROR.H);KErrGsmRRInvalidInformationElement;-4100;Temporary network failure. Try again later.
+TelephonyGSMRadioResourceNetworkErrors  (EXTERROR.H);KErrGsmRRUnspecifiedProtocolError;-4111;Temporary network failure. Try again later.
+
+
+TelephonyGSMMobilityManagementNetworkErrors  (EXTERROR.H);KErrGsmMMUnallocatedTmsi;-4129;Temporary network failure. Try again later.
+TelephonyGSMMobilityManagementNetworkErrors  (EXTERROR.H);KErrGsmMMImsiUnknownInHlr;-4130;Operation is not allowed. Contact cellular network operator.
+TelephonyGSMMobilityManagementNetworkErrors  (EXTERROR.H);KErrGsmMMIllegalMs;-4131;Phone is blacklisted. Contact cellular network operator.
+TelephonyGSMMobilityManagementNetworkErrors  (EXTERROR.H);KErrGsmMMImsiUnknownInVlr;-4132;Temporary network failure. Try again later.
+TelephonyGSMMobilityManagementNetworkErrors  (EXTERROR.H);KErrGsmMMImeiNotAccepted;-4133;Phone failure.
+TelephonyGSMMobilityManagementNetworkErrors  (EXTERROR.H);KErrGsmMMIllegalMe;-4134;Phone is blacklisted. Contact cellular network operator.
+
+
+GPRS  (ETELPCKT.H);KErrGprsServiceNotAllowed;-4135;Failed to connect to the GPRS network
+GPRS  (ETELPCKT.H);KErrGprsAndNonGprsServicesNotAllowed;-4136;Failed to connect to the mobile network
+GPRS  (ETELPCKT.H);KErrGprsMSIdentityCannotBeDerivedByTheNetwork;-4137;Identity could not be derived by the network
+GPRS  (ETELPCKT.H);KErrGprsMSImplicitlyDetached;-4138;Your device was disconnected from the GPRS network.
+
+
+TelephonyGSMMobilityManagementNetworkErrors  (EXTERROR.H);KErrGsmMMPlmnNotAllowed;-4139;Roaming is not allowed in this area.
+TelephonyGSMMobilityManagementNetworkErrors  (EXTERROR.H);KErrGsmMMLocationAreaNotAllowed;-4140;Roaming is not allowed in this area.
+TelephonyGSMMobilityManagementNetworkErrors  (EXTERROR.H);KErrGsmMMRoamingNotAllowedInThisLocationArea;-4141;Roaming is not allowed in this area.
+
+
+GPRS  (ETELPCKT.H);KErrGprsMSCTemporarilyNotReachable;-4144;GPRS MSC temporary not reachable
+
+
+TelephonyGSMMobilityManagementNetworkErrors  (EXTERROR.H);KErrGsmMMNetworkFailure;-4145;Temporary network failure. Try again later.
+TelephonyGSMMobilityManagementNetworkErrors  (EXTERROR.H);KErrGsmMMCongestion;-4150;Network busy.
+
+
+GPRS  (ETELPCKT.H);KErrGprsLlcOrSndcpFailure;-4153;Your connection to Internet was dropped.
+GPRS  (ETELPCKT.H);KErrGprsInsufficientResources;-4154;Network overloaded.
+GPRS  (ETELPCKT.H);KErrGprsMissingorUnknownAPN;-4155;"""Could not connect to Internet service. Callback is not supported"""""""
+GPRS  (ETELPCKT.H);KErrGprsUnknownPDPAddress;-4156;The address for the Internet provider is not correct.
+GPRS  (ETELPCKT.H);KErrGprsUserAuthenticationFailure;-4157;Failed to identify the user.
+GPRS  (ETELPCKT.H);KErrGprsActivationRejectedByGGSN;-4158;No possible to connect to the Internet.
+GPRS  (ETELPCKT.H);KErrGprsActivationRejected;-4159;No possible to connect to the Internet.
+
+
+TelephonyGSMMobilityManagementNetworkErrors  (EXTERROR.H);KErrGsmMMServiceOptionNotSupported;-4160;Operation is not presently supported by the network.
+TelephonyGSMMobilityManagementNetworkErrors  (EXTERROR.H);KErrGsmMMServiceOptionNotSubscribed;-4161;Service not subscribed. Contact cellular network operator.
+TelephonyGSMMobilityManagementNetworkErrors  (EXTERROR.H);KErrGsmMMServiceOptionTemporaryOutOfOrder;-4162;Service temporarily out of use. Try again later.
+
+
+GPRS  (ETELPCKT.H);KErrGprsNSAPIAlreadyUsed;-4163;NS API already used
+GPRS  (ETELPCKT.H);KErrGprsRegularContextDeactivation;-4164;Regular context deactivation
+GPRS  (ETELPCKT.H);KErrGprsQoSNotAccepted;-4165;The requested quality of service was not granted.
+
+
+TelephonyGSMMobilityManagementNetworkErrors  (EXTERROR.H);KErrGsmMMCallCanNotBeIdentified;-4166;Temporary network failure. Try again later.
+
+
+GPRS  (ETELPCKT.H);KErrGprsReactivationRequested;-4167;Reactivation requested
+GPRS  (ETELPCKT.H);KErrGprsFeatureNotSupported;-4168;This is not supported.
+
+
+TelephonyGSMMobilityManagementNetworkErrors  (EXTERROR.H);KErrGsmMMSemanticErrorInMessage;-4223;Temporary network failure. Try again later.
+TelephonyGSMMobilityManagementNetworkErrors  (EXTERROR.H);KErrGsmMMMandatoryInformationElementError;-4224;Temporary network failure. Try again later.
+TelephonyGSMMobilityManagementNetworkErrors  (EXTERROR.H);KErrGsmMMNonExistentMessageType;-4225;No network support for requested operation.
+TelephonyGSMMobilityManagementNetworkErrors  (EXTERROR.H);KErrGsmMMIncompatibleMessageWithProtocolState;-4226;Temporary network failure. Try again later.
+TelephonyGSMMobilityManagementNetworkErrors  (EXTERROR.H);KErrGsmMMNonExistentInformationElement;-4227;Temporary network failure. Try again later.
+TelephonyGSMMobilityManagementNetworkErrors  (EXTERROR.H);KErrGsmMMConditionalIEError;-4228;Temporary network failure. Try again later.
+TelephonyGSMMobilityManagementNetworkErrors  (EXTERROR.H);KErrGsmMMIncompatibleMessageWithCallState;-4229;Temporary network failure. Try again later.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCUnassignedNumber;-4257;Invalid phone number. Check the number and try again.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCNoRouteToTransitNetwork;-4258;Temporary network failure. Try again later.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCNoRouteToDestination;-4259;Invalid phone number. Check the number and try again.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCChannelUnacceptable;-4262;Temporary network failure. Try again later.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCOperatorDeterminedBarring;-4264;Operation is not allowed. Contact cellular network operator.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCUserBusy;-4273;Number is busy. Try again later.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCUserNotResponding;-4274;The remote user is not currently reachable. Try again later.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCUserAlertingNoAnswer;-4275;The remote user is not currently reachable. Try again later.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCCallRejected;-4276;Short network failure. Try again immediately.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCNumberChanged;-4277;Number has changed. Check the number and try again.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCNonSelectedUserClearing;-4282;Unknown network failure. Try again later.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCDestinationOutOfOrder;-4283;Temporary network failure. Try again later.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCInvalidNumberFormat;-4284;Invalid phone number. Check the number and try again.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCFacilityRejected;-4285;Operation is not supported. Contact cellular network operator.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCResponseToStatusEnquiry;-4286;Blank
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCNormalUnspecified;-4287;Unknown network failure. Try again later.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCNoChannelAvailable;-4290;Network busy.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCNetworkOutOfOrder;-4294;Serious cellular network failure. Please contact the cellular network operator.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCTemporaryFailure;-4297;Short network failure. Try again immediately.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCSwitchingEquipmentCongestion;-4298;Network busy.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCAccessInformationDiscarded;-4299;Temporary network failure. Try again later.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCRequestedChannelNotAvailable;-4300;Network busy.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCResourceNotAvailable;-4303;Network busy.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCQualityOfServiceNotAvailable;-4305;Service can not be provided.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCRequestedFacilityNotSubscribed;-4306;Check operator services or connection settings.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCIncomingCallsBarredInCug;-4311;Incoming calls are not allowed within closed user group.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCBearerCapabilityNotAuthorised;-4313;Unauthorised operation.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCBearerCapabilityNotCurrentlyAvailable;-4314;Requested service is not presently available. Try again later.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCServiceNotAvailable;-4319;Check operator services or connection settings.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCBearerServiceNotImplemented;-4321;Check operator services or connection settings.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCChannelTypeNotImplemented;-4322;Check operator services or connection settings.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCAcmGreaterThanAcmMax;-4324;Blank
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCRequestedFacilityNotImplemented;-4325;Check operator services or connection settings.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCOnlyRestrictedDigitalInformationBCAvailable;-4326;Blank
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCServiceNotImplemented;-4335;Check operator services or connection settings.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCInvalidCallReferenceValue;-4337;Blank
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCChannelDoesNotExist;-4338;Temporary network failure. Try again later.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCSuspendedCallExistsButCallIdentityDoesNotWork;-4339;Blank
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCCallIdentityInUse;-4340;Blank
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCNoCallSuspended;-4341;Blank
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCRequestedCallIdentityAlreadyCleared;-4342;Blank
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCUserNotInCug;-4343;Only calls within closed user group allowed.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCIncompatibleDestination;-4344;Check connection type in connection settings.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCInvalidTransitNetworkSelection;-4347;Temporary network failure. Try again later.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCIncompatibleSegmentedMessage;-4350;Blank
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCSemanticallyIncorrectMessage;-4351;Blank
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCInvalidMandatoryInformation;-4352;Check operator services or connection settings.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCNonExistentMessageType;-4353;Blank
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCIncompatibleMessageInProtocolState;-4354;Blank
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCNonExistentInformationElement;-4355;Blank
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCConditionalIEError;-4356;Blank
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCIncompatibleMessageInCallState;-4357;Blank
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCRecoveryOnTimerExpiry;-4358;Blank
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCUnspecifiedProtocolError;-4367;Temporary network failure. Try again later.
+TelephonyGSMCallControlNetworkErrors  (EXTERROR.H);KErrGsmCCUnspecifiedInterworkingError;-4383;Operation is not presently supported by the network.
+
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSUnknownSubscriber;-4385;Unknown subscriber. Contact cellular network operator.
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSIllegalSubscriber;-4393;Unknown subscriber. Contact cellular network operator.
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSBearerServiceNotProvisioned;-4394;Service is not provisioned.
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSTeleserviceNotProvisioned;-4395;Service is not provisioned.
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSIllegalEquipment;-4396;Blank
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSCallBarred;-4397;Calls are barred by the operator. Contact cellular network operator.
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSIllegalOperation;-4400;Operation is not supported. Contact cellular network operator.
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSErrorStatus;-4401;Operation is not supported. Contact cellular network operator.
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSNotAvailable;-4402;Operation is not supported. Contact cellular network operator.
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSSubscriptionViolation;-4403;Operation is not allowed. Contact cellular network operator.
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSIncompatibility;-4404;The requested supplementary service is incompatible.
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSFacilityNotSupported;-4405;Operation is not supported. Contact cellular network operator.
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSAbsentSubscriber;-4411;Blank
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSSystemFailure;-4418;Temporary network failure. Try again later.
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSDataMissing;-4419;Parameter in the service request is missing.
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSUnexpectedDataValue;-4420;Unknown parameter in the service request.
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSPasswordRegistrationFailure;-4421;Wrong service password.
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSNegativePasswordCheck;-4422;Wrong service password.
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSPasswordAttemptsViolation;-4427;Too many times wrong service password.
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSUnknownAlphabet;-4455;Incompatible service language or alphabets.
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSUssdBusy;-4456;Blank
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSMaxNumMptyParticipants;-4510;Too many participants of a multiparty call.
+TelephonyGSMSupplementaryServices  (EXTERROR.H);KErrGsmSSResourcesUnavailable;-4511;Temporarily out of network resources when requesting the service.
+
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSUnassignedNumber;-4513;Invalid phone number. Check the number and try again.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSOperatorDeterminedBarring;-4520;Operation is not allowed. Contact cellular network operator.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSCallBarred;-4522;Call barred.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSReserved;-4523;Blank
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSNetworkFailure;-4529;Temporary network failure. Try again later.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSShortMessageTransferRejected;-4533;Short network failure. Try again immediately.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSMemoryCapacityExceeded;-4534;Temporary network failure. Try again later.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSDestinationOutOfOrder;-4539;Temporary network failure. Try again later.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSUnidentifiedSubscriber;-4540;Unknown subscriber. Contact cellular network operator.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSFacilityRejected;-4541;Operation is not supported. Contact cellular network operator.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSUnknownSubscriber;-4542;Unknown subscriber. Contact cellular network operator.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSNetworkOutOfOrder;-4550;Serious cellular network failure. Please contact the cellular network operator.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSTemporaryFailure;-4553;Temporary network failure. Try again later.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSCongestion;-4554;Network busy.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSResourcesUnavailable;-4559;Network busy.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSRequestedFacilityNotSubscribed;-4562;Service not subscribed. Contact cellular network operator.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSRequestedFacilityNotImplemented;-4581;Check operator services or connection settings.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSInvalidShortMessageTransferReferenceValue;-4593;Operation is not presently supported by the network.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSUnspecifiedInvalidMessage;-4607;Unknown network failure. Try again later.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSInvalidMandatoryInformation;-4608;Error in message content.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSNonExistentMessageType;-4609;Operation is not presently supported by the network.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSIncompatibleMessageWithSmsProtocolState;-4610;Operation is not presently supported by the network.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSInformationElementNotImplemented;-4611;Message type is not presently supported by the network.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSUnspecifiedProtocolError;-4623;Unknown network failure. Try again later.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSUnspecifiedInterworkingError;-4639;Operation is not presently supported by the network.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSTelematicInterworkingNotSupported;-4640;Operation is not presently supported by the network.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSShortMessageType0NotSupported;-4641;Message type is not presently supported by the network.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSCannotReplaceShortMessage;-4642;Cannot deliver the message to the destination.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSUnspecifiedPIDError;-4655;Unknown network failure. Try again later.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSDataCodingSchemeNotSupported;-4656;Incompatible message language or alphabets.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSMessageClassNotSupported;-4657;Message type is not presently supported by the network.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSUnspecifiedDCSError;-4671;Unknown network failure. Try again later.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSCommandCannotBeActioned;-4672;Operation cannot be performed.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSCommandNotSupported;-4673;Operation is not presently supported by the network.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSUnspecifiedCommandError;-4687;Unknown network failure. Try again later.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSTpduNotSupported;-4688;Operation is not presently supported by the network.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSServiceCentreBusy;-4704;Service centre is busy. Try again later.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSNoSCSubscription;-4705;No service centre. Check messaging settings.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSSCSystemFailure;-4706;Service centre failure. Try again later.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSInvalidSMEAddress;-4707;Service centre failure. Try again later.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSDestinationSMEBarred;-4710;The destination is barred.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSDuplicateSM;-4711;Blank
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSTPVPFNotSupported;-4712;Short message validity period not supported by the network.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSTPVPNotSupported;-4713;Short message validity period not supported by the network.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSSimSMSStorageFull;-4720;Short message storage in SIM card is full.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSNoSMSStorageCapabilityInSim;-4721;No short message storage capability in SIM card.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSErrorInMS;-4722;Error receiving the short message.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSMemCapacityExceeded;-4723;No space to store the short message.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSSimAppToolkitBusy;-4724;SIM is busy performing another operation.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSUnspecifiedErrorCause;-4767;Unknown network failure. Try again later.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSFailureInME;-4812;Error in receiving the short message.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSServiceOfMSReserved;-4813;Busy because of short message operation.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSOperationNotAllowed;-4814;Operation is not allowed. Contact cellular network operator.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSOperationNotSupported;-4815;Phone is not supporting the operation.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSInvalidPDUModeParameter;-4816;Blank
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSInvalidTextModeParameter;-4817;Blank
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSSimNotInserted;-4822;Insert SIM card.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSSimPin1Required;-4823;PIN1 is required to continue.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSPhoneToSimLockRequired;-4824;Blank
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSSimFailure;-4825;SIM card failure. Replace the SIM card.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSSimBusy;-4826;SIM card is busy performing another operation.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSSimWrong;-4827;Wrong SIM card. Replace the SIM card.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSSimPuk1Required;-4828;PUK1 code is required to continue.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSPin2Required;-4829;PIN2 is required to continue.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSPuk2Required;-4830;PUK2 code is required to continue.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSMemoryFailure;-4832;Memory failure. Try again.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSInvalidMemoryIndex;-4833;Memory failure. Try again.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSMemoryFull;-4834;Memory is full. Remove some messages and try again.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSUnknownSCAddress;-4842;Blank
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSNoNetworkService;-4843;Service not available.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSNetworkTimeout;-4844;Temporary network failure. Try again later.
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSCnmaAckNotExpected;-4852;Blank
+TelephonyGSMSms  (EXTERROR.H);KErrGsmSMSUnknownError;-5012;Temporary network failure. Try again later.
+
+
+URI Utils  (URIUTILSCOMMON.H);KUriUtilsErrBadComponentIndex;-5000;Error specifying the use of an invalid component index
+URI Utils  (URIUTILSCOMMON.H);KUriUtilsErrBadBasePath;-5001;Error specifying the use of a base uri path is not absolute and not empty
+URI Utils  (URIUTILSCOMMON.H);KUriUtilsErrBufferOverflow;-5002;Error specifying that a buffer is not big enough to append a component and delimiters
+URI Utils  (URIUTILSCOMMON.H);KUriUtilsErrBadDelimitedParserMode;-5003;Error specifying the use of an supported parsing mode
+URI Utils  (URIUTILSCOMMON.H);KUriUtilsErrNoDelimiter;-5004;Error specifying that the delimiting character is not set
+URI Utils  (URIUTILSCOMMON.H);KUriUtilsErrNotParsed;-5005;Error specifying that the data has not been parsed
+URI Utils  (URIUTILSCOMMON.H);KUriUtilsErr16BitChar;-5006;Error specifying that a 16-bit character was found in data to be escape encode
+URI Utils  (URIUTILSCOMMON.H);KUriUtilsErrBadEscapeTriple;-5007;Error specifying that a badly formed escape triple was found in data being escape decoded
+URI Utils  (URIUTILSCOMMON.H);KUriUtilsCannotConvert;-5008;Error specifying that charconv was unable to convert the input data
+URI Utils  (URIUTILSCOMMON.H);KUriUtilsErrEmptyData;-5009;Error specifying that there was empty data
+URI Utils  (URIUTILSCOMMON.H);KUriUtilsErrNoIntegerInData;-5010;Error specifying that there is no character representation of an integer
+URI Utils  (URIUTILSCOMMON.H);KUriUtilsErrInvalidUri;-5011;Error code specifying an invalid uri
+URI Utils  (URIUTILSCOMMON.H);KUriUtilsErrBadEscapeMode;-5012;Error code for unsupported escaping mode
+URI Utils  (URIUTILSCOMMON.H);KUriUtilsErrBadTextRemoveMode;-5013;Error code for unsupported text whitespace removal mode
+URI Utils  (URIUTILSCOMMON.H);KUriUtilsErrDecodeMalformedQuotedString;-5014;Quoted string could not be decoded as it is malformed
+
+
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707PhoneFailure;-5024;Phone failure. Switch off the phone and then switch on.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707NoConnectionToPhone;-5025;Phone failure. Switch off the phone and then switch on.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707PhoneLinkReserved;-5026;Phone is busy due the other call operation.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707OperationNotAllowed;-5027;Operation is not allowed. Check phone settings.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707OperationNotSupported;-5028;Operation is not supported by the phone.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707PhoneToSimLockRequired;-5029;Blank
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707SimNotInserted;-5034;Insert SIM card.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707SimPin1Required;-5035;PIN1 is required to continue.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707SIMPuk1Required;-5036;PUK1 code is required to continue.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707SimFailure;-5037;SIM card failure. Replace the SIM card.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707SimBusy;-5038;SIM card is busy while performing other operation.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707SimWrong;-5039;Wrong SIM card. Replace the SIM card.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707IncorrectPassword;-5040;Incorrect code please re-enter.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707SimPin2Required;-5041;PIN2 is required to continue.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707SIMPuk2Required;-5042;PUK2 code is required to continue.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707MemoryFull;-5043;Memory is full. Remove some messages and try again.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707InvalidIndex;-5044;Memory failure. Try again.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707NotFound;-5045;Requested information not found. Try again.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707MemoryFailure;-5046;Memory failure. Try again.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707TextStringTooLong;-5047;Entered string is too long. Please re-enter the string.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707InvalidCharsInTextString;-5048;Invalid characters in text string. Please re-enter the string.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707DialStringTooLong;-5049;Entered dial string is too long. Please re-enter the string.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707InvalidCharsInDialString;-5050;Invalid characters in dial string. Please re-enter the string.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707NoNetworkService;-5054;Service is not available.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707NetworkTimeout;-5055;Temporary network failure. Try again later.
+TelephonyGSMTE-TAerrors  (EXTERROR.H);KErrGsm0707UnknownError;-5124;Temporary network failure. Try again later.
+
+
+;//Domain Name Daemon Error Codes;;
+Domain Name Daemon  (DND_ERR.H);KErrDndNameNotFound;-5120;Returned when no data found for GetByName
+Domain Name Daemon  (DND_ERR.H);KErrDndAddrNotFound;-5121;Returned when no data found for GetByAddr
+Domain Name Daemon  (DND_ERR.H);KErrDndNoServers;-5122;No DNS server addresses available (timeout)
+Domain Name Daemon  (DND_ERR.H);KErrDndNoRoute;-5123;Send timeout for the query (probably no route for server)
+Domain Name Daemon  (DND_ERR.H);KErrDndCache;-5124;Corrupted data in cache (= bad DNS reply from server)
+Domain Name Daemon  (DND_ERR.H);KErrDndFormat;-5125;Wrong format   
+Domain Name Daemon  (DND_ERR.H);KErrDndServerFailure;-5126;   
+Domain Name Daemon  (DND_ERR.H);KErrDndBadName;-5127;Bad name   
+Domain Name Daemon  (DND_ERR.H);KErrDndNotImplemented;-5128;   
+Domain Name Daemon  (DND_ERR.H);KErrDndRefused;-5129;Server refused  
+Domain Name Daemon  (DND_ERR.H);KErrDndBadQuery;-5130;Bad query from application (invalid domain name, etc.), not processed
+Domain Name Daemon  (DND_ERR.H);KErrDndNoRecord;-5131;No record found of the desired type and class.
+Domain Name Daemon  (DND_ERR.H);KErrDndNameTooBig;-5132;Buffer overflow with name 
+Domain Name Daemon  (DND_ERR.H);KErrDndUnknown;-5133;Misc error - must be something wrong with the packet or the NS
+Domain Name Daemon  (DND_ERR.H);KErrDndServerUnusable;-5134;The server is unusable for the attempted query (for example, not allowing recursion)
+;;;
+
+;//IPSEC Error Codes;;
+IPSEC  (IPSECERR.H);EIpsec_NotANATTPacket;-5154;UDP packet is NOT a NAT Taversal packet
+IPSEC  (IPSECERR.H);EIpsec_NoInnerSource ;-5155;Cannot find inner-src for outbound packet when tunneling (for SECPOL)
+IPSEC  (IPSECERR.H);EIpsec_LostSA ;-5156;An SA has been lost betweenApply andVerify, expired? (for SECPOL)
+IPSEC  (IPSECERR.H);EIpsec_IcmpError ;-5157;An ICMP error report containing AH orESP (for INET6)
+IPSEC  (IPSECERR.H);EIpsec_PolicyUnknownSelector;-5158;unknown selector keyword
+IPSEC  (IPSECERR.H);EIpsec_PolicyInboundOutbound;-5159;Only one of the 'inbound' or 'outbound' is allowed
+IPSEC  (IPSECERR.H);EIpsec_PolicyIpMaskExpected;-5160;Expected IP address (as mask) here
+IPSEC  (IPSECERR.H);EIpsec_PolicyIpAddressExpected;-5161;Expected IP address here
+IPSEC  (IPSECERR.H);EIpsec_PolicyInvalidIpAddress;-5162;Invalid IP address
+IPSEC  (IPSECERR.H);EIpsec_PolicyRightParen ;-5163;Right parenthesis expected
+IPSEC  (IPSECERR.H);EIpsec_PolicyLeftParen ;-5164;Left parenthesis expected
+IPSEC  (IPSECERR.H);EIpsec_PolicySpecNotFound;-5165;SA specification is not defined before reference in selector
+IPSEC  (IPSECERR.H);EIpsec_PolicySyntaxError ;-5166;Generic delimiter error inspecification
+IPSEC  (IPSECERR.H);EIpsec_PolicySpecName ;-5167;SA specification name missing or invalid
+IPSEC  (IPSECERR.H);EIpsec_PolicyNoEncryptAlgorithm   ;-5168;ESP specification must include encryptionb algorithm
+IPSEC  (IPSECERR.H);EIpsec_PolicyNoAuthAlgorithm      ;-5169;AH specification must include authentication algorithm
+IPSEC  (IPSECERR.H);EIpsec_PolicyTooManyTypes;-5170;Type can be specified onlyonce for specification
+IPSEC  (IPSECERR.H);EIpsec_PolicyNoType ;-5171;SA type (AH or ESP) omittedfrom specification
+IPSEC  (IPSECERR.H);EIpsec_PolicyCloseBraceExpected   ;-5172;closing brace expected
+IPSEC  (IPSECERR.H);EIpsec_PolicyNumberExpected       ;-5173;number value expected
+IPSEC  (IPSECERR.H);EIpsec_PolicyUnknownSpec ;-5174;unknown policy specification keyword
+IPSEC  (IPSECERR.H);EIpsec_PolicyInvalidIdentity      ;-5175;invalid identity syntax
+IPSEC  (IPSECERR.H);EIpsec_PolicyIdentityDefined      ;-5176;identify already defined
+IPSEC  (IPSECERR.H);EIpsec_PolicyUnknownAuth ;-5177;algorithm not defined in algorithm map
+IPSEC  (IPSECERR.H);EIpsec_PolicyUnknownEncrypt       ;-5178;algorithm not defined in algorithm map
+IPSEC  (IPSECERR.H);EIpsec_UnavailableDigest ;-5179;No installed library implements the digest
+IPSEC  (IPSECERR.H);EIpsec_UnavailableCipher ;-5180;No installed library implements the cipher
+IPSEC  (IPSECERR.H);EIpsec_UnknownDigestNumber        ;-5181;Attempting to use algorithmnumber that is not known
+IPSEC  (IPSECERR.H);EIpsec_UnknownCipherNumber        ;-5182;Attempting to use algorithmnumber that is not known
+IPSEC  (IPSECERR.H);EIpsec_BadCipherKey ;-5183;Key in SA is too short (forthe algorithm) or is weak
+IPSEC  (IPSECERR.H);EIpsec_MismatchDestinationIdentity;-5184;destination identity does not match
+IPSEC  (IPSECERR.H);EIpsec_MismatchSourceIdentity     ;-5185;source identity does not match
+IPSEC  (IPSECERR.H);EIpsec_MismatchProtocol ;-5186;protocol does not match
+IPSEC  (IPSECERR.H);EIpsec_MismatchDestinationPort    ;-5187;destination port does not match
+IPSEC  (IPSECERR.H);EIpsec_MismatchSourcePort;-5188;source port does not match
+IPSEC  (IPSECERR.H);EIpsec_MismatchProxy ;-5189;proxy address does not match
+IPSEC  (IPSECERR.H);EIpsec_MismatchSource ;-5190;source address does not match
+IPSEC  (IPSECERR.H);EIpsec_MismatchReplayWindow       ;-5191;ReplayWindow length is shorter than required
+IPSEC  (IPSECERR.H);EIpsec_MismatchedEncryptAlg       ;-5192;Encrypt algorithm doesn't match
+IPSEC  (IPSECERR.H);EIpsec_MismatchedAuthAlg ;-5193;Auth algorithm doesn't match
+IPSEC  (IPSECERR.H);EIpsec_MismatchedPFS ;-5194;PFS bit is not same
+IPSEC  (IPSECERR.H);EIpsec_MismatchedType ;-5195;SA Type (AH/ESP) does not match
+IPSEC  (IPSECERR.H);EIpsec_MismatchedDestination     ;-5196;SA destination does not match (internal error?)
+IPSEC  (IPSECERR.H);EIpsec_AcquireFailed ;-5197;Acquiring SA failed (no SAavailableor negotiated)
+IPSEC  (IPSECERR.H);EIpsec_EspBadCipherBlockSize    ;-5198;Configuration error, cipherblock size must be < 256
+IPSEC  (IPSECERR.H);EIpsec_EspSequenceWrap ;-5199;Outbound sequence # wrappedaround for this SA
+IPSEC  (IPSECERR.H);EIpsec_AhSequenceWrap ;-5200;Outbound sequence # wrappedaround for this SA
+IPSEC  (IPSECERR.H);EIpsec_AhPacketTooLong ;-5201;Outbound packet would exeed2**16-1 with AH
+IPSEC  (IPSECERR.H);EIpsec_AhRMBufSplit ;-5202;Inbound AH processing failed (Memory?)
+IPSEC  (IPSECERR.H);EIpsec_NoBundle ;-5203;Incoming packet had transforms, but policy doesn't require any
+IPSEC  (IPSECERR.H);EIpsec_TooManyTransforms ;-5204;Incoming packet had more transforms than policy requires
+IPSEC  (IPSECERR.H);EIpsec_UnrequiredSA ;-5205;Applied SA where policy hasnone
+IPSEC  (IPSECERR.H);EIpsec_MismatchedSA ;-5206;Applied SA does not match the policy
+IPSEC  (IPSECERR.H);EIpsec_TunnelMismatch ;-5207;Tunnelmode does not match the policy
+IPSEC  (IPSECERR.H);EIpsec_TooFewTransforms ;-5208;Incoming packet has less transforms than policy requires
+IPSEC  (IPSECERR.H);EIpsec_MaxTransforms ;-5209;Incoming packet exceed configured maxlimit of transforms
+IPSEC  (IPSECERR.H);EIpsec_NoSelectorMatch ;-5210;None of the policy selectors matched
+IPSEC  (IPSECERR.H);EIpsec_OutboundPending ;-5211;Outbooud SA does not exits,ACQUIRE pending
+IPSEC  (IPSECERR.H);EIpsec_OutboundNotFound ;-5212;Outbound SA does not exist,ACQUIRE started
+IPSEC  (IPSECERR.H);EIpsec_ReplayDuplicate ;-5213;Duplicate packet (replay window test)
+IPSEC  (IPSECERR.H);EIpsec_EspPadLength ;-5214;The ESP pad length is corrupt (probably wrong key)
+IPSEC  (IPSECERR.H);EIpsec_EspPadByte ;-5215;The ESP pad byte content isinvalid (probably wrong key)
+IPSEC  (IPSECERR.H);EIpsec_DataAlignment ;-5216;Data not aligned by block size
+IPSEC  (IPSECERR.H);EIpsec_PacketLength ;-5217;Invalid lenght of the packet
+IPSEC  (IPSECERR.H);EIpsec_AhAuthentication ;-5218;Authentication check failedin AH
+IPSEC  (IPSECERR.H);EIpsec_AhIcvLength ;-5219;ICV length in packet does not match algorithm
+IPSEC  (IPSECERR.H);EIpsec_AhInboundSA ;-5220;The inbound SA for AH doesnot exist
+IPSEC  (IPSECERR.H);EIpsec_AhAuthAlg ;-5221;Required auth algorithm forAH not available/installed
+IPSEC  (IPSECERR.H);EIpsec_EspEncrAlg ;-5222;Required encrypt algorithmfor ESP not available/installed
+IPSEC  (IPSECERR.H);EIpsec_EspAuthAlg ;-5223;Required auth algorithm forESP not available/installed
+IPSEC  (IPSECERR.H);EIpsec_EspAuthentication ;-5224;Authentication check failedin ESP
+IPSEC  (IPSECERR.H);EIpsec_EspInboundSA ;-5225;The inbound SA for ESP doesnot exist
+IPSEC  (IPSECERR.H);EIpsec_CorruptPacketOut ;-5226;Corrupt packet after IPSECoperations
+IPSEC  (IPSECERR.H);EIpsec_CorruptPacketIn ;-5227;Truncated or corrupt packetor header(in)
+IPSEC  (IPSECERR.H);EIpsec_RMBUF;-5228;RMBUF operation failed unexpectedly
+
+
+;//IR OBEX Error Codes;;
+IR OBEX  (OBEX.H);KErrIrObexClientNoDevicesFound;-5501;No other infrared device found
+IR OBEX  (OBEX.H);KErrIrObexClientPeerDoesNotHaveObex;-5502;Other IR device cannot handle IrObex 
+IR OBEX  (OBEX.H);KErrIrObexClientPutPeerAborted;-5503;Other IR device aborted the transfer 
+IR OBEX  (OBEX.H);KErrIrObexServerPutPeerAborted;-5507;Peer device aborted data transmission/obex sending 
+IR OBEX  (OBEX.H);KErrIrObexConnectChallRejected;-5512;Cannot authorise the challenge so link dropped 
+IR OBEX  (OBEX.H);KErrIrObexRespSuccess;-5532;
+IR OBEX  (OBEX.H);KErrIrObexRespCreated;-5533;
+IR OBEX  (OBEX.H);KErrIrObexRespAccepted ;-5534;
+IR OBEX  (OBEX.H);KErrIrObexRespNonAuthInfo;-5535;
+IR OBEX  (OBEX.H);KErrIrObexRespNoContent;-5536;
+IR OBEX  (OBEX.H);KErrIrObexRespResetContent;-5537;
+IR OBEX  (OBEX.H);KErrIrObexRespPartialContent;-5538;
+IR OBEX  (OBEX.H);KErrIrObexRespMultipleChoices;-5548;
+IR OBEX  (OBEX.H);KErrIrObexRespMovedPerm;-5549;
+IR OBEX  (OBEX.H);KErrIrObexRespMovedTemp;-5550;
+IR OBEX  (OBEX.H);KErrIrObexRespSeeOther;-5551;
+IR OBEX  (OBEX.H);KErrIrObexRespNotModified;-5552;
+IR OBEX  (OBEX.H);KErrIrObexRespUseProxy;-5553;
+IR OBEX  (OBEX.H);KErrIrObexRespBadRequest;-5564
+IR OBEX  (OBEX.H);KErrIrObexRespUnauthorized;-5565
+IR OBEX  (OBEX.H);KErrIrObexRespPaymentRequired;-5566
+IR OBEX  (OBEX.H);KErrIrObexRespForbidden;-5567
+IR OBEX  (OBEX.H);KErrIrObexRespNotFound;-5568
+IR OBEX  (OBEX.H);KErrIrObexRespMethodNotAllowed;-5569
+IR OBEX  (OBEX.H);KErrIrObexRespNotAcceptable;-5570
+IR OBEX  (OBEX.H);KErrIrObexRespProxyAuthenReqd;-5571
+IR OBEX  (OBEX.H);KErrIrObexRespTimedOut;-5572
+IR OBEX  (OBEX.H);KErrIrObexRespConflict;-5573
+IR OBEX  (OBEX.H);KErrIrObexRespGone;-5574
+IR OBEX  (OBEX.H);KErrIrObexRespLengthReqd;-5575
+IR OBEX  (OBEX.H);KErrIrObexRespPreCondFailed;-5576
+IR OBEX  (OBEX.H);KErrIrObexRespReqEntityTooLarge;-5577
+IR OBEX  (OBEX.H);KErrIrObexRespReqURLTooLarge;-5578
+IR OBEX  (OBEX.H);KErrIrObexRespUnsupMediaType;-5579
+IR OBEX  (OBEX.H);KErrIrObexRespInternalError;-5580
+IR OBEX  (OBEX.H);KErrIrObexRespNotImplemented;-5581
+IR OBEX  (OBEX.H);KErrIrObexRespBadGateway;-5582
+IR OBEX  (OBEX.H);KErrIrObexRespServiceUnavail;-5583
+IR OBEX  (OBEX.H);KErrIrObexRespGatewayTimeout;-5584
+IR OBEX  (OBEX.H);KErrIrObexRespHTTPVerNotSupp;-5585
+IR OBEX  (OBEX.H);KErrIrObexRespDatabaseFull;-5596
+IR OBEX  (OBEX.H);KErrIrObexRespDatabaseLocked;-5597
+
+
+;//VCard / VCal Parser Error Codes;
+Versit (VERROR.H);KVersitErrCodeBase;-5750
+Versit (VERROR.H);KVersitErrBadDateTime;-5751
+Versit (VERROR.H);KVersitErrRepeatTypeNotHandled;-5752
+Versit (VERROR.H);KVersitErrBadRepeatValue;-5753
+Versit (VERROR.H);KVersitErrBadTimeZone;-5754
+Versit (VERROR.H);KVersitErrBadTimePeriod;-5755;
+Versit (VERROR.H);KVersitErrNumberExpected;-5756;
+Versit (VERROR.H);KVersitErrNestedVcardExpected;-5757;
+Versit (VERROR.H);KVersitErrNoPropertyName;-5758;
+
+
+;//Bluetooth HCI Error Codes;;
+Bluetooth HCI  (HCIERRORS.H);EOK;-6000;HCI OK errorcode - Used to indicate the absence of any error condition
+Bluetooth HCI  (HCIERRORS.H);EUnknownOpcode;-6001;HCI unknownopcode error code
+Bluetooth HCI  (HCIERRORS.H);ENoConnection;-6002;HCI no connection error code
+Bluetooth HCI  (HCIERRORS.H);EHardwareFail;-6003;HCI hardwarefailure error code
+Bluetooth HCI  (HCIERRORS.H);EPageTimedOut;-6004;HCI page timeout error code
+Bluetooth HCI  (HCIERRORS.H);EAuthenticationFailure;-6005;HCI authentification failure error code
+Bluetooth HCI  (HCIERRORS.H);EKeyMissing;-6006;HCI key missing error code
+Bluetooth HCI  (HCIERRORS.H);EKeyMemoryFull;-6007;HCI key memory full error code
+Bluetooth HCI  (HCIERRORS.H);EConnectionTimeout;-6008;HCI connection timeout error code
+Bluetooth HCI  (HCIERRORS.H);EMaxConnections;-6009;HCI maximumnumber of connections exceeded error code
+Bluetooth HCI  (HCIERRORS.H);EMaxSCOConnections;-6010;HCI maximumnumber of SCO connections exceeded error code
+Bluetooth HCI  (HCIERRORS.H);EMaxACLConnections;-6011;HCI maximumnumber of ACL connections exceeded error code
+Bluetooth HCI  (HCIERRORS.H);ECommandDisallowed;-6012;HCI commanddisallowed error code
+Bluetooth HCI  (HCIERRORS.H);EHostResourceRejection;-6013;HCI host resource rejection error code
+Bluetooth HCI  (HCIERRORS.H);EHostSecurityRejection;-6014;HCI host security rejection error code
+Bluetooth HCI  (HCIERRORS.H);EHostPersonalDeviceRejection;-6015;HCI host personal device rejection error code
+Bluetooth HCI  (HCIERRORS.H);ERemoteHostTimeout;-6016;HCI remote host timeout error code
+Bluetooth HCI  (HCIERRORS.H);EUnsupportedParameter;-6017;HCI unsupported parameter error code
+Bluetooth HCI  (HCIERRORS.H);EInvalidHCIParameter;-6018;HCI invalid HCI parameter error code
+Bluetooth HCI  (HCIERRORS.H);ERemoteUserEndedConnection;-6019;HCI remote device user ended connection error code
+Bluetooth HCI  (HCIERRORS.H);ERemoteLowResources;-6020;HCI remote device low resources error code
+Bluetooth HCI  (HCIERRORS.H);ERemoteAboutToPowerOff;-6021;HCI remote device about to power off error code
+Bluetooth HCI  (HCIERRORS.H);ETerminatedByLocalHost;-6022;HCI treminated by local host error code
+Bluetooth HCI  (HCIERRORS.H);ERepeatedAttempts;-6023;HCI repeated attempts error code
+Bluetooth HCI  (HCIERRORS.H);EPairingNotAllowed;-6024;HCI pairingnot allowed error code
+Bluetooth HCI  (HCIERRORS.H);EUnknownLMPpdu;-6025;HCI unknown LMP PDU error code
+Bluetooth HCI  (HCIERRORS.H);EUnsupportedRemoteLMPFeature;-6026;HCI unsupported remote LMP feature error code
+Bluetooth HCI  (HCIERRORS.H);ESCOOffsetRejected;-6027;HCI SCO offset rejected error code
+Bluetooth HCI  (HCIERRORS.H);ESCOIntervalRejected;-6028;HCI SCO interval rejected error code
+Bluetooth HCI  (HCIERRORS.H);ESCOAirModeRejected;-6029;HCI SCO airmode rejected error code
+Bluetooth HCI  (HCIERRORS.H);EInvalidLMPParameters;-6030;HCI invalid LMP parameters error code
+Bluetooth HCI  (HCIERRORS.H);EUnspecifiedError;-6031;HCI unspecified error code
+Bluetooth HCI  (HCIERRORS.H);EUnsupportedLMPParameterValue;-6032;HCI unsupported LMP parameter value error code
+Bluetooth HCI  (HCIERRORS.H);ERoleChangeNotAllowed;-6033;HCI role change not allowed error code
+Bluetooth HCI  (HCIERRORS.H);ELMPResponseTimeout;-6034;HCI LMP response timeout error code
+Bluetooth HCI  (HCIERRORS.H);ELMPErrorTransactionCollision;-6035;HCI LMP error transaction collision error code
+Bluetooth HCI  (HCIERRORS.H);ELMPPDUNotAllowed;-6036;HCI LMP PDU not allowed error code
+Bluetooth HCI  (HCIERRORS.H);EEncryptionModeNotAcceptable;-6037;HCI encryption mode not acceptable error code
+Bluetooth HCI  (HCIERRORS.H);EUnitKeyUsed;-6038;HCI unit key not used error code
+Bluetooth HCI  (HCIERRORS.H);EQOSIsNotSupported;-6039;HCI QOS notsupported error code
+Bluetooth HCI  (HCIERRORS.H);EInstantPassed;-6040;HCI instant passed error code
+Bluetooth HCI  (HCIERRORS.H);EPairingWithUnitKeyNotSupported;-6041;HCI pairing with unit key not supported error code;
+Bluetooth HCI  (HCIERRORS.H);EDifferentTransactionCollision;-6042; ;
+Bluetooth HCI  (HCIERRORS.H);Reserved by Bluetooth Spec;-6043; ;
+Bluetooth HCI  (HCIERRORS.H);EQoSUnacceptableParameter;-6044;HCI bad parameter error code;
+Bluetooth HCI  (HCIERRORS.H);EQoSRejected;-6045;HCI quality of service not accepted error code;
+Bluetooth HCI  (HCIERRORS.H);EChannelClassificationNotSupported;-6046;HCI adaptive frequency hopping channel classification not supported error code;
+Bluetooth HCI  (HCIERRORS.H);EInsufficientSecurity;-6047;HCI insufficient security error code;
+Bluetooth HCI  (HCIERRORS.H);EParameterOutOfMandatoryRange;-6048;HCI parameter value outside required range error code;
+Bluetooth HCI  (HCIERRORS.H);Reserved by Bluetooth Spec;-6049; ;
+Bluetooth HCI  (HCIERRORS.H);ERoleSwitchPending;-6050;HCI failure because a masterslave role switch is about to take place error code;
+Bluetooth HCI  (HCIERRORS.H);Reserved by Bluetooth Spec;-6051; ;
+Bluetooth HCI  (HCIERRORS.H);EReservedSlotViolation;-6052;HCI use of reserved baseband packet slot error code;HCI Error Code
+Bluetooth HCI  (HCIERRORS.H);ERoleSwitchFailed;-6053;HCI masterslave role switch failed error code;
+;;;;0x00
+;//Bluetooth L2CAP Error Codes;;;0x0a
+Bluetooth L2CAP  (BT_SOCK.H);KErrBadAddress ;-6300; L2CAP Bad address error code ;0x0b
+Bluetooth L2CAP  (BT_SOCK.H);KErrSAPUnexpectedEvent ;-6301; L2CAP unexpected SAP event error code ;0x0c
+Bluetooth L2CAP  (BT_SOCK.H);KErrBadPacketReceived ;-6302; L2CAP bad packet received error code ;0x0d
+Bluetooth L2CAP  (BT_SOCK.H);KErrL2CAPBadResponse ;-6303; L2CAP bad response error code ;0x0e
+Bluetooth L2CAP  (BT_SOCK.H);KErrHCIConnectFailed ;-6304; L2CAP HCI connection failed error code ;0x0f
+Bluetooth L2CAP  (BT_SOCK.H);KErrHCILinkDisconnection ;-6305; L2CAP HCI link disconnection error code ;0x10
+Bluetooth L2CAP  (BT_SOCK.H);KErrSAPNotConnected ;-6306; L2CAP SAP not connected error code ;0x11
+Bluetooth L2CAP  (BT_SOCK.H);KErrConfigBadParams ;-6307; L2CAP bad configuration parameters error code ;0x12
+Bluetooth L2CAP  (BT_SOCK.H);KErrConfigRejected ;-6308; L2CAP configuration rejected error code ;0x13
+Bluetooth L2CAP  (BT_SOCK.H);KErrConfigUnknownOptions ;-6309; L2CAP unknown configuration options error code ;0x14
+Bluetooth L2CAP  (BT_SOCK.H);KErrL2PeerDisconnected ;-6310; L2CAP peer disconnected error code ;0x15
+Bluetooth L2CAP  (BT_SOCK.H);KErrL2CAPAccessRequestDenied ;-6311; L2CAP access request denied error code ;0x16
+Bluetooth L2CAP  (BT_SOCK.H);KErrL2CAPRequestTimeout ;-6312; L2CAP request timeout error code ;0x17
+Bluetooth L2CAP  (BT_SOCK.H);KErrL2PeerRejectedCommand ;-6313; L2CAP peer rejected command error code ;0x18
+Bluetooth L2CAP  (BT_SOCK.H);KErrHostResNameTooLong ;-6314; L2CAP host resolver name too long error code ;0x19
+Bluetooth L2CAP  (BT_SOCK.H);KErrL2CAPNoMorePSMs ;-6315; L2CAP no more PSMs error code ;0x1a
+Bluetooth L2CAP  (BT_SOCK.H);KErrL2CAPMaxTransmitExceeded ;-6316; L2CAP in reliable mode: the maximum L2Cap retransmissions have been made and channel will disconnect error code;0x1b
+Bluetooth L2CAP  (BT_SOCK.H);KErrL2CAPDataControllerDetached ;-6317; L2CAP problems (e.g. no memory) whilst sending data error code;0x1c
+Bluetooth L2CAP  (BT_SOCK.H);KErrL2CAPConfigPending ;-6318; L2CAP configuration is in progress error code;0x1d
+Bluetooth L2CAP  (BT_SOCK.H);KErrL2CAPConfigAlreadyInProgress ;-6319; L2CAP attempt to alter config whilst configuration is in progress error code;0x1f
+Bluetooth L2CAP  (BT_SOCK.H);KErrL2CAPNoFreeCID ;-6320; L2CAP no more channel IDs available error code;0x20
+;;;;0x21
+;//Bluetooth RFCOMM Error Codes;;;0x26
+Bluetooth RFCOMM  (BT_SOCK.H);KErrRfcommSAPUnexpectedEvent ;-6350; RFCOMM unexpected event error code. ;0x28
+Bluetooth RFCOMM  (BT_SOCK.H);KErrRfcommAlreadyBound ;-6351; RFCOMM SAP already bound error code. ;0x29
+Bluetooth RFCOMM  (BT_SOCK.H);KErrRfcommBadAddress ;-6352; RFCOMM bad address error code. ;0x2a
+Bluetooth RFCOMM  (BT_SOCK.H);KErrRfcommMTUSize ;-6353; RFCOMM MTU size exceeded error code. ;0x2b
+Bluetooth RFCOMM  (BT_SOCK.H);KErrRfcommFrameResponseTimeout ;-6354; RFCOMM frame response timeout error code. ;0x2c
+Bluetooth RFCOMM  (BT_SOCK.H);KErrRfcommMuxRemoteDisconnect ;-6355; RFCOMM remote end disconnected error code. ;0x2d
+Bluetooth RFCOMM  (BT_SOCK.H);KErrRfcommNotBound ;-6356; RFCOMM SAP not bound error code. ;0x2e
+Bluetooth RFCOMM  (BT_SOCK.H);KErrRfcommParameterNegotiationFailure ;-6357; RFCOMM parameter negotiation failure error code. ;0x2f
+Bluetooth RFCOMM  (BT_SOCK.H);KErrRfcommNotListening ;-6358; RFCOMM not listening error code. ;0x30
+Bluetooth RFCOMM  (BT_SOCK.H);KErrRfcommNoMoreServerChannels ;-6359; RFCOMM no more server channels available error code. ;0x31
+;;;;0x32
+;// Bluetooth AVCTP Error Codes;;;0x34
+Bluetooth AVCTP  (BT_SOCK.H);KErrAvctpBadAddress ;-6400; AVCTP bad address error code ;0x35
+Bluetooth AVCTP  (BT_SOCK.H);KErrAvctpSAPUnexpectedEvent ;-6401; AVCTP unexpected SAP event error code ;
+Bluetooth AVCTP  (BT_SOCK.H);KErrAvctpBadPacketReceived ;-6402; AVCTP bad packet received error code ;
+Bluetooth AVCTP  (BT_SOCK.H);KErrAvctpBadResponse ;-6403; AVCTP bad response error code ;
+Bluetooth AVCTP  (BT_SOCK.H);KErrAvctpConnectFailed ;-6404; AVCTP connect failed error code ;
+Bluetooth AVCTP  (BT_SOCK.H);KErrAvctpLinkDisconnection ;-6405; AVCTP link disconnection error code ;
+Bluetooth AVCTP  (BT_SOCK.H);KErrAvctpSAPNotConnected ;-6406; AVCTP SAP not connected error code ;
+Bluetooth AVCTP  (BT_SOCK.H);KErrAvctpPeerDisconnected ;-6407; AVCTP peer disconnection error code ;
+Bluetooth AVCTP  (BT_SOCK.H);KErrAvctpAccessRequestDenied ;-6408; AVCTP access request denied error code ;
+Bluetooth AVCTP  (BT_SOCK.H);KErrAvctpRequestTimeout ;-6409; AVCTP request timeout error code ;
+Bluetooth AVCTP  (BT_SOCK.H);KErrAvctpPeerRejectedCommand ;-6410; AVCTP peer rejected command error code ;
+
+;//Bluetooth SDP Error Codes;;;
+Bluetooth SDP  (BTSDP.H);KErrSdpAlreadyBound;-6400;Cannot bind to specifed sockets protocol, as already bound;
+Bluetooth SDP  (BTSDP.H);KErrSdpPeerError;-6401;Remote device gave unknown error
+Bluetooth SDP  (BTSDP.H);KErrSdpClientNotConnected;-6402;Local device is not connected
+Bluetooth SDP  (BTSDP.H);KErrSdpUnsupportedVersion;-6403;Invalid/unsupported SDP version
+Bluetooth SDP  (BTSDP.H);KErrSdpBadRecordHandle;-6404;Invalid Service Record Handle
+Bluetooth SDP  (BTSDP.H);KErrSdpBadContinuationState;-6405;Invalid ContinuationState
+Bluetooth SDP  (BTSDP.H);KErrSdpServerRejectedRequest;-6406;SDP server rejected the request
+Bluetooth SDP  (BTSDP.H);KErrSdpBadRequestBufferLength;-6407;Request buffer was ill-formed
+Bluetooth SDP  (BTSDP.H);KErrSdpBadResultBufferLength;-6408;Result buffer was ill-formed
+Bluetooth SDP  (BTSDP.H);KErrSdpBadUUIDLength;-6409;UUID entry was ill-formed
+Bluetooth SDP  (BTSDP.H);KErrSdpBadResultData;-6410;Response was ill-formed
+Bluetooth SDP  (BTSDP.H);KErrSdpDatabaseFull;-6411;SDP database is full
+
+;//Bluetooth Link manager Error Codes.;;
+Bluetooth Link Manager  (BTSOCK.H);KErrInsufficientBasebandResources ;-6450; Insufficient baseband resources error value 
+Bluetooth Link Manager  (BTSOCK.H);KErrProxyWriteNotAvailable ;-6451; Proxy write not available error value 
+Bluetooth Link Manager  (BTSOCK.H);KErrReflexiveBluetoothLink ;-6452; Reflexive BT link error value 
+
+
+;//Message Server Error Codes;;
+Message Server  (MSVSTD.H);KMsvMediaUnavailable;-7000;There is no disk in the drive containing the Message Server index
+Message Server  (MSVSTD.H);KMsvMediaIncorrect;-7001;There is a disk in the drive containing the Message Server index, but it is the wrong one
+Message Server  (MSVSTD.H);KMsvMediaChanged;-7002;
+Message Server  (MSVSTD.H);KMsvIndexBackup     ;-7003;
+Message Server  (MSVSTD.H);KMsvIndexRestore;-7004;
+
+
+;//HTTP Error Codes;;
+HTTP Client  (HTTPERR.H);KErrHttpEncodeDefault          ;-7200;Error making a default encoding of unrecognised headers
+HTTP Client  (HTTPERR.H);KErrHttpEncodeAccept           ;-7201;Error encoding the Accept field
+HTTP Client  (HTTPERR.H);KErrHttpEncodeAcceptCharset    ;-7202;Error encoding the Accept-Charset field
+HTTP Client  (HTTPERR.H);KErrHttpEncodeQValue           ;-7203;Error encoding a q-value parameter
+HTTP Client  (HTTPERR.H);KErrHttpEncodeAuthorization    ;-7204;Error encoding the Authorization field
+HTTP Client  (HTTPERR.H);KErrHttpEncodeBasicAuth        ;-7205;Error encoding Basiccredentials
+HTTP Client  (HTTPERR.H);KErrHttpEncodeDigestAuth       ;-7206;Error encoding Digestcredentials
+HTTP Client  (HTTPERR.H);KErrHttpEncodeConnection       ;-7207;Error encoding the Connection field
+HTTP Client  (HTTPERR.H);KErrHttpEncodeContentLength    ;-7208;Error encoding the Content-Length field
+HTTP Client  (HTTPERR.H);KErrHttpEncodeContentType      ;-7209;Error encoding the Content-Type field
+HTTP Client  (HTTPERR.H);KErrHttpEncodeHost             ;-7210;Error encoding the Host field
+HTTP Client  (HTTPERR.H);KErrHttpEncodeHostPort         ;-7211;Error encoding the Host field's port parameter
+HTTP Client  (HTTPERR.H);KErrHttpEncodeTransferEncoding ;-7212;Error encoding the Transfer-Encoding field
+HTTP Client  (HTTPERR.H);KErrHttpEncodeUserAgent        ;-7213;Error encoding the User-Agent field
+HTTP Client  (HTTPERR.H);KErrHttpEncodeDate             ;-7214;Error encoding the Date field
+HTTP Client  (HTTPERR.H);KErrHttpEncodeCookie           ;-7215;Error encoding the Cookie field
+HTTP Client  (HTTPERR.H);KErrHttpEncodeCacheControl     ;-7216;Error encoding the Cache-Control field
+HTTP Client  (HTTPERR.H);KErrHttpEncodePragma           ;-7217;Error encoding the Pragma field
+HTTP Client  (HTTPERR.H);KErrHttpEncodeIfMatch          ;-7218;Error encoding the ifmatch field
+HTTP Client  (HTTPERR.H);KErrHttpEncodeIfNoneMatch      ;-7219;Error encoding the ifnone match field
+HTTP Client  (HTTPERR.H);KErrHttpEncodeIfModifiedSince  ;-7220;Error encoding the ifmodified since field
+HTTP Client  (HTTPERR.H);KErrHttpEncodeIfUnmodifiedSince;-7221;Error encoding the ifunmodified since field
+HTTP Client  (HTTPERR.H);KErrHttpEncodeCookie2          ;-7222;Error encoding the Cookie2 field
+
+;//Codec decoding errors for values found in HTTP headers;;
+HTTP Client  (HTTPERR.H);KErrHttpDecodeMalformedDate    ;-7260;General formatting error for date values
+HTTP Client  (HTTPERR.H);KErrHttpDecodeMalformedYear    ;-7261;Malformed year
+HTTP Client  (HTTPERR.H);KErrHttpDecodeMalformedMonth   ;-7262;Malformed short monthname
+HTTP Client  (HTTPERR.H);KErrHttpDecodeMalformedDay     ;-7263;Malformed number of day in month
+HTTP Client  (HTTPERR.H);KErrHttpDecodeMalformedWkDay   ;-7264;Malformed short day name
+HTTP Client  (HTTPERR.H);KErrHttpDecodeMalformedWeekDay ;-7265;Malformed long day name
+HTTP Client  (HTTPERR.H);KErrHttpDecodeMalformedInteger ;-7266;Malformed integer value
+HTTP Client  (HTTPERR.H);KErrHttpDecodeMalformedQuotedStr;-7267;Malformed quoted string
+
+;//Codec decoding errors for HTTP headers;;
+HTTP Client  (HTTPERR.H);KErrHttpDecodeAccept           ;-7270;Error decoding the Accept field
+HTTP Client  (HTTPERR.H);KErrHttpDecodeConnection       ;-7271;Error decoding the Connection field
+HTTP Client  (HTTPERR.H);KErrHttpDecodeContentLength    ;-7272;Error decoding the Content-Length field
+HTTP Client  (HTTPERR.H);KErrHttpDecodeContentType      ;-7273;Error decoding the Content-Type field
+HTTP Client  (HTTPERR.H);KErrHttpDecodeTransferEncoding ;-7274;Error decoding the Transfer-Encoding field
+HTTP Client  (HTTPERR.H);KErrHttpDecodeWWWAuthenticate  ;-7275;Error decoding the WWWAuthenticate field
+HTTP Client  (HTTPERR.H);KErrHttpDecodeUnknownAuthScheme;-7276;The WWWAuthenticate field contained an unrecognised authentication scheme
+HTTP Client  (HTTPERR.H);KErrHttpDecodeBasicAuth        ;-7277;Error decoding a Basic WWWAuthenticate challenge
+HTTP Client  (HTTPERR.H);KErrHttpDecodeDigestAuth       ;-7278;Error decoding a Digest WWWAuthenticate challenge
+HTTP Client  (HTTPERR.H);KErrHttpDecodeCookie           ;-7279;Error decoding a Set-Cookie field
+
+;//Response errors. These represent specific failure cases;;
+HTTP Client  (HTTPERR.H);KErrHttpRedirectExceededLimit      ;-7300;A uri redirected too many times, possibly indicating a circular redirection
+HTTP Client  (HTTPERR.H);KErrHttpRedirectUseProxy           ;-7301;A server responded that the uri must be fetched via a proxy
+HTTP Client  (HTTPERR.H);KErrHttpRedirectNoLocationField    ;-7302;A server sent a redirection response that did not include a Location header
+HTTP Client  (HTTPERR.H);KErrHttpUnknownParseState          ;-7303;An error occured in parsing which left the parser in a unknown state
+
+;//Request building errors: cause the Validation Filter to make a transaction fail and terminate;;
+HTTP Client  (HTTPERR.H);KErrHttpRequestHasBody                 ;-7330;A body is provided with a method that doesn't allow bodys to be transmitted
+HTTP Client  (HTTPERR.H);KErrHttpRequestBodyMissing             ;-7331;A body is missing from a method that requires it
+HTTP Client  (HTTPERR.H);KErrHttpTraceReqWithoutMaxForwardHeader;-7332;Should contain The Max-Forward header
+HTTP Client  (HTTPERR.H);KErrHttpPostReqBodyWithoutSizeOnHTTP10 ;-7333;Body must NOT be sent chunked if using HTTP/1.0
+HTTP Client  (HTTPERR.H);KErrHttpInvalidHeaderInRequest         ;-7334;Request contained a response header or a entity header but no body
+
+;//Missing but required header errors;;
+HTTP Client  (HTTPERR.H);KErrHttpEntityHeaderMissingContentType     ;-7360;A body was provided in the request but no Content-Type header was set
+HTTP Client  (HTTPERR.H);KErrHttpGeneralHeaderMissingHost           ;-7361;The request URI was relative, but no Host header was set to indicate a server to connect to
+
+;//Protocol handler errors;;
+HTTP Client  (HTTPERR.H);KErrHttpCantResetRequestBody           ;-7370;The request body needed to be rewound but the client but it doesn't support
+HTTP Client  (HTTPERR.H);KErrHttpProtTransactionNotInitialised  ;-7371;The Protocol handler is not initialised
+HTTP Client  (HTTPERR.H);KErrHttpCannotEstablishTunnel          ;-7372;Unable to establish a tunnel.
+HTTP Client  (HTTPERR.H);KErrHttpInvalidUri                     ;-7373;Invalid URI
+HTTP Client  (HTTPERR.H);KErrHttpNonPipeliningError             ;-7374;Protocol handler experienced a non-pipelining error
+HTTP Client  (HTTPERR.H);KErrHttpPipeliningError                ;-7375;Protocol handler experienced a pipelining error
+
+
+;//Error code definitions for TLS.;;
+SSL/TLS  (SSLERR.H);KErrSSLNoSharedCipher        ;-7401;No shared cipher was found. The handshake failed becausethere was no available shared cipher supported by both the client and the server.
+SSL/TLS  (SSLERR.H);KErrSSLSocketBusy;-7402;The socket already has received data pending on it. This error is seen when StartClientHandshake is called when  there is already data waiting to be read from the socket. *
+SSL/TLS  (SSLERR.H);KErrSSLInvalidCipherSuite    ;-7403; One or more cipher suites passed as an argument was invalid.
+SSL/TLS  (SSLERR.H);KErrSSLInvalidCert;-7404;The certificate that was passed as an argument was invalid.
+SSL/TLS  (SSLERR.H);KErrSSLNoClientCert;-7405; No client certificate was supplied.
+SSL/TLS  (SSLERR.H);KErrSSLUnsupportedKeySize    ;-7406; The size of the key is toobig.
+SSL/TLS  (SSLERR.H);KErrSSLUnsupportedKey        ;-7407; General unsupported key error
+SSL/TLS  (SSLERR.H);KErrSSLBadRecordHeader       ;-7408; An invalid record was received.
+;;;
+;// Handshake related errors;;
+SSL/TLS  (SSLERR.H);KErrSSLBadProtocolVersion    ;-7409; Invalid protocol version.
+SSL/TLS  (SSLERR.H);KErrSSL2ServerOnly;-7410; The server only supports the SSL2.0 protocol.
+SSL/TLS  (SSLERR.H);KErrSSLUnexpectedMessage     ;-7411; Unexpected message.
+SSL/TLS  (SSLERR.H);KErrSSLUnsupportedCipher     ;-7412; Unsupported cipher.
+SSL/TLS  (SSLERR.H);KErrSSLBadMAC;-7413; Bad MAC.
+SSL/TLS  (SSLERR.H);KErrSSLReceivedAlert;-7414; An SSL alert was received from the remote end, which caused the connection to be terminated.
+SSL/TLS  (SSLERR.H);KErrSSLRecvNotSupportedHS    ;-7415; An invalid handshake message was received.
+SSL/TLS  (SSLERR.H);KErrSSLHSRecordFieldTooBig   ;-7416; A field in the handshake record being parsed was too big.
+SSL/TLS  (SSLERR.H);KErrSSLRecordHeaderTooBig    ;-7417; Record header field too big.
+SSL/TLS  (SSLERR.H);KErrSSLSendDataTooBig            ;-7418; Send data field too big.
+SSL/TLS  (SSLERR.H);KErrSSLNoCertificate;-7419; No certificate.
+SSL/TLS  (SSLERR.H);KErrSSLInvalidHash;-7420; Invalid hash.
+SSL/TLS  (SSLERR.H);KErrSSLSendCanceled;-7421; Send cancelled.
+SSL/TLS  (SSLERR.H);KErrSSLRecvCanceled;-7422; Receieve cancelled.
+SSL/TLS  (SSLERR.H);KErrSSLHandshakeCanceled     ;-7423; CancelHandshake was calledduring one of the handshake methods.
+SSL/TLS  (SSLERR.H);KErrSSLWriteFailed;-7424; Write failed.
+SSL/TLS  (SSLERR.H);KErrSSLFailedToLoad;-7425; The SSL.dll couldn't be loaded by the adaptor.
+SSL/TLS  (SSLERR.H);KErrSSLDisconnectIndication  ;-7426; An unspecified error was signaled from the SSL.dll to the adaptor.
+SSL/TLS  (SSLERR.H);KErrSSLDllLeave;-7427; A leave occured in the SSL.dll.
+;;;
+;// Equivalent to the standard TLS protocol message errors as defined in the TLS RFC. ;;
+SSL/TLS  (SSLERR.H);KErrSSLAlertCloseNotify              ;-7500; Close notification.
+SSL/TLS  (SSLERR.H);KErrSSLAlertUnexpectedMessage        ;-7510; An inappropriate message was received.
+SSL/TLS  (SSLERR.H);KErrSSLAlertBadRecordMac             ;-7520; A record was received withan incorrect MAC.
+SSL/TLS  (SSLERR.H);KErrSSLAlertDecryptionFailed         ;-7521; A TLS cipher text was decrypted in an invalid way.
+SSL/TLS  (SSLERR.H);KErrSSLAlertRecordOverflow           ;-7522; A TLS cipher text record was received which was too long.
+SSL/TLS  (SSLERR.H);KErrSSLAlertDecompressionFailure     ;-7530; The decompression functionreceived improper input.
+SSL/TLS  (SSLERR.H);KErrSSLAlertHandshakeFailure         ;-7540; With given the options available, the sender was unable to negotiate an acceptable set of security parameters.
+SSL/TLS  (SSLERR.H);KErrSSLAlertNoCertificate            ;-7541; No certificate.
+SSL/TLS  (SSLERR.H);KErrSSLAlertBadCertificate           ;-7542; A certificate was corrupt,e.g. contained signatures that could not be verified.
+SSL/TLS  (SSLERR.H);KErrSSLAlertUnsupportedCertificate   ;-7543; The certificate was of an unsupported type.
+SSL/TLS  (SSLERR.H);KErrSSLAlertCertificateRevoked       ;-7544; The certificate was revoked.
+SSL/TLS  (SSLERR.H);KErrSSLAlertCertificateExpired       ;-7545; The certificate was expired.
+SSL/TLS  (SSLERR.H);KErrSSLAlertCertificateUnknown       ;-7546; An unspecified problem withthe certificate. Certificate can not be used.
+SSL/TLS  (SSLERR.H);KErrSSLAlertIllegalParameter         ;-7547; A field in the handshake was out of range or inconsistent with other fields.
+SSL/TLS  (SSLERR.H);KErrSSLAlertUnknownCA                ;-7548; Either the CA certificate could not be located or the CA could not be matched with a known trusted CA.
+SSL/TLS  (SSLERR.H);KErrSSLAlertAccessDenied             ;-7549; A valid certificate was received, but the access control denied access.
+SSL/TLS  (SSLERR.H);KErrSSLAlertDecodeError              ;-7550; A message could not be decoded, e.g. some field was out of the specified range.
+SSL/TLS  (SSLERR.H);KErrSSLAlertDecryptError             ;-7551; A handshake cryptographic operation failed.
+SSL/TLS  (SSLERR.H);KErrSSLAlertExportRestriction        ;-7560; A negotiation was not allowed due to export restrictions.
+SSL/TLS  (SSLERR.H);KErrSSLAlertProtocolVersion          ;-7570; The protocol version was not supported, e.g. the client has attempted to negotiate a recognised, but unsupportedprotocol.
+SSL/TLS  (SSLERR.H);KErrSSLAlertInsufficientSecurity     ;-7571; Returned instead of KErrSSLAlertHandshakeFailure when the negotiation fails because the server requests ciphers more secure than those supported by the client.
+SSL/TLS  (SSLERR.H);KErrSSLAlertInternalError            ;-7580; An internal error.
+SSL/TLS  (SSLERR.H);KErrSSLAlertUserCanceled             ;-7590; This handshake is being cancelled by the user.
+SSL/TLS  (SSLERR.H);KErrSSLAlertNoRenegotiation          ;-7600; No renegotiation will be accepted.
+
+
+;//Transport-related errors;;
+SyncML  (SYNCMLERR.H);KErrTransportRequest;-8321;The transport cannot send data as created.
+SyncML  (SYNCMLERR.H);KErrTransportHeader;-8322;The transport has not been suitably configured.
+SyncML  (SYNCMLERR.H);KErrTransportSvrNoUri;-8323;The URI does not exist.
+SyncML  (SYNCMLERR.H);KErrTransportSvrError;-8324;There was a transport server error.
+SyncML  (SYNCMLERR.H);KErrTransportAuthenticationFailure;-8325;Transport Authentification failure.
+SyncML  (SYNCMLERR.H);KErrTransportDisconnected;-8326;Transport disconnected the session.
+SyncML  (SYNCMLERR.H);KErrSyncEngineErrorBase;-8327;Base value for engine-related errors.
+SyncML  (SYNCMLERR.H);KErrConnectionError;-8328;Transports could not connect to the server.
+SyncML  (SYNCMLERR.H);KErrCannotCommunicateWithServer;-8329;Could not communicate with the server:possibly atime-out occurred.
+SyncML  (SYNCMLERR.H);KErrDatabaseAdapterIndexError;-8330;Database adapter failed to create an item.
+SyncML  (SYNCMLERR.H);KErrParseCallbackError;-8331;Currently unused.
+SyncML  (SYNCMLERR.H);KErrCommandInvalid;-8332;Currently unused.
+SyncML  (SYNCMLERR.H);KErrSessionIdNotValid;-8333;Invalid session ID.
+SyncML  (SYNCMLERR.H);KErrVerDTDMissing;-8334;SyncML message did not specify a DTD version.
+SyncML  (SYNCMLERR.H);KErrProtoMissing;-8335;SyncML message did not specify a protocol.
+SyncML  (SYNCMLERR.H);KErrSyncHdrMissing;-8336;Currently unused.
+SyncML  (SYNCMLERR.H);KErrTargetLocMissing;-8337;SyncML message did not specify a target location.
+SyncML  (SYNCMLERR.H);KErrSourceLocMissing;-8338;SyncML message did not specify a source location.
+SyncML  (SYNCMLERR.H);KErrTargetLocNameMissing;-8339;Currently unused.
+SyncML  (SYNCMLERR.H);KErrSourceLocNameMissing;-8340;Currently unused.
+SyncML  (SYNCMLERR.H);KErrMappingInfoMissing;-8341;Mapping of added item could not created.
+SyncML  (SYNCMLERR.H);KErrMappingInfoNotAcked;-8342;Mapping has not been acknowledged by the server.
+SyncML  (SYNCMLERR.H);KErrVersionDTDNotSupported;-8343;SyncML message specified an unsupported DTD version.
+SyncML  (SYNCMLERR.H);KErrProtoNotSupported;-8344;SyncML message specified an unsupported protocol.
+SyncML  (SYNCMLERR.H);KErrStatusCommandForCommandNotSent;-8345;A status was received for a cmdId, butthis cmdIdwas not sent.
+SyncML  (SYNCMLERR.H);KErrStatusCommandNotTheSame;-8346;A status was received but the commandstringdoesnot matched the received one.
+SyncML  (SYNCMLERR.H);KErrMissingStatusCommands;-8347;Status command(s) were expected but are missing.
+SyncML  (SYNCMLERR.H);KErrFailedToAddRecord;-8348;Failed to add record in database.
+SyncML  (SYNCMLERR.H);KErrFailedToReplaceRecord;-8349;Failed to replace record in database.
+SyncML  (SYNCMLERR.H);KErrFailedToDeleteRecord;-8350;Failed to delete record in database.
+SyncML  (SYNCMLERR.H);KErrXmlParsingError;-8351;XML parsing error.
+SyncML  (SYNCMLERR.H);KErrReferenceToolkitError;-8352;There was an error reported in the referencetoolkit.
+SyncML  (SYNCMLERR.H);KErrClientDatabaseNotFound;-8404;No suitable database was found on theclientdevice.
+SyncML  (SYNCMLERR.H);KErrServerDatabaseNotFound;-8405;No suitable database was found on theserver.
+SyncML  (SYNCMLERR.H);KErrDevInfFileNotFound;-8406;Currently unused.
+SyncML  (SYNCMLERR.H);KErrObjectTooLargeToSendToServer;-8407;Object is too large to send to server.
+SyncML  (SYNCMLERR.H);KErrSlowSync;-8408;Sync is going to be slow.
+SyncML  (SYNCMLERR.H);KErrFailedToGetRecord;-8409;Failed to get record from DevMan.
+SyncML  (SYNCMLERR.H);KErrUserInteractionFailed;-8410;User interaction failed.
+SyncML  (SYNCMLERR.H);KErrStatusSizeMismatch;-8411;Large object size mismatch.
+SyncML  (SYNCMLERR.H);KErrFailedToCloseDatabase;-8412;Data Provider close failed.
+;;;
+;// Push message parser-related errors;;
+SyncML  (SYNCMLERR.H);KErrMessageTooShort;-8451;Push message is too short.
+SyncML  (SYNCMLERR.H);KErrMessageIsCorrupt;-8452;Push message is corrupt.
+SyncML  (SYNCMLERR.H);KErrBadTransportId;-8453;Profile has no Transport ID.
+SyncML  (SYNCMLERR.H);KErrNoNotificationBody;-8454;Push message has no body.
+SyncML  (SYNCMLERR.H);KErrWrongVersion;-8455;Push message specifies an unsupportedversion.
+SyncML  (SYNCMLERR.H);KErrUnsupportedMimeType;-8456;Push message specifies an unsupportedversion.
+SyncML  (SYNCMLERR.H);KErrNoSuchTask;-8457;Currently unused.
+SyncML  (SYNCMLERR.H);KErrUnknownSyncType;-8458;Push message specifies an unknown typeof sync.
+SyncML  (SYNCMLERR.H);KErrUnknownProfile;-8459;Push message specifies an unknown profile.
+SyncML  (SYNCMLERR.H);KErrInvalidProfile;-8460;Currently unused.
+SyncML  (SYNCMLERR.H);KErrInvalidCredentials;-8461;Unsupported (USERNETWPIN or USERPIN) securitymechanism specified.
+SyncML  (SYNCMLERR.H);KErrNoCredentials;-8462;Currently unused.
+SyncML  (SYNCMLERR.H);KErrIntegrityFailureHMAC;-8463;Failed to verify the generated HMAC value.
+SyncML  (SYNCMLERR.H);KErrMustUsageUriNotComplete;-8464;Currently unused.
+SyncML  (SYNCMLERR.H);KErrDMAccUriIsCorrupt;-8465;Push message has invalid DM account URI.
+SyncML  (SYNCMLERR.H);KErrDMConUriIsCorrupt;-8466;Push message has invalid DM connectionURI.
+SyncML  (SYNCMLERR.H);KErrParmNameNotInProvDoc;-8468;Push message has missing characteristic.
+SyncML  (SYNCMLERR.H);KErrInvalidAppIdValue;-8469;Push message has missing or invalid App Id.
+SyncML  (SYNCMLERR.H);KErrInvalidToNapIdValue;-8470;Push message has missing or invalid TO-NAPID.
+SyncML  (SYNCMLERR.H);KErrInvalidProviderIdValue;-8471;Push message has missing or invalid Provider-ID.
+SyncML  (SYNCMLERR.H);KErrEmptyAauthLevelValue;-8472;Push message has missing or invalid AAUTHLEVEL.
+SyncML  (SYNCMLERR.H);KErrAppSrvAAuthLevelNotFound;-8473;Push message has missing or invalid APPSRV
+SyncML  (SYNCMLERR.H);KErrClientAAuthLevelNotFound;-8474;Push message has missing or invalid AppAuth Client
+SyncML  (SYNCMLERR.H);KErrInvalidAppAuth;-8475;Currently unused.
+SyncML  (SYNCMLERR.H);KErrNoApplicationCharac;-8476;Push message has missing or invalid APPLICATION characteristic
+SyncML  (SYNCMLERR.H);KErrNoAppAuthCharac;-8478;Push message has missing or invalid APPAUTH characteristic.
+SyncML  (SYNCMLERR.H);KErrMissingRequiredParmInSvr;-8480;Currently unused.
+SyncML  (SYNCMLERR.H);KErrMissingRequiredParmInClient;-8481;Currently unused.
+SyncML  (SYNCMLERR.H);KErrAppAddrCharacNotFound;-8484;Missing APPADDR characteristic or subcharacteristic
+SyncML  (SYNCMLERR.H);KErrUnsupportedVersion;-8485;Unsupported WBXML version
+SyncML  (SYNCMLERR.H);KErrWrongProvPublicDocId;-8486;Prov Document identifier not WAP Provisoningversion 1.0
+;;;
+;//Client API-related errors.;;
+SyncML  (SYNCMLERR.H);KErrProfileNotFound;-8501;The requested profile does not exist.
+SyncML  (SYNCMLERR.H);KErrConnectionNotFound;-8502;The requested connection does not exist within the profile.
+SyncML  (SYNCMLERR.H);KErrTaskNotFound;-8503;The requested task does not exist within theprofile.
+SyncML  (SYNCMLERR.H);KErrTransportNotFound;-8504;The requested transport adaptor does not exist.
+SyncML  (SYNCMLERR.H);KErrDataProviderNotFound;-8505;The requested data provider does not exist.
+SyncML  (SYNCMLERR.H);KErrJobNotFound;-8506;The requested job has completed.
+SyncML  (SYNCMLERR.H);KErrObjectPendingDelete;-8507;The requested object is pending deletion.
+SyncML  (SYNCMLERR.H);KErrObjectInUse;-8508;The object to modify or delete is currently in use.
+SyncML  (SYNCMLERR.H);KErrProfileAccessDenied;-8509;The specified profile is not available, e.g. a Device Management profile, or open foredit by another client.
+SyncML  (SYNCMLERR.H);KErrSuspended;-8510;The requested data stream cannot be found intheData Store.
+SyncML  (SYNCMLERR.H);KErrDataDepotStreamNotFound;-8511;The requested data stream cannot be found intheData Store.
+
+
+;//MMS SMIL Translator Error Codes;;
+MMS SMIL Translator  (MDXMLCONSTANTS.H);KErrXMLBadAttributeValue ;-9001;XML attribute value error code.
+MMS SMIL Translator  (MDXMLCONSTANTS.H);KErrXMLBadAttributeName ;-9002;XML attribute name error code.
+MMS SMIL Translator  (MDXMLCONSTANTS.H);KErrXMLInvalidChild ;-9003;Invalid XML child element error code.
+MMS SMIL Translator  (MDXMLCONSTANTS.H);KErrXMLBadNesting ;-9004;XML element nesting error code.
+MMS SMIL Translator  (MDXMLCONSTANTS.H);KErrXMLIncomplete ;-9005;XML element incomplete error code.
+MMS SMIL Translator  (MDXMLCONSTANTS.H);KErrXMLBadElementName ;-9006;XML element name error code.
+MMS SMIL Translator  (MDXMLCONSTANTS.H);KErrXMLDuplicateDocTypeTags ;-9007;Error code that indicates that more than one DOCTYPE tag has been encountered: the first one encountered will be used.
+MMS SMIL Translator  (MDXMLCONSTANTS.H);KErrXMLDuplicateVersionTags ;-9008;Error code that indicates that more than one XML version tag has been encountered: the first one encountered will be used.
+MMS SMIL Translator  (MDXMLCONSTANTS.H);KErrXMLDuplicateRootElements ;-9009;Error code that indicates that more than one element has been encountered at the root of the document.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+MMS SMIL Translator  (MDXMLCONSTANTS.H);KErrXMLMissingDocTypeTag ;-9010;Error code that indicates that no DOCTYPE tag was encountered.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+MMS SMIL Translator  (MDXMLCONSTANTS.H);KErrXMLMissingVersionTag ;-9011;Error code that indicates that no XML version tag was encountered.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+MMS SMIL Translator  (MDXMLCONSTANTS.H);KErrXMLDuplicateAttributeName ;-9012;Error code that indicates that an element has two or more entries for the same attribute.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+MMS SMIL Translator  (MDXMLCONSTANTS.H);KErrXMLMultipleRootElements ;-9013;Error code that indicates there is no single root element.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+MMS SMIL Translator  (MDXMLCONSTANTS.H);KErrXMLCorruptFile ;-9014;Error code that indicates spurious characters have been found. This may occur as the result of a missing or an extra attribute or element delimiter.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+MMS SMIL Translator  (MDXMLCONSTANTS.H);KErrXMLIllegalCharacter ;-9015;Error code that indicates a built-in entity or element / attribute delimiter is at an inappropriate place.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;// Error codes;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+XML Parser  (GMXMLDOMCONSTANTS.H);KErrXMLBadAttributeValue;-9001;XML attribute value error code. ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+XML Parser  (GMXMLDOMCONSTANTS.H);KErrXMLBadAttributeName;-9002;XML attribute name error code. ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+XML Parser  (GMXMLDOMCONSTANTS.H);KErrXMLInvalidChild;-9003;Invalid XML child element error code. ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+XML Parser  (GMXMLCONSTANTS.H);KErrXMLBadNesting  ;-9004;XML element nesting error code.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+XML Parser  (GMXMLCONSTANTS.H);KErrXMLIncomplete  ;-9005;XML element incomplete error code.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+XML Parser  (GMXMLCONSTANTS.H);KErrXMLBadElementName  ;-9006;XML element name error code.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+XML Parser  (GMXMLCONSTANTS.H);KErrXMLDuplicateDocTypeTags  ;-9007;Error code that indicates that more than one DOCTYPE tag has been encountered: the first one encountered will be used.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+XML Parser  (GMXMLCONSTANTS.H);KErrXMLDuplicateVersionTags  ;-9008;Error code that indicates that more than one XML version tag has been encountered: the first one encountered will be used.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+XML Parser  (GMXMLCONSTANTS.H);KErrXMLDuplicateRootElements  ;-9009;Error code that indicates that more than one element has been encountered at the root of the document (there should be a single <smil> element). The resulting tree may be confused, but is provided rather than being discarded.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+XML Parser  (GMXMLCONSTANTS.H);KErrXMLMissingDocTypeTag  ;-9010;Error code that indicates that no DOCTYPE tag was encountered.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+XML Parser  (GMXMLCONSTANTS.H);KErrXMLMissingVersionTag  ;-9011;Error code that indicates that no XML version tag was encountered.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+XML Parser  (GMXMLCONSTANTS.H);KErrXMLDuplicateAttributeName  ;-9012;Error code that indicates that an element has two or more entries for the same attribute.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+XML Parser  (GMXMLCONSTANTS.H);KErrXMLMultipleRootElements  ;-9013;Error code that indicates there is no single root element. This may be the result of two of more root elements being added incorrectly, or a missing root element leading to the child elements being assumed to be root nodes.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+XML Parser  (GMXMLCONSTANTS.H);KErrXMLCorruptFile  ;-9014;Error code that indicates spurious characters have been found. This may occur as the result of a missing or an extra attribute or element delimiter.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+XML Parser  (GMXMLCONSTANTS.H);KErrXMLIllegalCharacter  ;-9015;Error code that indicates a built-in entity or element / attribute delimiters at an inappropriate place.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+XML Parser  (GMXMLCONSTANTS.H);KErrXMLBadEntity  ;-9016;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+XML Parser  (GMXMLCONSTANTS.H);KErrXMLInvalidElement  ;-9017;Error code that indicates an element was found to be invalid by the DTD;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+XML Parser  (GMXMLCONSTANTS.H);KErrXMLInvalidAttribute  ;-9018;Error code that indicates an attribute was found to be invalid by the DTD;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;// Error codes for the MMS ServerMTM;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ MMS Server MTM  (MMSERRORS.H);KMmsErrUnspecified;-9100
+ MMS Server MTM  (MMSERRORS.H);KMmsErrServiceDenied;-9101
+ MMS Server MTM  (MMSERRORS.H);KMmsErrMessageFormatCorrupt;-9102
+ MMS Server MTM  (MMSERRORS.H);KMmsErrSendingAddressUnresolved;-9103
+ MMS Server MTM  (MMSERRORS.H);KMmsErrMessageNotFound;-9104
+ MMS Server MTM  (MMSERRORS.H);KMmsErrNetworkProblem;-9105
+ MMS Server MTM  (MMSERRORS.H);KMmsErrContentNotAccepted;-9106
+ MMS Server MTM  (MMSERRORS.H);KMmsErrUnsupportedMessage;-9107
+ MMS Server MTM  (MMSERRORS.H);KMmsErrInvalidPDU;-9108
+ MMS Server MTM  (MMSERRORS.H);KMmsErrNoData;-9109
+ MMS Server MTM  (MMSERRORS.H);KMmsNoResponseStatus;-9110
+
+;;
+;// Crypto libraries;
+Security Services   (SECURITYERR.H);KErrBadPassphrase;-11000
+Security Services   (SECURITYERR.H);KErrTotalLossOfEntropy;-11001
+Security Services   (SECURITYERR.H);KErrKeyNotWeakEnough;-11002;
+Security Services   (SECURITYERR.H);KErrInvalidPadding;-11003;
+Security Services   (SECURITYERR.H);KErrWeakKey;-11004;
+Security Services   (SECURITYERR.H);KErrNegativeExportNotSupported   ;-11005;
+Security Services   (SECURITYERR.H);;;
+Security Services   (SECURITYERR.H);//Crypto key store interfaces and the software keystore.;;
+Security Services   (SECURITYERR.H);KErrKeyAlgorithm;-11006;
+Security Services   (SECURITYERR.H);KErrKeyUsage;-11007;
+Security Services   (SECURITYERR.H);KErrKeyValidity;-11008;
+Security Services   (SECURITYERR.H);KErrKeySize;-11009;
+Security Services   (SECURITYERR.H);KErrKeyAccess;-11010;
+Security Services   (SECURITYERR.H);KErrPrivateKeyNotFound;-11011;
+
+;;;
+;// Error codes returned from the compressor and decompressor classes;;
+EZLIB  (EZLIBERRORCODES.H);KEZlibErrStream             ;-11501;The Z_STREAM_ERROR zlib error code has been returned by an internal method due to a stream error. 
+EZLIB  (EZLIBERRORCODES.H);KEZlibErrData               ;-11502;The Z_DATA_ERROR zlib error code has been returned by an internalmethod due to a data error. 
+EZLIB  (EZLIBERRORCODES.H);KEZlibErrBuf                ;-11503;The Z_BUF_ERROR zlib error code has been returned by an internalmethod due to a buffer error.
+EZLIB  (EZLIBERRORCODES.H);KEZlibErrVersion            ;-11504;The Z_VERSION_ERROR zlib error code has been returned by an internal method due to a version error.
+EZLIB  (EZLIBERRORCODES.H);KEZlibErrUnexpected         ;-11505;Unexpected ezlib error.
+EZLIB  (EZLIBERRORCODES.H);KEZlibErrDeflateTerminated  ;-11506;Returned by ::DeflateL() if deflation has already occured. 
+EZLIB  (EZLIBERRORCODES.H);KEZlibErrInflateTerminated  ;-11507;Returned by ::InflateL() if inflation has already occured.
+EZLIB  (EZLIBERRORCODES.H);KEZlibErrInflateDictionary  ;-11508;An error has occured inflating the dictionary.
+;;;
+;// Error codes returned from GZip classes;;
+EZLIB  (EZLIBERRORCODES.H);KEZlibErrNotGZipFile        ;-11509;
+EZLIB  (EZLIBERRORCODES.H);KEZlibErrInvalidCompression ;-11510;
+EZLIB  (EZLIBERRORCODES.H);KEZlibErrBadGZipHeader      ;-11511;
+EZLIB  (EZLIBERRORCODES.H);KEZlibErrBadGZipTrailer     ;-11512;
+EZLIB  (EZLIBERRORCODES.H);KEZlibErrBadGZipCrc         ;-11513;
+
+
+;// Error codes for the CVideoPlayerUtilityAPI;;
+Multimedia Framework  (MMFERRORS.H);KErrMMNotEnoughBandwidth;-12000;Not enough network bandwidth.
+Multimedia Framework  (MMFERRORS.H);KErrMMSocketServiceNotFound;-12001;Error locating network socket services.
+Multimedia Framework  (MMFERRORS.H);KErrMMNetworkRead;-12002;An error occurred while reading data from the network.
+Multimedia Framework  (MMFERRORS.H);KErrMMNetworkWrite;-12003;An error occurred while writing data to the network.
+Multimedia Framework  (MMFERRORS.H);KErrMMServerSocket;-12004;Invalid socket error or an error occurred while creating a network socket.
+Multimedia Framework  (MMFERRORS.H);KErrMMServerNotSupported;-12005;Streaming Server not supported.
+Multimedia Framework  (MMFERRORS.H);KErrMMServerAlert;-12006;Server alert.
+Multimedia Framework  (MMFERRORS.H);KErrMMUDPReceive;-12007;Player cannot receive UDP data packets.
+Multimedia Framework  (MMFERRORS.H);KErrMMInvalidProtocol;-12008;Network transport not recognized.
+Multimedia Framework  (MMFERRORS.H);KErrMMInvalidURL;-12009;Invalid URL.
+Multimedia Framework  (MMFERRORS.H);KErrMMMulticast;-12010;An error occured attempting to join or access multicast session.
+Multimedia Framework  (MMFERRORS.H);KErrMMProxyServer;-12011;Proxy status error, Proxy invalid response error or invalid hostname for proxy.
+Multimedia Framework  (MMFERRORS.H);KErrMMProxyServerNotSupported;-12012;Client cannot support proxy server.
+Multimedia Framework  (MMFERRORS.H);KErrMMProxyServerConnect;-12013;Unable to locate proxy server or Proxy connection could not be established.
+Multimedia Framework  (MMFERRORS.H);KErrMMAudioDevice;-12014;Cannot open audio device, or lost control of audio device.
+Multimedia Framework  (MMFERRORS.H);KErrMMVideoDevice;-12015;Problem blitting video to display.
+Multimedia Framework  (MMFERRORS.H);KErrMMDecoder;-12016;Invalid decoder, decoder not properly initialized, or appropriate decoder could not be found.
+Multimedia Framework  (MMFERRORS.H);KErrMMPartialPlayback;-12017;Only able to play either the audio or the video portion of the media file. Could be due to a codec that isn't supported, the video frame size being too large etc.
+Multimedia Framework  (MMFERRORS.H);KErrMMDRMNotAuthorized;-12018;Digital Rights have expired.
+
+
+;//CDMA OTA result codes based on 3GPP2 C.S0016-B Table 3.5.1.2-1;;
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaUnknown;-13257;Rejected - Unknown reason 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaDataSizeMismatch;-13258;Rejected - Data size mismatch 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaProtocolVersionMismatch;-13259;Rejected - Protocol version mismatch
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaInvalidParameter;-13260;Rejected - Invalid parameter 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaSIDNIDLengthMismatch;-13261;Rejected - SID NID length mismatch
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaMessageNotExpectedInThisMode;-13262;Rejected - Message not expected in this mode 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaBlockIdValueNotSupported;-13263;Rejected - Block Id value not supported 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaPRLLengthMismatch;-13264;Rejected - PRL length mismatch
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaCRC;-13265;Rejected - Incorrect CRC 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaLocked;-13266;Rejected - Mobile Station Locked 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaInvalidSPC ;-13267;Rejected - Invalid SPC 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaSPCChangeDeniedByUser ;-13268;Rejected - SPC change denied by user
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaInvalidSpasm;-13269;Rejected - Invalid SPASM 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaBlockIdNotExpectedInThisMode;-13270;Rejected - Block Id not expected in this mode
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaUserZoneAlreadyInPUZL ;-13271;Rejected - User Zone already in PUZL
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaUserZoneNotInPUZL;-13272;Rejected - User zone not in PUZL 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaNoEntriesInPUZL;-13273;Rejected - No entries in PUZL 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaOperationModeMismatch ;-13274;Rejected - Operation Mode mismatch
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaSimpleIPMaxNumNaiMismatch ;-13275;Rejected - SimpleIP MAX_NUM_NAI mismatch
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaSimpleIPMaxNaiLengthMismatch;-13276;Rejected - SimpleIP MAX_NAI_LENGTH mismatch 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaMobileIPMaxNumNaiMismatch ;-13277;Rejected - MobileIP MAX_NUM_NAI mismatch
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaMobileIPMaxNaiLengthMismatch;-13278;Rejected - MobileIP MAX_NAI_LENGTH mismatch 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaSimpleIPPapMaxSsLenMismatch;-13279;Rejected - SimpleIP PAP MAX_SS_LENGTH mismatch
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaSimpleIPChapMaxSsLenMismatch;-13280;Rejected - SimpleIP CHAP MAX_SS_LENGTH mismatch
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaMobileIPMaxMnAaaSsLenMismatch;-13281;Rejected - MobileIP MAX_MN-AAA_SS_LENGTH mismatch 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaMobileIPMaxMnHaSsLenMismatch;-13282;Rejected - MobileIP MAX_MN-HA_SS_LENGTH mismatch 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaMobileIPMnAaaAuthAlgoMismatch;-13283;Rejected - MobileIP MN-AAA_AUTH_ALGORITHM mismatch 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaMobileIPMnhaAuthAlgoMismatch;-13284;Rejected - MobileIP MNHA_AUTH_ALGORITHM mismatch 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaSimpleIPActNaiEntryIndexMismatch;-13285;Rejected - SimpleIP ACT_NAI_ENTRY_INDEX mismatch 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaMobileIPActNaiEntryIndexMismatch;-13286;Rejected - MobileIP ACT_NAI_ENTRY_INDEX mismatch 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaSimpleIPPapNaiEntryIndexMismatch;-13287;Rejected - SimpleIP PAP NAI_ENTRY_INDEX mismatch
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaSimpleIPChapNaiEntryIndexMismatch;-13288;Rejected - SimpleIP CHAP NAI_ENTRY_INDEX mismatch 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaOtaMobileIPNaiEntryIndexMismatch;-13289;Rejected - MobileIP NAI_ENTRY_INDEX mismatch 
+
+;//CDMA Flash result codes;;
+Multimode Telephony  (ETELMMERR.H);KErrCdmaFlashInvalidFeature;-13513;Rejected Info Record- Invalid Feature code 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaFlashInvalidKeypadEntry;-13514;Rejected Info Record- Invalid Keypad entry  
+Multimode Telephony  (ETELMMERR.H);KErrCdmaFlashInvalidNumberType;-13515;Rejected Info Record- Invalid NumberType  
+Multimode Telephony  (ETELMMERR.H);KErrCdmaFlashInvalidNumberPlan;-13516;Rejected Info Record- Invalid Number Plan 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaFlashInvalidPI ;-13517;Rejected Info Record- Invalid Presentation Indicator 
+Multimode Telephony  (ETELMMERR.H);KErrCdmaFlashInvalidSI ;-13518;Rejected Info Record- Invalid Screening Indicator  
+Multimode Telephony  (ETELMMERR.H);KErrCdmaFlashInvalidPartyNum;-13519;Rejected Info Record- Invalid Party Number  
+Multimode Telephony  (ETELMMERR.H);KErrCdmaFlashL3BlockedFlashMessage;-13520;Call-stack blocked sending flash message
+;;;
+;//CDMA miscellaneous result codes defined by Symbian;;
+Multimode Telephony  (ETELMMERR.H);KErrCdmaMiscSignallingFailure;-13768;Signalling failure invoice call origination or termination.
+Multimode Telephony  (ETELMMERR.H);KErrCdmaMiscNetworkBusy;-13769;Busy network in voicecall origination or termination.
+Multimode Telephony  (ETELMMERR.H);KErrCdmaMiscConnectionLost;-13770;Loss of connection invoice call origination or termination.
+Multimode Telephony  (ETELMMERR.H);KErrCdmaMiscNetworkRelease;-13771;Release of network invoice call origination or termination.
+Multimode Telephony  (ETELMMERR.H);KErrCdmaMiscBaseStationRejectServiceOption;-13772;Service option rejection by base station in voice call origination or termination.
+Multimode Telephony  (ETELMMERR.H);KErrCdmaMiscAccessFailure ;-13773;Access failure in voice call originationor termination.
+Multimode Telephony  (ETELMMERR.H);KErrCdmaMiscNoService ;-13774;Service not available in voicecall origination or termination.
+Multimode Telephony  (ETELMMERR.H);KErrCdmaMiscSecurityCodeBlocked;-13775;This code is blocked (probably as a result of the maximum retry being exceeded)
+
+
+;//ECOM Error Codes;;
+ECOM  (ECOMERRORCODES.H);KEComErrNoInterfaceIdentified;-17004;The call to instantiate an Interface Implementation failed because no registrations exist for this interface.
+ECOM  (ECOMERRORCODES.H);KEComErrNoResolver;-17014;The Non-Default resolver could not be instantiated. The most likely situation is that an incorrect implementation uid was supplied.
+ECOM  (ECOMERRORCODES.H);KEComErrTooManyNotificationsOutstanding  ;-17026;The client has requested too many notifications.ECom can only support a finite number of notifications
+ECOM  (ECOMERRORCODES.H);KEComErrMissingParameter;-17028;An ECom service was requested with an essential parameter missing. For example, this error code will be supplied when calling an overload of CreateImplementationL which uses a non-default resolver if you fail tosupply the resolver
+ECOM  (ECOMERRORCODES.H);KEComErrListInvalidAwaitNotification;-17029;The registry index is invalid but the client has requested notifications - so they will receive a notification when the indexis ready again
+ECOM  (ECOMERRORCODES.H);KEComErrListCurrentlyUnavailable;-17030;The registry index is invalid and the client has not requested notifications. They will have to try again later after discoveries have completed.
+ECOM  (ECOMERRORCODES.H);KEComErrInvalidUnloadPolicy;-17003;The Client requested a service which is not supplied by this framework 
+ECOM  (ECOMERRORCODES.H);KEComErrInvalidIIC;-17008;An attempt has been made to load an implementation contained within a dll which no longer exists (deleted or is on a CF card that has been removed).
+ECOM  (ECOMERRORCODES.H);KEComErrDriveNotFound;-17019;An attempt has been made to update registry information for a dll on a drive that does not exist.
+ECOM  (ECOMERRORCODES.H);KEComErrUnknownService;-17002;The Client requested a service which is not supplied by this framework The Client requested a service which is not supplied by this framework
+ECOM  (ECOMERRORCODES.H);KEComErrReferenceCountInvalid;-17013;The Interface Implementation reference count is invalid 
+ECOM  (ECOMERRORCODES.H);KEComErrDestructionFailed;-17017;The Interface Implementations destruction could not be recorded 
+ECOM  (ECOMERRORCODES.H);KEComErrInvalidRegistryData;-17022;An attempt has been made to update the registry information for a non-existent DLL.  An ECom internal error.
+ECOM  (ECOMERRORCODES.H);KEComErrDestroyingWithNullDtorKey;-17027;The client called DestroyedImplementation with a destruction key of NULL. This is an irrecoverable error because the object cannot be deleted.
+ECOM  (ECOMERRORCODES.H);KEComErrAlreadyReceiving;-17001; 
+ECOM  (ECOMERRORCODES.H);KEComErrEnableFailed;-17005;The call to Enable the registered Interface Implementation failed 
+ECOM  (ECOMERRORCODES.H);KEComErrDisableFailed;-17006;The call to Disable the registered Interface Implementation failed 
+ECOM  (ECOMERRORCODES.H);KEComErrNoRegistrationsFound;-17007;The call to instantiate an Interface Implementation failed because no appropriate implementation was found.
+ECOM  (ECOMERRORCODES.H);KEComErrUninstallFailed;-17009;The call to Remove the registered Interface Implementation failed 
+ECOM  (ECOMERRORCODES.H);KEComErrReinstallFailed;-17010;The call to Re-register an Interface Implementation failed 
+ECOM  (ECOMERRORCODES.H);KEComErrRegistrationFailed;-17011;The call to Register an Interface Implementation failed 
+ECOM  (ECOMERRORCODES.H);KEComErrNotConnected;-17012;The client does not have a session open with theframework 
+ECOM  (ECOMERRORCODES.H);KEComErrSuspendFailed;-17015;The call to Suspend registration activities failed 
+ECOM  (ECOMERRORCODES.H);KEComErrResumeFailed;-17016;The call to Resume registration activities failed 
+ECOM  (ECOMERRORCODES.H);KEComErrDriveAlreadyInstalled;-17018;An attempt has been made to add a drive to the registry which already exists
+ECOM  (ECOMERRORCODES.H);KEComErrIndexEntryNotFound;-17020; 
+ECOM  (ECOMERRORCODES.H);KEComErrNoRegistrationData;-17021;An IIC has been found which does not have a corresponding registration information file
+ECOM  (ECOMERRORCODES.H);KEComErrMismatchedTags;-17023;
+ECOM  (ECOMERRORCODES.H);KEComErrInstantiationPointerNotFound;-17024;
+ECOM  (ECOMERRORCODES.H);KEComErrInstantiationPointerNotAvailable ;-17025;
+
+;;;
+Content Handling Framework  (CHFERROR.H);KErrCHFProxyObjectAlreadyExists;-17050;A proxy object with the same identifier already exists.
+Content Handling Framework  (CHFERROR.H);KErrCHFNoSchemeInUri;-17051;Supplied URI has no scheme part.
+Content Handling Framework  (CHFERROR.H);KErrCHFDataSupplierConstructionFailed;-17052;Data supplier construction failed.
+Content Handling Framework  (CHFERROR.H);KErrCHFContentHandlerConstructionFailed;-17053;Content handler construction failed.
+Content Handling Framework  (CHFERROR.H);KErrCHFDataSupplierSetPositionFailed;-17054;Failed to set position in data supplier.
+
+;;;
+Root Server  (RSERROR.H);KErrRSSuddenDeath ;-17103;A module has died.
+Root Server  (RSERROR.H);KErrRSRequestCancelled ;-17104;A request was cancelled.
+Root Server  (RSERROR.H);KErrRSInvalidParameter ;-17105;A parameter was in some way invalid.
+Root Server  (RSERROR.H);KErrRSInvalidParameterFile ;-17106;The file could not be found, read or was in some way corrupt.
+Root Server  (RSERROR.H);KErrRSInvalidParameterName ;-17107;The name was invalid.
+Root Server  (RSERROR.H);KErrRSInvalidParameterStackSize ;-17108;The stack size was invalid.
+Root Server  (RSERROR.H);KErrRSInvalidParameterHeapSize ;-17109;The heap size was invalid.
+Root Server  (RSERROR.H);KErrRSInvalidUidType ;-17110;The second UID of the DLL was not the UID of a Comms Provider Module.
+Root Server  (RSERROR.H);KErrRSModuleAlreadyExist ;-17111;A Comms Provider Module with this name is already loaded.
+Root Server  (RSERROR.H);KErrRSInvalidMBufPoolSize ;-17112;The size of the MBuf pool is invalid.
+Root Server  (RSERROR.H);KErrRSModuleNotRunning ;-17113;The specified module is not running.
+Root Server  (RSERROR.H);KErrRSModuleNotLoaded ;-17114;The specified module is not loaded.
+Root Server  (RSERROR.H);KErrRSAlreadyBound ;-17115;The specified binding is already active.
+Root Server  (RSERROR.H);KErrRSModulesStillRunning ;-17116;There are running modules.
+Root Server  (RSERROR.H);KErrRSNoNewHeapsAvailable ;-17117;Unable to create more new heaps in the Comms Process. Consider sharing a heap between modules.
+Root Server  (RSERROR.H);KErrRSRequestTimedOut ;-17118;A request timed out. This can happen when a module stops responding to requests for some reason.
+Root Server  (RSERROR.H);KErrRSModuleUnknown ;-17119;The specified module does not exist..
+Root Server  (RSERROR.H);KErrRSSubModuleUnknown ;-17120;The specified sub module does not exist.
+Root Server  (RSERROR.H);KErrRSBindingUnknown ;-17121;The specified binding does not exist.
+Root Server  (RSERROR.H);KErrRSStatusUnknown ;-17122;The status is unknown.
+Root Server  (RSERROR.H);KErrRSBindingExists ;-17123;The specified binding exist.
+Root Server  (RSERROR.H);KErrRSModuleNotReady ;-17124;The module is not ready for requests.
+Root Server  (RSERROR.H);KErrRSBindingInProgress ;-17125;The specified binding is not yet completed.
+Root Server  (RSERROR.H);KErrRSUnableToOpenHeap ;-17126;Found heap but unable to open it for sharing.
+Root Server  (RSERROR.H);KErrRSUnableToFindHeap ;-17127;Unable to find specified heap.
+Root Server  (RSERROR.H);KErrRSUnableToCreateQueues ;-17128;Unable to create communication channels for new module.
+Root Server  (RSERROR.H);KErrRSZombie ;-17129;This Comms Provider Module exists but is not responding.
+Root Server  (RSERROR.H);KErrRSInvalidParameterThreadFuncOrdinal   ;-17130;The specified ordinal does not exist for the DLL.
+Root Server  (RSERROR.H);KErrRSInvalidBinding ;-17131;Invalid binding.
+Root Server  (RSERROR.H);KErrRSInvalidQueueLength ;-17132;Queue length of binding invalid. Must be betweenTRSBindingInfo::EMinQueueLength and TRSBindingInfo::EMaxQueueLength.
+
+
+Esock  (ES_SOCK.H);KErrConnectionTerminated;-17210;
+Esock  (ES_SOCK.H);KErrCannotFindProtocol;-17211;
+
+
+Central Repository  (TREESTOREERR.H);KErrTreeStoreUriTooLong         ;-17250;The supplied URI exceeded the maximum overall length supported.
+Central Repository  (TREESTOREERR.H);KErrTreeStoreUriTooDeep         ;-17251;The depth of the supplied URI exceeded the maximum tree depth supported.
+Central Repository  (TREESTOREERR.H);KErrTreeStoreUriSegmentTooLong  ;-17252;A segment in the supplied URI exceeded the maximum length supported.
+Central Repository  (TREESTOREERR.H);KErrTreeStoreBadUriSegmentName  ;-17253;A segment in the supplied URI contained characters in the 'reserved' range in RFC2396.
+Central Repository  (TREESTOREERR.H);KErrTreeStoreBadUriDelimiters   ;-17254;The supplied URI contained either a missing front delimiter or an illegal back delimiter.
+Central Repository  (TREESTOREERR.H);KErrTreeStoreZeroLenUriSegment  ;-17255;The supplied URI contained a segment of zero length (i.e. the character' with no content).
+Central Repository  (TREESTOREERR.H);KErrTreeStoreUnknownMountPoint  ;-17256;The supplied mount point URI does not exist in this tree store.
+Central Repository  (TREESTOREERR.H);KErrTreeStoreVolAlreadyAttached ;-17257;The specified tree volume is already attached in the tree store.
+Central Repository  (TREESTOREERR.H);KErrTreeStoreVolumeNotAttached  ;-17258;The specified tree volume is already attached in the tree store.
+Central Repository  (TREESTOREERR.H);KErrTreeStoreNotAPersistedTree  ;-17259;An attempt was made to manipulate volumes for a tree that isn't persisted.
+
+
+;//Position Client API Error Codes;;
+LBS Position Framework  (LBSERRORS.H);KErrPositionBufferOverflow;-17350;
+LBS Position Framework  (LBSERRORS.H);KErrPositionIncalculable;-17351;
+
+
+Content Access Framework  (CAFERR.H);KErrCANotSupported;-17450;Agent does not support the requested capability.
+Content Access Framework  (CAFERR.H);KErrCANoPermission;-17451;Rights evaluation failed for the supplied intent.
+Content Access Framework  (CAFERR.H);KErrCANoRights;-17452;No rights were available for evaluation.
+Content Access Framework  (CAFERR.H);KErrCANoAgent;-17453;The Agent required is not present. This may occur if content 'belongs' to an agent that is no longer available on the device. 
+Content Access Framework  (CAFERR.H);KErrCAOutOfRange;-17454;Values specified are out of range.
+Content Access Framework  (CAFERR.H);KErrCAPendingRights;-17455;The rights were not available but are 'expected'.
+Content Access Framework  (CAFERR.H);KErrCASizeNotDetermined;-17456;A request to get the content size failed because the agent was unable to determine it.
+Content Access Framework  (CAFERR.H);KErrCANewFileHandleRequired  ;-17457;The function failed because the agent needs the client to provide another file handle before the import can continue.
+
+;;;
+;// ECom related;;
+XML Framework (XMLFRAMEWORKERRORS.H);KErrXmlStringDictionaryPluginNotFound    ;-17550;
+XML Framework (XMLFRAMEWORKERRORS.H);KErrXmlParserPluginNotFound;-17551;
+XML Framework (XMLFRAMEWORKERRORS.H);KErrXmlGeneratorPluginNotFound;-17552;
+XML Framework (XMLFRAMEWORKERRORS.H);KErrXmlPluginNotFound;-17553;
+;;;
+;// CCharSetConverter;;
+XML Framework (XMLFRAMEWORKERRORS.H);KErrXmlBadCharacterConversion;-17554;
+XML Framework (XMLFRAMEWORKERRORS.H);KErrXmlUnsupportedCharacterSet;-17555;
+XML Framework (XMLFRAMEWORKERRORS.H);KErrXmlUnavailableCharacterSet;-17556;
+;;;
+;// MStringDictionary;
+XML Framework (XMLFRAMEWORKERRORS.H);KErrXmlUnsupportedElement;-17557
+XML Framework (XMLFRAMEWORKERRORS.H);KErrXmlUnsupportedAttribute;-17558
+XML Framework (XMLFRAMEWORKERRORS.H);KErrXmlUnsupportedAttributeValue;-17559
+XML Framework (XMLFRAMEWORKERRORS.H);KErrXmlMissingStringDictionary;-17560
+;;
+;// General;
+XML Framework (XMLFRAMEWORKERRORS.H);KErrXmlUnsupportedDocumentVersion;-17561
+XML Framework (XMLFRAMEWORKERRORS.H);KErrXmlDocumentCorrupt;-17562
+XML Framework (XMLFRAMEWORKERRORS.H);KErrXmlStringPoolTableNotFound;-17563
+XML Framework (XMLFRAMEWORKERRORS.H);KErrXmlBadIndex;-17564
+XML Framework (XMLFRAMEWORKERRORS.H);KErrXmlUnsupportedExtInterface;-17566
+
+;;
+;//LBS Privacy Framework Error Codes;
+LBS Privacy  (EPOS_CSPRIVACYSHARELEAVECODE.H);KErrPrivacyTbNullPtr ;-17901
+LBS Privacy  (EPOS_CSPRIVACYSHARELEAVECODE.H);KErrPrivacyTbProgramError;-17902
+LBS Privacy  (EPOS_CSPRIVACYSHARELEAVECODE.H);KErrPrivacyTbNullSearchString ;-17903
+LBS Privacy  (EPOS_CSPRIVACYSHARELEAVECODE.H);KErrPrivacyTbWriteFailure;-17904
+LBS Privacy  (EPOS_CSPRIVACYSHARELEAVECODE.H);KErrPriPolicyTbPackedPriByte ;-17905
+LBS Privacy  (EPOS_CSPRIVACYSHARELEAVECODE.H);KErrPriVersionTbInvalidVersion ;-17906
+LBS Privacy  (EPOS_CSPRIVACYSHARELEAVECODE.H);KErrPriVersionTbRecordAlreadyExist ;-17907
+;;
+LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H);KErrServicePrivacyTbErrorBase;-17910
+LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H);KErrSerPriTbMismatchServiceIdAndType;-17911
+LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H);KErrSerPriTbServiceIdTypeChanged;-17912
+LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H);KErrSerPriTbSecureIdChanged;-17913
+;;
+;//Leave code used for ServiceIdPhoneNumber table;
+LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H);KErrServiceIdPhoneNumberTbErrorBase;-17915
+LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H);KErrServiceIdPhoneNumTbMatchDigitsOutOfRange;-17916
+LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H);KErrServicePrivacyErrorBase;-17920
+LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H);KErrServicePrivacyDuplicateServiceItemId;-17921
+LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H);KErrServicePrivacyArrayIndexOutOfRange;-17922
+;;
+;//Leave code used for ServicePrivacyDbModel;
+LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H);KErrServicePrivacyDbModelErrorBase;-17925
+LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H);KErrSPDbModelWrongMajorVersion;-17926
+LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H);KErrSPDbModelServiceIdPhNoDigitsLessThan7;-17927
+LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H);KErrSPDbModelServiceIdTypeNotSet;-17928
+LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H);KErrSPDbModelWrongServiceInfoMask;-17929
+LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H);KErrSPDbModelNullServiceId;-17930
+LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H);KErrSPDbModelChildTbRcdNotDeleted;-17931
+LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H);KErrSPDbModelChildTbRcdNotUpdated;-17932
+LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H);KErrSPDbModelInvalidPhMatchLength;-17933
+;;
+;//Leave code used for ServicePrivacyDb;
+LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H);KErrServicePrivacyDbErrorBase;-17935
+LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H);KErrServicePrivacyDbInvalidServiceItemIdInArray;-17936
+LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H);KErrServicePrivacyDbEventObserverAlreadyExists;-17937

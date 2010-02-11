@@ -1,0 +1,44 @@
+<h1>Protocol panic</h1>
+<p>The Sockets Server gives a &quot;Protocol panic&quot; when it finds incorrect protocol module behaviour.</p>
+<code>0</code>
+<p>An unknown request completed</p>
+<code>1</code>
+<p>Protocol completed a connect request unexpectedly</p>
+<code>2</code>
+<p>Unused</p>
+<code>3</code>
+<p>Protocol completed a connect with data request unexpectedly</p>
+<code>4</code>
+<p>Protocol completed a shutdown with data request unexpectedly</p>
+<code>5</code>
+<p><code>CProtocolFamilyBase::Remove()</code> failed</p>
+<code>6</code>
+<p>Protocol made incorrect call to the server through a <code>MSocketNotify</code> function</p>
+<code>7</code>
+<p>Protocol made call to <code>MSocketNotify::NewDataL()</code> with bad <code>aCount</code> value</p>
+<code>8</code>
+<p>Unused</p>
+<code>9</code>
+<p>Protocol made call to <code>MSocketNotify::DisConnect()</code> with connectionless socket</p>
+<code>10</code>
+<p>Server could not get expected received data from protocol</p>
+<code>11</code>
+<p>Protocol has returned an invalid <code>TServerProtocolDesc</code></p>
+<code>12</code>
+<p>Protocol has not implemented <code>CProtocolBase::Error()</code></p>
+<code>13</code>
+<p>Protocol has not implemented descriptor-overload of <code>CProtocolBase::Process()</code></p>
+<code>14</code>
+<p>Protocol has not implemented <code>RMBufChain</code>-overload <code>CProtocolBase::Process()</code></p>
+<code>15</code>
+<p>Protocol has not implemented descriptor-overload of <code>CProtocolBase::Send()</code></p>
+<code>16</code>
+<p>Protocol has not implemented <code>RMBufChain</code>-overload <code>CProtocolBase::Send()</code></p>
+<code>17</code>
+<p>Protocol has not implemented <code>CProtocolBase::BindToL()</code></p>
+<code>18</code>
+<p>Protocol has not implemented <code>CProtocolBase::BindL()</code></p>
+<code>19</code>
+<p>Protocol made call to <code>MSocketNotify::ConnectComplete()</code> on non-listening socket</p>
+<code>20</code>
+<p>Protocol made call to <code>MSocketNotify::ConnectComplete()</code> when server has accepted maximum number of sockets</p>
