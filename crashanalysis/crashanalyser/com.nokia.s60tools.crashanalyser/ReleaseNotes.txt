@@ -51,4 +51,4 @@ Known Issues:
 
 
 Copyright © 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
-License: http://www.symbianfoundation.org/legal/sfl-v10.html.
+License: http://www.eclipse.org/legal/epl-v10.html.
