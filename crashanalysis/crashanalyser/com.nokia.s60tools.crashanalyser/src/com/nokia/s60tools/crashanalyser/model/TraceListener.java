@@ -36,7 +36,7 @@ import com.nokia.s60tools.crashanalyser.plugin.*;
  * This class listens MobileCrash files via TraceViewer 
  *
  */
-public class TraceListener implements ITraceDataProcessor, 
+public final class TraceListener implements ITraceDataProcessor, 
 										IErrorLibraryObserver  {
 	private final static String MOBILE_CRASH_STARTTAG = "<MB_CR_START>"; //$NON-NLS-1$
 	private final static String MOBILE_CRASH_LINE_TAG = "<MB_CD>"; //$NON-NLS-1$

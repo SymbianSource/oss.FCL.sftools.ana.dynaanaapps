@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.jobs.ILock;
 import org.eclipse.swt.widgets.Display;
 import com.nokia.s60tools.crashanalyser.data.*;
 import com.nokia.s60tools.crashanalyser.interfaces.*;
+import com.nokia.s60tools.crashanalyser.containers.Thread;
 
 /**
  * This class is responsible for providing crash files to MainView's content provider.
@@ -203,6 +204,32 @@ public class CrashFileManager extends Job {
 		}
 	}
 	
+	/**
+	 * Returns threads in one crash file
+	 */
+	public CrashFileBundle[] getThreads(CrashFileBundle crashFile) {
+	
+		List<CrashFileBundle> threadBundles = new ArrayList<CrashFileBundle>();
+		List<Thread> threads = crashFile.getThreads();
+		for(Thread thread : threads) {
+			if(crashFile.isFullyDecoded())
+				threadBundles.add(new CrashFileBundle(crashFile.getCrashFile(), crashFile.getOriginatingDirectory(), thread));
+			else if(crashFile.isPartiallyDecoded())
+				threadBundles.add(new CrashFileBundle(crashFile.getSummaryFile(), crashFile.getOriginatingDirectory(), thread));			
+		}
+		return threadBundles.toArray(new CrashFileBundle[threadBundles.size()]);
+	}
+	
+	/**
+	 * Returns the number of threads totally in all processes.
+	 * @param crashFilebundle Crash file
+	 * @return number of threads in the crash file
+	 */
+	public int getTotalThreadCount(CrashFileBundle crashFileBundle) {
+		return crashFileBundle.getTotalThreadCount();
+	}
+	
+
 	/**
 	 * Starts reading all files from files system
 	 */

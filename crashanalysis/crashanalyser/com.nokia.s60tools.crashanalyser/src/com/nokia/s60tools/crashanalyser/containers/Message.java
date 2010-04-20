@@ -39,7 +39,7 @@ public final class Message {
 	public static final String TAG_TITLE = "title";
 	public static final String TAG_LINE = "line";
 
-	public enum MessageTypes {ERROR, WARNING, COMMENT};
+	public enum MessageTypes {ERROR, WARNING, COMMENT, MESSAGE};
 	
 	// message data
 	private final int messageId;
@@ -162,6 +162,8 @@ public final class Message {
 			return MessageTypes.ERROR;
 		else if ("Warning".equals(type))
 			return MessageTypes.WARNING;
+		else if ("Message".equals(type))
+			return MessageTypes.MESSAGE;
 		else
 			return MessageTypes.COMMENT;
 	}

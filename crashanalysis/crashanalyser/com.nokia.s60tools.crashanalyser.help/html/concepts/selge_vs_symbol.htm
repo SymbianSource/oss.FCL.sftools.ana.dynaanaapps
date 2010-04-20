@@ -1,40 +1,86 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
-<title>Symbol files,  Map files, and Image files</title>
-<link href="../../book.css" type="text/css" rel="stylesheet">
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>Symbol files, Map files, OST dictionary files, and Image files</title>
+  <link href="../../book.css" type="text/css" rel="stylesheet">
 </head>
-<body>
 
-<h2>Symbol files, Map files, and Image files</h2>
-<p>In the Crash Analyser Import Wizard, you have to define either the symbol files or map files or both of them. Defining image files is optional.</p>
+<body>
+<h2>Symbol files, Map files, OST dictionary files, and Image files</h2>
+
+<p>In the Crash Analyser Import Wizard, you have to define either the symbol
+files or map files or both of them. Defining image files is optional.</p>
 
 <h4>Symbol files</h4>
-<p>When you create an image, symbol files are generated automatically. Symbol files contain the binary structure of an image, which is needed for producing an analysis file. You can find a symbol file for example from <i>\epoc32\rombuild\&lt;device>\core.</i></p>
-<p>If you have defined symbol files, you can define also map files and image files.</p><h4>Map files</h4><p>If you need to define map files, you can select the <b>Map files folder</b> option to define the location of map files, or you can select <b>MapFiles.zip</b> option if you want to provide a ZIP file containing the map files. If you choose the <b>SDK Map files folder</b> option, the Crash Analyser Import Wizard checks which SDKs you have installed in Carbide.c++, and lists the directories of each SDK which contain map files. Choose the directory you want. If you do not want to define any map files, then select the <b>No map files</b> option.</p>
+
+<p>When you create an image, symbol files are generated automatically. Symbol
+files contain the binary structure of an image, which is needed for producing
+an analysis file. You can find a symbol file for example from
+<i>\epoc32\rombuild\&lt;device&gt;\core.</i></p>
+
+<p>If you have defined symbol files, you can define also map files and image
+files.</p>
+
+<h4>Map files</h4>
+
+<p>If you need to define map files, you can select the <b>Map files folder</b>
+option to define the location of map files, or you can select
+<b>MapFiles.zip</b> option if you want to provide a ZIP file containing the map
+files. If you choose the <b>SDK Map files folder</b> option, the Crash Analyser
+Import Wizard checks which SDKs you have installed in Carbide.c++, and lists
+the directories of each SDK which contain map files. Choose the directory you
+want. If you do not want to define any map files, then select the <b>No map
+files</b> option.</p>
 
 <h4>Image files</h4>
-<p>The following image file types can be selected in the Import Wizard. You can also select more that one type at the time.</p>
+
+<p>The following image file types can be selected in the Import Wizard. You can
+also select more that one type at the time.</p>
 <ul>
-<li><b>R&amp;D image file</b> (.fpsx,), is a flashable Nokia proprietary image file containing the software for the phone.</li>
-<li><b>Core image file</b> (.Cxx), is a language independent flashable phone software file.</li>
-<li><b>Variant image file</b> (.Vxx.), is an image file which contains the language, country or operator variant specific phone software.</li>
-<li><b>(.img) image file</b> is a Symbian OS flashable image file.</li>
+  <li><b>R&amp;D image file</b> (.fpsx,), is a flashable Nokia proprietary
+    image file containing the software for the phone.</li>
+  <li><b>Core image file</b> (.Cxx), is a language independent flashable phone
+    software file.</li>
+  <li><b>Variant image file</b> (.Vxx.), is an image file which contains the
+    language, country or operator variant specific phone software.</li>
+  <li><b>(.img) image file</b> is a Symbian OS flashable image file.</li>
 </ul>
-<p>All the files (.fpsx, .Cxx, .Vxx, .img) refer to flash image files. Usually only one / few of them are needed, the extension just differs in different environments. The files are the ones that are flashed to phone e.g. with Phoenix tool. The image files are not absolutely neccessary but they enable the analyser to do more precise decoding than just symbol files.</p>
-<p>Different environments put these files to different locations, common locations under SDK root are for example \epoc32\rombuild and \Rom_images_2009. If you have not flashed your development phone yourself, it may be difficult to find the original flash images anywhere. Most of flash files available can be found from Notes DCT5 database, but the decoding files must match the flash image in phone exactly. Only reliable way is to flash a certain image first and use flash image for decoding only for crashes from that image.</p>
+
+<p>All the files (.fpsx, .Cxx, .Vxx, .img) refer to flash image files. Usually
+only one / few of them are needed, the extension just differs in different
+environments. The files are the ones that are flashed to phone e.g. with
+Phoenix tool. The image files are not absolutely necessary but they enable the
+analyser to do more precise decoding than just symbol files.</p>
+
+<p>Different environments put these files to different locations, common
+locations under SDK root are for example \epoc32\rombuild and \Rom_images_2009.
+If you have not flashed your development phone yourself, it may be difficult to
+find the original flash images anywhere. Most of flash files available can be
+found from Notes DCT5 database, but the decoding files must match the flash
+image in phone exactly. Only reliable way is to flash a certain image first and
+use flash image for decoding only for crashes from that image.</p>
+
+<h4>OST dictionary files</h4>
+
+<p>OST dictionaries are XML files generated by TraceCompiler. The files are
+used to translate the binary trace to human-readable format. The files are
+located in your environment under <em>\epoc32\ost_dictionaries</em>.</p>
+
 <h5>Related concepts</h5>
 <ul>
-<li><a href="../concepts/how_to_analyse_crash.htm">How to analyse a crash </a></li>
+  <li><a href="../concepts/how_to_analyse_crash.htm">How to analyse a crash
+  </a></li>
 </ul>
 
 <h5>Related tasks</h5>
 <ul>
-<li><a href="../tasks/import_crash_files.htm">Importing crash files</a></li>
+  <li><a href="../tasks/import_crash_files.htm">Importing crash files</a></li>
 </ul>
 
-<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
-License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
 </body>
 </html>

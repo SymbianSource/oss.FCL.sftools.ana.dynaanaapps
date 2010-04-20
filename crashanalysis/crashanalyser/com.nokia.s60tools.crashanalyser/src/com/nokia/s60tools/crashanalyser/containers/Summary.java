@@ -36,18 +36,21 @@ public final class Summary {
 	public static final String TAG_DATE = "date";
 	public static final String TAG_TIME = "time";
 	public static final String TAG_UPTIME = "uptime";
+	public static final String TAG_CRASH_SOURCE = "crash_source";
 	public static final String TAG_SEG_HW_INFO = "seg_hw_info";
 	public static final String TAG_VERSION = "version_text";
 	public static final String TAG_VERSIONS = "version_text_list";
 	public static final String TAG_PRODUCT_TYPE = "product_type";
 	public static final String TAG_PRODUCT_CODE = "product_code";
 	public static final String TAG_SERIAL_NUMBER = "serial_number";
+	public static final String TAG_PRODUCTION_MODE = "production_mode";
 	public static final String TAG_SEG_SW_INFO = "seg_sw_info";
 	public static final String TAG_LANGUAGE = "language";
 	public static final String TAG_CHECKSUM = "checksum";
 	public static final String TAG_IMEI = "imei";
 	public static final String TAG_SEG_MEMORY_INFO = "seg_memory_info";
 	public static final String TAG_RAM = "ram";
+	public static final String TAG_DRIVE = "drive";
 	public static final String TAG_FREE = "free";
 	
 	public static final String FORMAT = "%-15s: %s";
@@ -65,10 +68,13 @@ public final class Summary {
 	private final String summarySerialNumber;
 	private final String summaryImei;
 	private final String summaryFreeRam;
+	private final String summaryFreeDisk;
+	private final String summaryProductionMode;
+	private final String summaryCrashSource;
 	
 	private Summary(String crashTime, String crashDate, String upTime, String[] swVersion, String language,
 					String romId, String[] hwVersion, String productType, String productCode, 
-					String serialNumber, String imei, String freeRam) {
+					String serialNumber, String productionMode, String crashSource, String imei, String freeRam, String freeDisk) {
 		summaryCrashTime = crashTime;
 		summaryCrashDate = crashDate;
 		summaryUpTime = upTime;
@@ -81,6 +87,9 @@ public final class Summary {
 		summarySerialNumber = serialNumber;
 		summaryImei = imei;
 		summaryFreeRam = freeRam;
+		summaryFreeDisk = freeDisk;
+		summaryProductionMode = productionMode;
+		summaryCrashSource = crashSource;
 	}
 	
 	/**
@@ -109,6 +118,9 @@ public final class Summary {
 		writeLine(out, "Serial Number", summarySerialNumber);
 		writeLine(out, "Imei", summaryImei);
 		writeLine(out, "Free Ram", summaryFreeRam);
+		writeLine(out, "Free Disk Space", summaryFreeDisk);
+		writeLine(out, "Production Mode", summaryProductionMode);
+		writeLine(out, "Crash Source", summaryCrashSource);
 	}
 	
 	void writeLine(BufferedWriter out, String header, String value) throws IOException {
@@ -128,6 +140,7 @@ public final class Summary {
 			String crashTime = "";
 			String crashDate = "";
 			String upTime = "";
+			String crashSource = "";
 			
 			// read data under seg_header node
 			NodeList segHeader = rootElement.getElementsByTagName(TAG_SEG_HEADER);
@@ -161,12 +174,18 @@ public final class Summary {
 				} else {
 					upTime = convertUpTime(upTime);
 				}
+				
+				// read crash source
+				crashSource = XmlUtils.getTextValue((Element)segHeader.item(0), TAG_CRASH_SOURCE);
+				if(crashSource == null)
+					crashSource = "";
 			}
 			
 			List<String> hwVersions = new ArrayList<String>();
 			String productType = "";
 			String productCode = "";
 			String serialNumber = "";
+			String productionMode = "";
 			
 			// read data under seg_hw_info node
 			NodeList segHwInfo = rootElement.getElementsByTagName(TAG_SEG_HW_INFO);
@@ -197,6 +216,11 @@ public final class Summary {
 				serialNumber = XmlUtils.getTextValue((Element)segHwInfo.item(0), TAG_SERIAL_NUMBER);
 				if (serialNumber == null)
 					serialNumber = "";
+
+				// read production mode
+				productionMode = XmlUtils.getTextValue((Element)segHwInfo.item(0), TAG_PRODUCTION_MODE);
+				if (productionMode == null)
+					productionMode = "";
 			}
 			
 			List<String> swVersions = new ArrayList<String>();
@@ -237,6 +261,8 @@ public final class Summary {
 			}
 			
 			String freeRamAmount = "";
+			String freeDiskSpace = "";
+			
 			// read free ram amount
 			NodeList segMemoryInfo = rootElement.getElementsByTagName(TAG_SEG_MEMORY_INFO);
 			if (segMemoryInfo != null && segMemoryInfo.getLength() > 0) {
@@ -246,10 +272,17 @@ public final class Summary {
 					if (freeRamAmount == null)
 						freeRamAmount = "";
 				}
+				NodeList drive = ((Element)segMemoryInfo.item(0)).getElementsByTagName(TAG_DRIVE);
+				if (drive != null && drive.getLength() > 0) {
+					freeDiskSpace = XmlUtils.getTextValue((Element)drive.item(0), TAG_FREE);
+					if (freeDiskSpace == null)
+						freeDiskSpace = "";
+				}
 			}
 			
 			return new Summary(crashTime, crashDate, upTime, swVersions.toArray(new String[swVersions.size()]), 
-								language, romId, hwVersions.toArray(new String[hwVersions.size()]), productType, productCode, serialNumber, imei, freeRamAmount);
+								language, romId, hwVersions.toArray(new String[hwVersions.size()]), productType, 
+								productCode, serialNumber, productionMode, crashSource, imei, freeRamAmount, freeDiskSpace);
 		} catch (Exception e) {
 			return null;
 		}
@@ -302,6 +335,19 @@ public final class Summary {
 	public String getFreeRam() {
 		return summaryFreeRam;
 	}
+
+	public String getFreeDisk() {
+		return summaryFreeDisk;
+	}
+
+	public String getProductionMode() {
+		return summaryProductionMode;
+	}
+	
+	public String getCrashSource() {
+		return summaryCrashSource;
+	}
+
 	
 	static String convertUpTime(String uptime) {
 		try {

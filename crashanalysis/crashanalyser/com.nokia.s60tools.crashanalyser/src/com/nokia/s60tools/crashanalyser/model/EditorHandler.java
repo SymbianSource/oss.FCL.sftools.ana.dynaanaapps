@@ -117,7 +117,14 @@ public final class EditorHandler {
     	    			continue;
     	    		
     	    		String title = part.getTitle();
-	    			if (title.equalsIgnoreCase(file.getFileName())) {
+    	    		String pageTitle = null;
+    	    		if(file.getThread() != null) {
+    	    			pageTitle = file.getThread().getFullName();
+    	    		} else {
+    	    			pageTitle = file.getFileName();
+    	    		}
+    	    		
+	    			if (title.equalsIgnoreCase(pageTitle)) {
 	    				page.bringToTop(part);
 	    				return true;
 	    			}

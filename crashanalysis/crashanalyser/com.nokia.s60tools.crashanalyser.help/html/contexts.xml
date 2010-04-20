@@ -34,7 +34,7 @@
       <description>Crash Analyser - Importing Crash Files</description>	   
 		<topic label="Importing crash files" href="html/tasks/import_crash_files.htm" >		
 	    </topic>
-		<topic label="Symbol files, Map files and Image files" href="html/concepts/selge_vs_symbol.htm" >		
+		<topic label="Symbol files, Map files, OST dictionary files, and Image files" href="html/concepts/selge_vs_symbol.htm" >		
 	    </topic>
 		<topic label="MobileCrash file and D_ECX file" href="html/concepts/mc_file.htm" >		
 	    </topic>
@@ -46,7 +46,7 @@
       <description>Crash Analyser - Decoding Crash Files</description>	   
 		<topic label="Decoding crash files" href="html/tasks/decode_crash_files.htm" >		
 	    </topic>
-		<topic label="Symbol files, Map files and Image files" href="html/concepts/selge_vs_symbol.htm" >		
+		<topic label="Symbol files, Map files, OST dictionary files, and Image files" href="html/concepts/selge_vs_symbol.htm" >		
 	    </topic>
     </context>	  
 

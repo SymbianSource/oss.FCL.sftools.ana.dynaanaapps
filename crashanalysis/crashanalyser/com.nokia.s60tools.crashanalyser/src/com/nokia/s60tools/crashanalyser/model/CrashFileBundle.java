@@ -18,8 +18,11 @@
 package com.nokia.s60tools.crashanalyser.model;
 
 import com.nokia.s60tools.crashanalyser.files.*;
+import com.nokia.s60tools.crashanalyser.files.SummaryFile.ContentType;
 import com.nokia.s60tools.crashanalyser.data.*;
+import com.nokia.s60tools.crashanalyser.containers.Thread;
 import java.io.*;
+import java.util.List;
 
 /**
  * CrashFileBundle class bundles up one folder under Crash Analyser plugin's folder. I.e. one
@@ -35,6 +38,8 @@ import java.io.*;
  * 
  * Bundle can also be a waiting bundle, so that 'Loading files. Please wait' row can be shown in MainView.
  *
+ * Bundle can also be a thread bundle. That is a row in the MainView 
+ * which has no crash (i.e. a child in the treeview)
  */
 public class CrashFileBundle {
 
@@ -79,6 +84,12 @@ public class CrashFileBundle {
 	 * If true, bundle is an empty or waiting bundle
 	 */
 	boolean emptyFile = false;
+	
+	/**
+	 * If true, bundle is a thread bundle
+	 */
+	private boolean threadBundle = false;
+
 	
 	/**
 	 * Directory from where files in this bundle originally came from.
@@ -127,6 +138,30 @@ public class CrashFileBundle {
 	 */
 	public CrashFileBundle(SummaryFile file, String originalDirectory) {
 		summaryFile = file;
+		originatingDirectory = originalDirectory;
+	}
+
+	/**
+	 * Initialise bundle with already read Crash file
+	 * @param file crash file
+	 */
+	public CrashFileBundle(CrashFile file, String originalDirectory, Thread thread) {
+		threadBundle = true;
+		crashxmlFile = (CrashFile) file.clone();
+		crashxmlFile.setThread(thread);
+		crashxmlFile.formatDescription();
+		originatingDirectory = originalDirectory;
+	}
+	
+	/**
+	 * Initialise bundle with already read Summary file
+	 * @param file summary file
+	 */
+	public CrashFileBundle(SummaryFile file, String originalDirectory, Thread thread) {
+		threadBundle = true;
+		summaryFile = (CrashFile) file.clone();
+		summaryFile.setThread(thread);
+		summaryFile.formatDescription();
 		originatingDirectory = originalDirectory;
 	}
 
@@ -199,6 +234,7 @@ public class CrashFileBundle {
 		} else if (emulatorPanicFile != null) {
 			retval = "Emulator Panic";
 		}
+
 		return retval;
 	}
 	
@@ -212,7 +248,8 @@ public class CrashFileBundle {
 			retval = crashxmlFile.getFileName();
 		} else if (summaryFile != null) {
 			retval = summaryFile.getFileName();
-		}
+		} 
+
 		return retval;
 	}
 
@@ -233,7 +270,10 @@ public class CrashFileBundle {
 			retval = summaryFile.getPanicCode();
 		} else if (emulatorPanicFile != null) {
 			retval = emulatorPanicFile.getPanicCode();
+		} else if (threadBundle) {
+			retval = "";
 		}
+			
 		
 		return retval;
 	}
@@ -249,6 +289,7 @@ public class CrashFileBundle {
 			return "";
 		
 		String retval = "";
+
 		if (crashxmlFile != null) {
 			retval = crashxmlFile.getPanicCategory();
 		} else if (summaryFile != null) {
@@ -257,7 +298,7 @@ public class CrashFileBundle {
 			retval = emulatorPanicFile.getPanicCategory();
 		} else if (undecodedFile != null) {
 			retval = "Unknown";
-		}
+		} 
 		
 		return retval;
 	}
@@ -273,7 +314,11 @@ public class CrashFileBundle {
 			return "";
 		
 		String retval = "";
-		if (crashxmlFile != null) {
+		if (threadBundle && crashxmlFile != null) {
+			retval = crashxmlFile.getThread().getFullName();
+		} else if (threadBundle && summaryFile != null) {
+			retval = summaryFile.getThread().getFullName();
+		}else if (crashxmlFile != null) {
 			retval = crashxmlFile.getThreadName();
 		} else if (summaryFile != null) {
 			retval = summaryFile.getThreadName();
@@ -281,11 +326,59 @@ public class CrashFileBundle {
 			retval = emulatorPanicFile.getThreadName();
 		} else if (undecodedFile != null) {
 			retval = "Unknown";
+		} 
+
+		return retval;
+	}
+
+	/**
+	 * Returns the total thread count (all threads in all processes).
+	 * Thread count is available
+	 * only if bundle contains decoded files or emulator panic.
+	 * 
+	 * @return thread count or -1 if not available
+	 */
+	public int getTotalThreadCount() {
+		if (emptyFile)
+			return -1;
+		
+		if (threadBundle) {
+			return 1;
+		}
+		
+		int retval = -1;
+		if (crashxmlFile != null) {
+			retval = crashxmlFile.getTotalThreadCount();
+		} else if (summaryFile != null) {
+			retval = summaryFile.getTotalThreadCount();
+		} else if (emulatorPanicFile != null) {
+			retval = emulatorPanicFile.getTotalThreadCount();
+		} else if (undecodedFile != null) {
+			retval = -1;
 		}
 		
 		return retval;
 	}
-	
+
+	/**
+	 * Returns the threads in this crash file (all threads in all processes).
+	 * 
+	 * @return thread count or -1 if not available
+	 */
+	public List<Thread> getThreads() {
+		if (emptyFile || threadBundle)
+			return null;
+		
+		if (crashxmlFile != null) {
+			return crashxmlFile.getThreads();
+		} else if (summaryFile != null) {
+			return summaryFile.getThreads();
+		} else if (emulatorPanicFile != null) {
+			return emulatorPanicFile.getThreads();
+		}
+		return null;
+	}
+
 	/**
 	 * Returns the time of a crash. Crash time is not always available
 	 * (even in decoded crash files).  If crash time is not available,  
@@ -329,8 +422,8 @@ public class CrashFileBundle {
 			retval = emulatorPanicFile.getTime();
 			if ("".equals(retval))
 				retval = emulatorPanicFile.getCreated();
-		}
-		
+		} 
+
 		return retval;
 	}
 	
@@ -392,6 +485,15 @@ public class CrashFileBundle {
 		return false;
 	}
 	
+	/**
+	 * Returns whether this bundle is a thread bundle.
+	 * @return true if this bundle is a thread bundle.
+	 */
+	public boolean isThread() {
+		return threadBundle;
+	}
+	
+
 	/**
 	 * Returns whether this bundle contains any files.
 	 * @return true if bundle contains files, false if not
@@ -509,7 +611,15 @@ public class CrashFileBundle {
 	public String getDescription(boolean full) {
 		if (isEmpty())
 			return "";
-			
+		
+		if ((crashxmlFile != null && crashxmlFile.getContentType() == ContentType.REGMSG) ||
+			(summaryFile  != null && summaryFile.getContentType()  == ContentType.REGMSG )) {
+			return HtmlFormatter.formatRegistrationMessage();
+		} else if ((crashxmlFile != null && crashxmlFile.getContentType() == ContentType.REPORT) ||
+				   (summaryFile  != null && summaryFile.getContentType()  == ContentType.REPORT )) {
+			return HtmlFormatter.formatReport();
+		}
+		
 		if (crashxmlFile != null) {
 			if (full)
 				return crashxmlFile.getDescription();

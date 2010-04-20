@@ -40,6 +40,11 @@ import org.eclipse.swt.events.*;
  */
 public class CrashAnalyserPreferences extends PreferencePage implements IWorkbenchPreferencePage, 
 																		SelectionListener{
+	/**
+	 * Preference page ID for opening page directly
+	 */
+	public static final String PAGE_ID = "com.nokia.s60tools.crashanalyser.ui.preferences.CrashAnalyserPreferences"; //$NON-NLS-1$
+
 	private Button buttonListenTraceViewer;
 	private Button buttonShowVisualizer;
 	private Button buttonEpocwind;

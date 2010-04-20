@@ -45,7 +45,7 @@ import java.awt.Toolkit;
 
 /**
  * Table viewer for call stack table. Call stack table is used in 
- * SummaryPage.java (Crash Data page in Crash Visualiser editor) 
+ * CallStackPage.java (Crash Data page in Crash Visualiser editor) 
  *
  */
 public class CallStackTableViewer extends CrashAnalyserTableViewer {

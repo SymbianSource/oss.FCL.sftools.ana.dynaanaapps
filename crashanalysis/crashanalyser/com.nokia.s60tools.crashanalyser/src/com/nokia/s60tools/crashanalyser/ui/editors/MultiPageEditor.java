@@ -29,6 +29,7 @@ import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import com.nokia.s60tools.crashanalyser.data.ErrorLibrary;
 import com.nokia.s60tools.crashanalyser.files.*;
+import com.nokia.s60tools.crashanalyser.files.SummaryFile.ContentType;
 import com.nokia.s60tools.crashanalyser.interfaces.*;
 import com.nokia.s60tools.crashanalyser.resources.ImageKeys;
 import com.nokia.s60tools.crashanalyser.resources.ImageResourceManager;
@@ -36,14 +37,15 @@ import com.nokia.s60tools.crashanalyser.model.*;
 import java.io.*;
 
 /**
- * A Crash Visualiser editor. Editor contains four tab pages:
- * Crash Data, Advanced, Errors & Warnings and XML.
+ * A Crash Visualiser editor. Editor contains seven tab pages:
+ * General, Call Stack, Codesegments, Registers, Traces, Errors & Warnings and XML.
  * 
- * Crash Data page contains summary data of the crash and crash reason
- * and description. Crash Data page also contain stack data if available.
+ * Summary page contains summary data of the crash and crash reason
+ * and description. 
  * 
- * Advanced page contains more advanced details about the crash, such as 
- * registers values, code segments, event log and cpsr details.
+ * Call Stack page contains call stack data if available. Codesegments page
+ * contains crash time loaded codesegments. Registers page has register
+ * values and CPSR details. Traces page has OST traces and event log.
  * 
  * Errors & Warnings page contains all error and warning messages which 
  * may have occurred during the xml file creation.
@@ -55,7 +57,10 @@ public class MultiPageEditor extends MultiPageEditorPart implements IResourceCha
 																	IErrorLibraryObserver {
 	// editor pages
 	private SummaryPage summaryPage;
-	private AdvancedPage advancedPage;
+	private CallStackPage callStackPage;	
+	private CodesegmentsPage codesegmentsPage;	
+	private RegistersPage registersPage;
+	private TracesPage tracesPage;
 	private ErrorPage errorPage;
 	private XmlPage xmlPage;
 	
@@ -65,7 +70,7 @@ public class MultiPageEditor extends MultiPageEditorPart implements IResourceCha
 	
 	private ErrorLibrary errorLibrary = null;
 	private String crashFilePath = "";
-	static final int ERROR_PAGE_INDEX = 2;
+	static final int ERROR_PAGE_INDEX = 5;
 	
 	public MultiPageEditor() {
 		super();
@@ -73,7 +78,7 @@ public class MultiPageEditor extends MultiPageEditorPart implements IResourceCha
 	}
 	
 	/**
-	 * Creates Crash Data page
+	 * Creates General page
 	 */
 	void createSummaryPage() {
 		summaryPage = new SummaryPage();
@@ -82,40 +87,132 @@ public class MultiPageEditor extends MultiPageEditorPart implements IResourceCha
 		if (crashFile != null) {
 			int index = 
 				addPage(summaryPage.createPage(new Composite(getContainer(), SWT.NONE), crashFile));
-			setPageText(index, "Crash Data");
+			setPageText(index, "General");
 		// Summary xml is opened via CrashAnalyser View
 		} else if (summaryFile != null) {
 			int index = 
 				addPage(summaryPage.createPage(new Composite(getContainer(), SWT.NONE), summaryFile));
-			setPageText(index, "Crash Summary");
+			setPageText(index, "General");
 		// output.crashxml file opened from File > Open
 		} else {
 			int index = 
 				addPage(summaryPage.createPage(new Composite(getContainer(), SWT.NONE)));
-			setPageText(index, "Crash Data");
+			setPageText(index, "General");
 		}
 	}
 	
 	/**
-	 * Creates advanced page
+	 * Creates Call Stack page
 	 */
-	void createAdvancedPage() {
-		advancedPage = new AdvancedPage();
+	void createCallStackPage() {
+		callStackPage = new CallStackPage();
 		
 		// output.crashxml is opened via CrashAnalyser View
 		if (crashFile != null) {
-			int index = addPage(advancedPage.createPage(new Composite(getContainer(), SWT.NONE), crashFile));
-			setPageText(index, "Advanced");
-		// Summary xml is opened via CrashAnalyser View			
+			if (crashFile.getContentType() == ContentType.CRASH) {
+				int index = 
+					addPage(callStackPage.createPage(new Composite(getContainer(), SWT.NONE), crashFile));
+				setPageText(index, "Call Stack");
+			}
+		// Summary xml is opened via CrashAnalyser View
 		} else if (summaryFile != null) {
-			int index = addPage(advancedPage.createPage(new Composite(getContainer(), SWT.NONE), summaryFile));
-			setPageText(index, "Advanced");
-		// output.crashxml file opened from File > Open			
+			if (summaryFile.getContentType() == ContentType.CRASH) {
+				int index = 
+					addPage(summaryPage.createPage(new Composite(getContainer(), SWT.NONE), summaryFile));
+				setPageText(index, "Call Stack");
+			}
+		// output.crashxml file opened from File > Open
 		} else {
-			int index = addPage(advancedPage.createPage(new Composite(getContainer(), SWT.NONE)));
-			setPageText(index, "Advanced");
+			int index = 
+				addPage(summaryPage.createPage(new Composite(getContainer(), SWT.NONE)));
+			setPageText(index, "Call Stack");
 		}
 	}
+
+	/**
+	 * Creates Call Stack page
+	 */
+	void createCodesegmentsPage() {
+		codesegmentsPage = new CodesegmentsPage();
+		
+		// output.crashxml is opened via CrashAnalyser View
+		if (crashFile != null) {
+			if (crashFile.getContentType() == ContentType.CRASH) {
+				int index = 
+					addPage(codesegmentsPage.createPage(new Composite(getContainer(), SWT.NONE), crashFile));
+				setPageText(index, "Code Segments");
+			}
+		// Summary xml is opened via CrashAnalyser View
+		} else if (summaryFile != null) {
+			if (summaryFile.getContentType() == ContentType.CRASH) {
+				int index = 
+					addPage(codesegmentsPage.createPage(new Composite(getContainer(), SWT.NONE), summaryFile));
+				setPageText(index, "Code Segments");
+			}
+		// output.crashxml file opened from File > Open
+		} else {
+			int index = 
+				addPage(codesegmentsPage.createPage(new Composite(getContainer(), SWT.NONE)));
+			setPageText(index, "Code Segments");
+		}
+	}
+
+	/**
+	 * Creates Registers page
+	 */
+	void createRegistersPage() {
+		registersPage = new RegistersPage();
+		
+		// output.crashxml is opened via CrashAnalyser View
+		if (crashFile != null) {
+			if (crashFile.getContentType() == ContentType.CRASH) {
+				int index = 
+					addPage(registersPage.createPage(new Composite(getContainer(), SWT.NONE), crashFile));
+				setPageText(index, "Registers");
+			}
+		// Summary xml is opened via CrashAnalyser View
+		} else if (summaryFile != null) {
+			if (summaryFile.getContentType() == ContentType.CRASH) {
+				int index = 
+					addPage(registersPage.createPage(new Composite(getContainer(), SWT.NONE), summaryFile));
+				setPageText(index, "Registers");
+			}
+		// output.crashxml file opened from File > Open
+		} else {
+			int index = 
+				addPage(registersPage.createPage(new Composite(getContainer(), SWT.NONE)));
+			setPageText(index, "Registers");
+		}
+	}
+
+	/**
+	 * Creates Traces page
+	 */
+	void createTracesPage() {
+		tracesPage = new TracesPage();
+		
+		// output.crashxml is opened via CrashAnalyser View
+		if (crashFile != null) {
+			if (crashFile.getContentType() == ContentType.CRASH) {
+				int index = 
+					addPage(tracesPage.createPage(new Composite(getContainer(), SWT.NONE), crashFile));
+				setPageText(index, "Traces");
+			}
+		// Summary xml is opened via CrashAnalyser View
+		} else if (summaryFile != null) {
+			if (summaryFile.getContentType() == ContentType.CRASH) {
+				int index = 
+					addPage(tracesPage.createPage(new Composite(getContainer(), SWT.NONE), summaryFile));
+				setPageText(index, "Traces");
+			}
+		// output.crashxml file opened from File > Open
+		} else {
+			int index = 
+				addPage(tracesPage.createPage(new Composite(getContainer(), SWT.NONE)));
+			setPageText(index, "Traces");
+		}
+	}
+
 	
 	/**
 	 * Creates Errors & Warnings page
@@ -125,13 +222,13 @@ public class MultiPageEditor extends MultiPageEditorPart implements IResourceCha
 		
 		// output.crashxml is opened via CrashAnalyser View
 		if (crashFile != null) {
-			if (crashFile.containsErrorsOrWarnings()) {
+			if (crashFile.containsErrorsOrWarnings() && crashFile.getContentType() == ContentType.CRASH) {
 				int index = addPage(errorPage.createPage(new Composite(getContainer(), SWT.NONE), crashFile));
 				setPageText(index, "Errors && Warnings");
 			}
 		// Summary xml is opened via CrashAnalyser View			
 		} else if (summaryFile != null) {
-			if (summaryFile.containsErrorsOrWarnings()) {
+			if (summaryFile.containsErrorsOrWarnings() && summaryFile.getContentType() == ContentType.CRASH) {
 				int index = addPage(errorPage.createPage(new Composite(getContainer(), SWT.NONE), summaryFile));
 				setPageText(index, "Errors && Warnings");
 			}
@@ -169,7 +266,12 @@ public class MultiPageEditor extends MultiPageEditorPart implements IResourceCha
 	 */
 	protected void createPages() {
 		createSummaryPage();
-		createAdvancedPage();
+		createCallStackPage();
+		createCodesegmentsPage();
+		createRegistersPage();
+		createTracesPage();
+
+		//		createAdvancedPage();
 		createErrorPage();
 		createXmlPage();
 		
@@ -187,7 +289,10 @@ public class MultiPageEditor extends MultiPageEditorPart implements IResourceCha
 			public void run(){
 				crashFile = CrashFile.read(new File(crashFilePath), errorLibrary);
 				summaryPage.setFile(crashFile);
-				advancedPage.setFile(crashFile);
+				callStackPage.setFile(crashFile);
+				codesegmentsPage.setFile(crashFile);
+				registersPage.setFile(crashFile);
+				tracesPage.setFile(crashFile);
 				if (crashFile.containsErrorsOrWarnings()) {
 					errorPage.setFile(crashFile);
 				} else {
@@ -269,13 +374,25 @@ public class MultiPageEditor extends MultiPageEditorPart implements IResourceCha
 			// output.crashxml file opened from Crash Analyser Main View
 			if (editorInput instanceof CrashFile) {
 				crashFile = (CrashFile)editorInput;
-				fileName = crashFile.getFileName();
+				
+				if (crashFile.getThread() != null) {
+					fileName = crashFile.getThread().getFullName();
+				} else {
+					fileName = crashFile.getFileName();
+				}
+				
 				super.setTitleImage(ImageResourceManager.getImage(ImageKeys.DECODED_FILE));
 			
 			// Summary xml file opened from Crash Analyser Main View
 			} else if (editorInput instanceof SummaryFile) {
 				summaryFile = (SummaryFile)editorInput;
-				fileName = summaryFile.getFileName();
+				
+				if (summaryFile.getThread() != null) {
+					fileName = summaryFile.getThread().getFullName();
+				} else {
+					fileName = summaryFile.getFileName();
+				}
+				
 				super.setTitleImage(ImageResourceManager.getImage(ImageKeys.PARTIALLY_DECODED_FILE));
 
 			// output.crashxml file opened from Carbide File menu

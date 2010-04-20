@@ -20,6 +20,8 @@ package com.nokia.s60tools.crashanalyser.ui.views;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MessageBox;
@@ -34,16 +36,18 @@ import org.eclipse.ui.*;
 import org.eclipse.ui.part.*;
 import org.eclipse.swt.dnd.*;
 
-import com.nokia.s60tools.ui.*;
+import com.nokia.s60tools.ui.actions.OpenPreferencePageAction;
 import com.nokia.s60tools.util.resource.*;
 import com.nokia.s60tools.crashanalyser.model.*;
 import com.nokia.s60tools.crashanalyser.plugin.*;
 import com.nokia.s60tools.crashanalyser.resources.*;
 import com.nokia.s60tools.crashanalyser.files.*;
+import com.nokia.s60tools.crashanalyser.ui.preferences.CrashAnalyserPreferences;
 import com.nokia.s60tools.crashanalyser.ui.wizards.*;
 import com.nokia.s60tools.crashanalyser.ui.dialogs.*;
 import com.nokia.s60tools.crashanalyser.data.*;
 import com.nokia.s60tools.crashanalyser.interfaces.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -63,7 +67,13 @@ public class MainView extends ViewPart implements IDecodingObserver,
 	 * also need static access to ID in order to be able to invoke the view.
 	 */
 	public static final String ID = "com.nokia.s60tools.crashanalyser.ui.views.MainView"; //$NON-NLS-1$
-	private TableViewer tableViewerCrashFiles;
+	//private TableViewer tableViewerCrashFiles;
+	private TreeViewer treeViewerCrashFiles;
+	/**
+	 * Open the preferences
+	 */
+	private Action mainMenuActionOpenPreferences;
+
 	private Action actionDoubleClick;
 	private Action actionOpenWizard;
 	private Action actionDecode;
@@ -87,13 +97,16 @@ public class MainView extends ViewPart implements IDecodingObserver,
 
 	
 	public void selectionChanged(SelectionChangedEvent arg0) {
-		ISelection selection = tableViewerCrashFiles.getSelection();
+		ISelection selection = treeViewerCrashFiles.getSelection();
 		
 		// no files selected, don't show description
 		if (selection == null || selection.isEmpty()) {
 			browserPanicDescription.setText("");
+			actionDecode.setEnabled(false);
+			actionDeleteFiles.setEnabled(false);
 			return;
 		}
+		
 		
 		@SuppressWarnings("unchecked")
 		Iterator<CrashFileBundle> i = ((IStructuredSelection)selection).iterator();
@@ -109,6 +122,8 @@ public class MainView extends ViewPart implements IDecodingObserver,
 												cFileBundle.getDescription(true)));
 			}
 		}
+		actionDecode.setEnabled(true);
+		actionDeleteFiles.setEnabled(true);
 	}
 
 	/**
@@ -126,8 +141,8 @@ public class MainView extends ViewPart implements IDecodingObserver,
 	 */
 	public void crashFilesUpdated() {
 		mainViewLoaded = true;
-		actionOpenWizard.setEnabled(true);		
-		actionDecode.setEnabled(true);
+		actionOpenWizard.setEnabled(true);	
+		mainMenuActionOpenPreferences.setEnabled(true);
 		refreshView();
 		if (showWizard) {
 			showWizard = false;
@@ -148,7 +163,8 @@ public class MainView extends ViewPart implements IDecodingObserver,
 	 */
 	public void createPartControl(Composite parent) {
 		SashForm sashFormMain = new SashForm(parent, SWT.HORIZONTAL);
-		createCrashFilesListViewTableViewer(sashFormMain);
+		//createCrashFilesListViewTableViewer(sashFormMain);
+		createCrashFilesListViewTreeViewer(sashFormMain);
 		createPanicsViewer(sashFormMain);
 		sashFormMain.setWeights(new int[] {2,1});
 		
@@ -158,12 +174,13 @@ public class MainView extends ViewPart implements IDecodingObserver,
 		contributeToActionBars();
 		
 		actionOpenWizard.setEnabled(false);
+		mainMenuActionOpenPreferences.setEnabled(false);
 		actionDecode.setEnabled(false);
 		actionPanicLibrary.setEnabled(false);
 		errorLibrary = ErrorLibrary.getInstance(this);
 		
 		try {
-			PlatformUI.getWorkbench().getHelpSystem().setHelp(tableViewerCrashFiles.getControl(),
+			PlatformUI.getWorkbench().getHelpSystem().setHelp(treeViewerCrashFiles.getControl(),
 				HelpContextIDs.CRASH_ANALYSER_HELP_MAIN_VIEW);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -180,7 +197,7 @@ public class MainView extends ViewPart implements IDecodingObserver,
 			public void run(){
 				try {
 					if (mainViewLoaded) {
-						CrashFileBundle cFile = (CrashFileBundle)tableViewerCrashFiles.getElementAt(0);
+						CrashFileBundle cFile = (CrashFileBundle) treeViewerCrashFiles.getTree().getItem(0).getData();
 						if (cFile.isEmpty()) {
 							showWizard();
 						}
@@ -239,36 +256,45 @@ public class MainView extends ViewPart implements IDecodingObserver,
 	/**
 	 * Creates the MainView table which is used for showing crash files 
 	 */
-	private void createCrashFilesListViewTableViewer(Composite parent) {
+	private void createCrashFilesListViewTreeViewer(Composite parent) {
 		SashForm sashFormCrashFiles = new SashForm(parent, SWT.VERTICAL);
+
+		Tree tree = new Tree(sashFormCrashFiles, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		
-		List<S60ToolsTableColumnData> columnDataArr = new ArrayList<S60ToolsTableColumnData>();
+		tree.setHeaderVisible(true);
+		TreeColumn column1 = new TreeColumn(tree, SWT.LEFT);
+		column1.setText("Time");
+		column1.setWidth(150);
+
+		TreeColumn column2 = new TreeColumn(tree, SWT.LEFT);
+		column2.setText("Thread");
+		column2.setWidth(250);
+
+		TreeColumn column3 = new TreeColumn(tree, SWT.LEFT);
+		column3.setText("Panic Category");
+		column3.setWidth(90);
+
+		TreeColumn column4 = new TreeColumn(tree, SWT.LEFT);
+		column4.setText("Panic Code");
+		column4.setWidth(70);
+
+		TreeColumn column5 = new TreeColumn(tree, SWT.LEFT);
+		column5.setText("Crash File");
+		column5.setWidth(690);
 		
-		columnDataArr.add(new S60ToolsTableColumnData("Crash File", 690, 0));
-		columnDataArr.add(new S60ToolsTableColumnData("Panic Code", 70, 0)); 
-		columnDataArr.add(new S60ToolsTableColumnData("Panic Category", 90, 0)); 
-		columnDataArr.add(new S60ToolsTableColumnData("Thread", 250, 0));
-		columnDataArr.add(new S60ToolsTableColumnData("Time", 130, 0));
-		
-		S60ToolsTableColumnData[] arr 
-				= columnDataArr.toArray(new S60ToolsTableColumnData[columnDataArr.size()]);
-		
-		S60ToolsTable tbl = S60ToolsTableFactory.create(sashFormCrashFiles, arr);
-		
-		TableViewer tblViewer = new TableViewer(tbl.getTableInstance());
-		tbl.setHostingViewer(tblViewer);
-		tblViewer.addDropSupport(DND.DROP_COPY, new Transfer[] {FileTransfer.getInstance()}, this);
+		TreeViewer treeViewer = new TreeViewer(tree);
+		treeViewer.addDropSupport(DND.DROP_COPY, new Transfer[] {FileTransfer.getInstance()}, this);
 
 		contentProvider = new MainViewContentProvider(this);
-		tblViewer.setContentProvider(contentProvider);
-		tblViewer.setLabelProvider(new MainViewLabelProvider());
-		tblViewer.setSorter(new ViewerSorter());
-		tblViewer.setInput(getViewSite());
-		tblViewer.addSelectionChangedListener(this);
-		
-		tableViewerCrashFiles = tblViewer;
+		treeViewer.setContentProvider(contentProvider);
+		treeViewer.setLabelProvider(new MainViewLabelProvider());
+		treeViewer.setSorter(new ViewerSorter());
+		treeViewer.setInput(getViewSite());
+		treeViewer.addSelectionChangedListener(this);
+		treeViewer.expandAll();
+		treeViewerCrashFiles = treeViewer;
 	}
-	
+
 	/**
 	 * Creates the right side view of the MainView. Contains a browser which
 	 * is used for showing information about a selected file in MainView table. 
@@ -292,7 +318,7 @@ public class MainView extends ViewPart implements IDecodingObserver,
 	 * Initialize double-click action
 	 */
 	private void hookDoubleClickAction() {
-		tableViewerCrashFiles.addDoubleClickListener(new IDoubleClickListener() {
+		treeViewerCrashFiles.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
 				actionDoubleClick.run();
 			}
@@ -311,9 +337,9 @@ public class MainView extends ViewPart implements IDecodingObserver,
 				
 			}
 		});
-		Menu menu = menuMgr.createContextMenu(tableViewerCrashFiles.getControl());
-		tableViewerCrashFiles.getControl().setMenu(menu);
-		getSite().registerContextMenu(menuMgr, tableViewerCrashFiles);
+		Menu menu = menuMgr.createContextMenu(treeViewerCrashFiles.getControl());
+		treeViewerCrashFiles.getControl().setMenu(menu);
+		getSite().registerContextMenu(menuMgr, treeViewerCrashFiles);
 	}
 
 	/**
@@ -330,6 +356,7 @@ public class MainView extends ViewPart implements IDecodingObserver,
 	 */
 	private void fillLocalPullDown(IMenuManager manager) {
 		manager.add(actionOpenWizard);
+		manager.add(mainMenuActionOpenPreferences);
 		manager.add(actionDecode);
 		manager.add(actionDeleteFiles);
 		manager.add(actionPanicLibrary);
@@ -354,6 +381,7 @@ public class MainView extends ViewPart implements IDecodingObserver,
 	 */
 	private void fillLocalToolBar(IToolBarManager manager) {
 		manager.add(actionOpenWizard);
+		manager.add(mainMenuActionOpenPreferences);
 		manager.add(actionDecode);
 		manager.add(actionDeleteFiles);
 		manager.add(actionPanicLibrary);
@@ -371,7 +399,7 @@ public class MainView extends ViewPart implements IDecodingObserver,
 	private MenuManager getExportMenu(boolean showAlways) {
 		MenuManager subMenuExport = new MenuManager("Export");
 		
-		ISelection selection = tableViewerCrashFiles.getSelection();
+		ISelection selection = treeViewerCrashFiles.getSelection();
 		// if no files are selected, don't show export menu
 		if (!showAlways && (selection == null || selection.isEmpty()))
 			return null;
@@ -422,6 +450,12 @@ public class MainView extends ViewPart implements IDecodingObserver,
 	 * Make all actions (buttons, double-click)
 	 */
 	private void makeActions() {
+		mainMenuActionOpenPreferences = new OpenPreferencePageAction(
+				CrashAnalyserPreferences.PAGE_ID,
+				null,
+				null
+				);
+
 		makeDeleteFilesAction();
 		makeOpenWizardAction();
 		makeOpenPanicLibraryAction();	
@@ -444,7 +478,7 @@ public class MainView extends ViewPart implements IDecodingObserver,
 				try {
 					if (wizardRunning)
 						return;
-					ISelection selection = tableViewerCrashFiles.getSelection();
+					ISelection selection = treeViewerCrashFiles.getSelection();
 					Object obj = ((IStructuredSelection)selection).getFirstElement();
 					CrashFileBundle cFile = (CrashFileBundle)obj;
 					// if empty file is double-clicked, open wizard
@@ -472,7 +506,7 @@ public class MainView extends ViewPart implements IDecodingObserver,
 	private void makeExportToHtml() {
 		actionExportToHtml = new Action() {
 			public void run() {
-				ISelection selection = tableViewerCrashFiles.getSelection();
+				ISelection selection = treeViewerCrashFiles.getSelection();
 				FileExportManager.ExportSelectedFileToHtml(selection, getShell());
 			}
 		};
@@ -485,7 +519,7 @@ public class MainView extends ViewPart implements IDecodingObserver,
 	private void makeExportToXml() {
 		actionExportToXml = new Action() {
 			public void run() {
-				ISelection selection = tableViewerCrashFiles.getSelection();
+				ISelection selection = treeViewerCrashFiles.getSelection();
 				FileExportManager.ExportSelectedFileToXml(selection, getShell());
 			}
 		};
@@ -498,7 +532,7 @@ public class MainView extends ViewPart implements IDecodingObserver,
 	private void makeExportAsXmlAction() {
 		actionExportAsXml = new Action() {
 			public void run() {
-				ISelection selection = tableViewerCrashFiles.getSelection();
+				ISelection selection = treeViewerCrashFiles.getSelection();
 				FileExportManager.ExportSelectedFilesAsXmlToZip(selection, getShell());
 			}
 		};
@@ -511,7 +545,7 @@ public class MainView extends ViewPart implements IDecodingObserver,
 	private void makeExportAsHtmlAction() {
 		actionExportAsHtml = new Action() {
 			public void run() {
-				ISelection selection = tableViewerCrashFiles.getSelection();
+				ISelection selection = treeViewerCrashFiles.getSelection();
 				FileExportManager.ExportSelectedFilesAsHtmlToZip(selection, getShell());
 			}
 		};
@@ -524,7 +558,7 @@ public class MainView extends ViewPart implements IDecodingObserver,
 	private void makeExportAllAction() {
 		actionExportAll = new Action() {
 			public void run() {
-				ISelection selection = tableViewerCrashFiles.getSelection();
+				ISelection selection = treeViewerCrashFiles.getSelection();
 				FileExportManager.ExportSelectedFilesToZipInAllFormats(selection, getShell());
 			}
 		};
@@ -537,7 +571,7 @@ public class MainView extends ViewPart implements IDecodingObserver,
 	private void makeOpenPanicLibraryAction() {
 		actionPanicLibrary = new Action() {
 			public void run() {
-				ErrorLibraryDialog dlg = new ErrorLibraryDialog(tableViewerCrashFiles.getControl().getShell(), errorLibrary);
+				ErrorLibraryDialog dlg = new ErrorLibraryDialog(treeViewerCrashFiles.getControl().getShell(), errorLibrary);
 				dlg.open();
 			}
 		};
@@ -580,7 +614,7 @@ public class MainView extends ViewPart implements IDecodingObserver,
 	private void makeDecodeFilesAction() {
 		actionDecode = new Action() {
 			public void run() {
-				ISelection selection = tableViewerCrashFiles.getSelection();
+				ISelection selection = treeViewerCrashFiles.getSelection();
 				// if nothing is selected, just ignore button press
 				if (selection == null || selection.isEmpty())
 					return;
@@ -630,6 +664,7 @@ public class MainView extends ViewPart implements IDecodingObserver,
 		actionDecode.setText("Decode Files...");
 		actionDecode.setToolTipText("Decode Selected Files");
 		actionDecode.setImageDescriptor(ImageResourceManager.getImageDescriptor(ImageKeys.DECODE_FILES));
+		actionDecode.setEnabled(false);
 	}
 
 	/**
@@ -639,14 +674,14 @@ public class MainView extends ViewPart implements IDecodingObserver,
 		// Delete file button
 		actionDeleteFiles = new Action() {
 			public void run() {
-				ISelection selection = tableViewerCrashFiles.getSelection();
+				ISelection selection = treeViewerCrashFiles.getSelection();
 				if (selection == null || selection.isEmpty())
 					return;
 				
 				// Confirm file delete
-				MessageBox messageBox = new MessageBox(tableViewerCrashFiles.getControl().getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		        messageBox.setText("Crash Analyser - Delete Files");
-		        messageBox.setMessage("Are you sure you want to delete selected files?");
+				MessageBox messageBox = new MessageBox(treeViewerCrashFiles.getControl().getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		        messageBox.setText("Crash Analyser - Remove Files");
+		        messageBox.setMessage("Are you sure you want to remove selected files?");
 		        int buttonID = messageBox.open();
 		        if (buttonID == SWT.YES) {
 			        // go through all selected files and remove them
@@ -665,15 +700,16 @@ public class MainView extends ViewPart implements IDecodingObserver,
 				}
 
 		        // All items were removed, add empty item
-				if (tableViewerCrashFiles.getTable().getItemCount() == 0) {
+				if (treeViewerCrashFiles.getTree().getItemCount() == 0) {//.getTable().getItemCount() == 0) {
 					CrashFileBundle empty = new CrashFileBundle(true);
-					tableViewerCrashFiles.add(empty);
+					treeViewerCrashFiles.add(empty, null);
 				}
 			}
 		};
-		actionDeleteFiles.setText("Delete Files");
-		actionDeleteFiles.setToolTipText("Delete Selected Files");
+		actionDeleteFiles.setText("Remove Files");
+		actionDeleteFiles.setToolTipText("Remove Selected Files");
 		actionDeleteFiles.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
+		actionDeleteFiles.setEnabled(false);
 	}
 
 	/**
@@ -682,7 +718,7 @@ public class MainView extends ViewPart implements IDecodingObserver,
 	 */
 	private void showMessage(String message) {
 		MessageDialog.openInformation(
-			tableViewerCrashFiles.getControl().getShell(),
+			treeViewerCrashFiles.getControl().getShell(),
 			"Crash Analyser",
 			message);
 	}
@@ -695,7 +731,7 @@ public class MainView extends ViewPart implements IDecodingObserver,
 		Runnable showErrorMessageRunnable = new Runnable(){
 			public void run(){
 				MessageDialog.openError(
-						tableViewerCrashFiles.getControl().getShell(),
+						treeViewerCrashFiles.getControl().getShell(),
 						"Crash Analyser",
 						errorMessage);
 				errorMessage = ""; //$NON-NLS-1$
@@ -712,14 +748,14 @@ public class MainView extends ViewPart implements IDecodingObserver,
 	 * @return a shell
 	 */
 	private Shell getShell() {
-		return tableViewerCrashFiles.getControl().getShell();
+		return treeViewerCrashFiles.getControl().getShell();
 	}
 
 	/**
 	 * Passing the focus request to the viewer's control.
 	 */
 	public void setFocus() {
-		tableViewerCrashFiles.getControl().setFocus();
+		treeViewerCrashFiles.getControl().setFocus();
 	}
 	
 	/**
@@ -746,6 +782,7 @@ public class MainView extends ViewPart implements IDecodingObserver,
 	void disableUIForImport(boolean disable) {
 		actionDecode.setEnabled(!disable);
 		actionOpenWizard.setEnabled(!disable);
+		mainMenuActionOpenPreferences.setEnabled(!disable);
 		actionDeleteFiles.setEnabled(!disable);
 		wizardRunning = disable;
 	}
@@ -780,7 +817,7 @@ public class MainView extends ViewPart implements IDecodingObserver,
 	private void refreshView() {
 		Runnable refreshRunnable = new Runnable(){
 			public void run(){
-				tableViewerCrashFiles.refresh();
+				treeViewerCrashFiles.refresh();
 			}
 		};
 		
@@ -796,7 +833,7 @@ public class MainView extends ViewPart implements IDecodingObserver,
 	private void updateView() {
 		try {
 			getViewSite().getPage().showView(MainView.ID);
-			tableViewerCrashFiles.refresh();
+			treeViewerCrashFiles.refresh();
 		} catch (Exception e) {			
 			e.printStackTrace();
 		}
@@ -810,6 +847,8 @@ public class MainView extends ViewPart implements IDecodingObserver,
 		disableUIForImport(false);
 		// no errors while decoding
 		if ("".equals(error)) { //$NON-NLS-1$
+
+			
 			contentProvider.refresh();
 			setMainViewVisible();
 			fileToBeShown = caFile;
@@ -826,7 +865,7 @@ public class MainView extends ViewPart implements IDecodingObserver,
 	 */
 	public void refresh() {
 		contentProvider.refresh();
-		tableViewerCrashFiles.refresh();
+		treeViewerCrashFiles.refresh();
 	}
 	
 	public void dragEnter(DropTargetEvent event) {

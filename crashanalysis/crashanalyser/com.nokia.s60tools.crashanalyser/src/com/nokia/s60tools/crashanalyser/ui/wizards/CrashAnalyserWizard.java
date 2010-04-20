@@ -30,7 +30,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
-import com.nokia.s60tools.ui.wizards.S60ToolsWizard;
+import com.nokia.s60tools.ui.wizards.*;
 import com.nokia.s60tools.crashanalyser.model.*;
 import com.nokia.s60tools.crashanalyser.plugin.CrashAnalyserPlugin;
 import com.nokia.s60tools.crashanalyser.resources.*;
@@ -45,7 +45,7 @@ import java.util.*;
  * can be executed.
  *
  */
-public class CrashAnalyserWizard extends S60ToolsWizard {
+public final class CrashAnalyserWizard extends S60ToolsWizard {
 
 	static private final ImageDescriptor bannerImgDescriptor = ImageResourceManager.getImageDescriptor(ImageKeys.WIZARD_BANNER);
 	List<CrashFileBundle> filesToDecode = null;
@@ -97,7 +97,7 @@ public class CrashAnalyserWizard extends S60ToolsWizard {
 		// No implementation needed
 	}
 
-	
+
 	@Override
 	public boolean needsProgressMonitor() {
 		return true;
@@ -120,13 +120,13 @@ public class CrashAnalyserWizard extends S60ToolsWizard {
 			
 			parameterFilesPage = new ParameterFilesPage(engine, false);
 			addPage(parameterFilesPage);
-		
+			
 			setWindowTitle("Crash Analyser - Crash File Import Wizard");
 			
 			// files were drag&dropped, "press next automatically"
 			if (!"".equals(providedFileOrFolder))
 				moveToSecondPage();
-			
+						
 		// we are re-decoding files provided by user, show only "3rd" page
 		} else {
 			parameterFilesPage = new ParameterFilesPage(engine, true);
@@ -190,6 +190,7 @@ public class CrashAnalyserWizard extends S60ToolsWizard {
 				decodingData.mapFilesFolder = parameterFilesPage.getMapFilesFolder();
 				decodingData.mapFilesZip = parameterFilesPage.getMapFilesZip();
 				decodingData.imageFiles = parameterFilesPage.getImageFiles();
+				decodingData.traceDictionaryFiles = parameterFilesPage.getTraceFiles();
 			}
 			
 			decodingData.errorLibrary = errorLibrary;
@@ -207,6 +208,7 @@ public class CrashAnalyserWizard extends S60ToolsWizard {
 			decodingData.mapFilesFolder = parameterFilesPage.getMapFilesFolder();
 			decodingData.mapFilesZip = parameterFilesPage.getMapFilesZip();
 			decodingData.imageFiles = parameterFilesPage.getImageFiles();
+			decodingData.traceDictionaryFiles = parameterFilesPage.getTraceFiles();
 			
 			decodingData.errorLibrary = errorLibrary;
 			

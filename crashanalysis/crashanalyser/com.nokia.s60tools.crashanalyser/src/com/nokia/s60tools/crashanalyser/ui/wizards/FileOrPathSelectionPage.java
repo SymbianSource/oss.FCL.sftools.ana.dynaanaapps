@@ -195,7 +195,9 @@ public class FileOrPathSelectionPage extends S60ToolsWizardPage implements Selec
 			DirectoryDialog dialog = new DirectoryDialog(this.getShell());
 			dialog.setText("Select crash files path");
 			String result = dialog.open();
-			comboFileOrPath.setText(result);
+			
+			if (result != null)
+				comboFileOrPath.setText(result);
 			
 		// browse file button
 		} else if (e.widget == buttonBrowseFile){
@@ -208,7 +210,9 @@ public class FileOrPathSelectionPage extends S60ToolsWizardPage implements Selec
 									"*."+CrashAnalyserFile.ELF_CORE_DUMP_FILE_EXTENSION};
 	        dialog.setFilterExtensions(filterExt);			
 			String result = dialog.open();
-			comboFileOrPath.setText(result);
+			
+			if(result != null)
+				comboFileOrPath.setText(result);
 			
 		// Read Files from Device button
 		} else if (e.widget == buttonReadFilesFromDevice) {
@@ -252,15 +256,8 @@ public class FileOrPathSelectionPage extends S60ToolsWizardPage implements Selec
 				}
 			// user has selected a single file
 			} else if (file.isFile() && file.exists()) {
-				// file seems to be a known crash file type
-				if (DecoderEngine.isFileValidCrashFile(file)) {
 					this.setErrorMessage(null);
 					return true;
-				// file type is not a crash file
-				} else {
-					this.setErrorMessage("Invalid file");
-					return false;
-				}
 			// user has not selected a folder nor a file
 			} else {
 				this.setErrorMessage("Invalid file or folder.");

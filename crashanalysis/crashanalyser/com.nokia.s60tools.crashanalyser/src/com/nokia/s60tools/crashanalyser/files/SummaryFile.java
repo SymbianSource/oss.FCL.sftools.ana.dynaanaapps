@@ -23,6 +23,8 @@ import javax.xml.parsers.*;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.*;
 import org.w3c.dom.*;
+
+import com.nokia.s60tools.crashanalyser.containers.OstTrace;
 import com.nokia.s60tools.crashanalyser.containers.RegisterDetails;
 import com.nokia.s60tools.crashanalyser.containers.CodeSegment;
 import com.nokia.s60tools.crashanalyser.containers.Message;
@@ -44,7 +46,9 @@ import com.nokia.s60tools.crashanalyser.plugin.CrashAnalyserPlugin;
  * does not contain stack information. A summary file is a base class for CrashFile. 
  *
  */
-public class SummaryFile extends CrashAnalyserFile implements IEditorInput {
+public class SummaryFile extends CrashAnalyserFile implements IEditorInput, Cloneable {
+
+	public enum ContentType {CRASH, REGMSG, REPORT};
 
 	// XML tags
 	public static final String TAG_SYMBOL_SET = "symbol_set";
@@ -59,6 +63,7 @@ public class SummaryFile extends CrashAnalyserFile implements IEditorInput {
 	public static final String TAG_CODESEG = "codeseg";
 	public static final String TAG_REGISTER_SET = "register_set";
 	public static final String TAG_SEG_EVENT_LOG = "seg_event_log";
+	public static final String TAG_SEG_TRACES = "seg_traces";
 	public static final String TAG_MESSAGE = "message";
 	public static final String TAG_VI_ENTRY = "vi_entry";
 	public static final String TAG_SOURCE_INFO = "source_info";
@@ -74,11 +79,13 @@ public class SummaryFile extends CrashAnalyserFile implements IEditorInput {
 	protected Map<Integer, RegisterSet> registerSets = null;
 	protected List<RegisterDetails> registerDetails = null;
 	protected EventLog eventLog = null;
+	protected OstTrace ostTrace = null;
 	protected Summary crashSummary = null;
 	protected String sourceFileType = "";
 	protected String sourceFileName = "";
 	protected String sourceFilePath = "";
 
+	
 	/**
 	 * Constructor
 	 * @param filePath file path to this crash file
@@ -88,6 +95,29 @@ public class SummaryFile extends CrashAnalyserFile implements IEditorInput {
 		super(filePath, library);
 	}
 	
+	/**
+	 * Constructor
+	 * @param filePath file path to this crash file
+	 * @param library error library
+	 */
+	protected SummaryFile(String filePath, ErrorLibrary library, Thread thread) {
+		super(filePath, library);
+		threadInfo = thread;
+	}
+
+	public Object clone() {
+		SummaryFile newSummaryFile = null;
+		try {
+			// Just shallow copy (i.e. no need to read information from file)
+			newSummaryFile = (SummaryFile) super.clone();
+		} catch (CloneNotSupportedException ex) {
+			// ignore
+		}
+		return newSummaryFile;
+	}
+	
+	
+
 	/**
 	 * Returns the file type of this crash file.
 	 * @return "Decoded File"
@@ -106,6 +136,14 @@ public class SummaryFile extends CrashAnalyserFile implements IEditorInput {
 	
 	public String getSourceFilePath() {
 		return sourceFilePath;
+	}
+	
+	
+	public void setThread(Thread thread) {
+		threadInfo = thread;
+		panicCategory = threadInfo.getExitCategory();
+		panicCode = threadInfo.getExitReason();
+		threadName = threadInfo.getFullName();
 	}
 	
 	public List<Stack> getStandAloneStacks() {
@@ -140,6 +178,27 @@ public class SummaryFile extends CrashAnalyserFile implements IEditorInput {
 		return false;
 	}
 	
+	/**
+	 * Returns the content type of the file.
+	 * @return Returns crash/registration/report. If not found returns crash. 
+	 */
+	public ContentType getContentType() {
+		List<Message> msgs = getMessages();
+		if (msgs != null && !msgs.isEmpty()) {
+			for (int i = 0; i < msgs.size(); i++) {
+				if (Message.MessageTypes.MESSAGE.equals(msgs.get(i).getMessageType()) &&
+						msgs.get(i).getTitle().equals("MobileCrash content type")) {
+					if(msgs.get(i).getMessage().equals("registration")) 
+						return ContentType.REGMSG;
+					else if (msgs.get(i).getMessage().equals("report")) 
+						return ContentType.REPORT;
+				}
+			}
+		}
+		// Returns crash by default.
+		return ContentType.CRASH; 
+	}
+
 	/**
 	 * Returns all messages
 	 * @return all messages
@@ -184,6 +243,25 @@ public class SummaryFile extends CrashAnalyserFile implements IEditorInput {
 	}
 
 	/**
+	 * Reads crash file
+	 * @param folder where xml file is
+	 * @param library error library
+	 * @param thread thread
+	 * @return read crash file or null
+	 */
+	public static SummaryFile read(String folder, ErrorLibrary library, Thread thread) {
+		String summaryFile = findFile(folder,"xml");
+		
+		// summary file doesn't exist
+		if (summaryFile == null)
+			return null;
+		
+		SummaryFile file = new SummaryFile(summaryFile, library, thread);
+		file.doRead();
+		return file;
+	}
+	
+		/**
 	 * Writes crash file into text or html file
 	 * @param filePathWithoutFileName file path where file is to be written to
 	 * @param html if false a .txt file is created. if true a .html file is created
@@ -243,6 +321,17 @@ public class SummaryFile extends CrashAnalyserFile implements IEditorInput {
 							writeLine(out, "Program Counter", thread.getProgramCounter());
 							panicDescription = thread.getPanicDescription();
 						}
+					} else if (threadInfo != null) {
+						Process threadProcess = getProcessByThread(threadInfo.getId());
+						
+						if (threadProcess != null)
+							writeLine(out, "Process", threadProcess.getName());
+						
+						writeLine(out, "Thread", threadInfo.getFullName());
+						writeLine(out, "Stack Pointer", threadInfo.getStackPointer());
+						writeLine(out, "Link Register", threadInfo.getLinkRegister());
+						writeLine(out, "Program Counter", threadInfo.getProgramCounter());
+						panicDescription = threadInfo.getPanicDescription();						
 					}
 					
 					// write crash summary to file
@@ -275,6 +364,10 @@ public class SummaryFile extends CrashAnalyserFile implements IEditorInput {
 					if (eventLog != null)
 						eventLog.writeTo(out);					
 						
+					// write OST trace to file
+					if (ostTrace != null)
+						ostTrace.writeTo(out);					
+
 					// write process data to file
 					if (process != null) {
 						process.writeTo(out, Process.StackItems.ALL, html);
@@ -452,6 +545,12 @@ public class SummaryFile extends CrashAnalyserFile implements IEditorInput {
 				eventLog = EventLog.read((Element)nl.item(0));
 			}
 			
+			// read OST traces
+			nl = docEle.getElementsByTagName(TAG_SEG_TRACES);
+			if (nl != null && nl.getLength() > 0) {
+				ostTrace = OstTrace.read((Element)nl.item(0));
+			}
+
 			// read messages from xml
 			nl = docEle.getElementsByTagName(TAG_MESSAGE);
 			if (nl != null && nl.getLength() > 0) {
@@ -592,6 +691,7 @@ public class SummaryFile extends CrashAnalyserFile implements IEditorInput {
 			
 			// set panic data
 			Process process = getCrashedProcess();
+			processCount = getProcessCount();
 			if (process != null) {
 				Thread firstThread = process.getFirstThread();
 				if (firstThread != null) {
@@ -599,6 +699,10 @@ public class SummaryFile extends CrashAnalyserFile implements IEditorInput {
 					panicCode = firstThread.getExitReason();
 					threadName = firstThread.getFullName();
 				}
+			} else if (threadInfo != null) {
+				panicCategory = threadInfo.getExitCategory();
+				panicCode = threadInfo.getExitReason();
+				threadName = threadInfo.getFullName();
 			}
 
 			formatDescription();
@@ -610,18 +714,21 @@ public class SummaryFile extends CrashAnalyserFile implements IEditorInput {
 	/**
 	 * Formats a description for this crash. 
 	 */
-	void formatDescription() {
+	public void formatDescription() {
 		Thread thread = null;
 		
-		// get the first thread of the first process
-		if (processes != null && !processes.isEmpty()) {
-			Process[] processesArray = processes.values().toArray(new Process[processes.values().size()]);
-			Process process = processesArray[0];
-			thread = process.getFirstThread();
+		if (threadInfo != null) {
+			thread = threadInfo;
 		}
-		
-		description = HtmlFormatter.formatCrashFileDescription(crashSummary, getMessages(), thread);
-		shortDescription = HtmlFormatter.formatCrashFileDescription(crashSummary, null, thread);
+		// get the first thread of the first process
+		else if (processes != null && !processes.isEmpty()) {
+			thread = getCrashedThread();
+		}
+
+		if (thread != null) {
+			description = HtmlFormatter.formatCrashFileDescription(crashSummary, getMessages(), thread);
+			shortDescription = HtmlFormatter.formatCrashFileDescription(crashSummary, null, thread);
+		}
 	}
 	
 	public Summary getSummary() {
@@ -634,6 +741,10 @@ public class SummaryFile extends CrashAnalyserFile implements IEditorInput {
 	 * @return first process or null
 	 */
 	public Process getCrashedProcess() {
+		if (threadInfo != null) {
+			return null;
+		}
+		
 		Process crashedProcess = null;
 		if (processes != null && !processes.isEmpty()) {
 			Process[] processesArray = processes.values().toArray(new Process[processes.values().size()]);
@@ -650,10 +761,109 @@ public class SummaryFile extends CrashAnalyserFile implements IEditorInput {
 		return crashedProcess;
 	}
 	
+	/**
+	 * Get crashed process
+	 * 
+	 * @return first crashed thread
+	 */
+	public Thread getCrashedThread() {
+		if (threadInfo != null) {
+			return null;
+		}
+		
+		Thread crashedThread = null;
+		if (processes != null && !processes.isEmpty()) {
+			Process[] processesArray = processes.values().toArray(new Process[processes.values().size()]);
+			for (Process process : processesArray) {
+				for (Thread thread : process.getThreads()) {
+					String exitType = thread.getExitType();
+					if (exitType.equalsIgnoreCase("Panic") || exitType.equalsIgnoreCase("Exception")) {
+						crashedThread = thread;
+						break;
+					}					
+				}
+			}
+		}
+		return crashedThread;
+	}
+
+	/**
+	 * Get process by thread id
+	 * 
+	 * @return Found process or null
+	 */
+	public Process getProcessByThread(int threadId) {
+		
+		Process threadProcess = null;
+		if (processes != null && !processes.isEmpty()) {
+			Process[] processesArray = processes.values().toArray(new Process[processes.values().size()]);
+			for (Process process : processesArray) {
+				for (Thread thread : process.getThreads()) {
+					//String exitType = thread.getExitType();
+					if (thread.getId() == threadId) {
+						threadProcess = process;
+						break;
+					}					
+				}
+			}
+		}
+		return threadProcess;
+	}
+	
+	/**
+	 * Get process count
+	 * 
+	 * @return the number of processes or -1 if not available
+	 */
+	public int getProcessCount()
+	{
+		if (processes == null) {
+			processCount = -1;
+		}
+		else {
+			processCount = processes.size();
+		}
+		return processCount;
+	}
+	
+	/**
+	 * Get process count
+	 * 
+	 * @return the number of threads or -1 if not available
+	 */
+	public int getTotalThreadCount()
+	{
+		totalThreadCount = 0;
+		if (processes == null) {
+			return  -1;
+		}
+		for(Process process : processes.values()) {
+			totalThreadCount += process.getThreads().size();
+		}
+		return totalThreadCount;
+	}
+	
+	/**
+	 * Returns all threads
+	 * 
+	 * @return all threads in all processes
+	 */
+	public List<Thread> getThreads() {
+		List<Thread> allThreads = new ArrayList<Thread>();
+		for(Process process : processes.values()) {
+			allThreads.addAll(process.getThreads());
+		}
+		return allThreads;
+	}
+
 	public EventLog getEventLog() {
 		return eventLog;
 	}
 	
+	public OstTrace getOstTrace() {
+		return ostTrace;
+	}
+
 	public List<RegisterDetails> getRegisterDetails() {
 		return registerDetails;
 	}

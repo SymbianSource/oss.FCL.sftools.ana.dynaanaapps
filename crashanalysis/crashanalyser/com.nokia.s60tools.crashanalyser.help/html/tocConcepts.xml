@@ -6,7 +6,7 @@
 	<!-- Enter topic entries here for Concepts section of help -->
 	
 	<topic label="MobileCrash file and D_EXC file " href="html/concepts/mc_file.htm" />
-	<topic label="Symbol files, Map files, and Image files" href="html/concepts/selge_vs_symbol.htm" />
+	<topic label="Symbol files, Map files, OST dictionary files, and Image files" href="html/concepts/selge_vs_symbol.htm" />
 	<topic label="Analysis file" href="html/concepts/analysis_file.htm" />
 	<topic label="How to analyse a crash" href="html/concepts/how_to_analyse_crash.htm" />
 

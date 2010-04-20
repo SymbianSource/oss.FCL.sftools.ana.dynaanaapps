@@ -17,6 +17,9 @@
 
 package com.nokia.s60tools.crashanalyser.files;
 
+import java.util.List;
+
+import com.nokia.s60tools.crashanalyser.containers.Thread;
 import com.nokia.s60tools.crashanalyser.data.*;
 
 /**
@@ -45,7 +48,12 @@ public class UndecodedFile extends CrashAnalyserFile {
 		else
 			return "D_EXC";
 	}
-	
+
+	// No threads
+	public List<Thread> getThreads() {
+		return null;
+	}
+
 	/**
 	 * Reads crash file
 	 * @param folder folder which contains one binary crash file which will be read

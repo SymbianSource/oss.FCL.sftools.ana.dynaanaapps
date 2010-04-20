@@ -93,7 +93,7 @@
 <p>Note that typically Crash Analyser performs a heuristic match that compares the stack data with supplied symbolic information. In some situations, the stack can contain the addresses of previous function calls that are not relevant to the current call stack. This is called &ldquo;ghosting&rdquo; and usually arises because an unintialised area of memory is reserved from the stack (for example, Symbian OS descriptors behave in this way). In such situations, since the stack memory is not wiped, any prior function addresses within the reserved stack area may contain references to old call chains. As such, it is important to use common sense and basic understanding of the component source code in conjunction with the call stack data in order to rule out irrelevant ghost entries.</p>
 <p>It is also important to verify if the value of the current stack pointer (R13) falls within or outside of the bounds of the stack. If the value of R13 is outside, or then very close to the stack boundary, then it may indicate a stack overflow which will result in an exception, typically reported in Symbian OS as a KERN-EXEC 3 panic.</p>
 
-<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+<div id="footer">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
 License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
 </body>
 </html>

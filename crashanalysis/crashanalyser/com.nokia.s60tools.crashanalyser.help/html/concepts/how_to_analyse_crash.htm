@@ -1,79 +1,162 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
-<title>How to analyse a crash</title>
-<link href="../../book.css" type="text/css" rel="stylesheet">
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>How to analyse a crash</title>
+  <link href="../../book.css" type="text/css" rel="stylesheet">
 </head>
+
 <body>
-
 <h2>How to analyse a crash</h2>
-<p>Analysing a crash is started by importing a file to the Crash Analyser main view. By double-clicking the imported file, the Crash Visualiser opens.</p>
+
+<p>Analysing a crash is started by importing a file to the Crash Analyser main
+view. By double-clicking the imported file, the Crash Visualiser opens.</p>
+
 <p></p>
-<img src="images\CrashVisualiser.PNG">
+<img src="images\CrashVisualiser.PNG"> 
+
 <p></p>
-<p>The Crash Visualiser contains four different tabs:</p>
+
+<p>The Crash Visualiser contains seven different tabs (at the bottom of the
+view). However, in some cases all the tabs are not visible. </p>
+<ol>
+  <li><b>General</b> 
+    <ul>
+      <li>General 
+        <p>The General pane shows general information on a crash, for example:
+        </p>
+        <ol>
+          <li>in which process and in which thread the crash occurred,</li>
+          <li>when the crash occurred, </li>
+          <li>which device was used when the crash occurred, and </li>
+          <li>other general information.</li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+</ol>
 <ul>
-<li><b>1) Crash Data</b>
-<ul>
-<li>Summary<p>The Summary pane shows general issues about a crash, for example: <b>1)</b> In which process and in which thread a crash occurred, <b>2)</b> When a crash occurred, <b>3)</b> Information on which device was used when the crash occurred, <b>4)</b> Etc.</p></li><li>Exit Info<p> The Exit Info pane gives the reason why a crash occurred. The reason might be for example a Symbian OS panic or exception. If the panic or error description can be found in the Crash Analyser error library, then the description is displayed.</p></li>
-<li>Call Stack<p>The <b>Call Stack</b> pane shows the reconstructed call stack from the time of the panic/exception. The call stack appears in a similar layout as you might expect to see with a typical Symbian OS debugger (for example Carbide.c++). The most recently executing function appears near the top of the stack, and the oldest or initial functions appear at the bottom.</p>
-<p>By right-clicking on the <b>Call Stack</b> pane, you get four selections:</p>
-<table width="667" border="1" cellspacing="1" cellpadding="2">
-<colgroup>
-<col width="50*">
-<col width="141*"></colgroup>
-<thead>
-<tr>
-<td><b>Function</b></td>
-<td><b>Description</b></td>
-</tr>
-<tr>
-<td><b>Open Source File</b></td>
-<td>Opens the source file this symbol points to. This is possible only if the source file is in use in your computer.</td>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><b>Active SDK</b></td>
-<td>Used for selecting the active SDK which is used in the Open Source File function.</td>
-</tr>
-<tr>
-<td><b>Copy Selection to Clipboard</b></td>
-<td> Selected/highlighted rows are copied to clipboard.
-<ul>
-<li>As plain text: Can be pasted for example to Notepad.</li>
-<li>As rich text: Can be pasted for example to MS Word.</li>
-</ul>
-</td>
-</tr>
-<tr>
-<td><b>Copy Whole Stack to Clipboard</b></td>
-<td>All rows are copied to clipboard.
-<ul>
-<li>As plain text: Can be pasted for example to Notepad.</li>
-<li>As rich text: Can be pasted for example to MS Word.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p>For more detailed information on call stack and analysing call stacks, see <a href="../reference/call_stack.htm">Call stack.</a></p></li>
-</ul></li>
-<li><b>2) Advanced</b>
-<ul>
-<li>Registers<p>The Registers pane shows the register values at the time of the crash.</p>
-<p>For more detailed information on registers, see <a href="../reference/registers.htm">Registers.</a></p></li>
-<li>Code Segments<p>The code segment list contains a list of binaries (dlls/plugins/exe) that were loaded at the time of the crash.</p><p>For more detailed information on code segments, see <a href="../reference/code_segments.htm">Code segments.</a></p></li>
-<li>Event Log<p>The Event Log pane shows 30 last events that occurred in the device before the crash. Only the window and key events are captured.</p></li>
-<li>CPSR details<p>The ARM processor stores the processor state in "status registers." The current state of the processor is stored within the Current Program Status Register (CPSR). This register contains bits that can be queried to identify certain attributes of the processor at the current point in time. For example, you can check CPSR to identify if the processor is executing code in User, Supervisor or one of the other ARM processor modes. This can give a useful indication of whether a panic/exception occurred whilst executing user or kernel code.  Additionally, another bit within CPSR can indicate what kind of instruction was executing at the time of the problem, that is, was the processor in THUMB or ARM mode. Refer to the ARM architecture manual for your processor for full details. Note that Crash Analyser is unable to discern the type of processor that the device utilizes. Therefore, Crash Analyser prevents several different interpretations of this register, and the appropriate interpretation for the device's hardware architecture must be selected manually.</p></li>
-</ul></li>
-<li><b>3) Errors &amp; Warnings</b><p>Shows all possible errors and warnings occurring during the decoding process.</p>
-<p><b>Note!</b> If no errors or warnings have occurred, then this tab is not shown.</p></li>
-<li><b>4) XML</b><p>Shows the raw data which other tabs are visualising in more readable format. The other tabs do not show all information what the raw data contains, so if some information is missing from a tab, you can try to find it from the XML tab.</p></li>
+  <li>Exit Info 
+    <p>The Exit Info pane gives the reason why a crash occurred. The reason
+    could be, for example, a Symbian OS panic or exception. If the panic or
+    error description can be found in the Crash Analyser error library, then
+    the description is displayed.</p>
+  </li>
+  <li><b>Call Stack</b> 
+    <p>The <b>Call Stack</b> pane shows the reconstructed call stack from the
+    time of the panic/exception. The call stack appears in similar layout as
+    you would expect to see with a typical Symbian OS debugger (for example
+    Carbide.c++). The most recently executed function appears near the top of
+    the stack, and the oldest or initial functions appear at the bottom.</p>
+    <p>By right-clicking on the <b>Call Stack</b> pane, you get four
+    selections:</p>
+
+    <table width="667" border="1" cellspacing="1" cellpadding="2">
+      <colgroup><col width="50*">
+        <col width="141*">
+      </colgroup>
+      <thead>
+        <tr>
+          <td><b>Function</b></td>
+          <td><b>Description</b></td>
+        </tr>
+        <tr>
+          <td><b>Open Source File</b></td>
+          <td>Opens the source file this symbol points to. This is possible
+            only if the source file is in use in your computer.</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Active SDK</b></td>
+          <td>Used for selecting the active SDK which is used in the Open
+            Source File function.</td>
+        </tr>
+        <tr>
+          <td><b>Copy Selection to Clipboard</b></td>
+          <td>Selected/highlighted rows are copied to clipboard. 
+            <ul>
+              <li>As plain text: Can be pasted for example to Notepad.</li>
+              <li>As rich text: Can be pasted for example to MS Word.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td><b>Copy Whole Stack to Clipboard</b></td>
+          <td>All rows are copied to clipboard. 
+            <ul>
+              <li>As plain text: Can be pasted for example to Notepad.</li>
+              <li>As rich text: Can be pasted for example to MS Word.</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    For more detailed information on call stack and analysing call stacks, see
+    <a href="../reference/call_stack.htm">Call stack.</a></li>
+  <li><b>Code Segments</b> 
+    <p>The code segment list contains a list of binaries (dlls/plugins/exe)
+    which were loaded at the time of the crash.</p>
+    <p>For more detailed information on code segments, see <a
+    href="../reference/code_segments.htm">Code segments.</a> </p>
+  </li>
+  <li><b>Registers</b> 
+    <ul>
+      <li><p>The Registers pane shows the register values at the time of the
+        crash.</p>
+        <p>For more detailed information on registers, see <a
+        href="../reference/registers.htm">Registers.</a></p>
+      </li>
+      <li>CPSR details 
+        <p>The ARM processor stores the processor state in "status registers."
+        The current state of the processor is stored within the Current Program
+        Status Register (CPSR). This register contains bits that can be queried
+        to identify certain attributes of the processor at the current point in
+        time. For example, you can check CPSR to identify if the processor is
+        executing code in User, Supervisor or one of the other ARM processor
+        modes. This can give a useful indication of whether a panic/exception
+        occurred whilst executing user or kernel code. Additionally, another
+        bit within CPSR can indicate what type of instruction was executing at
+        the time of the problem, that is, was the processor in THUMB or ARM
+        mode. Refer to the ARM architecture manual for your processor for full
+        details. Note that Crash Analyser is unable to discern the type of
+        processor that the device utilizes. Therefore, Crash Analyser prevents
+        several different interpretations of this register, and the appropriate
+        interpretation for the device's hardware architecture must be selected
+        manually.</p>
+      </li>
+    </ul>
+  </li>
+  <li><b>Traces</b> 
+    <ul>
+      <li>OST Traces 
+        <p>The OST Traces pane shows OST trace output from the device before
+        the crash. </p>
+      </li>
+      <li>Event Log 
+        <p>The Event Log pane shows the last 30 events that occurred in the
+        device before the crash. Only the window and key events are
+        captured.</p>
+      </li>
+    </ul>
+  </li>
+  <li><b>Errors &amp; Warnings</b> 
+    <p>This tab shows all possible errors and warnings occurring during the
+    decoding process.</p>
+    <p><b>Note!</b> If no errors or warnings have occurred, then this tab is
+    not shown.</p>
+  </li>
+  <li><b>XML</b> 
+    <p>This tab shows the raw data which other tabs are visualising in more
+    readable format. The other tabs do not show all the information contained
+    in the raw data, so if some information is missing from one of the other
+    tabs, you can try to find it from the XML tab.</p>
+  </li>
 </ul>
 
-<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
-License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
 </body>
 </html>

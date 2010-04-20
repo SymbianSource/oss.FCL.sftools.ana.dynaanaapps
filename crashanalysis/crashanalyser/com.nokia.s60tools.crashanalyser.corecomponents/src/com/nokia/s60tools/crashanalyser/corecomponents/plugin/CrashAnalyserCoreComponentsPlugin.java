@@ -24,6 +24,8 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
 
+
+
 /**
  * The activator class controls the plug-in life cycle
  */
@@ -35,7 +37,9 @@ public class CrashAnalyserCoreComponentsPlugin extends Plugin {
 	
 	// The shared instance
 	private static CrashAnalyserCoreComponentsPlugin plugin;
-	
+
+	protected static final String DATA_FOLDER = "data\\";	
+
 	/**
 	 * The constructor
 	 */
@@ -90,4 +94,14 @@ public class CrashAnalyserCoreComponentsPlugin extends Plugin {
 			return ""; //$NON-NLS-1$
 		}
 	}	
+	
+	/**
+	 * Returns the location for data-folder which contains all 
+	 * error & panic description xml files
+	 * @return
+	 */
+	public static String getDataPath() {
+		return getPluginInstallPath() + File.separator + DATA_FOLDER;
+	}		
+
 }

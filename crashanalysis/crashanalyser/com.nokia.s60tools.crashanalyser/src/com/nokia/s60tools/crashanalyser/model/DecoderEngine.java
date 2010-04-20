@@ -506,6 +506,7 @@ public class DecoderEngine extends Job {
 						filesToBeDecoded.toArray(new String[filesToBeDecoded
 								.size()]), decodingData.symbolFiles,
 						mapFilesFolder, decodingData.imageFiles,
+						decodingData.traceDictionaryFiles,
 						CrashAnalyserFile.OUTPUT_FILE_EXTENSION,
 						ERROR_FILE_EXTENSION, getSelgeEventIniFile(), monitor);
 			}
@@ -684,7 +685,8 @@ public class DecoderEngine extends Job {
 				CommandLineManager.executeFullAnalysis(workingFolder,
 						filesToBeDecoded.toArray(new String[filesToBeDecoded
 								.size()]), decodingData.symbolFiles,
-						mapFilesFolder, decodingData.imageFiles,
+						mapFilesFolder, decodingData.imageFiles, 
+						decodingData.traceDictionaryFiles,
 						CrashAnalyserFile.OUTPUT_FILE_EXTENSION,
 						ERROR_FILE_EXTENSION, getSelgeEventIniFile(), monitor);
 			}

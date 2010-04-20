@@ -18,11 +18,14 @@
 package com.nokia.s60tools.crashanalyser.files;
 
 import java.io.*;
+import java.util.List;
+
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import com.nokia.s60tools.crashanalyser.model.*;
+import com.nokia.s60tools.crashanalyser.containers.Thread;
 import com.nokia.s60tools.crashanalyser.data.*;
 
 /**
@@ -56,6 +59,11 @@ public class PanicFile extends CrashAnalyserFile {
 	 */
 	public String getFileType() {
 		return "Emulator panic";
+	}
+	
+	// No threads
+	public List<Thread> getThreads() {
+		return null;
 	}
 	
 	/**

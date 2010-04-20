@@ -35,6 +35,7 @@ public final class Stack {
 	// XML tags
 	public static final String TAG_ID = "id";
 	public static final String TAG_RANGE = "range";
+	public static final String TAG_HASH = "hash";
 	public static final String TAG_LINK = "link";
 	public static final String TAG_STACK_ENTRY = "stack_entry";
 	public static final String ATTRIBUTE_SEG = "seg";
@@ -46,6 +47,7 @@ public final class Stack {
 	private final int stackId;
 	private final String stackType;
 	private final String stackRange;
+	private final String stackHash;
 	private final String stackLinkRegister;
 	private final String stackStackPointer;
 	private final String stackProgramCounter;
@@ -66,12 +68,13 @@ public final class Stack {
 	 * @param data stack entries
 	 * @param cpsrStack defines whether this stack contains cpsr register
 	 */
-	private Stack(int id, String type, String range, String linkRegister, String stackPointer, 
+	private Stack(int id, String type, String range, String hash, String linkRegister, String stackPointer, 
 					String programCounter, boolean containsAccurateStackEntries, List<StackEntry> data,
 					boolean cpsrStack) {
 		stackId = id;
 		stackType = type;
 		stackRange = range;
+		stackHash = hash;
 		stackLinkRegister = linkRegister;
 		stackStackPointer = stackPointer;
 		stackProgramCounter = programCounter;
@@ -112,6 +115,10 @@ public final class Stack {
 		return stackLinkRegister;
 	}
 	
+	public String getHash() {
+		return stackHash;
+	}
+	
 	/**
 	 * Writes stack data into given buffer (i.e. text file)
 	 * @param out buffer to write to
@@ -125,6 +132,7 @@ public final class Stack {
 		writeLine(out, "--------");
 		writeLine(out, "Stack Type", stackType);
 		writeLine(out, "Stack Range", stackRange);
+		writeLine(out, "Stack Hash", stackHash);
 		
 		if (stackData != null && !stackData.isEmpty()) {
 			writeLine(out, "");
@@ -207,6 +215,11 @@ public final class Stack {
 			if (range == null)
 				range = "";
 			
+			// read defect hash if exists
+			String hash = XmlUtils.getTextValue(elementThreadStack, TAG_HASH);
+			if (hash == null)
+				hash = "";
+
 			// read stack entries
 			List<StackEntry> entries = null;
 			NodeList stackEntries = elementThreadStack.getElementsByTagName(TAG_STACK_ENTRY);
@@ -233,7 +246,7 @@ public final class Stack {
 				}
 			}
 			
-			return new Stack(id, type, range, linkRegister, stackPointer, programCounter,
+			return new Stack(id, type, range, hash, linkRegister, stackPointer, programCounter,
 								containsAccurateStackEntries, entries, cpsrStack);
 		} catch (Exception e) {
 			return null;

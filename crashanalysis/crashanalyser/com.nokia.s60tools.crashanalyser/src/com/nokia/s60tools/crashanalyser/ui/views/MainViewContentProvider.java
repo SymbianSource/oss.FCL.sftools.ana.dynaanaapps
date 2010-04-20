@@ -17,10 +17,11 @@
 
 package com.nokia.s60tools.crashanalyser.ui.views;
 
-import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import com.nokia.s60tools.crashanalyser.data.*;
 import com.nokia.s60tools.crashanalyser.interfaces.INewCrashFilesObserver;
+import com.nokia.s60tools.crashanalyser.model.CrashFileBundle;
 import com.nokia.s60tools.crashanalyser.model.CrashFileManager;
 
 /**
@@ -31,7 +32,7 @@ import com.nokia.s60tools.crashanalyser.model.CrashFileManager;
  * format. 
  *
  */
-public class MainViewContentProvider implements IStructuredContentProvider {
+public class MainViewContentProvider implements ITreeContentProvider { // IStructuredContentProvider {
 
 	private final CrashFileManager crashFileManager;	
 	private ErrorLibrary errorLibrary = null;
@@ -58,5 +59,19 @@ public class MainViewContentProvider implements IStructuredContentProvider {
 
 	public void inputChanged(Viewer arg0, Object arg1, Object arg2) {
 		// No implementation needed
+	}
+
+	public Object[] getChildren(Object crashFile) {
+		return crashFileManager.getThreads((CrashFileBundle) crashFile);
+	}
+
+	public Object getParent(Object arg0) {
+		return null;
+	}
+
+	public boolean hasChildren(Object arg0) {
+		if (crashFileManager.getTotalThreadCount((CrashFileBundle) arg0) > 1)
+			return true;
+		return false;
 	}
 }

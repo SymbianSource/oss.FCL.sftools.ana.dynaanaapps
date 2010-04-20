@@ -65,6 +65,12 @@ public class DecodingData {
 	public String[] imageFiles = null;
 	
 	/**
+	 * Contains list of provided trace dictionary file locations or null
+	 * if no OST trace dictionary files were provided.
+	 */
+	public String[] traceDictionaryFiles = null;
+
+	/**
 	 * Whether an html file should be generated from input files
 	 */
 	public boolean html = false;

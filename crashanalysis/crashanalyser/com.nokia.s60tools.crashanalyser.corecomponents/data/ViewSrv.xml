@@ -41,7 +41,7 @@
     </panic>
     <panic>
       <panic_id>14</panic_id>
-      <panic_description>&lt;p&gt; A view has taken too long to complete its implementation of ViewDeactivated() and must, therefore, be panicked to stop it from blocking the entire OS. &lt;/p&gt;	   </panic_description>
+      <panic_description>&lt;p&gt; - A view has taken too long to complete its implementation of ViewDeactivated() and must, therefore, be panicked to stop it from blocking the entire OS. &lt;/p&gt;	   </panic_description>
     </panic>
   </panics>
 </panic_category>

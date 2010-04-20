@@ -1,5 +1,5 @@
 =====================================================================
-RELEASE NOTE for Crash Analyser 1.2.0 (20th October 2009)
+RELEASE NOTE for Crash Analyser 1.3.0 (30th March 2010)
 =====================================================================
 
 Product Description:
@@ -22,16 +22,18 @@ Features:
 
 New Features:
 =============
-- Support for multiple processes
-- ELF core dump support
-- Drag & Drop support
-- Possibility to read files directly from the device via PC Suite connection
+- Shows production mode and crash source
+- Shows OST trace information and possible to insert OST dictionaries to 
+  decoding process
+- Added preferences button to main view
+- Defect hash information is shown
+- If there are multiple threads in the crash those are shown as tree view
+  in the main view
 
 Enhancements:
 =============
-- Improved progress reporting while handling crash files
-- Removed last wizard page in order to simplify user experience
-- Bug fixes & UI improvements
+- Improved UI, more tabs added
+- Bug fixes
 
 System Requirements:
 ====================
@@ -50,5 +52,5 @@ Known Issues:
 - GCCE map files are not supported. Only RVCT map files are supported. 
 
 
-Copyright © 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
 License: http://www.eclipse.org/legal/epl-v10.html.

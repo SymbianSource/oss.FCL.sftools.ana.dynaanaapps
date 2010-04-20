@@ -79,7 +79,7 @@ public final class CommandLineManager {
 	 */
 	public static boolean executeFullAnalysis(String outputFolder,
 			String[] crashFiles, String[] symbolFiles, String mapFilesFolder,
-			String[] imageFiles, String fileExtension,
+			String[] imageFiles, String[] traceDictionaryFiles, String fileExtension,
 			String failedFileExtension, String selgeEventIniFile,
 			IProgressMonitor monitor) {
 		List<String> debugMetadataFiles = new ArrayList<String>();
@@ -94,6 +94,12 @@ public final class CommandLineManager {
 		if (imageFiles != null && imageFiles.length > 0) {
 			for (int i = 0; i < imageFiles.length; i++)
 				debugMetadataFiles.add(imageFiles[i]);
+		}
+
+		// collect trace dictionary files if any provided
+		if (traceDictionaryFiles != null && traceDictionaryFiles.length > 0) {
+			for (String traceDictionaryFile : traceDictionaryFiles)
+				debugMetadataFiles.add(traceDictionaryFile);
 		}
 
 		String[] debugMetadata = null;

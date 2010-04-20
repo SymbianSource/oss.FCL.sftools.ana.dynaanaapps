@@ -29,8 +29,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import com.nokia.s60tools.crashanalyser.containers.ErrorLibraryError;
-import com.nokia.s60tools.crashanalyser.plugin.*;
-
+import com.nokia.s60tools.crashanalyser.corecomponents.plugin.*;
 /**
  * This class reads all error xml files with SAX parser.  
  *
@@ -112,7 +111,7 @@ public class ErrorsXmlReader extends DefaultHandler {
 			panics = null;
 			categories = null;
 			
-			String dataPath = CrashAnalyserPlugin.getDataPath();
+			String dataPath = CrashAnalyserCoreComponentsPlugin.getDataPath();
 			SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 			SAXParserFactory spf = SAXParserFactory.newInstance();
 			spf.setSchema(sf.newSchema(new File(dataPath + "schema.xsd")));

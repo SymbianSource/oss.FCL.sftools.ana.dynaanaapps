@@ -17,6 +17,7 @@
 
 package com.nokia.s60tools.crashanalyser.files;
 
+import com.nokia.s60tools.crashanalyser.containers.Thread;
 import com.nokia.s60tools.crashanalyser.data.*;
 import java.io.*;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -40,6 +41,15 @@ public class CrashFile extends SummaryFile implements IEditorInput {
 		super(filePath, library);
 	}
 	
+	/**
+	 * Constructor
+	 * @param filePath file path to this crash file
+	 * @param library error library
+	 */
+	protected CrashFile(String filePath, ErrorLibrary library, Thread thread) {
+		super(filePath, library, thread);
+	}
+
 	/**
 	 * Returns the file type of this crash file.
 	 * @return "Decoded File"
@@ -79,7 +89,24 @@ public class CrashFile extends SummaryFile implements IEditorInput {
 		file.doRead();
 		return file;
 	}
-	
+
+	/**
+	 * Reads crash file
+	 * @param folder folder which contains one .crashxml file which will be read
+	 * @param library error library
+	 * @return read crash file
+	 */
+	public static CrashFile read(String folder, ErrorLibrary library, Thread thread) {
+		String crashFile = findFile(folder, CrashAnalyserFile.OUTPUT_FILE_EXTENSION);
+		
+		if (crashFile == null)
+			return null;
+		
+		CrashFile file = new CrashFile(crashFile, library, thread);
+		file.doRead();
+		return file;
+	}
+		
 	@Override
 	public ImageDescriptor getImageDescriptor() {
 		return null;

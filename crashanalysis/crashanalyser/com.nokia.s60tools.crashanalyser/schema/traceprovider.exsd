@@ -1,16 +1,21 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="com.nokia.s60tools.crashanalyser">
+<schema targetNamespace="com.nokia.s60tools.memspy" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appInfo>
-         <meta.schema plugin="com.nokia.s60tools.crashanalyser" id="traceprovider" name="Trace Data Provider"/>
+         <meta.schema plugin="com.nokia.s60tools.memspy" id="traceprovider" name="MemSpy Trace Data Provider"/>
       </appInfo>
       <documentation>
-         This extension point can be used by other plug-ins to provide trace data for CrashAnalyser.
+         This extension point can be used to provide trace data for MemSpy.
       </documentation>
    </annotation>
 
    <element name="extension">
+      <annotation>
+         <appInfo>
+            <meta.element />
+         </appInfo>
+      </annotation>
       <complexType>
          <sequence>
             <element ref="traceprovider"/>
@@ -47,17 +52,17 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Trace provider instance&apos;s class implementing ITraceProvider interface
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="com.nokia.s60tools.crashanalyser.export.ITraceProvider"/>
+                  <meta.attribute kind="java" basedOn=":com.nokia.s60tools.memspy.export.ITraceProvider"/>
                </appInfo>
             </annotation>
          </attribute>
          <attribute name="providerName" type="string" use="required">
             <annotation>
                <documentation>
-                  Name of the trace provider
+                  Name of the trace provider instance
                </documentation>
             </annotation>
          </attribute>
@@ -69,43 +74,19 @@
          <meta.section type="since"/>
       </appInfo>
       <documentation>
-         1.0.3
+         1.6.0
       </documentation>
    </annotation>
 
-   <annotation>
-      <appInfo>
-         <meta.section type="examples"/>
-      </appInfo>
-      <documentation>
-         
-      </documentation>
-   </annotation>
 
-   <annotation>
-      <appInfo>
-         <meta.section type="apiInfo"/>
-      </appInfo>
-      <documentation>
-         
-      </documentation>
-   </annotation>
 
-   <annotation>
-      <appInfo>
-         <meta.section type="implementation"/>
-      </appInfo>
-      <documentation>
-         
-      </documentation>
-   </annotation>
 
    <annotation>
       <appInfo>
          <meta.section type="copyright"/>
       </appInfo>
       <documentation>
-         Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies). 
+         Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
 All rights reserved.
 This component and the accompanying materials are made available
 under the terms of &quot;Eclipse Public License v1.0&quot;

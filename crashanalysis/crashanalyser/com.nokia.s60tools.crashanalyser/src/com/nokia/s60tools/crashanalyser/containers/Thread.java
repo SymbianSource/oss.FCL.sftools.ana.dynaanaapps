@@ -40,6 +40,7 @@ public final class Thread {
 	public static final String TAG_EXIT_TYPE = "exit_type";
 	public static final String TAG_EXIT_CATEGORY = "exit_category";
 	public static final String TAG_EXIT_REASON = "exit_reason";
+	public static final String TAG_EXIT_DESCRIPTION = "exit_description";
 	public static final String TAG_LINK = "link";
 	public static final String ATTRIBUTE_SEG = "seg";
 	public static final String SEGMENT_STACKS = "seg_stacks";
@@ -52,6 +53,7 @@ public final class Thread {
 	private final String threadExitType;
 	private final String threadExitCategory;
 	private final String threadExitReason;
+	private final String threadExitDescription;
 	private final String threadPanicDescription;
 	// PC, SP and LR do not really belong to thread,
 	// but these are taken from this thread's stack which
@@ -67,12 +69,13 @@ public final class Thread {
 
 	private Thread(int id, String fullName, String exitType, String exitCategory, 
 					String panicDescription, String programCounter, String stackPointer, String linkRegister, 
-					String exitReason, List<Stack> stacks, List<RegisterSet> registers) {
+					String exitReason, String exitDescription, List<Stack> stacks, List<RegisterSet> registers) {
 		threadId = id;
 		threadFullName = fullName;
 		threadExitType = exitType;
 		threadExitCategory = exitCategory;
 		threadExitReason = exitReason;
+		threadExitDescription = exitDescription;
 		threadProgramCounter = programCounter;
 		threadStackPointer = stackPointer;
 		threadLinkRegister = linkRegister;
@@ -101,6 +104,10 @@ public final class Thread {
 		return threadExitReason;
 	}
 	
+	public String getExitDescription() {
+		return threadExitDescription;
+	}
+
 	public String getProgramCounter() {
 		return threadProgramCounter;
 	}
@@ -144,6 +151,7 @@ public final class Thread {
 		} else {
 			writeLine(out, "Exit Reason", threadExitCategory + " - " +threadExitReason);
 		}
+		writeLine(out, "Exit Description", threadExitDescription);
 		
 		writeLine(out, "");
 		if (threadRegisters != null && !threadRegisters.isEmpty()) {
@@ -210,6 +218,7 @@ public final class Thread {
 			String exitType = "";
 			String exitCategory = "";
 			String exitReason = "";
+			String exitDescription = "";
 			// get child nodes such as exit_info, stacks, registers
 			NodeList childNodes = elementThread.getChildNodes();
 			if (childNodes == null || childNodes.getLength() < 1)
@@ -253,6 +262,16 @@ public final class Thread {
 									exitReason = "";
 							} else {
 								exitReason = "";
+							}								
+						} else if (TAG_EXIT_DESCRIPTION.equals(el.getNodeName())) {
+							// read exit description
+							firstChild = el.getFirstChild();
+							if (firstChild != null) {							
+								exitDescription = firstChild.getNodeValue();
+								if (exitDescription == null)
+									exitDescription = "";
+							} else {
+								exitDescription = "";
 							}								
 						}
 					}
@@ -314,7 +333,7 @@ public final class Thread {
 
 			return new Thread(id, fullName, exitType, exitCategory, 
 								panicDescription, programCounter, stackPointer, linkRegister,
-								exitReason, threadStacks, threadRegisters);
+								exitReason, exitDescription, threadStacks, threadRegisters);
 
 		} catch (Exception e) {
 			return null;

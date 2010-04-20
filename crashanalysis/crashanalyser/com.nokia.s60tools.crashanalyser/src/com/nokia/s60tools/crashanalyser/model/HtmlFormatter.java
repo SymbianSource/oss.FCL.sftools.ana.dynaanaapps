@@ -141,7 +141,12 @@ public final class HtmlFormatter {
 		// format exit information
 		if (thread != null) {
 			if (!"".equals(thread.getFullName())) {
-				description += BOLD + "Crashed Thread: " + BOLD_END + thread.getFullName() + BREAK;
+				if (thread.getExitType().equalsIgnoreCase("Panic") || 
+						thread.getExitType().equalsIgnoreCase("Exception")) {
+					description += BOLD + "Crashed Thread: " + BOLD_END + thread.getFullName() + BREAK;
+				} else {
+					description += BOLD + "Thread: " + BOLD_END + thread.getFullName() + BREAK;
+				}
 			}
 			if (!"".equals(thread.getExitType())) {
 				description += BOLD + "Exit Type: " + BOLD_END + thread.getExitType() + BREAK;
@@ -289,4 +294,21 @@ public final class HtmlFormatter {
 				panic + 
 				"\">report this missing error description</a>";		
 	}
+	
+	/**
+	 * Creates a HTML message about registration message.
+	 * @return HTML string about registration message.
+	 */
+	public static String formatRegistrationMessage() {
+		return "<H4>This is not a crash file!</H4><b>This is a registration message.</b>";	
+	}
+
+	/**
+	 * Creates a HTML message about report.
+	 * @return HTML string about report.
+	 */
+	public static String formatReport() {
+		return "<H4>This is not a crash file!</H4><b>This is a report.</b>";	
+	}
+
 }

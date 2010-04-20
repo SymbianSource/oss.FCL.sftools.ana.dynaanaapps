@@ -19,15 +19,18 @@ package com.nokia.s60tools.crashanalyser.files;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
+
 import org.xml.sax.helpers.DefaultHandler;
 import com.nokia.s60tools.crashanalyser.data.*;
+import com.nokia.s60tools.crashanalyser.containers.Thread;
 import java.text.DateFormat;
 
 /**
  * This is a base class for all Crash Analyser file types. 
  *
  */
-public abstract class CrashAnalyserFile extends DefaultHandler{
+public abstract class CrashAnalyserFile extends DefaultHandler {
 
 	// File extensions
 	public static final String OUTPUT_FILE_EXTENSION = "crashxml";
@@ -49,8 +52,13 @@ public abstract class CrashAnalyserFile extends DefaultHandler{
 	protected String shortDescription = "";
 	protected String romId = "";
 	protected String panicCode = "";
-	
+	protected int totalThreadCount = -1;
+	protected int processCount = -1;
+
 	protected ErrorLibrary errorLibrary;
+
+	// Thread if this is for thread information only.
+	protected Thread threadInfo = null;
 
 	/**
 	 * Constructor
@@ -72,6 +80,16 @@ public abstract class CrashAnalyserFile extends DefaultHandler{
 		return threadName;
 	}
 	
+	public int getTotalThreadCount() {
+		return totalThreadCount;
+	}
+	
+	public abstract List<Thread> getThreads();
+	
+	public int getProcessCount() {
+		return processCount;
+	}
+
 	public String getPanicCategory() {
 		return panicCategory;
 	}
@@ -104,6 +122,14 @@ public abstract class CrashAnalyserFile extends DefaultHandler{
 		return filePath; 
 	}
 	
+	public ErrorLibrary getErrorLibrary() {
+		return errorLibrary;
+	}
+	
+	public Thread getThread() {
+		return threadInfo;
+	}
+
 	/**
 	 * Read file name and last modified time
 	 */
