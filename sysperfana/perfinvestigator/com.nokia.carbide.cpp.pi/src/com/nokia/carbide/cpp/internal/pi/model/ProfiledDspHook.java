@@ -56,7 +56,7 @@ public class ProfiledDspHook
                 (int)(Math.random()*255),
                 (int)(Math.random()*255));
         this.nameString = name;
-        this.timeStamp = new Long(ts);
+        this.timeStamp = Long.valueOf(ts);
     }
 
     public void setEventTimeString(Long ts)

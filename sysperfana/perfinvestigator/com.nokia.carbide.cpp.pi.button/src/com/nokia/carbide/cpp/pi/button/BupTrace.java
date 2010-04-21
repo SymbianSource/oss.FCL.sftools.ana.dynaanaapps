@@ -40,7 +40,7 @@ public class BupTrace extends GenericSampledTrace
 	public GenericTraceGraph getTraceGraph(int graphIndex)
 	{
 		if (graphs == null) {
-			graphs = new BupTraceGraph[3];
+			graphs = new BupTraceGraph[4];
 			
 			BupUpdater.getInstance().convertToLatest(this.samples);
 			
@@ -85,11 +85,6 @@ public class BupTrace extends GenericSampledTrace
 	public void setSynchValue(double aSynchValue)
 	{
 		synchValue = aSynchValue;
-	}
-
-	public void addSample(BupSample sample)
-	{
-		this.samples.add(sample);
 	}
 
 	public BupSample getBupSample(int number)

@@ -44,9 +44,6 @@ public class CallTraceGraph extends GenericTraceGraph implements ActionListener,
 	public void repaint() {
 	}
 
-	public void refreshDataFromTrace() {
-	}
-
 	public void action(String action) {
 	}
 

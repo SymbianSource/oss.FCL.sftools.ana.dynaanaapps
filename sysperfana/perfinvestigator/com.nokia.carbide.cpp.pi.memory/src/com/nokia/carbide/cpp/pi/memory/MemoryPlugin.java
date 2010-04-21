@@ -28,9 +28,9 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Version;
 
 import com.nokia.carbide.cpp.internal.pi.analyser.NpiInstanceRepository;
+import com.nokia.carbide.cpp.internal.pi.analyser.ProfileReader;
 import com.nokia.carbide.cpp.internal.pi.analyser.ProfileVisualiser;
 import com.nokia.carbide.cpp.internal.pi.memory.actions.MemoryStatisticsDialog;
 import com.nokia.carbide.cpp.internal.pi.model.GenericTrace;
@@ -55,6 +55,7 @@ public class MemoryPlugin extends AbstractPiPlugin
 	implements IViewMenu, ITrace, IClassReplacer, IVisualizable, IEventListener, IReportable
 {
 	private static final String HELP_CONTEXT_ID = PIPageEditor.PI_ID + ".memory";  //$NON-NLS-1$
+	public static final String HELP_CONTEXT_ID_MAIN_PAGE = HELP_CONTEXT_ID + ".memoryPageContext";  //$NON-NLS-1$
 
 	// There will be 1 graph for editor page 0
 	// This code may assume that page 0 has the threads graph
@@ -64,7 +65,7 @@ public class MemoryPlugin extends AbstractPiPlugin
 	private static MemoryPlugin plugin;
 	
 	// version number of profiler
-	private String profilerVersion = "";
+	private String profilerVersion = ""; //$NON-NLS-1$
 	
 	private static void setPlugin(MemoryPlugin newPlugin)
 	{
@@ -99,6 +100,14 @@ public class MemoryPlugin extends AbstractPiPlugin
 	 */
 	public static MemoryPlugin getDefault() {
 		return plugin;
+	}
+	
+	/**
+	 * Update menu items
+	 */
+	public void updateMenuItems(){
+		int uid = NpiInstanceRepository.getInstance().activeUid();
+		ProfileReader.getInstance().setTraceMenus(NpiInstanceRepository.getInstance().getPlugins(uid), uid);
 	}
 
 	/**
@@ -176,8 +185,22 @@ public class MemoryPlugin extends AbstractPiPlugin
 		return "Memory"; //$NON-NLS-1$
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#getTraceTitle()
+	 */
+	public String getTraceTitle() {
+		return Messages.getString("MemoryPlugin.1"); //$NON-NLS-1$
+	}
+	
 	public int getTraceId() {
 		return 4;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#parseTraceFiles(java.io.File[])
+	 */
+	public ParsedTraceData parseTraceFiles(File[] files) throws Exception {
+		throw new UnsupportedOperationException();
 	}
 
 	public ParsedTraceData parseTraceFile(File file) throws Exception 
@@ -294,9 +317,33 @@ public class MemoryPlugin extends AbstractPiPlugin
 		action.setChecked(rescale);
 		action.setToolTipText(Messages.getString("MemoryPlugin.dynamicRescaleTooltip")); //$NON-NLS-1$
 		manager.add(action);
+		
+		
+		boolean showMemoryUsageLine = true;
+		// if there is a show memory usage value associated with the current Analyser tab, then use it		
+		obj = NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.memory.showMemoryUsage");	//$NON-NLS-1$
+		if ((obj != null) && (obj instanceof Boolean))
+			// retrieve the current value
+			showMemoryUsageLine = (Boolean)obj;
+		else
+			// set the initial value
+			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.memory.showMemoryUsage", showMemoryUsageLine);	//$NON-NLS-1$
+		
+		action = new Action(Messages.getString("MemTraceGraph.showTotalMemoryUsage"), Action.AS_CHECK_BOX) { //$NON-NLS-1$
+			public void run() {
+				if (this.isChecked())
+					receiveSelectionEvent("memory_usage_line_on"); //$NON-NLS-1$
+				else
+					receiveSelectionEvent("memory_usage_line_off"); //$NON-NLS-1$
+			}
+		};
+		action.setChecked(showMemoryUsageLine);
+		action.setToolTipText(Messages.getString("MemoryPlugin.showTotalMemoryUsageToolTip")); //$NON-NLS-1$
+		manager.add(action);
 
 		return manager;
 	}
+	
 
 	public void receiveEvent(String actionString, Event event) {
 		MemTrace trace = (MemTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.memory"); //$NON-NLS-1$
@@ -315,10 +362,6 @@ public class MemoryPlugin extends AbstractPiPlugin
 			((MemTraceGraph)trace.getTraceGraph(PIPageEditor.FUNCTIONS_PAGE)).action(actionString);
 		} else if (actionString.equals("scroll")) //$NON-NLS-1$
 		{
-			if (   !(event.data instanceof String)
-				|| !((String)event.data).equals("FigureCanvas")) //$NON-NLS-1$
-				return;
-			
 			PIEvent be = new PIEvent(event, PIEvent.SCROLLED);
 			
 			((MemTraceGraph)trace.getTraceGraph(PIPageEditor.THREADS_PAGE)).piEventReceived(be);
@@ -345,7 +388,11 @@ public class MemoryPlugin extends AbstractPiPlugin
 			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.memory.rescale", true); //$NON-NLS-1$
 		} else if (actionString.equals("rescale_off")) { //$NON-NLS-1$
 			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.memory.rescale", false); //$NON-NLS-1$
-		} else {
+		} else if (actionString.equals("memory_usage_line_on")) { //$NON-NLS-1$
+			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.memory.showMemoryUsage", true); //$NON-NLS-1$
+		} else if (actionString.equals("memory_usage_line_off")) { //$NON-NLS-1$
+			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.memory.showMemoryUsage", false); //$NON-NLS-1$
+		}else {
 			return;
 		}
 
@@ -376,7 +423,7 @@ public class MemoryPlugin extends AbstractPiPlugin
 		MemTrace trace = (MemTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.memory"); //$NON-NLS-1$
 
 		if (trace != null)
-			return new Integer(trace.getLastSampleNumber());
+			return Integer.valueOf(trace.getLastSampleNumber());
 		else
 			return null;
 	}
@@ -463,13 +510,5 @@ public class MemoryPlugin extends AbstractPiPlugin
 
 	public void setPageIndex(int index, int pageIndex) {
 		return;
-	}
-
-
-	/* (non-Javadoc)
-	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.IVisualizable#getGraphTitle(int)
-	 */
-	public String getGraphTitle(int graphIndex) {
-		return Messages.getString("MemoryPlugin.pluginTitle"); //$NON-NLS-1$
 	}
 }

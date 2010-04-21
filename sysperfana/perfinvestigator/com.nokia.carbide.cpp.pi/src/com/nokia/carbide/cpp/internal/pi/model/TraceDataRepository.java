@@ -44,7 +44,7 @@ public class TraceDataRepository
 	
 	public void registerTraces(int analysisId) {
 		if (analysisSpecificTraces.get(analysisId) == null) {
-			analysisSpecificTraces.put(new Integer(analysisId), new LinkedHashMap<Class,ParsedTraceData>());
+			analysisSpecificTraces.put(Integer.valueOf(analysisId), new LinkedHashMap<Class,ParsedTraceData>());
 		}
 	}
 	
@@ -58,7 +58,7 @@ public class TraceDataRepository
 		if (traceClass != null && traceData != null && traceData.traceData != null)
 		{
 			tracesForMyId.put(traceClass, traceData);
-			analysisSpecificTraces.put(new Integer(analysisId), tracesForMyId);
+			analysisSpecificTraces.put(Integer.valueOf(analysisId), tracesForMyId);
 		}
 	}
 	
@@ -72,7 +72,7 @@ public class TraceDataRepository
 		if (analysisSpecificTraces == null || traceClass == null)
 			return null;
 
-		LinkedHashMap<Class,ParsedTraceData> tmp = analysisSpecificTraces.get(new Integer(analysisId));
+		LinkedHashMap<Class,ParsedTraceData> tmp = analysisSpecificTraces.get(Integer.valueOf(analysisId));
 
 		if (tmp == null)
 			return null;
@@ -87,7 +87,7 @@ public class TraceDataRepository
 		if (analysisSpecificTraces == null) 
 			return resolvers.elements();
 
-		LinkedHashMap<Class,ParsedTraceData> tmp = analysisSpecificTraces.get(new Integer(analysisId));
+		LinkedHashMap<Class,ParsedTraceData> tmp = analysisSpecificTraces.get(Integer.valueOf(analysisId));
 
 		Iterator<ParsedTraceData> e = tmp.values().iterator();
 		while (e.hasNext())
@@ -120,7 +120,7 @@ public class TraceDataRepository
 		if (analysisSpecificTraces == null)
 			return null;
 
-		LinkedHashMap<Class,ParsedTraceData> tmp = analysisSpecificTraces.get(new Integer(analysisId));
+		LinkedHashMap<Class,ParsedTraceData> tmp = analysisSpecificTraces.get(Integer.valueOf(analysisId));
 
 		if (tmp == null)
 			return null;
@@ -133,7 +133,7 @@ public class TraceDataRepository
 		if (analysisSpecificTraces == null)
 			return null;
 
-		LinkedHashMap<Class,ParsedTraceData> tmp = analysisSpecificTraces.get(new Integer(analysisId));
+		LinkedHashMap<Class,ParsedTraceData> tmp = analysisSpecificTraces.get(Integer.valueOf(analysisId));
 
 		if (tmp == null)
 			return null;
@@ -146,7 +146,7 @@ public class TraceDataRepository
 		if (analysisSpecificTraces == null)
 			return null;
 
-		LinkedHashMap<Class,ParsedTraceData> tmp = analysisSpecificTraces.get(new Integer(analysisId));
+		LinkedHashMap<Class,ParsedTraceData> tmp = analysisSpecificTraces.get(Integer.valueOf(analysisId));
 
 		if (tmp == null)
 			return null;
@@ -157,7 +157,7 @@ public class TraceDataRepository
 	public void removeTraces(int analysisId)
 	{
 		if (analysisSpecificTraces != null)
-			analysisSpecificTraces.remove(new Integer(analysisId));
+			analysisSpecificTraces.remove(Integer.valueOf(analysisId));
 	}
 	
 	public void removeAll()

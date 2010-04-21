@@ -20,12 +20,13 @@ package com.nokia.carbide.cpp.internal.pi.resolvers;
 import java.util.Hashtable;
 
 import com.nokia.carbide.cpp.internal.pi.model.Binary;
-import com.nokia.carbide.cpp.internal.pi.model.Function;
+import com.nokia.carbide.cpp.internal.pi.model.IFunction;
 
 
 public class RofsSymbolFileFunctionResolver extends SymbolFileFunctionResolver {
 	
-	public Function findFunctionForAddress(long address) {
+	@Override
+	public IFunction findFunctionForAddress(long address) {
 		return super.findFunctionForAddress(address);
 	}
 	
@@ -37,10 +38,10 @@ public class RofsSymbolFileFunctionResolver extends SymbolFileFunctionResolver {
 			if (dllItem.name != null) {
 				Binary binary = hostNameToBinary.get(dllItem.name);
 				if (binary != null) {
-					dllItem.start += binary.startAddress;
-					dllItem.end += binary.startAddress;
+					dllItem.start += binary.getStartAddress();
+					dllItem.end += binary.getStartAddress();
 					for (SymbolFileFunctionItem funcItem : dllItem.data) {
-						funcItem.address += binary.startAddress;
+						funcItem.address += binary.getStartAddress();
 					}
 				}
 			}

@@ -226,7 +226,7 @@ public class BupEventMapManager {
 			MapEntry entry = keyCodeMap.get(keyCode);	// support override of mapping
 			if (entry == null) {
 				entry = new MapEntry();
-				keyCodeMap.put(new Integer(keyCode), entry);
+				keyCodeMap.put(Integer.valueOf(keyCode), entry);
 			}
 			entry.enumString = enumString;
 			entry.label = label;
@@ -235,7 +235,7 @@ public class BupEventMapManager {
 		public void removeMapping(int keyCode) {
 			MapEntry entry = keyCodeMap.get(keyCode);
 			if (entry != null) {
-				keyCodeMap.remove(new Integer(keyCode));
+				keyCodeMap.remove(Integer.valueOf(keyCode));
 			}
 		}
 		

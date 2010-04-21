@@ -133,18 +133,18 @@ public class DecidedPool
 		if (winner != null)
 		{
 			ProcessedBinary pb = this.amm.getBinaryReader().
-									getProcessedBinaryForName(winner.binaryName);
+									getProcessedBinaryForName(winner.getBinaryName());
 			
 			
 			String fName = pb.getFunctionNameForOffset(
-							address-(winner.startAddress+winner.offsetToCodeStart));
+							address-(winner.getStartAddress()+winner.getOffsetToCodeStart()));
 			
-			String bName = winner.binaryName;
+			String bName = winner.getBinaryName();
 			long fOffset = pb.getOffsetFromBinaryStartForFunction(fName);
-			Long fStart = new Long(winner.startAddress+winner.offsetToCodeStart+fOffset);
+			Long fStart = Long.valueOf(winner.getStartAddress()+winner.getOffsetToCodeStart()+fOffset);
 			
 			Function f = new Function(fName,fStart,bName);
-			f.length = pb.getFunctionLengthForOffset(fOffset);
+			f.setLength(pb.getFunctionLengthForOffset(fOffset));
 			
 			return f;
 
@@ -187,12 +187,12 @@ public class DecidedPool
 	
 	public void insertDecidedBinary(Binary binary,Vector samples)
 	{		
-		Vector currentBins = this.memLayout.isOccupiedBy(binary.startAddress,binary.length);
+		Vector currentBins = this.memLayout.isOccupiedBy(binary.getStartAddress(),binary.getLength());
 		
 		if (currentBins.size() == 0)
 		{
-			if (debug) System.out.println(Messages.getString("DecidedPool.analysisResolved1")+binary.binaryName+Messages.getString("DecidedPool.analysisResolved2")+Long.toHexString(binary.startAddress+binary.offsetToCodeStart)+ //$NON-NLS-1$ //$NON-NLS-2$
-					Messages.getString("DecidedPool.analysisResolved3")+Long.toHexString(binary.startAddress+binary.offsetToCodeStart+binary.length)); //$NON-NLS-1$
+			if (debug) System.out.println(Messages.getString("DecidedPool.analysisResolved1")+binary.getBinaryName()+Messages.getString("DecidedPool.analysisResolved2")+Long.toHexString(binary.getStartAddress()+binary.getOffsetToCodeStart())+ //$NON-NLS-1$ //$NON-NLS-2$
+					Messages.getString("DecidedPool.analysisResolved3")+Long.toHexString(binary.getStartAddress()+binary.getOffsetToCodeStart()+binary.getLength())); //$NON-NLS-1$
 			
 			DecidedLocation dl = new DecidedLocation(binary);
 			dl.insertSupportingSamples(samples);
@@ -214,7 +214,7 @@ public class DecidedPool
 				{
 					IttSample is = (IttSample)sampEnum.nextElement();
 
-					if (is.programCounter >= b.startAddress && is.programCounter <= b.startAddress+b.length)
+					if (is.programCounter >= b.getStartAddress() && is.programCounter <= b.getStartAddress()+b.getLength())
 					{
 						if (this.trySampleWithBinary(is,b,4) == false) 
 							okForThis=false;
@@ -455,8 +455,8 @@ public class DecidedPool
 			while (enumer.hasMoreElements())
 			{
 				Binary b = (Binary)enumer.nextElement();
-				long bStart = b.startAddress;
-				long bEnd = b.startAddress+b.length;
+				long bStart = b.getStartAddress();
+				long bEnd = b.getStartAddress()+b.getLength();
 				long end = start+length;
 				
 				// starts within the area
@@ -501,8 +501,8 @@ public class DecidedPool
 			while (enumer.hasMoreElements())
 			{
 				Binary b = (Binary)enumer.nextElement();
-				long bStart = b.startAddress;
-				long bEnd = b.startAddress+b.length;
+				long bStart = b.getStartAddress();
+				long bEnd = b.getStartAddress()+b.getLength();
 				
 				if (address >= bStart && address <= bEnd)
 				{
@@ -519,7 +519,7 @@ public class DecidedPool
 			while (dls.hasMoreElements())
 			{
 				Binary b = (Binary)dls.nextElement();
-				if (b.binaryName.toLowerCase().equals(binaryName.toLowerCase())) return b;
+				if (b.getBinaryName().toLowerCase().equals(binaryName.toLowerCase())) return b;
 			}
 			return null;
 		}

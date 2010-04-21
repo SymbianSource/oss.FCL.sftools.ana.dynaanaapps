@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Performance Investigator User Guide" href="html/profiler.htm" >
+<toc label="Performance Investigator" link_to="../com.nokia.carbide.help.common/carbideHelpTOC.xml#anchorCarbideMisc">
+
+<topic label="Performance Investigator" href="html/profiler.htm">
 				
 	<topic label="Release notes" href="html/release_notes.htm" />
-	<topic label="Getting Started with Performance Investigator"      href="html/Getting_Started/GS_index.htm" />
+	<topic label="Getting Started with Performance Investigator" href="html/Getting_Started/GS_index.htm" />
 	
 	<topic label="Software Performance" >
 		<link toc="tocConcepts.xml" />
-	</topic>
-	
+	</topic>	
 	
 	<topic label="Profiler" >
 		<link toc="tocProfiler.xml" />
@@ -23,5 +24,5 @@
 	
 	<topic label="Bugs fixed" href="html/bugs_fixed.htm" />
 	<topic label="Legal" href="html/legal.htm" />
-		      
+		</topic>	      
 </toc>

@@ -33,6 +33,7 @@ import org.osgi.framework.BundleContext;
 import com.nokia.carbide.cpp.internal.pi.analyser.NpiInstanceRepository;
 import com.nokia.carbide.cpp.internal.pi.analyser.ProfileVisualiser;
 import com.nokia.carbide.cpp.internal.pi.button.ui.SwitchBupMapDialog;
+import com.nokia.carbide.cpp.internal.pi.model.GenericSample;
 import com.nokia.carbide.cpp.internal.pi.model.GenericTrace;
 import com.nokia.carbide.cpp.internal.pi.model.ParsedTraceData;
 import com.nokia.carbide.cpp.internal.pi.plugin.model.AbstractPiPlugin;
@@ -60,6 +61,7 @@ import com.nokia.carbide.cpp.sdk.core.SDKCorePlugin;
 public class ButtonPlugin extends AbstractPiPlugin
 			implements ITrace, IViewMenu, IEventListener, IClassReplacer, IVisualizable, IFinalizeTrace, IProvideTraceAdditionalInfo
 {
+
 	public static final String PLUGIN_ID = PIPageEditor.PI_ID + ".button";  //$NON-NLS-1$
 
 	// There will be three graphs - one each for editor pages 0, 1, 2
@@ -120,8 +122,22 @@ public class ButtonPlugin extends AbstractPiPlugin
 		return "Button"; //$NON-NLS-1$
 	}
 
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#getTraceTitle()
+	 */
+	public String getTraceTitle() {
+		return Messages.getString("ButtonPlugin.0"); //$NON-NLS-1$
+	}
+
 	public int getTraceId() {
 		return 7;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#parseTraceFiles(java.io.File[])
+	 */
+	public ParsedTraceData parseTraceFiles(File[] files) throws Exception {
+		throw new UnsupportedOperationException();
 	}
 
 	public ParsedTraceData parseTraceFile(File file) throws Exception 
@@ -322,13 +338,6 @@ public class ButtonPlugin extends AbstractPiPlugin
 	public void setPageIndex(int index, int pageIndex) {
 		return;
 	}
-
-	/* (non-Javadoc)
-	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.IVisualizable#getGraphTitle(int)
-	 */
-	public String getGraphTitle(int graphIndex) {
-		return null;
-	}
 	
 	/**
 	 * Returns the shared preference store of this plugin
@@ -350,6 +359,13 @@ public class ButtonPlugin extends AbstractPiPlugin
 			BupEventMapManager.getInstance().releaseMap(bupTrace.getCurrentBupMapInUse());
 		}
 	}
+
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.IFinalizeTrace#runOnPartOpened()
+	 */
+	public void runOnPartOpened() {
+		//no-op
+	}
 	
 	public void switchMap() {
 		BupTrace bupTrace = (BupTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.button"); //$NON-NLS-1$
@@ -360,8 +376,9 @@ public class ButtonPlugin extends AbstractPiPlugin
 			IBupEventMap newMap = BupEventMapManager.getInstance().captureMap(dialog.getNewProfile());
 			if (bupTrace != null) {
 				boolean resetAll = dialog.resetAll();
-				Vector<BupSample> samples = bupTrace.samples;
-				for (BupSample sample : samples) {
+				Vector<GenericSample> samples = bupTrace.samples;
+				for (GenericSample genericSample : samples) {
+					BupSample sample = (BupSample)genericSample;
 					if (resetAll || !sample.isLabelModified()) {
 						sample.resetLabelToMapDefault(newMap);
 					}

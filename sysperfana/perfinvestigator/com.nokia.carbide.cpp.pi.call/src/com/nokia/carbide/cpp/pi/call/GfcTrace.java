@@ -29,7 +29,7 @@ import com.nokia.carbide.cpp.internal.pi.model.GenericSample;
 import com.nokia.carbide.cpp.internal.pi.model.GenericSampledTraceWithFunctions;
 import com.nokia.carbide.cpp.internal.pi.utils.QuickSortImpl;
 import com.nokia.carbide.cpp.internal.pi.utils.Sortable;
-import com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph;
+import com.nokia.carbide.cpp.pi.visual.IGenericTraceGraph;
 
 
 public class GfcTrace extends GenericSampledTraceWithFunctions
@@ -206,35 +206,35 @@ public class GfcTrace extends GenericSampledTraceWithFunctions
   	    CallerCallee caller = new CallerCallee();
   	    CallerCallee callee = new CallerCallee();
 
-		if (  (gSam.callerFunctionSym == null || gSam.callerFunctionSym.functionName.endsWith(Messages.getString("GfcTrace.functionNotFound"))) //$NON-NLS-1$
-			&& gSam.callerFunctionItt != null) //$NON-NLS-1$
+		if (  (gSam.getCallerFunctionSym() == null || gSam.getCallerFunctionSym().getFunctionName().endsWith(Messages.getString("GfcTrace.functionNotFound"))) //$NON-NLS-1$
+			&& gSam.getCallerFunctionItt() != null) //$NON-NLS-1$
 		{
-			caller.functionName = gSam.callerFunctionItt.functionName;
-    		caller.startAdress  = gSam.callerFunctionItt.startAddress;
-			caller.binaryName   = gSam.callerFunctionItt.functionBinary.binaryName;
+			caller.functionName = gSam.getCallerFunctionItt().getFunctionName();
+    		caller.startAdress  = gSam.getCallerFunctionItt().getStartAddress();
+			caller.binaryName   = gSam.getCallerFunctionItt().getFunctionBinary().getBinaryName();
 			caller.symbolParsed = false;
 		}
 		else
 		{
-			caller.functionName = gSam.callerFunctionSym.functionName;
-			caller.startAdress  = gSam.callerFunctionSym.startAddress;
-			caller.binaryName   = gSam.callerFunctionSym.functionBinary.binaryName;
+			caller.functionName = gSam.getCallerFunctionSym().getFunctionName();
+			caller.startAdress  = gSam.getCallerFunctionSym().getStartAddress();
+			caller.binaryName   = gSam.getCallerFunctionSym().getFunctionBinary().getBinaryName();
 			caller.symbolParsed = Boolean.valueOf(true);
 		}
 		
-		if (   (gSam.currentFunctionSym == null || gSam.currentFunctionSym.functionName.endsWith(Messages.getString("GfcTrace.functionNotFound"))) //$NON-NLS-1$
-			&& gSam.currentFunctionItt != null) //$NON-NLS-1$
+		if (   (gSam.getCurrentFunctionSym() == null || gSam.getCurrentFunctionSym().getFunctionName().endsWith(Messages.getString("GfcTrace.functionNotFound"))) //$NON-NLS-1$
+			&& gSam.getCurrentFunctionItt() != null) //$NON-NLS-1$
 		{
-			callee.functionName = gSam.currentFunctionItt.functionName;
-    		callee.startAdress  = gSam.currentFunctionItt.startAddress;
-			callee.binaryName   = gSam.currentFunctionItt.functionBinary.binaryName;
+			callee.functionName = gSam.getCurrentFunctionItt().getFunctionName();
+    		callee.startAdress  = gSam.getCurrentFunctionItt().getStartAddress();
+			callee.binaryName   = gSam.getCurrentFunctionItt().getFunctionBinary().getBinaryName();
 			callee.symbolParsed = Boolean.valueOf(false);
 		}
 		else
 		{
-			callee.functionName = gSam.currentFunctionSym.functionName;
-    		callee.startAdress  = gSam.currentFunctionSym.startAddress;
-			callee.binaryName   = gSam.currentFunctionSym.functionBinary.binaryName;
+			callee.functionName = gSam.getCurrentFunctionSym().getFunctionName();
+    		callee.startAdress  = gSam.getCurrentFunctionSym().getStartAddress();
+			callee.binaryName   = gSam.getCurrentFunctionSym().getFunctionBinary().getBinaryName();
 			callee.symbolParsed = Boolean.valueOf(true);
 		}
 
@@ -284,8 +284,8 @@ public class GfcTrace extends GenericSampledTraceWithFunctions
 
 	    if (!caller.equals(callee))
 	    {
-	    	callee.addCaller(caller, new Integer((int)sample));
-	    	caller.addCallee(callee, new Integer((int)sample));
+	    	callee.addCaller(caller, Integer.valueOf((int)sample));
+	    	caller.addCallee(callee, Integer.valueOf((int)sample));
 	    }
 	}
   
@@ -459,7 +459,7 @@ public class GfcTrace extends GenericSampledTraceWithFunctions
 	  	{
 	  		ItemSorter is = (ItemSorter)elements.nextElement();
 	  		f[i++] = is.item;
-	  		this.parsedGfcTrace.put(new Long(is.item.address), is.item);
+	  		this.parsedGfcTrace.put(Long.valueOf(is.item.address), is.item);
 	  	}
   	
 	  	return f;
@@ -518,19 +518,7 @@ public class GfcTrace extends GenericSampledTraceWithFunctions
   			}
   		}
   	}
-  	
-  	// this method is not used
-  	public GenericTraceGraph getTraceGraph()
-  	{
-  		return null;
-  	}
-
-  	// this method is not used
-  	public GenericTraceGraph getTraceGraph(int graphNumber)
-  	{
-		return null;
-	}
-	
+  		
 	public CallVisualiser getCallVisualiser()
 	{
 		return this.callVisualiser;
@@ -556,23 +544,4 @@ public class GfcTrace extends GenericSampledTraceWithFunctions
 		return this.completeGfcTrace;
 	}
 
-	@Override
-	public void finalizeTrace()
-	{
-		for (int i = 0; i < samples.size(); i++) {
-			GfcSample sample = (GfcSample) samples.get(i);
-			
-			if (sample.currentFunctionItt == null && sample.currentFunctionSym == null) {
-				sample.currentFunctionItt = new Function(Messages.getString("GfcTrace.functionNotFound1") + Long.toHexString(sample.programCounter) + Messages.getString("GfcTrace.functionNotFound2"), //$NON-NLS-1$ //$NON-NLS-2$
-						new Long(sample.programCounter),
-						Messages.getString("GfcTrace.binaryNotFound1") +  Long.toHexString(sample.programCounter) + Messages.getString("GfcTrace.binaryNotFound2")); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			
-			if (sample.callerFunctionItt == null && sample.callerFunctionSym == null) {
-				sample.callerFunctionItt = new Function(Messages.getString("GfcTrace.functionNotFound1") + Long.toHexString(sample.linkRegister) + Messages.getString("GfcTrace.functionNotFound2"), //$NON-NLS-1$ //$NON-NLS-2$
-						new Long(sample.linkRegister),
-						Messages.getString("GfcTrace.binaryNotFound1") +  Long.toHexString(sample.linkRegister) + Messages.getString("GfcTrace.binaryNotFound2")); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-		}
-	}
 }

@@ -142,7 +142,7 @@ public class ModifyCachedBupEventMap implements IBupEventMap,  IBupEventMapEdita
 		TableEntry entry = cachedMap.get(keyCode);
 		if (entry == null) {	
 			entry = new TableEntry();
-			cachedMap.put(new Integer(keyCode), entry);
+			cachedMap.put(Integer.valueOf(keyCode), entry);
 		}
 		entry.enumString = enumString;
 		entry.label = label;

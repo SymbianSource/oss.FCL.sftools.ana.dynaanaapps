@@ -67,8 +67,8 @@ public class QuickSortImpl
 				//System.out.println("QS left side is "+low+"-"+pivot+" right side is "+pivot+"-"+high);
 
 				//quickSort( a, low, pivot-1 );
-				stack.push(new Integer(pivot+1));
-				stack.push(new Integer(high));
+				stack.push(Integer.valueOf(pivot+1));
+				stack.push(Integer.valueOf(high));
 				//System.out.println("Pushed right side");
 				high = pivot-1;
 			}				

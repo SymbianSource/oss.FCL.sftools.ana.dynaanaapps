@@ -24,11 +24,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Vector;
 
 import org.eclipse.draw2d.FigureCanvas;
@@ -37,9 +34,11 @@ import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.Panel;
-import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseMoveListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
@@ -47,754 +46,871 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Sash;
 
+import com.nokia.carbide.cpp.internal.pi.address.GppModelAdapter;
+import com.nokia.carbide.cpp.internal.pi.address.GppTraceGraphSMP;
 import com.nokia.carbide.cpp.internal.pi.analyser.NpiInstanceRepository;
 import com.nokia.carbide.cpp.internal.pi.analyser.ProfileVisualiser;
-import com.nokia.carbide.cpp.internal.pi.model.GenericSampledTrace;
 import com.nokia.carbide.cpp.internal.pi.model.ProfiledBinary;
 import com.nokia.carbide.cpp.internal.pi.model.ProfiledFunction;
 import com.nokia.carbide.cpp.internal.pi.model.ProfiledGeneric;
 import com.nokia.carbide.cpp.internal.pi.model.ProfiledThread;
 import com.nokia.carbide.cpp.internal.pi.model.ProfiledThreshold;
+import com.nokia.carbide.cpp.internal.pi.plugin.model.IContextMenu;
+import com.nokia.carbide.cpp.internal.pi.plugin.model.ITitleBarMenu;
 import com.nokia.carbide.cpp.internal.pi.visual.Defines;
 import com.nokia.carbide.cpp.internal.pi.visual.GenericTable;
 import com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph;
 import com.nokia.carbide.cpp.internal.pi.visual.GraphComposite;
 import com.nokia.carbide.cpp.internal.pi.visual.PIEvent;
-import com.nokia.carbide.cpp.internal.pi.visual.PIEventListener;
-import com.nokia.carbide.cpp.internal.pi.visual.PIVisualSharedData;
 import com.nokia.carbide.cpp.pi.editors.PIPageEditor;
 import com.nokia.carbide.cpp.pi.util.ColorPalette;
+import com.nokia.carbide.cpp.pi.visual.IGenericTraceGraph;
 
+/**
+ * Each instance of this class represents one trace graph for profiling
+ * CPU activity. 
+ *
+ */
+public class GppTraceGraph extends GenericTraceGraph implements IGppTraceGraph,
+		ActionListener, FocusListener, MouseMotionListener, MouseListener,
+		MouseMoveListener, ITitleBarMenu, IContextMenu {
 
-public class GppTraceGraph extends GenericTraceGraph implements ActionListener, 
-																FocusListener, 
-																PIEventListener,
-																MouseMotionListener,
-																MouseListener,
-																MouseMoveListener
-{
-	private GppTraceGraph thisTraceGraph;
+	/**
+	 * amount of space at bottom of graph to contain things like x-axis units
+	 * and button icons
+	 */
+	public static final int X_LEGEND_HEIGHT = 50;
+
+	/**
+	 * When the graph is drawn, this is the finest granularity drawn. E.g.,
+	 * assume a granularity of 100, and a sample every ms. If the 1st function
+	 * draw appears in 5 samples from 101ms to 200ms and 10 samples from 200ms
+	 * to 300ms then the graph will show a point at height 5 at time 200
+	 * connected by a line to a point at height 10 at time 300.
+	 */
+	static final int GRANULARITY_VALUE = 100;
 	
-	// amount of space at bottom of graph to contain things like x-axis units and button icons
-	public static final int xLegendHeight = 50;
-	
-	// When the graph is drawn, this is the finest granularity drawn. E.g., assume
-	// a granularity of 100, and a sample every ms. If the 1st function draw appears
-	// in 5 samples from 101ms to 200ms and 10 samples from 200ms to 300ms then the
-	// graph will show a point at height 5 at time 200 connected by a line to a
-	// point at height 10 at time 300.
-	private static int granularityValue = 100;
-	
-	private GppVisualiserPanel vPanel;
+	/** constant to indicate graph is a bar graph */
+	public static final int BAR_MODE_ON = 3;
+	/** constant to indicate graph is stacked-area graph */
+	public static final int BAR_MODE_OFF = 4;
+
+	private static final String EMPTY_STRING = "";//$NON-NLS-1$ 
+
+	protected GppVisualiserPanel vPanel;
+	protected String title;
+	protected String shortTitle;
 
 	/*
-	 *  Depending on this trace graph's graphIndex, one of these will be
-	 *  the base table, and others will be derived from its selections.
-	 *  The other tables will appear and disappear based on drawMode.
-	 *  
-	 *  E.g., say that for graphIndex = 0, the base table is threadTable.
-	 *  Then this graph can represent the draw modes of:
-	 *  	THREADS
-	 *  	THREADS_BINARIES
-	 *  	THREADS_BINARIES_FUNCTIONS
-	 *  	THREADS_FUNCTIONS
-	 *  	THREADS_FUNCTIONS_BINARIES
+	 * Depending on this trace graph's graphIndex, one of these will be the base
+	 * table, and others will be derived from its selections. The other tables
+	 * will appear and disappear based on drawMode.
+	 * 
+	 * E.g., say that for graphIndex = 0, the base table is threadTable. Then
+	 * this graph can represent the draw modes of: THREADS THREADS_BINARIES
+	 * THREADS_BINARIES_FUNCTIONS THREADS_FUNCTIONS THREADS_FUNCTIONS_BINARIES
 	 */
-	private AddrThreadTable   threadTable;
-	private AddrBinaryTable   binaryTable;
-	private AddrFunctionTable functionTable;
-
-	/*
-	 *	Depending on this trace graph's graphIndex, one of these will match
-	 *	the entire trace's profiled vector, while the others will be derived
-	 *	from drilldown selections. The other vectors will only be meaningful
-	 *  depending on the drawMode.
-	 */
-	private Vector<ProfiledGeneric> profiledThreads   = new Vector<ProfiledGeneric>();
-	private Vector<ProfiledGeneric> profiledBinaries  = new Vector<ProfiledGeneric>();
-	private Vector<ProfiledGeneric> profiledFunctions = new Vector<ProfiledGeneric>();
+	protected AddrThreadTable threadTable;
+	protected AddrBinaryTable binaryTable;
+	protected AddrFunctionTable functionTable;
 	
-	private Vector<ProfiledGeneric> sortedProfiledThreads   = new Vector<ProfiledGeneric>();
-	private Vector<ProfiledGeneric> sortedProfiledBinaries  = new Vector<ProfiledGeneric>();
+	/*
+	 * Depending on this trace graph's graphIndex, one of these will match the
+	 * entire trace's profiled vector, while the others will be derived from
+	 * drilldown selections. The other vectors will only be meaningful depending
+	 * on the drawMode.
+	 */
+	protected Vector<ProfiledGeneric> profiledThreads = new Vector<ProfiledGeneric>();
+	protected Vector<ProfiledGeneric> profiledBinaries = new Vector<ProfiledGeneric>();
+	protected Vector<ProfiledGeneric> profiledFunctions = new Vector<ProfiledGeneric>();
+
+	private Vector<ProfiledGeneric> sortedProfiledThreads = new Vector<ProfiledGeneric>();
+	private Vector<ProfiledGeneric> sortedProfiledBinaries = new Vector<ProfiledGeneric>();
 	private Vector<ProfiledGeneric> sortedProfiledFunctions = new Vector<ProfiledGeneric>();
-	
-	private ProfiledThreshold thresholdThread   = new ProfiledThreshold("dummy[0]::dummy_0"); //$NON-NLS-1$
-	private ProfiledThreshold thresholdBinary   = new ProfiledThreshold("\\dummy"); //$NON-NLS-1$
-	private ProfiledThreshold thresholdFunction = new ProfiledThreshold("dummy::dummy()"); //$NON-NLS-1$
+
+	protected ProfiledThreshold thresholdThread;
+	private ProfiledThreshold thresholdBinary;
+	private ProfiledThreshold thresholdFunction;
 
 	// when multiple tables are visible, they are separated by sashes
 	private Sash leftSash;
 	private Sash rightSash;
 
-	public static final int NOFILL       = 0;
-	public static final int FILLSELECTED = 1;
-	public static final int FILLALL      = 2;
-	public static final int BAR_MODE_ON  = 3;
-	public static final int BAR_MODE_OFF = 4;
-		
-	private int drawMode = Defines.THREADS;
-	public int barMode   = BAR_MODE_OFF;
+	protected int drawMode = Defines.THREADS;
 	
-	private int uid;
-	
-	private static class BarGraphData
-	{
+	/** current graph drawing mode: either bar or stacked-area graph */
+	public int barMode = BAR_MODE_OFF;
+
+	protected int uid;
+
+	private static class BarGraphData {
 		public int x;
 		public Color color;
 	}
-	
-	private Vector<BarGraphData> barGraphData;
-	
-	public GppTraceGraph(int graphIndex, GppTrace trace, int uid)
-	{
-		super((GenericSampledTrace)trace);
-		
-		int granularityValue = trace.samples.size() > GppTraceGraph.granularityValue ? GppTraceGraph.granularityValue : trace.samples.size();  
-		
-		this.thisTraceGraph = this;
-		this.graphIndex     = graphIndex;
-		
-		// create the graph's 3 table objects - without any table items yet
-		ProfileVisualiser pV = NpiInstanceRepository.getInstance().getProfilePage(uid, graphIndex);
-		Composite holdTables = new Composite(pV.getBottomComposite(), SWT.NONE);
-		holdTables.setLayout(new FormLayout());
 
-		this.threadTable   = new AddrThreadTable(this, holdTables);
-		this.binaryTable   = new AddrBinaryTable(this, holdTables);
-		this.functionTable = new AddrFunctionTable(this, holdTables);
-		
+	private Vector<BarGraphData> barGraphData;
+
+	/**
+	 * The model adapter hides some of the SMP specifics. It must be created
+	 * during initialisation of this graph.
+	 */
+	protected GppModelAdapter adapter;
+
+	/** main Composite of legend view */
+	private Composite holdTablesComposite;
+
+
+	/**
+	 * Constructor
+	 * 
+	 * @param graphIndex
+	 *            the unique index of this graph
+	 * @param trace
+	 *            the trace data model to use
+	 * @param uid
+	 *            the Uid of the editor session
+	 */
+	public GppTraceGraph(int graphIndex, GppTrace trace, int uid) {
+		super(trace);
+		this.graphIndex = graphIndex;
 		this.uid = uid;
 
-		Label graphTitle = pV.getTitle();
-		Label graphTitle2 = pV.getTitle2();
-		if 	(graphTitle2 != null)
-			graphTitle2.setText(""); //$NON-NLS-1$
+	}
+
+	/**
+	 * Initialises the graph.
+	 * 
+	 * @param pageIndex
+	 *            page index of the page which displays the graph
+	 * @param trace
+	 *            the trace model
+	 */
+	public void init(int pageIndex, GppTrace trace) {
+		doCreateAdapter();
+		doSetTitle();
+		int granularityValue = trace.samples.size() > GppTraceGraph.GRANULARITY_VALUE ? GppTraceGraph.GRANULARITY_VALUE
+				: trace.samples.size();
+
+		// create the graph's 3 table objects - without any table items yet
+		ProfileVisualiser pV = NpiInstanceRepository.getInstance()
+				.getProfilePage(uid, pageIndex);
+		holdTablesComposite = trace.createLegendComposite(pageIndex, graphIndex, pV.getBottomComposite(), getShortTitle());
+		holdTablesComposite.setLayout(new FormLayout());
+
+		createLegendTables(holdTablesComposite);
 
 		// initialize the threshold counts
 		int totalSampleCount = trace.getSampleAmount();
-		NpiInstanceRepository.getInstance().setPersistState(uid, "com.nokia.carbide.cpp.pi.address.thresholdCountThread", new Integer(new Double(totalSampleCount * (Double)NpiInstanceRepository.getInstance().getPersistState(uid, "com.nokia.carbide.cpp.pi.address.thresholdLoadThread") + 0.5).intValue())); //$NON-NLS-1$ //$NON-NLS-2$
-		NpiInstanceRepository.getInstance().setPersistState(uid, "com.nokia.carbide.cpp.pi.address.thresholdCountBinary", new Integer(new Double(totalSampleCount * (Double)NpiInstanceRepository.getInstance().getPersistState(uid, "com.nokia.carbide.cpp.pi.address.thresholdLoadBinary") + 0.5).intValue())); //$NON-NLS-1$ //$NON-NLS-2$
-		NpiInstanceRepository.getInstance().setPersistState(uid, "com.nokia.carbide.cpp.pi.address.thresholdCountFunction", new Integer(new Double(totalSampleCount * (Double)NpiInstanceRepository.getInstance().getPersistState(uid, "com.nokia.carbide.cpp.pi.address.thresholdLoadFunction") + 0.5).intValue())); //$NON-NLS-1$ //$NON-NLS-2$
-		
-		int samplingInterval = (Integer) NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.address.samplingInterval"); //$NON-NLS-1$
+
+		// CH: this is called too many times (those values are global for the
+		// whole trace) -> can we move it to GppTrace?
+		NpiInstanceRepository
+				.getInstance()
+				.setPersistState(
+						uid,
+						"com.nokia.carbide.cpp.pi.address.thresholdCountThread", Integer.valueOf(new Double(totalSampleCount * (Double) NpiInstanceRepository.getInstance().getPersistState(uid, "com.nokia.carbide.cpp.pi.address.thresholdLoadThread") + 0.5).intValue())); //$NON-NLS-1$ //$NON-NLS-2$
+		NpiInstanceRepository
+				.getInstance()
+				.setPersistState(
+						uid,
+						"com.nokia.carbide.cpp.pi.address.thresholdCountBinary", Integer.valueOf(new Double(totalSampleCount * (Double) NpiInstanceRepository.getInstance().getPersistState(uid, "com.nokia.carbide.cpp.pi.address.thresholdLoadBinary") + 0.5).intValue())); //$NON-NLS-1$ //$NON-NLS-2$
+		NpiInstanceRepository
+				.getInstance()
+				.setPersistState(
+						uid,
+						"com.nokia.carbide.cpp.pi.address.thresholdCountFunction", Integer.valueOf(new Double(totalSampleCount * (Double) NpiInstanceRepository.getInstance().getPersistState(uid, "com.nokia.carbide.cpp.pi.address.thresholdLoadFunction") + 0.5).intValue())); //$NON-NLS-1$ //$NON-NLS-2$
+
+		int samplingInterval = (Integer) NpiInstanceRepository.getInstance()
+				.activeUidGetPersistState(
+						"com.nokia.carbide.cpp.pi.address.samplingInterval"); //$NON-NLS-1$
 
 		// initialize the threshold items
-		thresholdThread.setColor(trace.getThreadColorPalette().getColor(thresholdThread.getNameString()));
-		thresholdThread.setActivityMarkCount((trace.samples.size() + granularityValue) / granularityValue + 1);
-		for (int i = 0; i < trace.samples.size() + granularityValue; i += granularityValue)
-		{
-			thresholdThread.zeroActivityMarkValues(i * samplingInterval);
-		}
-		thresholdBinary.setColor(trace.getBinaryColorPalette().getColor(thresholdBinary.getNameString()));
-		thresholdBinary.setActivityMarkCount((trace.samples.size() + granularityValue) / granularityValue + 1);
-		for (int i = 0; i < trace.samples.size() + granularityValue; i += granularityValue)
-		{
-			thresholdBinary.zeroActivityMarkValues(i * samplingInterval);
-		}
-		thresholdFunction.setColor(trace.getFunctionColorPalette().getColor(thresholdFunction.getNameString()));
-		thresholdFunction.setActivityMarkCount((trace.samples.size() + granularityValue) / granularityValue + 1);
-		for (int i = 0; i < trace.samples.size() + granularityValue; i += granularityValue)
-		{
-			thresholdFunction.zeroActivityMarkValues(i * samplingInterval);
-		}
+		int bucketDuration = granularityValue * samplingInterval;
+		int numberOfBuckets = GppTraceUtil.calculateNumberOfBuckets(trace
+				.getLastSampleTime(), granularityValue);
 
-		// all the trace data is known, and you have it sorted 3 different ways
-		// so set the drawmode, create the page's base table, and set the graph title
-		if (graphIndex == PIPageEditor.THREADS_PAGE) {
+		thresholdThread = new ProfiledThreshold(
+				"dummy[0]::dummy_0", trace.getCPUCount(), trace.getGraphCount()); //$NON-NLS-1$
+		thresholdBinary = new ProfiledThreshold(
+				"\\dummy", trace.getCPUCount(), trace.getGraphCount()); //$NON-NLS-1$
+		thresholdFunction = new ProfiledThreshold(
+				"dummy::dummy()", trace.getCPUCount(), trace.getGraphCount()); //$NON-NLS-1$
+		thresholdThread.setColor(trace.getThreadColorPalette().getColor(
+				thresholdThread.getNameString()));
+		thresholdThread.createBuckets(numberOfBuckets);
+		thresholdThread.initialiseBuckets(bucketDuration);
+		thresholdBinary.setColor(trace.getBinaryColorPalette().getColor(
+				thresholdBinary.getNameString()));
+		thresholdBinary.createBuckets(numberOfBuckets);
+		thresholdBinary.initialiseBuckets(bucketDuration);
+		thresholdFunction.setColor(trace.getFunctionColorPalette().getColor(
+				thresholdFunction.getNameString()));
+		thresholdFunction.createBuckets(numberOfBuckets);
+		thresholdFunction.initialiseBuckets(bucketDuration);
+
+		int graphType = adapter.getGraphType();
+
+		if (graphType == PIPageEditor.THREADS_PAGE) {
 			this.drawMode = Defines.THREADS;
+			int threshold = (Integer)NpiInstanceRepository.getInstance().getPersistState(uid, "com.nokia.carbide.cpp.pi.address.thresholdCountThread"); //$NON-NLS-1$
 
-			// tables will show threads in decreasing total sample order, but
-			// then put them back in increasing sample order so that the graph
-			// shows most common (e.g., EKern) threads on top
-			this.profiledThreads.clear();
-			for (int i = trace.getSortedThreads().size() - 1; i >= 0; i--)
-				this.profiledThreads.add(trace.getSortedThreads().get(i));
-			filterSortedByThreshold(graphIndex, 
-									(Integer)NpiInstanceRepository.getInstance().getPersistState(uid, "com.nokia.carbide.cpp.pi.address.thresholdCountThread"), //$NON-NLS-1$
-									thresholdThread, this.profiledThreads);
+			for (ProfiledGeneric profiled : trace.getSortedThreads()) {
+				if (adapter.getTotalSampleCount(profiled) > 0){
+					if (adapter.getTotalSampleCount(profiled) < threshold){//check below threshold
+						adapter.addItem(thresholdThread, graphIndex, profiled, adapter.getTotalSampleCount(profiled));
+					} else {
+						profiledThreads.add(profiled);
+					}
+				}
+			}
+
 			this.threadTable.setTableViewer(Defines.THREADS);
-
 			this.profiledThreads = trace.getSortedThreads();
-			graphTitle.setText(Messages.getString("GppTraceGraph.threadLoad"));  //$NON-NLS-1$
-		} else
-		if (graphIndex == PIPageEditor.BINARIES_PAGE) {
+		} else if (graphType == PIPageEditor.BINARIES_PAGE) {
 			this.drawMode = Defines.BINARIES;
+			int threshold = (Integer)NpiInstanceRepository.getInstance().getPersistState(uid, "com.nokia.carbide.cpp.pi.address.thresholdCountBinary"); //$NON-NLS-1$
 
-			// tables will show binaries in decreasing total sample order, but
-			// then put them back in increasing sample order so that the graph
-			// shows most common (e.g., EKern) binaries on top
-			this.profiledBinaries.clear();
-			for (int i = trace.getSortedBinaries().size() - 1; i >= 0; i--)
-				this.profiledBinaries.add(trace.getSortedBinaries().get(i));
-			filterSortedByThreshold(graphIndex, (Integer)NpiInstanceRepository.getInstance().getPersistState(uid, "com.nokia.carbide.cpp.pi.address.thresholdCountBinary"), //$NON-NLS-1$
-								thresholdBinary, this.profiledBinaries);
+			for (ProfiledGeneric profiled : trace.getSortedBinaries()) {
+				if (adapter.getTotalSampleCount(profiled) > 0){
+					if (adapter.getTotalSampleCount(profiled) < threshold){//check below threshold
+						adapter.addItem(thresholdBinary, graphIndex, profiled, adapter.getTotalSampleCount(profiled));
+					} else {
+						profiledBinaries.add(profiled);
+					}
+					
+				}
+			}
+
 			this.binaryTable.setTableViewer(Defines.BINARIES);
 
 			this.profiledBinaries = trace.getSortedBinaries();
-			graphTitle.setText(Messages.getString("GppTraceGraph.binaryLoad"));  //$NON-NLS-1$
-		} else
-		if (graphIndex == PIPageEditor.FUNCTIONS_PAGE) {
+		} else if (graphType == PIPageEditor.FUNCTIONS_PAGE) {
 			this.drawMode = Defines.FUNCTIONS;
+			int threshold = (Integer)NpiInstanceRepository.getInstance().getPersistState(uid, "com.nokia.carbide.cpp.pi.address.thresholdCountFunction"); //$NON-NLS-1$
 
-			// tables will show functions in decreasing total sample order, but
-			// then put them back in increasing sample order so that the graph
-			// shows most common (e.g., EKern) functions on top
-			this.profiledFunctions.clear();
-			for (int i = trace.getSortedFunctions().size() - 1; i >= 0; i--)
-				this.profiledFunctions.add(trace.getSortedFunctions().get(i));
-			filterSortedByThreshold(graphIndex, (Integer)NpiInstanceRepository.getInstance().getPersistState(uid, "com.nokia.carbide.cpp.pi.address.thresholdCountFunction"), //$NON-NLS-1$
-								thresholdFunction, this.profiledFunctions);
+			for (ProfiledGeneric profiled : trace.getSortedFunctions()) {
+				if (adapter.getTotalSampleCount(profiled) > 0){
+					if (adapter.getTotalSampleCount(profiled) < threshold){//check below threshold
+						adapter.addItem(thresholdFunction, graphIndex, profiled, adapter.getTotalSampleCount(profiled));
+					} else {
+						profiledFunctions.add(profiled);
+					}
+				}
+			}
 			this.functionTable.setTableViewer(Defines.FUNCTIONS);
 
 			this.profiledFunctions = trace.getSortedFunctions();
-			graphTitle.setText(Messages.getString("GppTraceGraph.FunctionLoad"));  //$NON-NLS-1$
-		} else
-		{
-			try {
-				throw new Exception(Messages.getString("GppTraceGraph.traceGraphInternalErrorIn"));  //$NON-NLS-1$
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		} else {
+			throw new IllegalStateException(Messages
+					.getString("GppTraceGraph.traceGraphInternalErrorIn")); //$NON-NLS-1$
 		}
-		
+
+
 		// since the trace can be shown any of 3 ways (by thread, by binary, or
 		// by function), make sure that all 3 are ready for display
-		// Sse sorted vector to be consistent with other call to genericRefreshCumulativeThreadTable()
-		// fix issue with wrong color on newly opened npi file before a change in the table
+		// Sse sorted vector to be consistent with other call to
+		// genericRefreshCumulativeThreadTable()
+		// fix issue with wrong color on newly opened npi file before a change
+		// in the table
 		if (this.profiledThreads.size() > 0) {
 			genericRefreshCumulativeThreadTable(this.profiledThreads.elements());
-			genericRefreshCumulativeThreadTable(this.sortedProfiledThreads.elements());
+			genericRefreshCumulativeThreadTable(this.sortedProfiledThreads
+					.elements());
 		}
 		if (this.profiledBinaries.size() > 0) {
-			genericRefreshCumulativeThreadTable(this.profiledBinaries.elements());
-			genericRefreshCumulativeThreadTable(this.sortedProfiledBinaries.elements());
+			genericRefreshCumulativeThreadTable(this.profiledBinaries
+					.elements());
+			genericRefreshCumulativeThreadTable(this.sortedProfiledBinaries
+					.elements());
 		}
 		if (this.profiledFunctions.size() > 0) {
-			genericRefreshCumulativeThreadTable(this.profiledFunctions.elements());
-			genericRefreshCumulativeThreadTable(this.sortedProfiledFunctions.elements());
+			genericRefreshCumulativeThreadTable(this.profiledFunctions
+					.elements());
+			genericRefreshCumulativeThreadTable(this.sortedProfiledFunctions
+					.elements());
 		}
-		
-		if (   this.profiledThreads.size() <= 0
-			&& this.profiledBinaries.size() <= 0
-			&& this.profiledFunctions.size() <= 0) {
+
+		if (this.profiledThreads.size() <= 0
+				&& this.profiledBinaries.size() <= 0
+				&& this.profiledFunctions.size() <= 0) {
 			try {
-				throw new Exception(Messages.getString("GppTraceGraph.traceGraphInternalErrorAt"));  //$NON-NLS-1$
+				throw new Exception(Messages
+						.getString("GppTraceGraph.traceGraphInternalErrorAt")); //$NON-NLS-1$
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 
 		this.vPanel = new GppVisualiserPanel(this);
+
 	}
-	
-	/*
-	 * Combine all vectors elements that are below the threshold into a single
-	 * vector element. Assumes that the input vector is sorted by decreasing sample count.
+
+	/**
+	 * Sets the graph-specific title
 	 */
-	private void filterSortedByThreshold(int graphIndex, int thresholdCount, ProfiledThreshold pThreshold, Vector<ProfiledGeneric> pGenerics)
-	{
-		// count and remove items below the threshold 
-		for (int i = pGenerics.size() - 1; i >= 0; i--) {
-			if (pGenerics.elementAt(i).getTotalSampleCount() < thresholdCount) {
-				pThreshold.addItem(graphIndex, pGenerics.elementAt(i), 0);
-				pGenerics.removeElementAt(i);
-			} else {
-				break;
-			}
-		}
+	protected void doSetTitle() {
+		title = Messages.getString("GppTraceGraph.1");		 //$NON-NLS-1$
+		shortTitle = Messages.getString("GppTraceGraph.0"); //$NON-NLS-1$
 	}
 
+	/**
+	 * Creates a GppModelAdapter
+	 */
+	protected void doCreateAdapter() {
+		adapter = new GppModelAdapter(this.graphIndex);
+	}
+
+	/**
+	 * Creates the three legend tables for this graph (for threads, binaries,
+	 * functions)
+	 * 
+	 * @param holdTablesComposite
+	 */
+	protected void createLegendTables(Composite holdTablesComposite) {
+		this.threadTable = new AddrThreadTable(this, holdTablesComposite, adapter);
+		this.binaryTable = new AddrBinaryTable(this, holdTablesComposite, adapter);
+		this.functionTable = new AddrFunctionTable(this, holdTablesComposite, adapter);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.nokia.carbide.cpp.pi.address.IGppTraceGraph#getGppTrace()
+	 */
 	public GppTrace getGppTrace() {
-		return (GppTrace)this.getTrace();
+		return (GppTrace) this.getTrace();
 	}
 
-	public int getGraphIndex()
-	{
-		return this.graphIndex;
-	}
-
-	public void piEventReceived(PIEvent be)
-	{
-		switch (be.getType())
-		{
-			// determine the threads that can be shown, and get rid of all drilldowns
-			case PIEvent.THRESHOLD_THREAD_CHANGED:
-				if (this.getGraphIndex() == PIPageEditor.THREADS_PAGE)
-					this.getThreadTable().action("changeThresholdThread"); //$NON-NLS-1$
-				switch (this.drawMode) {
-				case Defines.THREADS:
-				case Defines.THREADS_FUNCTIONS:
-				case Defines.THREADS_FUNCTIONS_BINARIES:
-				case Defines.THREADS_BINARIES:
-				case Defines.THREADS_BINARIES_FUNCTIONS:
-				case Defines.BINARIES_THREADS:
-				case Defines.BINARIES_THREADS_FUNCTIONS:
-				case Defines.BINARIES_FUNCTIONS_THREADS:
-				case Defines.FUNCTIONS_THREADS:
-				case Defines.FUNCTIONS_THREADS_BINARIES:
-				case Defines.FUNCTIONS_BINARIES_THREADS:
-					this.setGraphImageChanged(true);
-				default:
-					break;
-			}
-				break;
-			case PIEvent.THRESHOLD_BINARY_CHANGED:
-				if (this.getGraphIndex() == PIPageEditor.BINARIES_PAGE)
-					this.getBinaryTable().action("changeThresholdBinary"); //$NON-NLS-1$
-				switch (this.drawMode) {
-				case Defines.THREADS_FUNCTIONS_BINARIES:
-				case Defines.THREADS_BINARIES:
-				case Defines.THREADS_BINARIES_FUNCTIONS:
-				case Defines.BINARIES:
-				case Defines.BINARIES_THREADS:
-				case Defines.BINARIES_THREADS_FUNCTIONS:
-				case Defines.BINARIES_FUNCTIONS:
-				case Defines.BINARIES_FUNCTIONS_THREADS:
-				case Defines.FUNCTIONS_THREADS_BINARIES:
-				case Defines.FUNCTIONS_BINARIES:
-				case Defines.FUNCTIONS_BINARIES_THREADS:
-					this.setGraphImageChanged(true);
-				default:
-					break;
-			}
-				break;
-			case PIEvent.THRESHOLD_FUNCTION_CHANGED:
-				if (this.getGraphIndex() == PIPageEditor.FUNCTIONS_PAGE)
-					this.getFunctionTable().action("changeThresholdFunction"); //$NON-NLS-1$
-				switch (this.drawMode) {
-				case Defines.THREADS_FUNCTIONS:
-				case Defines.THREADS_FUNCTIONS_BINARIES:
-				case Defines.THREADS_BINARIES_FUNCTIONS:
-				case Defines.BINARIES_THREADS_FUNCTIONS:
-				case Defines.BINARIES_FUNCTIONS:
-				case Defines.BINARIES_FUNCTIONS_THREADS:
-				case Defines.FUNCTIONS:
-				case Defines.FUNCTIONS_THREADS:
-				case Defines.FUNCTIONS_THREADS_BINARIES:
-				case Defines.FUNCTIONS_BINARIES:
-				case Defines.FUNCTIONS_BINARIES_THREADS:
-					this.setGraphImageChanged(true);
-				default:
-					break;
-			}
-				break;
-			// when the selection area changes, change the percent loads
-			// and the sample counts in all tables of this GPP graph
-			case PIEvent.SELECTION_AREA_CHANGED:
-				// this is the first GPP graph to be told of the selection area change,
-				// so it gathers the overall trace information
-				GppTrace trace = (GppTrace)this.getTrace();
-				trace.setSelectedArea();
-				
-				// take care of the threshold members
-				int sampleCount = 0;
-				int thresholdCount;
-				
-				if (graphIndex == PIPageEditor.THREADS_PAGE) {
-					thresholdCount = (Integer)NpiInstanceRepository.getInstance().getPersistState(uid, "com.nokia.carbide.cpp.pi.address.thresholdCountThread"); //$NON-NLS-1$
-					if (thresholdCount > 0) {
-						for (int i = 0; i < profiledThreads.size(); i++)
-							if (profiledThreads.elementAt(i).getTotalSampleCount() < thresholdCount)
-								sampleCount += profiledThreads.elementAt(i).getSampleCount(graphIndex);
-						thresholdThread.setSampleCount(this.graphIndex, sampleCount);
-					}
-				} else if (graphIndex == PIPageEditor.BINARIES_PAGE) {
-					thresholdCount = (Integer)NpiInstanceRepository.getInstance().getPersistState(uid, "com.nokia.carbide.cpp.pi.address.thresholdCountBinary"); //$NON-NLS-1$
-					if (thresholdCount > 0) {
-						for (int i = 0; i < profiledBinaries.size(); i++)
-							if (profiledBinaries.elementAt(i).getTotalSampleCount() < thresholdCount)
-								sampleCount += profiledBinaries.elementAt(i).getSampleCount(graphIndex);
-						thresholdBinary.setSampleCount(this.graphIndex, sampleCount);
-					}
-				} else if (graphIndex == PIPageEditor.FUNCTIONS_PAGE) {
-					thresholdCount = (Integer)NpiInstanceRepository.getInstance().getPersistState(uid, "com.nokia.carbide.cpp.pi.address.thresholdCountFunction"); //$NON-NLS-1$
-					if (thresholdCount > 0) {
-						for (int i = 0; i < profiledFunctions.size(); i++)
-							if (profiledFunctions.elementAt(i).getTotalSampleCount() < thresholdCount)
-								sampleCount += profiledFunctions.elementAt(i).getSampleCount(graphIndex);
-						thresholdFunction.setSampleCount(this.graphIndex, sampleCount);
-					}
-				}
-
-				double startTime = PIPageEditor.currentPageEditor().getStartTime();
-				double endTime   = PIPageEditor.currentPageEditor().getEndTime();
-				
-				// send this message to the 2 other GPP graphs
-				PIEvent be2 = new PIEvent(be.getValueObject(),
-						PIEvent.SELECTION_AREA_CHANGED2);
-				
-				// update the selection area shown
-				for (int i = 0; i < 3; i++)
-				{
-					GppTraceGraph graph = trace.getGppGraph(i, getUid());
-
-					if (graph != this) {
-						graph.piEventReceived(be2);
-						// once per graph, update the selection interval shown
-						graph.getCompositePanel().getVisualiser().getTimeString().setText(ProfileVisualiser.getTimeInterval(startTime, endTime));
-					}
-					
-					// change the graph's selected time interval
-					graph.setSelectionStart((double) startTime * 1000);
-					graph.setSelectionEnd((double) endTime * 1000);
-					graph.parentComponent.setSelectionFields((int)(startTime * 1000), (int)(endTime * 1000));
-				}
-
-				this.parentComponent.getSashForm().redraw();
-				be = be2;
-				// FALL THROUGH
-			case PIEvent.SELECTION_AREA_CHANGED2:
-			{
-				// this code lets each graph's base thread/binary/function table update the other tables
-				switch (drawMode)
-				{
-					case Defines.THREADS:
-					case Defines.THREADS_FUNCTIONS:
-					case Defines.THREADS_FUNCTIONS_BINARIES:
-					case Defines.THREADS_BINARIES:
-					case Defines.THREADS_BINARIES_FUNCTIONS:
-				    {
-				        this.threadTable.piEventReceived(be);
-				        break;
-				    }
-					case Defines.BINARIES:
-					case Defines.BINARIES_THREADS:
-					case Defines.BINARIES_THREADS_FUNCTIONS:
-					case Defines.BINARIES_FUNCTIONS:
-					case Defines.BINARIES_FUNCTIONS_THREADS:
-					{
-				        this.binaryTable.piEventReceived(be);
-						break;
-					}
-					case Defines.FUNCTIONS:
-					case Defines.FUNCTIONS_THREADS:
-					case Defines.FUNCTIONS_THREADS_BINARIES:
-					case Defines.FUNCTIONS_BINARIES:
-					case Defines.FUNCTIONS_BINARIES_THREADS:
-					{
-				        this.functionTable.piEventReceived(be);
-						break;
-					}
-				}
-
-				this.vPanel.refreshCumulativeThreadTable();
-				this.setGraphImageChanged(true);	// any selection change to drill down will change graph
-				this.repaint();
-				break;
-			}
-			
-			// in the graph, show all values from the rightmost table
-			case PIEvent.SET_FILL_ALL_THREADS:
-				this.setGraphImageChanged(true);	// any selection change to drill down will change graph
-				this.vPanel.piEventReceived(be);
-				break;
-
-			// in the graph, don't fill between the lines will the color of
-			// the line above
-			case PIEvent.SET_FILL_OFF:
-				this.setGraphImageChanged(true);	// any selection change to drill down will change graph
-				this.vPanel.piEventReceived(be);
-				break;
-
-			// in the graph, show bars
-			case PIEvent.GPP_SET_BAR_GRAPH_ON:
-				this.vPanel.piEventReceived(be);
-				break;
-
-			// in the graph, show polylines 
-			case PIEvent.GPP_SET_BAR_GRAPH_OFF:
-				this.vPanel.piEventReceived(be);
-				break;
-
-			// in the graph, show only the values from selected rows in the
-			// rightmost table
-			case PIEvent.SET_FILL_SELECTED_THREAD:
-				this.setGraphImageChanged(true);	// any selection change to drill down will change graph
-				this.vPanel.piEventReceived(be);
-				break;
-
-			// Redraw the graph because the thread table's selected values have changed.
-			// The thread table is handled (setting of array of selected threads
-			// and table redraw) by the table selection listener or mouse listener.
-			case PIEvent.CHANGED_THREAD_TABLE:
-				switch (drawMode)
-				{
-					case Defines.THREADS_BINARIES:
-					case Defines.THREADS_BINARIES_FUNCTIONS:
-					case Defines.THREADS_FUNCTIONS:
-					case Defines.THREADS_FUNCTIONS_BINARIES:
-					{
-						this.threadTable.piEventReceived(be);
-						break;
-					}
-					case Defines.BINARIES_THREADS_FUNCTIONS:
-					{
-						this.binaryTable.piEventReceived(be);
-						break;
-					}
-					case Defines.FUNCTIONS_THREADS_BINARIES:
-					{
-						this.functionTable.piEventReceived(be);
-						break;
-					}
-					case Defines.THREADS:
-					case Defines.BINARIES:
-					case Defines.BINARIES_THREADS:
-					case Defines.BINARIES_FUNCTIONS:
-					case Defines.BINARIES_FUNCTIONS_THREADS:
-					case Defines.FUNCTIONS:
-					case Defines.FUNCTIONS_THREADS:
-					case Defines.FUNCTIONS_BINARIES:
-					case Defines.FUNCTIONS_BINARIES_THREADS:
-					default:
-						break;
-				}
-
-				this.vPanel.refreshCumulativeThreadTable();
-				this.repaint();
-			    //if fill selected, the graph is drawn again
-				this.vPanel.piEventReceived(be);
-				break;
-
-			// Redraw the graph because the binary table's selected values have changed.
-			// The binary table is handled (setting of array of selected binaries
-			// and table redraw) by the table selection listener or mouse listener.
-			case PIEvent.CHANGED_BINARY_TABLE:
-				switch(drawMode)
-				{
-					case Defines.BINARIES_THREADS:
-					case Defines.BINARIES_THREADS_FUNCTIONS:
-					case Defines.BINARIES_FUNCTIONS:
-					case Defines.BINARIES_FUNCTIONS_THREADS:
-					{
-						this.binaryTable.piEventReceived(be);
-						break;
-					}
-					case Defines.THREADS_BINARIES_FUNCTIONS:
-					{
-						this.threadTable.piEventReceived(be);
-						break;
-					}
-					case Defines.FUNCTIONS_BINARIES_THREADS:
-					{
-						this.functionTable.piEventReceived(be);
-						break;
-					}
-					case Defines.THREADS:
-					case Defines.THREADS_BINARIES:
-					case Defines.THREADS_FUNCTIONS:
-					case Defines.THREADS_FUNCTIONS_BINARIES:
-					case Defines.BINARIES:
-					case Defines.FUNCTIONS:
-					case Defines.FUNCTIONS_THREADS:
-					case Defines.FUNCTIONS_THREADS_BINARIES:
-					case Defines.FUNCTIONS_BINARIES:
-					default:
-						break;
-				}
-
-				this.vPanel.refreshCumulativeThreadTable();
-				this.repaint();
-			    //if fill selected, the graph is drawn again
-				this.vPanel.piEventReceived(be);
-				break;
-
-			// Redraw the graph because the function table's selected values have changed.
-			// The function table is handled (setting of array of selected functions
-			// and table redraw) by the table selection listener or mouse listener.
-			case PIEvent.CHANGED_FUNCTION_TABLE:
-				switch(drawMode)
-				{
-					case Defines.FUNCTIONS_THREADS:
-					case Defines.FUNCTIONS_THREADS_BINARIES:
-					case Defines.FUNCTIONS_BINARIES:
-					case Defines.FUNCTIONS_BINARIES_THREADS:
-					{
-						this.functionTable.piEventReceived(be);
-						break;
-					}
-					case Defines.THREADS_FUNCTIONS_BINARIES:
-					{
-						this.threadTable.piEventReceived(be);
-						break;
-					}
-					case Defines.BINARIES_FUNCTIONS_THREADS:
-					{
-						this.binaryTable.piEventReceived(be);
-						break;
-					}
-					case Defines.THREADS:
-					case Defines.THREADS_BINARIES:
-					case Defines.THREADS_BINARIES_FUNCTIONS:
-					case Defines.THREADS_FUNCTIONS:
-					case Defines.BINARIES:
-					case Defines.BINARIES_THREADS:
-					case Defines.BINARIES_THREADS_FUNCTIONS:
-					case Defines.BINARIES_FUNCTIONS:
-					case Defines.FUNCTIONS:
-					default:
-						break;
-				}
-
-				this.vPanel.refreshCumulativeThreadTable();
-				this.repaint();
-				this.vPanel.piEventReceived(be);
-				break;
-
-			case PIEvent.MOUSE_PRESSED:
-				switch (drawMode) {
-					case Defines.THREADS:
-					{
-						break;
-					}
-					case Defines.BINARIES:
-					{
-						break;
-					}
-					case Defines.FUNCTIONS:
-					{
-						break;
-					}
-					default:
-					{
-						break;
-					}
-				}
-			    this.parentComponent.setActive(this);
-				break;
-				
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.nokia.carbide.cpp.internal.pi.visual.PIEventListener#piEventReceived
+	 * (com.nokia.carbide.cpp.internal.pi.visual.PIEvent)
+	 */
+	public void piEventReceived(PIEvent be) {
+		switch (be.getType()) {
+		// determine the threads that can be shown, and get rid of all
+		// drilldowns
+		case PIEvent.THRESHOLD_THREAD_CHANGED:
+			if (this.getGraphIndex() == PIPageEditor.THREADS_PAGE)
+				this.getThreadTable().action("changeThresholdThread"); //$NON-NLS-1$
+			switch (this.drawMode) {
+			case Defines.THREADS:
+			case Defines.THREADS_FUNCTIONS:
+			case Defines.THREADS_FUNCTIONS_BINARIES:
+			case Defines.THREADS_BINARIES:
+			case Defines.THREADS_BINARIES_FUNCTIONS:
+			case Defines.BINARIES_THREADS:
+			case Defines.BINARIES_THREADS_FUNCTIONS:
+			case Defines.BINARIES_FUNCTIONS_THREADS:
+			case Defines.FUNCTIONS_THREADS:
+			case Defines.FUNCTIONS_THREADS_BINARIES:
+			case Defines.FUNCTIONS_BINARIES_THREADS:
+				this.setGraphImageChanged(true);
 			default:
 				break;
-		}
-	}
-	
-	public void actionPerformed(ActionEvent ae)
-	{
-	}
-	
-	public void action(String actionString)
-	{
-	    System.out.println(Messages.getString("GppTraceGraph.actionString")+actionString);  //$NON-NLS-1$
-	    
-	    if (actionString.equals("resetToCurrentMode")) //$NON-NLS-1$
-	    {
-	        if (drawMode == Defines.THREADS_FUNCTIONS)
-	            this.setDrawMode(Defines.THREADS);
-	        else if (drawMode == Defines.BINARIES_FUNCTIONS)
-	            this.setDrawMode(Defines.BINARIES);
-	        else
-	            System.out.println(Messages.getString("GppTraceGraph.drawMode") + drawMode); //should not print this ever  //$NON-NLS-1$
-	    }
-	    else
-	    {
-			switch (drawMode)
-			{
-				case Defines.THREADS:
-				case Defines.THREADS_FUNCTIONS:
-				case Defines.THREADS_FUNCTIONS_BINARIES:
-				case Defines.THREADS_BINARIES:
-				case Defines.THREADS_BINARIES_FUNCTIONS:
-			    {
-					this.threadTable.action(actionString);
-			        break;
-			    }
-				case Defines.BINARIES:
-				case Defines.BINARIES_THREADS:
-				case Defines.BINARIES_THREADS_FUNCTIONS:
-				case Defines.BINARIES_FUNCTIONS:
-				case Defines.BINARIES_FUNCTIONS_THREADS:
-				{
-					this.binaryTable.action(actionString);
-					break;
+			}
+			break;
+		case PIEvent.THRESHOLD_BINARY_CHANGED:
+			if (this.getGraphIndex() == PIPageEditor.BINARIES_PAGE)
+				this.getBinaryTable().action("changeThresholdBinary"); //$NON-NLS-1$
+			switch (this.drawMode) {
+			case Defines.THREADS_FUNCTIONS_BINARIES:
+			case Defines.THREADS_BINARIES:
+			case Defines.THREADS_BINARIES_FUNCTIONS:
+			case Defines.BINARIES:
+			case Defines.BINARIES_THREADS:
+			case Defines.BINARIES_THREADS_FUNCTIONS:
+			case Defines.BINARIES_FUNCTIONS:
+			case Defines.BINARIES_FUNCTIONS_THREADS:
+			case Defines.FUNCTIONS_THREADS_BINARIES:
+			case Defines.FUNCTIONS_BINARIES:
+			case Defines.FUNCTIONS_BINARIES_THREADS:
+				this.setGraphImageChanged(true);
+			default:
+				break;
+			}
+			break;
+		case PIEvent.THRESHOLD_FUNCTION_CHANGED:
+			if (this.getGraphIndex() == PIPageEditor.FUNCTIONS_PAGE)
+				this.getFunctionTable().action("changeThresholdFunction"); //$NON-NLS-1$
+			switch (this.drawMode) {
+			case Defines.THREADS_FUNCTIONS:
+			case Defines.THREADS_FUNCTIONS_BINARIES:
+			case Defines.THREADS_BINARIES_FUNCTIONS:
+			case Defines.BINARIES_THREADS_FUNCTIONS:
+			case Defines.BINARIES_FUNCTIONS:
+			case Defines.BINARIES_FUNCTIONS_THREADS:
+			case Defines.FUNCTIONS:
+			case Defines.FUNCTIONS_THREADS:
+			case Defines.FUNCTIONS_THREADS_BINARIES:
+			case Defines.FUNCTIONS_BINARIES:
+			case Defines.FUNCTIONS_BINARIES_THREADS:
+				this.setGraphImageChanged(true);
+			default:
+				break;
+			}
+			break;
+		// when the selection area changes, change the percent loads
+		// and the sample counts in all tables of this GPP graph
+		case PIEvent.SELECTION_AREA_CHANGED:
+			// this is the first GPP graph to be told of the selection area
+			// change,
+			// so it gathers the overall trace information
+			double doubleStartTime = PIPageEditor.currentPageEditor()
+					.getStartTime();
+			double doubleEndTime = PIPageEditor.currentPageEditor()
+					.getEndTime();
+			GppTrace trace = (GppTrace) this.getTrace();
+			trace.setSelectedArea(doubleStartTime, doubleEndTime);
+
+			// take care of the threshold members
+			int sampleCount = 0;
+			int thresholdCount;
+
+			if (graphIndex == PIPageEditor.THREADS_PAGE) {
+				thresholdCount = (Integer) NpiInstanceRepository
+						.getInstance()
+						.getPersistState(uid,
+								"com.nokia.carbide.cpp.pi.address.thresholdCountThread"); //$NON-NLS-1$
+				if (thresholdCount > 0) {
+					for (int i = 0; i < profiledThreads.size(); i++)
+						if (profiledThreads.elementAt(i).getTotalSampleCount() < thresholdCount)
+							sampleCount += profiledThreads.elementAt(i)
+									.getSampleCount(graphIndex);
+					thresholdThread
+							.setSampleCount(this.graphIndex, sampleCount);
 				}
-				case Defines.FUNCTIONS:
-				case Defines.FUNCTIONS_THREADS:
-				case Defines.FUNCTIONS_THREADS_BINARIES:
-				case Defines.FUNCTIONS_BINARIES:
-				case Defines.FUNCTIONS_BINARIES_THREADS:
-				{
-					this.functionTable.action(actionString);
-					break;
+			} else if (graphIndex == PIPageEditor.BINARIES_PAGE) {
+				thresholdCount = (Integer) NpiInstanceRepository
+						.getInstance()
+						.getPersistState(uid,
+								"com.nokia.carbide.cpp.pi.address.thresholdCountBinary"); //$NON-NLS-1$
+				if (thresholdCount > 0) {
+					for (int i = 0; i < profiledBinaries.size(); i++)
+						if (profiledBinaries.elementAt(i).getTotalSampleCount() < thresholdCount)
+							sampleCount += profiledBinaries.elementAt(i)
+									.getSampleCount(graphIndex);
+					thresholdBinary
+							.setSampleCount(this.graphIndex, sampleCount);
+				}
+			} else if (graphIndex == PIPageEditor.FUNCTIONS_PAGE) {
+				thresholdCount = (Integer) NpiInstanceRepository
+						.getInstance()
+						.getPersistState(uid,
+								"com.nokia.carbide.cpp.pi.address.thresholdCountFunction"); //$NON-NLS-1$
+				if (thresholdCount > 0) {
+					for (int i = 0; i < profiledFunctions.size(); i++)
+						if (profiledFunctions.elementAt(i)
+								.getTotalSampleCount() < thresholdCount)
+							sampleCount += profiledFunctions.elementAt(i)
+									.getSampleCount(graphIndex);
+					thresholdFunction.setSampleCount(this.graphIndex,
+							sampleCount);
 				}
 			}
-	    }
-	}
-	
-	public void focusGained(FocusEvent fe)
-	{
-	}
 
-	public void focusLost(FocusEvent fe)
-	{
-	}
+			double startTime = PIPageEditor.currentPageEditor().getStartTime();
+			double endTime = PIPageEditor.currentPageEditor().getEndTime();
 
-	public void mouseDragged(MouseEvent me) {
-	}
+			// send this message to the other GPP graphs
+			PIEvent be2 = new PIEvent(be.getValueObject(),
+					PIEvent.SELECTION_AREA_CHANGED2);
 
-	public void mouseEntered(MouseEvent me) {
-	}
+			// update the selection area shown
+			for (int i = 0; i < trace.getGraphCount(); i++) {
+				IGppTraceGraph graph = trace.getGppGraph(i, getUid());
 
-	public void mouseExited(MouseEvent me) {
-	}
+				if (graph != this) {
+					graph.piEventReceived(be2);
+					// once per graph, update the selection interval shown
+					graph.getCompositePanel().getVisualiser().updateStatusBarTimeInterval(startTime, endTime);
+				}
 
-	public void mouseHover(MouseEvent me) {
-	}
+				// change the graph's selected time interval
+				graph.setSelectionStart(startTime * 1000);
+				graph.setSelectionEnd(endTime * 1000);
+				graph.getCompositePanel().setSelectionFields(
+						(int) (startTime * 1000), (int) (endTime * 1000));
+			}
 
-	public void mousePressed(MouseEvent me) {
-	}
-
-	public void mouseReleased(MouseEvent me) {
-	}
-
-	public void mouseDoubleClicked(MouseEvent me)
-	{
-	    Object[] result = this.getProfiledGenericUnderMouse(me);
-		if ((result == null)) 
-		{
-			return;
-		}
-		
-		ProfiledGeneric pg = (ProfiledGeneric)result[0];
-		GenericTable gtu = null;
-
-		switch (drawMode)
-		{
+			this.parentComponent.getSashForm().redraw();
+			be = be2;
+			// FALL THROUGH
+		case PIEvent.SELECTION_AREA_CHANGED2: {
+			// this code lets each graph's base thread/binary/function table
+			// update the other tables
+			switch (drawMode) {
 			case Defines.THREADS:
-			case Defines.BINARIES_THREADS:
-			case Defines.FUNCTIONS_THREADS:
-			case Defines.BINARIES_FUNCTIONS_THREADS:
-			case Defines.FUNCTIONS_BINARIES_THREADS:
-			{
-			    gtu = this.threadTable;
-			    break;
+			case Defines.THREADS_FUNCTIONS:
+			case Defines.THREADS_FUNCTIONS_BINARIES:
+			case Defines.THREADS_BINARIES:
+			case Defines.THREADS_BINARIES_FUNCTIONS: {
+				this.threadTable.piEventReceived(be);
+				break;
 			}
 			case Defines.BINARIES:
-			case Defines.THREADS_BINARIES:
-			case Defines.THREADS_FUNCTIONS_BINARIES:
-			case Defines.FUNCTIONS_BINARIES:
-			case Defines.FUNCTIONS_THREADS_BINARIES:
-			{
-			    gtu = this.binaryTable;
+			case Defines.BINARIES_THREADS:
+			case Defines.BINARIES_THREADS_FUNCTIONS:
+			case Defines.BINARIES_FUNCTIONS:
+			case Defines.BINARIES_FUNCTIONS_THREADS: {
+				this.binaryTable.piEventReceived(be);
 				break;
 			}
 			case Defines.FUNCTIONS:
-			case Defines.THREADS_FUNCTIONS:
-			case Defines.BINARIES_FUNCTIONS:
-			case Defines.THREADS_BINARIES_FUNCTIONS:
-			case Defines.BINARIES_THREADS_FUNCTIONS:
-			{
-			    gtu = this.functionTable;
-			    break;
-			}
-			default:
+			case Defines.FUNCTIONS_THREADS:
+			case Defines.FUNCTIONS_THREADS_BINARIES:
+			case Defines.FUNCTIONS_BINARIES:
+			case Defines.FUNCTIONS_BINARIES_THREADS: {
+				this.functionTable.piEventReceived(be);
 				break;
+			}
+			}
+
+			this.vPanel.refreshCumulativeThreadTable();
+			this.setGraphImageChanged(true); // any selection change to drill
+			// down will change graph
+			this.repaint();
+			break;
 		}
 
-		if (pg != null)
+			// in the graph, show all values from the rightmost table
+		case PIEvent.SET_FILL_ALL_THREADS:
+			this.setGraphImageChanged(true); // any selection change to drill
+			// down will change graph
+			this.vPanel.piEventReceived(be);
+			break;
+
+		// in the graph, don't fill between the lines will the color of
+		// the line above
+		case PIEvent.SET_FILL_OFF:
+			this.setGraphImageChanged(true); // any selection change to drill
+			// down will change graph
+			this.vPanel.piEventReceived(be);
+			break;
+
+		// in the graph, show bars
+		case PIEvent.GPP_SET_BAR_GRAPH_ON:
+			this.vPanel.piEventReceived(be);
+			break;
+
+		// in the graph, show polylines
+		case PIEvent.GPP_SET_BAR_GRAPH_OFF:
+			this.vPanel.piEventReceived(be);
+			break;
+
+		// in the graph, show only the values from selected rows in the
+		// rightmost table
+		case PIEvent.SET_FILL_SELECTED_THREAD:
+			this.setGraphImageChanged(true); // any selection change to drill
+			// down will change graph
+			this.vPanel.piEventReceived(be);
+			break;
+
+		// Redraw the graph because the thread table's selected values have
+		// changed.
+		// The thread table is handled (setting of array of selected threads
+		// and table redraw) by the table selection listener or mouse listener.
+		case PIEvent.CHANGED_THREAD_TABLE:
+			switch (drawMode) {
+			case Defines.THREADS_BINARIES:
+			case Defines.THREADS_BINARIES_FUNCTIONS:
+			case Defines.THREADS_FUNCTIONS:
+			case Defines.THREADS_FUNCTIONS_BINARIES: {
+				this.threadTable.piEventReceived(be);
+				break;
+			}
+			case Defines.BINARIES_THREADS_FUNCTIONS: {
+				this.binaryTable.piEventReceived(be);
+				break;
+			}
+			case Defines.FUNCTIONS_THREADS_BINARIES: {
+				this.functionTable.piEventReceived(be);
+				break;
+			}
+			case Defines.THREADS:
+			case Defines.BINARIES:
+			case Defines.BINARIES_THREADS:
+			case Defines.BINARIES_FUNCTIONS:
+			case Defines.BINARIES_FUNCTIONS_THREADS:
+			case Defines.FUNCTIONS:
+			case Defines.FUNCTIONS_THREADS:
+			case Defines.FUNCTIONS_BINARIES:
+			case Defines.FUNCTIONS_BINARIES_THREADS:
+			default:
+				break;
+			}
+
+			this.vPanel.refreshCumulativeThreadTable();
+			this.repaint();
+			// if fill selected, the graph is drawn again
+			this.vPanel.piEventReceived(be);
+			break;
+
+		// Redraw the graph because the binary table's selected values have
+		// changed.
+		// The binary table is handled (setting of array of selected binaries
+		// and table redraw) by the table selection listener or mouse listener.
+		case PIEvent.CHANGED_BINARY_TABLE:
+			switch (drawMode) {
+			case Defines.BINARIES_THREADS:
+			case Defines.BINARIES_THREADS_FUNCTIONS:
+			case Defines.BINARIES_FUNCTIONS:
+			case Defines.BINARIES_FUNCTIONS_THREADS: {
+				this.binaryTable.piEventReceived(be);
+				break;
+			}
+			case Defines.THREADS_BINARIES_FUNCTIONS: {
+				this.threadTable.piEventReceived(be);
+				break;
+			}
+			case Defines.FUNCTIONS_BINARIES_THREADS: {
+				this.functionTable.piEventReceived(be);
+				break;
+			}
+			case Defines.THREADS:
+			case Defines.THREADS_BINARIES:
+			case Defines.THREADS_FUNCTIONS:
+			case Defines.THREADS_FUNCTIONS_BINARIES:
+			case Defines.BINARIES:
+			case Defines.FUNCTIONS:
+			case Defines.FUNCTIONS_THREADS:
+			case Defines.FUNCTIONS_THREADS_BINARIES:
+			case Defines.FUNCTIONS_BINARIES:
+			default:
+				break;
+			}
+
+			this.vPanel.refreshCumulativeThreadTable();
+			this.repaint();
+			// if fill selected, the graph is drawn again
+			this.vPanel.piEventReceived(be);
+			break;
+
+		// Redraw the graph because the function table's selected values have
+		// changed.
+		// The function table is handled (setting of array of selected functions
+		// and table redraw) by the table selection listener or mouse listener.
+		case PIEvent.CHANGED_FUNCTION_TABLE:
+			switch (drawMode) {
+			case Defines.FUNCTIONS_THREADS:
+			case Defines.FUNCTIONS_THREADS_BINARIES:
+			case Defines.FUNCTIONS_BINARIES:
+			case Defines.FUNCTIONS_BINARIES_THREADS: {
+				this.functionTable.piEventReceived(be);
+				break;
+			}
+			case Defines.THREADS_FUNCTIONS_BINARIES: {
+				this.threadTable.piEventReceived(be);
+				break;
+			}
+			case Defines.BINARIES_FUNCTIONS_THREADS: {
+				this.binaryTable.piEventReceived(be);
+				break;
+			}
+			case Defines.THREADS:
+			case Defines.THREADS_BINARIES:
+			case Defines.THREADS_BINARIES_FUNCTIONS:
+			case Defines.THREADS_FUNCTIONS:
+			case Defines.BINARIES:
+			case Defines.BINARIES_THREADS:
+			case Defines.BINARIES_THREADS_FUNCTIONS:
+			case Defines.BINARIES_FUNCTIONS:
+			case Defines.FUNCTIONS:
+			default:
+				break;
+			}
+
+			this.vPanel.refreshCumulativeThreadTable();
+			this.repaint();
+			this.vPanel.piEventReceived(be);
+			break;
+
+		case PIEvent.MOUSE_PRESSED:
+			switch (drawMode) {
+			case Defines.THREADS: {
+				break;
+			}
+			case Defines.BINARIES: {
+				break;
+			}
+			case Defines.FUNCTIONS: {
+				break;
+			}
+			default: {
+				break;
+			}
+			}
+			this.parentComponent.setActive(this);
+			break;
+
+		case PIEvent.SCALE_CHANGED:
+			this.setGraphImageChanged(true);
+			break;
+			
+		default:
+			break;
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	public void actionPerformed(ActionEvent ae) {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph#action(java
+	 * .lang.String)
+	 */
+	@Override
+	public void action(String actionString) {
+		System.out
+				.println(Messages.getString("GppTraceGraph.actionString") + actionString); //$NON-NLS-1$
+
+		if (actionString.equals("resetToCurrentMode")) //$NON-NLS-1$
 		{
+			if (drawMode == Defines.THREADS_FUNCTIONS)
+				this.setDrawMode(Defines.THREADS);
+			else if (drawMode == Defines.BINARIES_FUNCTIONS)
+				this.setDrawMode(Defines.BINARIES);
+			else
+				System.out
+						.println(Messages.getString("GppTraceGraph.drawMode") + drawMode); //should not print this ever  //$NON-NLS-1$
+		} else {
+			switch (drawMode) {
+			case Defines.THREADS:
+			case Defines.THREADS_FUNCTIONS:
+			case Defines.THREADS_FUNCTIONS_BINARIES:
+			case Defines.THREADS_BINARIES:
+			case Defines.THREADS_BINARIES_FUNCTIONS: {
+				this.threadTable.action(actionString);
+				break;
+			}
+			case Defines.BINARIES:
+			case Defines.BINARIES_THREADS:
+			case Defines.BINARIES_THREADS_FUNCTIONS:
+			case Defines.BINARIES_FUNCTIONS:
+			case Defines.BINARIES_FUNCTIONS_THREADS: {
+				this.binaryTable.action(actionString);
+				break;
+			}
+			case Defines.FUNCTIONS:
+			case Defines.FUNCTIONS_THREADS:
+			case Defines.FUNCTIONS_THREADS_BINARIES:
+			case Defines.FUNCTIONS_BINARIES:
+			case Defines.FUNCTIONS_BINARIES_THREADS: {
+				this.functionTable.action(actionString);
+				break;
+			}
+			}
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
+	 */
+	public void focusGained(FocusEvent fe) {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
+	 */
+	public void focusLost(FocusEvent fe) {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.draw2d.MouseMotionListener#mouseDragged(org.eclipse.draw2d
+	 * .MouseEvent)
+	 */
+	public void mouseDragged(MouseEvent me) {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.draw2d.MouseMotionListener#mouseEntered(org.eclipse.draw2d
+	 * .MouseEvent)
+	 */
+	public void mouseEntered(MouseEvent me) {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.draw2d.MouseMotionListener#mouseExited(org.eclipse.draw2d
+	 * .MouseEvent)
+	 */
+	public void mouseExited(MouseEvent me) {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.draw2d.MouseMotionListener#mouseHover(org.eclipse.draw2d.
+	 * MouseEvent)
+	 */
+	public void mouseHover(MouseEvent me) {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.draw2d.MouseListener#mousePressed(org.eclipse.draw2d.MouseEvent
+	 * )
+	 */
+	public void mousePressed(MouseEvent me) {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.draw2d.MouseListener#mouseReleased(org.eclipse.draw2d.MouseEvent
+	 * )
+	 */
+	public void mouseReleased(MouseEvent me) {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.draw2d.MouseListener#mouseDoubleClicked(org.eclipse.draw2d
+	 * .MouseEvent)
+	 */
+	public void mouseDoubleClicked(MouseEvent me) {
+		Object[] result = this.getProfiledGenericUnderMouseImproved(me, false);
+		if ((result == null)) {
+			return;
+		}
+
+		ProfiledGeneric pg = (ProfiledGeneric) result[0];
+		GenericTable gtu = getLegendTableForGraph();
+
+		if (pg != null) {
 			if (gtu.getIndex(pg) == null)
 				return;
 			int[] index = new int[1];
@@ -803,514 +919,640 @@ public class GppTraceGraph extends GenericTraceGraph implements ActionListener,
 		}
 	}
 
-	private Object[] getProfiledGenericUnderMouse(MouseEvent me)
-	{		
+	/**
+	 * For a stacked-area chart, this method retrieves the ProfiledGeneric
+	 * currently pointed to by the mouse. It also determines the percentage
+	 * activity load of this ProfiledGeneric in the current bucket. The load
+	 * will also be determined if no ProfiledGeneric is currently pointed to
+	 * (unresolved items).
+	 * 
+	 * 
+	 * @param me
+	 * @return Object[2] of which [0] is the ProfiledGeneric (may be null) and
+	 *         [1] is a String containing the load
+	 */
+	private Object[] getProfiledGenericUnderMouseImproved(MouseEvent me, boolean includeLoadString) {
 		Object[] result = new Object[2];
-		double x = me.x * this.getScale();
-		double y = me.y;
-		
-		y = y * 100 / (this.getVisualSize().height - GppTraceGraph.xLegendHeight);
-		y = 100 - y;
-		if (y <= 0)
-			return null;
-		
-		// mouse event may return out of range X, that may 
-		// crash when we use it to index data array
-		x = x >= 0 ? x : 0;
-		
-		if (x > PIPageEditor.currentPageEditor().getMaxEndTime() * 1000)
-			return null;
 
-		if (me.x >= (int)(this.getSize().width)) {
-			x = (this.getSize().width - 1) * this.getScale();
+		int adjustedX = me.x;
+		if (me.x >= (this.getSize().width)) {
+			adjustedX = this.getSize().width - 1;
+		}
+		double x = getTimeForXCoordinate(adjustedX, this.getScale());
+		if (x > PIPageEditor.currentPageEditor().getMaxEndTime() * 1000) {
+			return result;
+		}
+
+		double y = me.y;
+
+		y = y * 100	/ (this.getVisualSize().height - GppTraceGraph.X_LEGEND_HEIGHT);
+		y = 100 - y;
+		if (y <= 0){
+			return result;
 		}
 		
-		GppTrace gppTrace = (GppTrace) (this.getTrace());
+		int samplingInterval = (Integer) NpiInstanceRepository.getInstance().activeUidGetPersistState(
+				"com.nokia.carbide.cpp.pi.address.samplingInterval"); //$NON-NLS-1$
+		int granularityValue = ((GppTrace) (this.getTrace())).getGranularity();
 
-		Enumeration<ProfiledGeneric> enumer = null;
-		switch (drawMode)
-		{
+		int bucket = getBucketForTime(x);
+
+		//since the value is drawn at bucket mid-point, we need to work out whether
+		//x is to the left or right of the midpoint, in other words
+		//whether we need to take into account the gradient from the previous
+		//bucket or the next bucket
+		int offset = ((int)(x / samplingInterval)) % granularityValue; //offset into the bucket
+		int d = offset - (int)(granularityValue/2); //distance in samples off bucket mid-point, negative for left
+		double prt = Math.abs(d / (granularityValue * 1d)); //expressed as proportion
+		double saveLastPeak = 0f;
+		
+		for (ProfiledGeneric p : getSortedProfiledsForGraph()) {
+			if (!p.isEnabled(graphIndex)){
+				continue;
+			}
+			float[] cum = p.getCumulativeList(graphIndex);
+			float[] val = adapter.getActivityList(p);
+			if (cum == null || val == null || bucket >= cum.length){
+				return result;			
+			}
+
+			float lowCur = cum[bucket];
+			float topCur = cum[bucket] + val[bucket];
+
+			float lowNext = 0;
+			float topNext = 0;
+
+			double lowDiff = 0;
+			double topDiff = 0;
+
+			if (d < 0 && bucket > 0) {
+				// use gradient of previous bucket
+				lowNext = cum[bucket - 1];
+				topNext = cum[bucket - 1] + val[bucket - 1];
+
+			} else if (d > 0 && bucket < cum.length - 2) {
+				// use gradient of next bucket
+				lowNext = cum[bucket + 1];
+				topNext = cum[bucket + 1] + val[bucket + 1];
+
+			}
+			lowDiff = (lowNext - lowCur) * prt;
+			topDiff = (topNext - topCur) * prt;
+
+			// check whether y is in the profiled's value range
+			if (y >= lowCur + lowDiff && y < topCur + topDiff) {
+				result[0] = p;
+				if (includeLoadString){
+					//round to 2 dec places
+					result[1] = String.format("%.2f", (topCur + topDiff - lowCur - lowDiff));//$NON-NLS-1$
+				}
+				return result;
+			}
+			saveLastPeak = topCur + topDiff;
+		}
+		
+		if (includeLoadString){
+			// within the area of not shown profiled items
+			result[0] = null;
+			result[1] = String.format("%.2f", (100 - saveLastPeak));//$NON-NLS-1$
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Returns the bucket index for the given time
+	 * @param time
+	 * @return
+	 */
+	private int getBucketForTime(double time) {
+		return ((int) (time / ((GppTrace) (this.getTrace())).getBucketDuration()));
+	}
+
+	/**
+	 * @return the sorted collection of ProfiledGeneric appropriate for the
+	 *         current draw mode of the graph
+	 */
+	public Vector<ProfiledGeneric> getSortedProfiledsForGraph() {
+		switch (drawMode) {
+		case Defines.THREADS:
+		case Defines.BINARIES_THREADS:
+		case Defines.FUNCTIONS_THREADS:
+		case Defines.BINARIES_FUNCTIONS_THREADS:
+		case Defines.FUNCTIONS_BINARIES_THREADS: {
+			return sortedProfiledThreads ;
+		}
+		case Defines.BINARIES:
+		case Defines.THREADS_BINARIES:
+		case Defines.THREADS_FUNCTIONS_BINARIES:
+		case Defines.FUNCTIONS_BINARIES:
+		case Defines.FUNCTIONS_THREADS_BINARIES: {
+			return sortedProfiledBinaries;
+		}
+		case Defines.FUNCTIONS:
+		case Defines.THREADS_FUNCTIONS:
+		case Defines.BINARIES_FUNCTIONS:
+		case Defines.THREADS_BINARIES_FUNCTIONS:
+		case Defines.BINARIES_THREADS_FUNCTIONS: {
+			return sortedProfiledFunctions;
+		}
+		}
+		throw new IllegalArgumentException();
+		}
+
+	/**
+	 * @return the sorted collection of ProfiledGeneric appropriate for the
+	 *         current draw mode of the graph
+	 */
+	private GenericAddrTable getLegendTableForGraph() {
+
+		switch (drawMode) {
+		case Defines.THREADS:
+		case Defines.BINARIES_THREADS:
+		case Defines.FUNCTIONS_THREADS:
+		case Defines.BINARIES_FUNCTIONS_THREADS:
+		case Defines.FUNCTIONS_BINARIES_THREADS: {
+			return this.threadTable;
+		}
+		case Defines.BINARIES:
+		case Defines.THREADS_BINARIES:
+		case Defines.THREADS_FUNCTIONS_BINARIES:
+		case Defines.FUNCTIONS_BINARIES:
+		case Defines.FUNCTIONS_THREADS_BINARIES: {
+			return this.binaryTable;
+		}
+		case Defines.FUNCTIONS:
+		case Defines.THREADS_FUNCTIONS:
+		case Defines.BINARIES_FUNCTIONS:
+		case Defines.THREADS_BINARIES_FUNCTIONS:
+		case Defines.BINARIES_THREADS_FUNCTIONS: {
+			return this.functionTable;
+		}
+		}
+		throw new IllegalArgumentException();
+	}
+
+	/**
+	 * Converts the passed X-coordiate into a time value (in milliseconds) using
+	 * the scale provided. Makes sure the return value is non-negative.
+	 * 
+	 * @param x
+	 *            the x coordinate to use
+	 * @param scale
+	 *            the scale to use
+	 * @return time in milliseconds
+	 */
+	protected double getTimeForXCoordinate(int x, double scale) {
+		double time = x * scale;
+		// mouse event may return out of range X, that may
+		// crash when we use it to index data array
+		time = time >= 0 ? time : 0;
+		return time;
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.draw2d.MouseMotionListener#mouseMoved(org.eclipse.draw2d.
+	 * MouseEvent)
+	 */
+	public void mouseMoved(MouseEvent me) {
+		double x = getTimeForXCoordinate(me.x, this.getScale());
+		double y = me.y;
+
+		if (y >= this.getVisualSizeY() - GppTraceGraph.X_LEGEND_HEIGHT
+				|| x >= PIPageEditor.currentPageEditor().getMaxEndTime() * 1000) {
+			//don't set the tooltip to null here since it might affect other plugins, such as button plugin
+			return;
+		}
+
+		if (NpiInstanceRepository.getInstance() == null
+				|| NpiInstanceRepository
+						.getInstance()
+						.activeUidGetPersistState(
+								"com.nokia.carbide.cpp.pi.address.samplingInterval") == null) //$NON-NLS-1$)
+			return;
+
+		int samplingInterval = (Integer) NpiInstanceRepository.getInstance()
+				.activeUidGetPersistState(
+						"com.nokia.carbide.cpp.pi.address.samplingInterval"); //$NON-NLS-1$
+
+		if (this.barMode == GppTraceGraph.BAR_MODE_ON) {
+			GppSample samp = getSampleUnderMouse(me.x, this.getScale(),
+					samplingInterval);
+			if (samp == null) {
+				this.setToolTipText(null);
+				return;
+			}
+			switch (drawMode) {
 			case Defines.THREADS:
 			case Defines.BINARIES_THREADS:
 			case Defines.FUNCTIONS_THREADS:
 			case Defines.BINARIES_FUNCTIONS_THREADS:
-			case Defines.FUNCTIONS_BINARIES_THREADS:
-			{
-				enumer = gppTrace.getSortedThreadsElements();
-			    break;
+			case Defines.FUNCTIONS_BINARIES_THREADS: {
+				try {
+					this.setToolTipText(samp.sampleSynchTime + "ms @" + //$NON-NLS-1$
+							Long.toHexString(samp.programCounter) + " " + //$NON-NLS-1$
+							samp.thread.process.name + "::" + //$NON-NLS-1$
+							samp.thread.threadName + "_" + //$NON-NLS-1$
+							samp.thread.threadId);
+				} catch (NullPointerException e2) {
+					this
+							.setToolTipText(Messages
+									.getString("GppTraceGraph.cannotResolveThreadName")); //$NON-NLS-1$
+				}
+				break;
 			}
 			case Defines.BINARIES:
 			case Defines.THREADS_BINARIES:
 			case Defines.THREADS_FUNCTIONS_BINARIES:
 			case Defines.FUNCTIONS_BINARIES:
-			case Defines.FUNCTIONS_THREADS_BINARIES:
-			{
-				enumer = gppTrace.getSortedBinariesElements();
+			case Defines.FUNCTIONS_THREADS_BINARIES: {
+				try {
+					if (samp.getCurrentFunctionSym().getFunctionBinary().getBinaryName()
+							.endsWith(Messages
+									.getString("GppTraceGraph.NotFound"))) //$NON-NLS-1$
+						throw new NullPointerException();
+					this.setToolTipText(samp.sampleSynchTime + "ms @" + //$NON-NLS-1$
+							Long.toHexString(samp.programCounter) + " " + //$NON-NLS-1$
+							samp.getCurrentFunctionSym().getFunctionBinary().getBinaryName());
+				} catch (NullPointerException e) {
+					try {
+						this
+								.setToolTipText(samp.sampleSynchTime + "ms @" + //$NON-NLS-1$
+										Long.toHexString(samp.programCounter)
+										+ " " + //$NON-NLS-1$
+										samp.getCurrentFunctionItt().getFunctionBinary().getBinaryName());
+					} catch (NullPointerException e2) {
+						this
+								.setToolTipText(Messages
+										.getString("GppTraceGraph.cannotResolveBinaryName")); //$NON-NLS-1$
+					}
+				}
 				break;
 			}
 			case Defines.FUNCTIONS:
 			case Defines.THREADS_FUNCTIONS:
 			case Defines.BINARIES_FUNCTIONS:
 			case Defines.THREADS_BINARIES_FUNCTIONS:
-			case Defines.BINARIES_THREADS_FUNCTIONS:
-			{
-		        enumer = gppTrace.getSortedFunctionsElements();
-			    break;
+			case Defines.BINARIES_THREADS_FUNCTIONS: {
+				try {
+					if (samp.getCurrentFunctionSym().getFunctionBinary().getBinaryName()
+							.endsWith(Messages
+									.getString("GppTraceGraph.notFound"))) //$NON-NLS-1$
+						throw new NullPointerException();
+
+					this.setToolTipText(samp.sampleSynchTime + "ms @" + //$NON-NLS-1$
+							Long.toHexString(samp.programCounter) + " " + //$NON-NLS-1$
+							samp.getCurrentFunctionSym().getFunctionName());
+				} catch (NullPointerException e) {
+					try {
+						this.setToolTipText(samp.sampleSynchTime + "ms @" + //$NON-NLS-1$
+								Long.toHexString(samp.programCounter) + " " + //$NON-NLS-1$
+								samp.getCurrentFunctionItt().getFunctionName());
+					} catch (NullPointerException e2) {
+						this
+								.setToolTipText(Messages
+										.getString("GppTraceGraph.cannotResolveFunctionName")); //$NON-NLS-1$
+					}
+				}
+				break;
 			}
 			default:
-				break;
-		}
-
-		if (enumer == null)
-			return null;
-
-		Vector<ProfiledGeneric> activeThreads = new Vector<ProfiledGeneric>();
-		while(enumer.hasMoreElements())
-		{
-			ProfiledGeneric pg = (ProfiledGeneric)enumer.nextElement();
-			if (pg.isEnabled(this.graphIndex))		
-			{		
-				activeThreads.add(pg);
-			}
-		}
-		
-		int cumPrev = 0;
-		int cumNext = 0;
-		
-		int topPrev = 0;
-		int topNext = 0;
-
-		double cumDiff = 0;
-		double topDiff = 0;
-		
-		ProfiledGeneric currentProfiled = null;
-		
-		enumer = activeThreads.elements();
-		if (enumer.hasMoreElements())
-		    currentProfiled = enumer.nextElement();
-		
-		int samplingInterval = (Integer) NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.address.samplingInterval"); //$NON-NLS-1$
-		int granularityValue = gppTrace.samples.size() > GppTraceGraph.granularityValue ? GppTraceGraph.granularityValue : gppTrace.samples.size();  
-
-		while (true)
-		{
-			if (currentProfiled != null)
-			{
-				int[] cum = currentProfiled.getCumulativeList(graphIndex);
-				int[] val = currentProfiled.getActivityList();
-				if (cum == null || val == null)
-					return null;
-				
-				int current = ((int)(x / samplingInterval)) / granularityValue;
-				
-				if ((current >= cum.length) || (current + 1 >= cum.length)) 
-					return null;
-					
-				cumPrev = cum[current];	
-				cumNext = cum[current + 1];
-
-				topPrev = val[current];
-				topNext = val[current + 1];
-
-				cumDiff = (cumNext - cumPrev) * ((double)((x / samplingInterval) % granularityValue) / (granularityValue * 1d));
-				topDiff = (topNext - topPrev) * ((double)((x / samplingInterval) % granularityValue) / (granularityValue * 1d));
-			}
-			else
-			{
-				if (y >= cumPrev + topPrev + topDiff + cumDiff) 
-				{
-				    currentProfiled = null;
-					break;
-				}
-				else
-				{
-					break;
-				}
-			}
-			
-			if (y >= cumPrev + cumDiff && y < cumPrev + topPrev + topDiff + cumDiff ) 
-			{
-				break;
-			}
-			else
-			{
-				if (enumer.hasMoreElements())
-				{
-				    currentProfiled = (ProfiledGeneric)enumer.nextElement();
-				}
-				else
-				{
-				    currentProfiled = null;
-				}
-			}
-		}
-		
-		if (currentProfiled != null)
-		{
-			String loadString = "" + (topPrev + topDiff); //$NON-NLS-1$
-			int index = loadString.indexOf('.');
-			
-			if (index > 0 && ((index + 2) < loadString.length()))
-				loadString = loadString.substring(0, index + 2); 
-			
-			result[0] = currentProfiled;
-			result[1] = loadString;				
-		}
-		else
-		{
-			String totalString = "" + (100 - (cumPrev + topPrev + topDiff + cumDiff)); //$NON-NLS-1$
-			int index = totalString.indexOf('.');
-			
-			if (index > 0 && ((index + 2) < totalString.length()))
-				totalString = totalString.substring(0, index + 2);
-
-			result[0] = null;
-			result[1] = totalString;
-		}
-		return result;
-	}
-
-	public void mouseMoved(MouseEvent me)
-	{
-		double x = me.x * this.getScale();
-		double y = me.y;
-		
-		// mouse event may return out of range X, that may 
-		// crash when we use it to index data array
-		x = x >= 0 ? x : 0;
-		
-		if (   y >= this.getVisualSizeY() - GppTraceGraph.xLegendHeight
-			|| x >= PIPageEditor.currentPageEditor().getMaxEndTime() * 1000)
-		{
-			this.setToolTipText(null);
-			return;
-		}
-
-		if (   NpiInstanceRepository.getInstance() == null
-			|| NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.address.samplingInterval") == null) //$NON-NLS-1$)
-			return;
-		
-		int samplingInterval = (Integer) NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.address.samplingInterval"); //$NON-NLS-1$
-
-		if (this.barMode == GppTraceGraph.BAR_MODE_ON) {
-			GppSample samp = (GppSample)((GenericSampledTrace)this.getTrace()).getSample(((int)(x + .0005))/samplingInterval);
-			switch (drawMode)
-			{
-				case Defines.THREADS:
-				case Defines.BINARIES_THREADS:
-				case Defines.FUNCTIONS_THREADS:
-				case Defines.BINARIES_FUNCTIONS_THREADS:
-				case Defines.FUNCTIONS_BINARIES_THREADS:
-				{
-					try {
-						this.setToolTipText(samp.sampleSynchTime+"ms @"+  //$NON-NLS-1$
-											Long.toHexString(samp.programCounter)+" "+  //$NON-NLS-1$
-											samp.thread.process.name+"::"+  //$NON-NLS-1$
-											samp.thread.threadName+"_"+  //$NON-NLS-1$
-											samp.thread.threadId);}
-					catch (NullPointerException e2)
-					{
-						this.setToolTipText(Messages.getString("GppTraceGraph.cannotResolveThreadName"));  //$NON-NLS-1$
-					}
-					break;
-				}
-				case Defines.BINARIES:
-				case Defines.THREADS_BINARIES:
-				case Defines.THREADS_FUNCTIONS_BINARIES:
-				case Defines.FUNCTIONS_BINARIES:
-				case Defines.FUNCTIONS_THREADS_BINARIES:
-				{
-					try {
-						if (samp.currentFunctionSym.functionBinary.binaryName.endsWith(Messages.getString("GppTraceGraph.NotFound")))  //$NON-NLS-1$
-							throw new NullPointerException();
-						this.setToolTipText(samp.sampleSynchTime+"ms @"+  //$NON-NLS-1$
-											Long.toHexString(samp.programCounter)+" "+  //$NON-NLS-1$
-											samp.currentFunctionSym.functionBinary.binaryName);
-					} catch (NullPointerException e)
-					{
-						try {
-							this.setToolTipText(samp.sampleSynchTime+"ms @"+  //$NON-NLS-1$
-												Long.toHexString(samp.programCounter)+" "+  //$NON-NLS-1$
-												samp.currentFunctionItt.functionBinary.binaryName);}
-						catch (NullPointerException e2)
-						{
-							this.setToolTipText(Messages.getString("GppTraceGraph.cannotResolveBinaryName"));  //$NON-NLS-1$
-						}
-					}
-					break;
-				}
-				case Defines.FUNCTIONS:
-				case Defines.THREADS_FUNCTIONS:
-				case Defines.BINARIES_FUNCTIONS:
-				case Defines.THREADS_BINARIES_FUNCTIONS:
-				case Defines.BINARIES_THREADS_FUNCTIONS:
-				{
-					try {
-						if (samp.currentFunctionSym.functionBinary.binaryName.endsWith(Messages.getString("GppTraceGraph.notFound")))  //$NON-NLS-1$
-							throw new NullPointerException();
-						
-						this.setToolTipText(samp.sampleSynchTime+"ms @"+  //$NON-NLS-1$
-											Long.toHexString(samp.programCounter)+" "+  //$NON-NLS-1$
-											samp.currentFunctionSym.functionName);}
-					catch (NullPointerException e)
-					{
-						try{this.setToolTipText(samp.sampleSynchTime+"ms @"+  //$NON-NLS-1$
-												Long.toHexString(samp.programCounter)+" "+  //$NON-NLS-1$
-												samp.currentFunctionItt.functionName);}
-						catch (NullPointerException e2)
-						{
-							this.setToolTipText(Messages.getString("GppTraceGraph.cannotResolveFunctionName"));  //$NON-NLS-1$
-						}
-					}
-					break;
-				}
-				default:
-					return;
+				return;
 			}
 
-			return;  // return for barMode == GppTraceGraph.BAR_MODE_ON
+			return; // return for barMode == GppTraceGraph.BAR_MODE_ON
 		}
 
 		// barMode == GppTraceGraph.BAR_MODE_OFF
 
-    	Object[] result = this.getProfiledGenericUnderMouse(me);
-		if (result == null)
-		{
+		Object[] result = this.getProfiledGenericUnderMouseImproved(me, true);
+		if (result == null || (result[0] == null && result[1] == null)) {
 			this.setToolTipText(null);
 			return;
 		}
-		
-		if (me.x >= (int)(this.getSize().width)) {
+
+		if (me.x >= (this.getSize().width)) {
 			x = (this.getSize().width - 1) * this.getScale();
 		}
+
+		ProfiledGeneric pg = (ProfiledGeneric) result[0];
+
+		String string = (String) result[1];
+		if (pg == null) {
+			switch (drawMode) {
+			case Defines.THREADS:
+			case Defines.BINARIES_THREADS:
+			case Defines.FUNCTIONS_THREADS:
+			case Defines.BINARIES_FUNCTIONS_THREADS:
+			case Defines.FUNCTIONS_BINARIES_THREADS: {
+				this
+						.setToolTipText(string
+								+ "% " + Messages.getString("GppTraceGraph.unknownOrExcludedThreads")); //$NON-NLS-1$ //$NON-NLS-2$
+				break;
+			}
+			case Defines.BINARIES:
+			case Defines.THREADS_BINARIES:
+			case Defines.THREADS_FUNCTIONS_BINARIES:
+			case Defines.FUNCTIONS_BINARIES:
+			case Defines.FUNCTIONS_THREADS_BINARIES: {
+				this
+						.setToolTipText(string
+								+ "% " + Messages.getString("GppTraceGraph.unknownOrExcludedBinaries")); //$NON-NLS-1$ //$NON-NLS-2$
+				break;
+			}
+			case Defines.FUNCTIONS:
+			case Defines.THREADS_FUNCTIONS:
+			case Defines.BINARIES_FUNCTIONS:
+			case Defines.THREADS_BINARIES_FUNCTIONS:
+			case Defines.BINARIES_THREADS_FUNCTIONS: {
+				this
+						.setToolTipText(string
+								+ "% " + Messages.getString("GppTraceGraph.unknownOrExcludedFunctions")); //$NON-NLS-1$ //$NON-NLS-2$
+				break;
+			}
+			default:
+				break;
+			}
+		} else {
+			this.setToolTipText(string + "% " + pg.getNameString()); //$NON-NLS-1$
+		}
+	}
+
+	/**
+	 * Returns the closest matching sample with the given x-coordinate. May
+	 * return null if there isn't a matching sample in the immediate vicinity of
+	 * x. This method is typically used in bar mode.
+	 * 
+	 * @param xPoint
+	 * @param scale
+	 * @param samplingInterval
+	 * @return
+	 */
+	protected GppSample getSampleUnderMouse(int xPoint, double scale,
+			int samplingInterval) {
+		GppTrace trace = (GppTrace)this.getTrace();
+		GppSample match = null;
+		double x = xPoint * scale;
+		x = x >= 0 ? x : 0;
+		double xStart = (xPoint -5 ) * scale;
+		double xEnd = (xPoint +5) * scale;
 		
-		ProfiledGeneric pg = null;
-		switch (drawMode)
-		{
-			case Defines.THREADS:
-			case Defines.BINARIES_THREADS:
-			case Defines.FUNCTIONS_THREADS:
-			case Defines.BINARIES_FUNCTIONS_THREADS:
-			case Defines.FUNCTIONS_BINARIES_THREADS:
-			{
-			    pg = (ProfiledThread)result[0];
-			    break;
-			}
-			case Defines.BINARIES:
-			case Defines.THREADS_BINARIES:
-			case Defines.THREADS_FUNCTIONS_BINARIES:
-			case Defines.FUNCTIONS_BINARIES:
-			case Defines.FUNCTIONS_THREADS_BINARIES:
-			{
-			    pg = (ProfiledBinary)result[0];
-				break;
-			}
-			case Defines.FUNCTIONS:
-			case Defines.THREADS_FUNCTIONS:
-			case Defines.BINARIES_FUNCTIONS:
-			case Defines.THREADS_BINARIES_FUNCTIONS:
-			case Defines.BINARIES_THREADS_FUNCTIONS:
-			{
-			    pg = (ProfiledFunction)result[0];
-			    break;
-			}
-			default:
-				break;
+		int start =  ((int)(xStart + .0005) * trace.getCPUCount())/samplingInterval;
+		if (start < 0){
+			start = 0;
+		} else if (start >= trace.getSampleAmount()){
+			start = trace.getSampleAmount()-1;
 		}
 
-		String string = (String)result[1];
-		if (pg == null)
-		{
-			switch (drawMode)
-			{
-				case Defines.THREADS:
-				case Defines.BINARIES_THREADS:
-				case Defines.FUNCTIONS_THREADS:
-				case Defines.BINARIES_FUNCTIONS_THREADS:
-				case Defines.FUNCTIONS_BINARIES_THREADS:
-				{
-				    this.setToolTipText(string + "% " + Messages.getString("GppTraceGraph.unknownOrExcludedThreads"));  //$NON-NLS-1$ //$NON-NLS-2$
-				    break;
-				}
-				case Defines.BINARIES:
-				case Defines.THREADS_BINARIES:
-				case Defines.THREADS_FUNCTIONS_BINARIES:
-				case Defines.FUNCTIONS_BINARIES:
-				case Defines.FUNCTIONS_THREADS_BINARIES:
-				{
-				    this.setToolTipText(string + "% " + Messages.getString("GppTraceGraph.unknownOrExcludedBinaries"));  //$NON-NLS-1$ //$NON-NLS-2$
-					break;
-				}
-				case Defines.FUNCTIONS:
-				case Defines.THREADS_FUNCTIONS:
-				case Defines.BINARIES_FUNCTIONS:
-				case Defines.THREADS_BINARIES_FUNCTIONS:
-				case Defines.BINARIES_THREADS_FUNCTIONS:
-				{
-				    this.setToolTipText(string + "% " + Messages.getString("GppTraceGraph.unknownOrExcludedFunctions"));  //$NON-NLS-1$ //$NON-NLS-2$
-				    break;
-				}
-				default:
-					break;
-			}
-		}
-		else
-		{
-			this.setToolTipText(string + "% " + pg.getNameString());  //$NON-NLS-1$
-		}
-	}
-	
-	public GenericTable getTableUtils()
-	{
-		switch (drawMode)
-		{
-			case Defines.THREADS:
-			case Defines.BINARIES_THREADS:
-			case Defines.FUNCTIONS_THREADS:
-			case Defines.BINARIES_FUNCTIONS_THREADS:
-			case Defines.FUNCTIONS_BINARIES_THREADS:
-			{
-			    return this.threadTable;
-			}
-			case Defines.BINARIES:
-			case Defines.THREADS_BINARIES:
-			case Defines.THREADS_FUNCTIONS_BINARIES:
-			case Defines.FUNCTIONS_BINARIES:
-			case Defines.FUNCTIONS_THREADS_BINARIES:
-			{
-			    return this.binaryTable;
-			}
-			case Defines.FUNCTIONS:
-			case Defines.THREADS_FUNCTIONS:
-			case Defines.BINARIES_FUNCTIONS:
-			case Defines.THREADS_BINARIES_FUNCTIONS:
-			case Defines.BINARIES_THREADS_FUNCTIONS:
-			{
-			    return this.functionTable;
-			}
-			default:
-				break;
+		int end =  ((int)(xEnd + .0005) * trace.getCPUCount())/samplingInterval;
+		if (end >= trace.getSampleAmount()){
+			end = trace.getSampleAmount()-1;
 		}
 
-		System.out.println(Messages.getString("GppTraceGraph.debugDrawMode") + drawMode);  //$NON-NLS-1$
-	    return null;
+		//loop through samples with the correct CPU id in close vicinity, and find the closest one to the given x-coordinate 
+		for (int i = start; i <= end; i++) {
+			GppSample tmp = trace.getSortedGppSamples()[i];
+			if (doCheckSampleMatch(tmp) && (match == null || Math.abs(tmp.sampleSynchTime - x) < Math.abs(match.sampleSynchTime - x)) && isSampleEnabled(tmp)){
+				match = tmp;
+			}
+		}
+		
+		return match;
 	}
 	
-	public GppVisualiserPanel getVisualiserPanel()
-	{
+	/**
+	 * According to current graph index and drawing mode, check whether this 
+	 * sample is enabled  
+	 * @param sample the sample to use
+	 * @return true, if enabled, false if disabled or cannot be determined
+	 */
+	private boolean isSampleEnabled(GppSample sample) {
+		
+		switch (drawMode) {
+		case Defines.THREADS:
+			return isSampleEnabled(sample, true, false, false);			
+		case Defines.BINARIES:
+			return isSampleEnabled(sample, false, true, false);			
+		case Defines.FUNCTIONS:
+			return isSampleEnabled(sample, false, false, true);			
+		case Defines.BINARIES_THREADS:
+		case Defines.THREADS_BINARIES:
+			return isSampleEnabled(sample, true, true, false);			
+		case Defines.FUNCTIONS_THREADS:
+		case Defines.THREADS_FUNCTIONS:
+			return isSampleEnabled(sample, true, false, true);			
+		case Defines.FUNCTIONS_BINARIES:
+		case Defines.BINARIES_FUNCTIONS:
+			return isSampleEnabled(sample, false, true, true);	
+		case Defines.BINARIES_FUNCTIONS_THREADS:
+		case Defines.FUNCTIONS_BINARIES_THREADS: 
+		case Defines.THREADS_FUNCTIONS_BINARIES:
+		case Defines.FUNCTIONS_THREADS_BINARIES: 
+		case Defines.THREADS_BINARIES_FUNCTIONS:
+		case Defines.BINARIES_THREADS_FUNCTIONS: 
+			return isSampleEnabled(sample, true, true, true);	
+		}
+		throw new IllegalArgumentException();
+	}
+
+	/**
+	 * Check whether a combination of thread / function / binary for this sample
+	 * is enabled in the current graph. 
+	 * @param sample
+	 * @param checkThreads
+	 * @param checkBinaries
+	 * @param checkFunctions
+	 * @return
+	 */
+	private boolean isSampleEnabled(GppSample sample, boolean checkThreads, boolean checkBinaries,
+			boolean checkFunctions) {
+		
+		boolean ret = true;
+		GppTrace trace = (GppTrace) this.getTrace();
+		
+		if (checkThreads){
+			ret &= trace.getIndexedThreads().get(sample.threadIndex).isEnabled(graphIndex);
+		}
+		if (checkBinaries){
+			ret &= trace.getIndexedBinaries().get(sample.binaryIndex).isEnabled(graphIndex);			
+		}
+		if (checkFunctions){
+			ret &= trace.getIndexedFunctions().get(sample.functionIndex).isEnabled(graphIndex);			
+		}
+		return ret;
+	}
+
+	/**
+	 * Check the sample fulfils conditions for getSampleUnderMouse()
+	 * @return true if it fulfils matching conditions, false otherwise
+	 */
+	protected boolean doCheckSampleMatch(GppSample sample){
+		return true;
+	}
+
+	public GenericTable getTableUtils() {
+		switch (drawMode) {
+		case Defines.THREADS:
+		case Defines.BINARIES_THREADS:
+		case Defines.FUNCTIONS_THREADS:
+		case Defines.BINARIES_FUNCTIONS_THREADS:
+		case Defines.FUNCTIONS_BINARIES_THREADS: {
+			return this.threadTable;
+		}
+		case Defines.BINARIES:
+		case Defines.THREADS_BINARIES:
+		case Defines.THREADS_FUNCTIONS_BINARIES:
+		case Defines.FUNCTIONS_BINARIES:
+		case Defines.FUNCTIONS_THREADS_BINARIES: {
+			return this.binaryTable;
+		}
+		case Defines.FUNCTIONS:
+		case Defines.THREADS_FUNCTIONS:
+		case Defines.BINARIES_FUNCTIONS:
+		case Defines.THREADS_BINARIES_FUNCTIONS:
+		case Defines.BINARIES_THREADS_FUNCTIONS: {
+			return this.functionTable;
+		}
+		default:
+			break;
+		}
+
+		System.out
+				.println(Messages.getString("GppTraceGraph.debugDrawMode") + drawMode); //$NON-NLS-1$
+		return null;
+	}
+
+	public GppVisualiserPanel getVisualiserPanel() {
 		return this.vPanel;
 	}
-	
-	public AddrThreadTable  getThreadTable() {
+
+	public AddrThreadTable getThreadTable() {
 		return this.threadTable;
 	}
-	
+
 	public AddrBinaryTable getBinaryTable() {
 		return this.binaryTable;
 	}
-	
+
 	public AddrFunctionTable getFunctionTable() {
 		return this.functionTable;
 	}
 
-	public void setThreadTableViewer(CheckboxTableViewer tableViewer) {
-		this.threadTable.setTableViewer(tableViewer);
-	}
-	
-	public void setBinaryTableViewer(CheckboxTableViewer tableViewer) {
-		this.binaryTable.setTableViewer(tableViewer);;
-	}
-	
-	public void setFunctionTableViewer(CheckboxTableViewer tableViewer) {
-		this.functionTable.setTableViewer(tableViewer);
-	}
-
-	public void paint(Panel panel, Graphics graphics)
-	{
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph#paint(org.
+	 * eclipse.draw2d.Panel, org.eclipse.draw2d.Graphics)
+	 */
+	@Override
+	public void paint(Panel panel, Graphics graphics) {
 		this.setSize(panel.getClientArea().width, panel.getClientArea().height);
 		this.vPanel.paintComponent(panel, graphics);
 	}
 
-	public void paintLeftLegend(FigureCanvas figureCanvas, GC gc)
-	{
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph#paintLeftLegend
+	 * (org.eclipse.draw2d.FigureCanvas, org.eclipse.swt.graphics.GC)
+	 */
+	@Override
+	public void paintLeftLegend(FigureCanvas figureCanvas, GC gc) {
 		GC localGC = gc;
-		
+
 		if (gc == null)
 			gc = new GC(PIPageEditor.currentPageEditor().getSite().getShell());
 
-		Rectangle rect = ((GraphComposite) figureCanvas.getParent()).figureCanvas.getClientArea();
-		
+		Rectangle rect = ((GraphComposite) figureCanvas.getParent()).figureCanvas
+				.getClientArea();
+
 		int visY = rect.height;
-		
-		float visYfloat = visY - GppTraceGraph.xLegendHeight;
-		
+
+		float visYfloat = visY - GppTraceGraph.X_LEGEND_HEIGHT;
+
 		if (visYfloat < 0f)
 			visYfloat = 0f;
-		
+
 		gc.setForeground(ColorPalette.getColor(new RGB(100, 100, 100)));
 		gc.setBackground(ColorPalette.getColor(new RGB(255, 255, 255)));
-		
+
 		// write each next number if there is space
 		// float values will be slightly smaller than the actual result
 		// and they will be incremented by one, since rounding to int
 		// discards the remaining decimals
 		int percent = 100;
-		int previousBottom = 0;		// bottom of the previous legend drawn
-		for (float y = 0f; percent >= 0; y += visYfloat * 10000f / 100001f, percent -= 10)
-		{
+		int previousBottom = 0; // bottom of the previous legend drawn
+		for (float y = 0f; percent >= 0; y += visYfloat * 10000f / 100001f, percent -= 10) {
 			String legend = "" + percent + "%"; //$NON-NLS-1$ //$NON-NLS-2$
 			Point extent = gc.stringExtent(legend);
-			
-			gc.drawLine(GenericTraceGraph.yLegendWidth - 3, (int)y + 1, GenericTraceGraph.yLegendWidth, (int)y + 1);
 
-			if ((int)y >= previousBottom)
-			{
-				gc.drawString(legend, GenericTraceGraph.yLegendWidth - extent.x - 4, (int)y);
-				previousBottom = (int)y + extent.y;
+			gc.drawLine(IGenericTraceGraph.Y_LEGEND_WIDTH - 3, (int) y + 1,
+					IGenericTraceGraph.Y_LEGEND_WIDTH, (int) y + 1);
+
+			if ((int) y >= previousBottom) {
+				gc.drawString(legend, IGenericTraceGraph.Y_LEGEND_WIDTH
+						- extent.x - 4, (int) y);
+				previousBottom = (int) y + extent.y;
 			}
 		}
-		
+
 		if (localGC == null) {
 			gc.dispose();
 			figureCanvas.redraw();
 		}
 	}
-	
-	public void repaint()
-	{
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph#repaint()
+	 */
+	@Override
+	public void repaint() {
 		this.parentComponent.repaintComponent();
 	}
-	
-	public void drawBarsGpp(Vector<ProfiledGeneric> profiledGenerics, Graphics graphics, Object[] selection)
-	{
-		if (   this.updateCumulativeThreadTableIsNeeded
-			|| this.barGraphData == null)
-		{
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.nokia.carbide.cpp.pi.address.IGppTraceGraph#drawBarsGpp(java.util
+	 * .Vector, org.eclipse.draw2d.Graphics, java.lang.Object[])
+	 */
+	public void drawBarsGpp(Vector<ProfiledGeneric> profiledGenerics,
+			Graphics graphics, Object[] selection) {
+		if (this.updateCumulativeThreadTableIsNeeded
+				|| this.barGraphData == null) {
 			this.updateBarGraphData(profiledGenerics);
 		}
-		
+
 		this.updateIfNeeded(profiledGenerics);
-		
+
 		Enumeration<BarGraphData> barEnum = this.barGraphData.elements();
 
 		int drawX = -1;
 		int lastDrawX = -10;
 		double scale = this.getScale();
 		int y = this.getVisualSizeY() - 51;
-		org.eclipse.draw2d.geometry.Rectangle visibleArea = this.getVisibleArea(graphics);
+		org.eclipse.draw2d.geometry.Rectangle visibleArea = this
+				.getVisibleArea(graphics);
 
-		while(barEnum.hasMoreElements())
-		{
+		while (barEnum.hasMoreElements()) {
 			BarGraphData bgd = barEnum.nextElement();
-			drawX = (int)(((double)bgd.x) / scale);
-			
-			if (   drawX >= visibleArea.x
-				&& drawX < visibleArea.x + visibleArea.width )
-			{
+			drawX = (int) ((bgd.x) / scale);
+
+			if (drawX >= visibleArea.x
+					&& drawX < visibleArea.x + visibleArea.width) {
 				if (debug)
-					System.out.println(Messages.getString("GppTraceGraph.draw") + drawX + " " + scale + " " + bgd.x);    //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				if (drawX != lastDrawX)
-				{
+					System.out
+							.println(Messages.getString("GppTraceGraph.draw") + drawX + " " + scale + " " + bgd.x); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				if (drawX != lastDrawX) {
 					graphics.setForegroundColor(bgd.color);
 					graphics.drawLine(drawX, 0, drawX, y);
 					lastDrawX = drawX;
@@ -1319,985 +1561,577 @@ public class GppTraceGraph extends GenericTraceGraph implements ActionListener,
 		}
 	}
 
-	public void updateBarGraphData(Vector profiledGenerics)
-	{
+	/**
+	 * Updates this.barGraphData.
+	 * 
+	 * @param profiledGenerics
+	 *            Vector of either sortedThreads / sortedBinaries /
+	 *            sortedFunctions
+	 */
+	private void updateBarGraphData(Vector<ProfiledGeneric> profiledGenerics) {
 		if (this.barGraphData == null)
 			this.barGraphData = new Vector<BarGraphData>();
 		this.barGraphData.clear();
 
 		int x = 0;
-		
+
 		// find the first enabled profiled generic
 		int firstEnabled;
 		for (firstEnabled = 0; firstEnabled < profiledGenerics.size(); firstEnabled++)
-			if (((ProfiledGeneric)profiledGenerics.get(firstEnabled)).isEnabled(this.graphIndex))
+			if (((ProfiledGeneric) profiledGenerics.get(firstEnabled))
+					.isEnabled(this.graphIndex))
 				break;
-		
+
 		// return if there are no enabled profiled generics
 		if (firstEnabled == profiledGenerics.size())
 			return;
-		
-		int samplingInterval = (Integer) NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.address.samplingInterval"); //$NON-NLS-1$
-		Enumeration samples = ((GenericSampledTrace)this.getTrace()).getSamples();
-		while (samples.hasMoreElements())
-		{
-			GppSample gs = (GppSample)samples.nextElement();
-			
-			// for each of the tens of thousands of samples, loop through each of the
-			// perhaps thousands of functions, hundreds of binaries, or tens of threads
-			for (int i = firstEnabled; i < profiledGenerics.size(); i++)
-			{
+
+		int samplingInterval = (Integer) NpiInstanceRepository.getInstance()
+				.activeUidGetPersistState(
+						"com.nokia.carbide.cpp.pi.address.samplingInterval"); //$NON-NLS-1$
+		for (GppSample gs : ((GppTrace) this
+				.getTrace()).getSortedGppSamples()) {
+			if (!sampleInChart(gs)) {
+				continue;
+			}
+
+			// for each of the tens of thousands of samples, loop through each
+			// of the
+			// perhaps thousands of functions, hundreds of binaries, or tens of
+			// threads
+			// CH: the following is inefficient and needs refactoring (GppTrace
+			// has a Vector<ProfiledThread> profiledThreads etc. which are
+			// already sorted by index)
+			for (int i = firstEnabled; i < profiledGenerics.size(); i++) {
 				// find the next enabled profiled generic, if any
-				while (   (i < profiledGenerics.size()
-					   && !((ProfiledGeneric)profiledGenerics.get(i)).isEnabled(this.graphIndex)))
+				while ((i < profiledGenerics.size() && !((ProfiledGeneric) profiledGenerics
+						.get(i)).isEnabled(this.graphIndex)))
 					i++;
 				if (i >= profiledGenerics.size())
 					break;
 
-				ProfiledGeneric pg = (ProfiledGeneric)profiledGenerics.get(i);
+				ProfiledGeneric pg = (ProfiledGeneric) profiledGenerics.get(i);
 
-				if (   ((pg instanceof ProfiledThread)   && (pg.getIndex() == gs.threadIndex))
-				    || ((pg instanceof ProfiledBinary)   && (pg.getIndex() == gs.binaryIndex))
-				    || ((pg instanceof ProfiledFunction) && (pg.getIndex() == gs.functionIndex))) {
+				if (((pg instanceof ProfiledThread) && (pg.getIndex() == gs.threadIndex))
+						|| ((pg instanceof ProfiledBinary) && (pg.getIndex() == gs.binaryIndex))
+						|| ((pg instanceof ProfiledFunction) && (pg.getIndex() == gs.functionIndex))) {
 					BarGraphData bgd = new BarGraphData();
 					bgd.color = pg.getColor();
-					bgd.x = x;
+					//bgd.x = x;
+					bgd.x = (int)gs.sampleSynchTime;
 					this.barGraphData.add(bgd);
 					break;
 				}
 			}
 			x += samplingInterval;
+			
 		}
-	}	
 
-	public void refreshDataFromTrace()
-	{
-		refreshDataFromTrace((GppTrace)this.getTrace());
-
-	    if (this.vPanel != null)
-		{
-			this.vPanel.refreshCumulativeThreadTable();
-		}
 	}
 
-	public static void refreshDataFromTrace(GppTrace gppTrace)
-	{
-		Enumeration enumer = gppTrace.getSamples();
-		
-		int granularityValue = gppTrace.samples.size() > GppTraceGraph.granularityValue ? GppTraceGraph.granularityValue : gppTrace.samples.size();  
-
-		Hashtable<String,ProfiledGeneric> profiledThreads   = new Hashtable<String,ProfiledGeneric>();
-		Hashtable<String,ProfiledGeneric> profiledBinaries  = new Hashtable<String,ProfiledGeneric>();
-		Hashtable<String,ProfiledGeneric> profiledFunctions = new Hashtable<String,ProfiledGeneric>();
-		
-		Hashtable<ProfiledGeneric,Integer> threadPercentages   = new Hashtable<ProfiledGeneric,Integer>();
-		Hashtable<ProfiledGeneric,Integer> binaryPercentages   = new Hashtable<ProfiledGeneric,Integer>();
-		Hashtable<ProfiledGeneric,Integer> functionPercentages = new Hashtable<ProfiledGeneric,Integer>();
-		
-		int threadCount = 0;
-		int binaryCount = 0;
-		int functionCount = 0;
-		int count = 0;
-		int timeStamp = 0;
-		int stepValue = granularityValue;
-		char threadSymbol = 'A';
-		int samplingInterval = (Integer) NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.address.samplingInterval"); //$NON-NLS-1$
-
-		Vector<ProfiledGeneric> sortedProfiledThreads   = gppTrace.getSortedThreads();
-		Vector<ProfiledGeneric> sortedProfiledBinaries  = gppTrace.getSortedBinaries();
-		Vector<ProfiledGeneric> sortedProfiledFunctions = gppTrace.getSortedFunctions();
-
-		Vector<ProfiledGeneric> unsortedProfiledThreads   = gppTrace.getIndexedThreads();
-		Vector<ProfiledGeneric> unsortedProfiledBinaries  = gppTrace.getIndexedBinaries();
-		Vector<ProfiledGeneric> unsortedProfiledFunctions = gppTrace.getIndexedFunctions();
-		
-		// reset these list so we can call refreshDataFromTrace mulitple times (e.g. import) while keeping size consistent
-		sortedProfiledThreads.clear();
-		sortedProfiledBinaries.clear();
-		sortedProfiledFunctions.clear();
-
-		unsortedProfiledThreads.clear();
-		unsortedProfiledBinaries.clear();
-		unsortedProfiledFunctions.clear();
-
-		boolean exit = false;
-		while (exit == false)
-		{
-			exit = !enumer.hasMoreElements();
-			if (exit == true) 
-			{
-				// for the final samples, modify the step value
-				// so that they will also be included
-				// now there are no new samples, so proceed directly to
-				// adding the final values to the percent list
-				stepValue = count;
-			}
-			else
-			{
-				count++;
-				
-				// there is at least one new sample in the enumeration, so resolve it 
-				GppSample sample = (GppSample)enumer.nextElement();
-				String threadName   = sample.thread.process.name + "::" + sample.thread.threadName + "_" + sample.thread.threadId;   //$NON-NLS-1$ //$NON-NLS-2$
-				String binaryName   = getBinaryName(sample);
-				String functionName = getFunctionName(sample);
-
-				ProfiledThread   pThread = null;
-				ProfiledBinary   pBinary = null;
-				ProfiledFunction pFunction = null;
-				
-				// handle new thread names
-				if (profiledThreads.containsKey(threadName))
-				{
-					pThread = (ProfiledThread)profiledThreads.get(threadName);
-					if (pThread.getThreadId() != sample.thread.threadId.intValue())
-					{
-						// this was not the same thread, even though the
-						// name was the same
-						pThread = null;
-					}
-				}
-			
-				if (pThread == null)
-				{
-					pThread = new ProfiledThread();
-					
-					pThread.setIndex(threadCount++);
-					pThread.setNameValues(threadSymbol++, threadName);
-					pThread.setColor(gppTrace.getThreadColorPalette().getColor(threadName));
-					
-					pThread.setThreadId(sample.thread.threadId.intValue());
-					
-					pThread.setActivityMarkCount((gppTrace.samples.size() + granularityValue) / granularityValue + 1);
-					for (int i = 0; i < timeStamp + stepValue * samplingInterval; i += stepValue * samplingInterval)
-					{
-						pThread.zeroActivityMarkValues(i);
-					}
-					profiledThreads.put(threadName, pThread);
-					sortedProfiledThreads.add((ProfiledGeneric)pThread);			
-					unsortedProfiledThreads.add((ProfiledGeneric)pThread);			
-				}
-				
-				pThread.incTotalSampleCount();
-				sample.threadIndex = pThread.getIndex();
-
-				if (threadPercentages.containsKey(pThread))
-				{
-					Integer value = (Integer)threadPercentages.get(pThread);
-					value = new Integer(value.intValue()+1);
-					threadPercentages.remove(pThread);
-					threadPercentages.put(pThread, value);
-				}
-				else
-				{
-					threadPercentages.put(pThread, new Integer(1));
-				}
-				
-				// handle new binary names
-				if (profiledBinaries.containsKey(binaryName))
-				{
-					pBinary = (ProfiledBinary)profiledBinaries.get(binaryName);
-				}
-			
-				if (pBinary == null)
-				{
-					pBinary = new ProfiledBinary();
-
-					pBinary.setIndex(binaryCount++);
-					pBinary.setNameString(binaryName);
-					pBinary.setColor(gppTrace.getBinaryColorPalette().getColor(binaryName));
-					
-					pBinary.setActivityMarkCount((gppTrace.samples.size() + granularityValue) / granularityValue + 1);
-					for (int i = 0; i < timeStamp + stepValue * samplingInterval; i += stepValue * samplingInterval)
-					{
-						pBinary.zeroActivityMarkValues(i);
-					}
-					profiledBinaries.put(binaryName,pBinary);
-					sortedProfiledBinaries.add((ProfiledGeneric)pBinary);			
-					unsortedProfiledBinaries.add((ProfiledGeneric)pBinary);			
-				}
-				
-				pBinary.incTotalSampleCount();
-				sample.binaryIndex = pBinary.getIndex();
-
-				if (binaryPercentages.containsKey(pBinary))
-				{
-					Integer value = (Integer)binaryPercentages.get(pBinary);
-					value = new Integer(value.intValue()+1);
-					binaryPercentages.remove(pBinary);
-					binaryPercentages.put(pBinary,value);
-				}
-				else
-				{
-					binaryPercentages.put(pBinary, new Integer(1));
-				}														
-				
-				// handle new function names
-				if (profiledFunctions.containsKey(functionName))
-				{
-					pFunction = (ProfiledFunction)profiledFunctions.get(functionName);
-				}
-			
-				if (pFunction == null)
-				{
-					pFunction = new ProfiledFunction();
-
-					pFunction.setIndex(functionCount++);
-					pFunction.setNameString(functionName);
-					pFunction.setFunctionAddress(getFunctionAddress(sample));
-					pFunction.setFunctionBinaryName(binaryName);
-					pFunction.setColor(gppTrace.getFunctionColorPalette().getColor(functionName));
-					
-					pFunction.setActivityMarkCount((gppTrace.samples.size() + granularityValue) / granularityValue + 1);
-					for (int i = 0; i < timeStamp + stepValue * samplingInterval; i += stepValue * samplingInterval)
-					{
-						pFunction.zeroActivityMarkValues(i);
-					}
-					profiledFunctions.put(functionName,pFunction);
-					sortedProfiledFunctions.add((ProfiledGeneric)pFunction);			
-					unsortedProfiledFunctions.add((ProfiledGeneric)pFunction);			
-				}
-
-				pFunction.incTotalSampleCount();
-				sample.functionIndex = pFunction.getIndex();
-
-				if (functionPercentages.containsKey(pFunction))
-				{
-					Integer value = (Integer)functionPercentages.get(pFunction);
-					value = new Integer(value.intValue()+1);
-					functionPercentages.remove(pFunction);
-					functionPercentages.put(pFunction,value);
-				}
-				else
-				{
-					functionPercentages.put(pFunction, new Integer(1));
-				}														
-			}
-			
-			// for each stepValue (or final values) samples
-			// add the data to the profiled threads, binaries, functions
-			if (stepValue != 0 && count == stepValue)
-			{
-				Vector<ProfiledGeneric> tmpVector;
-				
-				tmpVector = new Vector<ProfiledGeneric>(profiledThreads.values());
-				Enumeration<ProfiledGeneric> ptEnum = tmpVector.elements();
-				while (ptEnum.hasMoreElements())
-				{
-					ProfiledThread updatePt = (ProfiledThread)ptEnum.nextElement();
-					if (threadPercentages.containsKey(updatePt))
-					{
-						int samples = ((Integer)(threadPercentages.get(updatePt))).intValue();
-						int finalPerc = (samples * 100) / stepValue;
-						updatePt.addActivityMarkValues(timeStamp + stepValue * samplingInterval, finalPerc, samples);
-					}
-					else
-					{
-						updatePt.zeroActivityMarkValues(timeStamp + stepValue * samplingInterval);
-					}					
-				}
-				
-				tmpVector = new Vector<ProfiledGeneric>(profiledBinaries.values());
-				Enumeration<ProfiledGeneric> pbEnum = tmpVector.elements();
-				while (pbEnum.hasMoreElements())
-				{
-					ProfiledBinary updatePb = (ProfiledBinary)pbEnum.nextElement();
-					if (binaryPercentages.containsKey(updatePb))
-					{
-						int samples = ((Integer)(binaryPercentages.get(updatePb))).intValue();
-						int finalPerc = (samples * 100) / stepValue;
-						updatePb.addActivityMarkValues(timeStamp + stepValue * samplingInterval, finalPerc, samples);
-					}
-					else
-					{
-						updatePb.zeroActivityMarkValues(timeStamp + stepValue * samplingInterval);
-					}					
-				}
-				
-				tmpVector = new Vector<ProfiledGeneric>(profiledFunctions.values());
-				Enumeration<ProfiledGeneric> pfEnum = tmpVector.elements();
-				while (pfEnum.hasMoreElements())
-				{
-					ProfiledFunction updatePf = (ProfiledFunction)pfEnum.nextElement();
-					if (functionPercentages.containsKey(updatePf))
-					{
-						int samples = ((Integer)(functionPercentages.get(updatePf))).intValue();
-						int finalPerc = (samples * 100) / stepValue;
-						updatePf.addActivityMarkValues(timeStamp + stepValue * samplingInterval, finalPerc, samples);
-					}
-					else
-					{
-						updatePf.zeroActivityMarkValues(timeStamp + stepValue * samplingInterval);
-					}					
-				}
-
-				threadPercentages.clear();
-				binaryPercentages.clear();
-				functionPercentages.clear();
-				count = 0;
-				timeStamp += stepValue * samplingInterval;
-			}
-		}
-		
-		// if there is no end point for a profiled element with samples, set the end to the last sample in the trace 
-		for (Enumeration<ProfiledGeneric> e = profiledThreads.elements(); e.hasMoreElements(); ) {
-			ProfiledGeneric pg = e.nextElement();
-			
-			if (pg.getRealLastSample() == -1 && pg.getTotalSampleCount() != 0)
-				pg.setLastSample(gppTrace.samples.size() * samplingInterval);
-		}
-
-		for (Enumeration<ProfiledGeneric> e = profiledBinaries.elements(); e.hasMoreElements(); ) {
-			ProfiledGeneric pg = e.nextElement();
-			
-			if (pg.getRealLastSample() == -1 && pg.getTotalSampleCount() != 0)
-				pg.setLastSample(gppTrace.samples.size() * samplingInterval);
-		}
-
-		for (Enumeration<ProfiledGeneric> e = profiledFunctions.elements(); e.hasMoreElements(); ) {
-			ProfiledGeneric pg = e.nextElement();
-			
-			if (pg.getRealLastSample() == -1 && pg.getTotalSampleCount() != 0)
-				pg.setLastSample(gppTrace.samples.size() * samplingInterval);
-		}
-
-		// sort the thread, binary, and function vectors by load
-		sortProfiledGenerics(profiledThreads, gppTrace);
-		sortProfiledGenerics(profiledBinaries, gppTrace);
-		sortProfiledGenerics(profiledFunctions, gppTrace);
-		
-		// the trace-level count arrays are initialized to 0
-		gppTrace.setThreadSampleCounts(new int[profiledThreads.size()]);
-		gppTrace.setBinarySampleCounts(new int[profiledBinaries.size()]);
-		gppTrace.setFunctionSampleCounts(new int[profiledFunctions.size()]);
-	}
-	
-	/*
-	 * Because a table to the left of a function table has changed, update
-	 * the function table.
-	 * If there is no table to the right of this one, redraw the graph based
-	 * on the changed data.
+	/**
+	 * Returns true if this sample is applicable to this chart. This method is
+	 * intended to be overridden, for example for SMP charts where samples
+	 * belong to the chart with the matching CPU number.
+	 * 
+	 * @param gs
+	 *            the sample to check
+	 * @return true, if sample belongs to chart, false otherwise
 	 */
-	public void refreshProfiledThreadData(int drawMode)
-	{
-		// Must have a table to its left
-	    if (   (drawMode != Defines.BINARIES_THREADS)
-	    	&& (drawMode != Defines.BINARIES_THREADS_FUNCTIONS)
-	    	&& (drawMode != Defines.BINARIES_FUNCTIONS_THREADS)
-	    	&& (drawMode != Defines.FUNCTIONS_THREADS)
-	    	&& (drawMode != Defines.FUNCTIONS_THREADS_BINARIES)
-	    	&& (drawMode != Defines.FUNCTIONS_BINARIES_THREADS)
-	    	)
-	    {
-	        System.out.println(Messages.getString("GppTraceGraph.wrongDrawMode"));  //$NON-NLS-1$
-	        return;
-	    }
-
-	    // boolean to use inside loops (should trust a compiler to optimize this out of the loop...)
-	    boolean basedOnBinaries = (drawMode == Defines.BINARIES_THREADS)
-	    					   || (drawMode == Defines.BINARIES_THREADS_FUNCTIONS)
-	    					   || (drawMode == Defines.FUNCTIONS_BINARIES_THREADS); 
-
-	    Hashtable<String,ProfiledThread> profiledThreads = new Hashtable<String,ProfiledThread>();
-		
-	    GenericSampledTrace trace = (GenericSampledTrace)this.getTrace();
-		int granularityValue = trace.samples.size() > GppTraceGraph.granularityValue ? GppTraceGraph.granularityValue : trace.samples.size();  
-		
-	    String[] selectedItems;
-		int[] selectedFunctionHashCodes = null;
-		int[] selectedBinaryHashCodes   = null;
-		int count = 0;
-		int timeStamp = 0;
-		int stepValue = granularityValue;
-		int samplingInterval = (Integer) NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.address.samplingInterval"); //$NON-NLS-1$
-		boolean exit = false;
-		
-		Hashtable<ProfiledThread,Integer> percentages = new Hashtable<ProfiledThread,Integer>();
-		PIVisualSharedData shared = this.getSharedDataInstance();
-		
-	    if (basedOnBinaries)
-		{
-		    selectedItems = shared.GPP_SelectedBinaryNames;
-		    if (selectedItems == null) 
-	        {
-		        selectedItems = new String[0];
-	        }
-		    int[] tmpHashCodes = new int[selectedItems.length];
-		    for (int i = 0; i < selectedItems.length; i++)
-		    {
-		        String tmp = selectedItems[i];
-		        tmpHashCodes[i] = tmp.hashCode();
-		    }
-		    selectedBinaryHashCodes = tmpHashCodes;
-		}
-		else
-		{
-		    selectedItems = shared.GPP_SelectedFunctionNames;
-		    if (selectedItems == null) 
-	        {
-		        selectedItems = new String[0];
-	        }
-		    int[] tmpHashCodes = new int[selectedItems.length];
-		    for (int i = 0; i < selectedItems.length; i++)
-		    {
-		        String tmp = selectedItems[i];
-		        tmpHashCodes[i] = tmp.hashCode();
-		    }
-		    selectedFunctionHashCodes = tmpHashCodes;
-		}
-		
-		for (Enumeration enumer = trace.getSamples(); !exit;)
-		{
-		    exit = !enumer.hasMoreElements();
-			if (exit)
-			{
-				// for the final samples, modify the step value
-				// so that they will also be included
-				// now there are no new samples, so proceed directly to
-				// adding the final values to the percent list
-				stepValue = count;
-			}
-			else
-			{
-			    count++;
-			    int compareValue = 0;
-			    boolean match = false;
-			    GppSample sample = (GppSample)enumer.nextElement();
-			    if (basedOnBinaries)
-				{
-				    compareValue = getBinaryName(sample).hashCode();
-				    for (int i = 0; i < selectedBinaryHashCodes.length; i++)
-				    {
-				        if (compareValue == selectedBinaryHashCodes[i])
-				        {
-				            match = true;
-				            break;
-				        }
-				    }
-				}
-			    else
-			    {
-				    compareValue = getFunctionName(sample).hashCode();
-				    for (int i = 0; i < selectedFunctionHashCodes.length; i++)
-				    {
-				        if (compareValue == selectedFunctionHashCodes[i])
-				        {
-				            match = true;
-				            break;
-				        }
-				    }
-			    }
-			    
-			    if (match)
-			    {
-			        ProfiledThread pt = null;
-			        String name = sample.thread.threadName;
-					if (profiledThreads.containsKey(name))
-					{
-						pt = (ProfiledThread)profiledThreads.get(name);
-					}
-				
-					if (pt == null)
-					{
-						pt = new ProfiledThread();
-					
-						pt.setNameString(name);
-						pt.setColor(((GppTrace)this.getTrace()).getThreadColorPalette().getColor(name));
-						pt.setThreadId(sample.thread.threadId.intValue());
-						
-						pt.setActivityMarkCount((trace.samples.size() + granularityValue) / granularityValue + 1);
-						for (int i = 0; i < timeStamp + stepValue * samplingInterval; i += stepValue * samplingInterval)
-						{
-							pt.zeroActivityMarkValues(i);
-						}
-						pt.setEnabled(this.graphIndex, true);
-						profiledThreads.put(name, pt);
-					}
-	
-					if (percentages.containsKey(pt))
-					{
-						Integer value = (Integer)percentages.get(pt);
-						value = new Integer(value.intValue()+1);
-						percentages.remove(pt);
-						percentages.put(pt,value);
-					}
-					else
-					{
-						percentages.put(pt,new Integer(1));
-					}
-			    }
-			}
-
-			if (stepValue != 0 && count == stepValue)
-			{	
-				Vector<ProfiledGeneric> v = new Vector<ProfiledGeneric>(profiledThreads.values());
-				Enumeration<ProfiledGeneric> pfEnum = v.elements();
-				while (pfEnum.hasMoreElements())
-				{
-					ProfiledThread updatePt = (ProfiledThread)pfEnum.nextElement();
-					if (percentages.containsKey(updatePt))
-					{
-						int samples = ((Integer)(percentages.get(updatePt))).intValue();
-						int finalPerc = (samples * 100) / stepValue;
-						updatePt.addActivityMarkValues(timeStamp + stepValue * samplingInterval, finalPerc, samples);
-					}
-					else
-					{
-						updatePt.zeroActivityMarkValues(timeStamp + stepValue * samplingInterval);
-					}					
-				}
-				
-				percentages.clear();
-				count = 0;
-				timeStamp += stepValue * samplingInterval;
-			}
-		}
-
-		this.threadTable.getTable().deselectAll();
-		this.threadTable.updateProfiledAndItemData(true);
-		this.threadTable.getTable().redraw();
-
-		// if this is not the last table, set the selected names to set up
-		// the next table
-	    if (   (drawMode == Defines.BINARIES_THREADS_FUNCTIONS)
-	    	|| (drawMode == Defines.FUNCTIONS_THREADS_BINARIES))
-	    {
-	    	this.threadTable.setSelectedNames();
-	    }
-	    else
-	    {
-	    	// This may not be needed needed
-			shared.GPP_SelectedThreadNames = new String[0];
-	    }
+	protected boolean sampleInChart(GppSample gs) {
+		return true;
 	}
 
-	/*
-	 * Because a table to the left of a binary table has changed, update
-	 * the binary table.
-	 * If there is no table to the right of this one, redraw the graph based
-	 * on the changed data.
-	 */
-	public void refreshProfiledBinaryData(int drawMode)
-	{
-		// Must have a table to its left
-	    if (   (drawMode != Defines.THREADS_BINARIES)
-	    	&& (drawMode != Defines.THREADS_BINARIES_FUNCTIONS)
-	    	&& (drawMode != Defines.THREADS_FUNCTIONS_BINARIES)
-	    	&& (drawMode != Defines.FUNCTIONS_BINARIES)
-	    	&& (drawMode != Defines.FUNCTIONS_BINARIES_THREADS)
-	    	&& (drawMode != Defines.FUNCTIONS_THREADS_BINARIES)
-	       )
-	    {
-	        System.out.println(Messages.getString("GppTraceGraph.wrongDrawMode"));  //$NON-NLS-1$
-	        return;
-	    }
+	// /*
+	// * Because a table to the left of a function table has changed, update
+	// * the function table.
+	// * If there is no table to the right of this one, redraw the graph based
+	// * on the changed data.
+	// */
+	// public void refreshProfiledThreadData(int drawMode)
+	// {
+	// // Must have a table to its left
+	// if ( (drawMode != Defines.BINARIES_THREADS)
+	// && (drawMode != Defines.BINARIES_THREADS_FUNCTIONS)
+	// && (drawMode != Defines.BINARIES_FUNCTIONS_THREADS)
+	// && (drawMode != Defines.FUNCTIONS_THREADS)
+	// && (drawMode != Defines.FUNCTIONS_THREADS_BINARIES)
+	// && (drawMode != Defines.FUNCTIONS_BINARIES_THREADS)
+	// )
+	// {
+	//	        System.out.println(Messages.getString("GppTraceGraph.wrongDrawMode"));  //$NON-NLS-1$
+	// return;
+	// }
+	//
+	// // boolean to use inside loops (should trust a compiler to optimize this
+	// out of the loop...)
+	// boolean basedOnBinaries = (drawMode == Defines.BINARIES_THREADS)
+	// || (drawMode == Defines.BINARIES_THREADS_FUNCTIONS)
+	// || (drawMode == Defines.FUNCTIONS_BINARIES_THREADS);
+	//
+	// Hashtable<String,ProfiledThread> profiledThreads = new
+	// Hashtable<String,ProfiledThread>();
+	//		
+	// GenericSampledTrace trace = (GenericSampledTrace)this.getTrace();
+	// int granularityValue = trace.samples.size() >
+	// GppTraceGraph.GRANULARITY_VALUE ? GppTraceGraph.GRANULARITY_VALUE :
+	// trace.samples.size();
+	//		
+	// String[] selectedItems;
+	// int[] selectedFunctionHashCodes = null;
+	// int[] selectedBinaryHashCodes = null;
+	// int count = 0;
+	// int timeStamp = 0;
+	// int stepValue = granularityValue;
+	//		int samplingInterval = (Integer) NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.address.samplingInterval"); //$NON-NLS-1$
+	// boolean exit = false;
+	//		
+	// Hashtable<ProfiledThread,Integer> percentages = new
+	// Hashtable<ProfiledThread,Integer>();
+	// PIVisualSharedData shared = this.getSharedDataInstance();
+	//		
+	// if (basedOnBinaries)
+	// {
+	// selectedItems = shared.GPP_SelectedBinaryNames;
+	// if (selectedItems == null)
+	// {
+	// selectedItems = new String[0];
+	// }
+	// int[] tmpHashCodes = new int[selectedItems.length];
+	// for (int i = 0; i < selectedItems.length; i++)
+	// {
+	// String tmp = selectedItems[i];
+	// tmpHashCodes[i] = tmp.hashCode();
+	// }
+	// selectedBinaryHashCodes = tmpHashCodes;
+	// }
+	// else
+	// {
+	// selectedItems = shared.GPP_SelectedFunctionNames;
+	// if (selectedItems == null)
+	// {
+	// selectedItems = new String[0];
+	// }
+	// int[] tmpHashCodes = new int[selectedItems.length];
+	// for (int i = 0; i < selectedItems.length; i++)
+	// {
+	// String tmp = selectedItems[i];
+	// tmpHashCodes[i] = tmp.hashCode();
+	// }
+	// selectedFunctionHashCodes = tmpHashCodes;
+	// }
+	//		
+	// for (Enumeration enumer = trace.getSamples(); !exit;)
+	// {
+	// exit = !enumer.hasMoreElements();
+	// if (exit)
+	// {
+	// // for the final samples, modify the step value
+	// // so that they will also be included
+	// // now there are no new samples, so proceed directly to
+	// // adding the final values to the percent list
+	// stepValue = count;
+	// }
+	// else
+	// {
+	// count++;
+	// int compareValue = 0;
+	// boolean match = false;
+	// GppSample sample = (GppSample)enumer.nextElement();
+	// if (basedOnBinaries)
+	// {
+	// compareValue = GppTraceGraphUtil.getBinaryName(sample).hashCode();
+	// for (int i = 0; i < selectedBinaryHashCodes.length; i++)
+	// {
+	// if (compareValue == selectedBinaryHashCodes[i])
+	// {
+	// match = true;
+	// break;
+	// }
+	// }
+	// }
+	// else
+	// {
+	// compareValue = GppTraceGraphUtil.getFunctionName(sample).hashCode();
+	// for (int i = 0; i < selectedFunctionHashCodes.length; i++)
+	// {
+	// if (compareValue == selectedFunctionHashCodes[i])
+	// {
+	// match = true;
+	// break;
+	// }
+	// }
+	// }
+	//			    
+	// if (match)
+	// {
+	// ProfiledThread pt = null;
+	// String name = sample.thread.threadName;
+	// if (profiledThreads.containsKey(name))
+	// {
+	// pt = profiledThreads.get(name);
+	// }
+	//				
+	// if (pt == null)
+	// {
+	// pt = new ProfiledThread();
+	//					
+	// pt.setNameString(name);
+	// pt.setColor(((GppTrace)this.getTrace()).getThreadColorPalette().getColor(name));
+	// pt.setThreadId(sample.thread.threadId.intValue());
+	//						
+	// pt.setActivityMarkCount((trace.samples.size() + granularityValue) /
+	// granularityValue + 1);
+	// for (int i = 0; i < timeStamp + stepValue * samplingInterval; i +=
+	// stepValue * samplingInterval)
+	// {
+	// pt.zeroActivityMarkValues(i);
+	// }
+	// pt.setEnabled(this.graphIndex, true);
+	// profiledThreads.put(name, pt);
+	// }
+	//	
+	// if (percentages.containsKey(pt))
+	// {
+	// Integer value = percentages.get(pt);
+	// value = Integer.valueOf(value.intValue()+1);
+	// percentages.remove(pt);
+	// percentages.put(pt,value);
+	// }
+	// else
+	// {
+	// percentages.put(pt,Integer.valueOf(1));
+	// }
+	// }
+	// }
+	//
+	// if (stepValue != 0 && count == stepValue)
+	// {
+	// Vector<ProfiledGeneric> v = new
+	// Vector<ProfiledGeneric>(profiledThreads.values());
+	// Enumeration<ProfiledGeneric> pfEnum = v.elements();
+	// while (pfEnum.hasMoreElements())
+	// {
+	// ProfiledThread updatePt = (ProfiledThread)pfEnum.nextElement();
+	// if (percentages.containsKey(updatePt))
+	// {
+	// int samples = ((percentages.get(updatePt))).intValue();
+	// int finalPerc = (samples * 100) / stepValue;
+	// updatePt.addActivityMarkValues(timeStamp + stepValue * samplingInterval,
+	// finalPerc, samples);
+	// }
+	// else
+	// {
+	// updatePt.zeroActivityMarkValues(timeStamp + stepValue *
+	// samplingInterval);
+	// }
+	// }
+	//				
+	// percentages.clear();
+	// count = 0;
+	// timeStamp += stepValue * samplingInterval;
+	// }
+	// }
+	//
+	// this.threadTable.getTable().deselectAll();
+	// this.threadTable.updateProfiledAndItemData(true);
+	// this.threadTable.getTable().redraw();
+	//
+	// // if this is not the last table, set the selected names to set up
+	// // the next table
+	// if ( (drawMode == Defines.BINARIES_THREADS_FUNCTIONS)
+	// || (drawMode == Defines.FUNCTIONS_THREADS_BINARIES))
+	// {
+	// this.threadTable.setSelectedNames();
+	// }
+	// else
+	// {
+	// // This may not be needed needed
+	// shared.GPP_SelectedThreadNames = new String[0];
+	// }
+	// }
+	//
+	// /*
+	// * Because a table to the left of a binary table has changed, update
+	// * the binary table.
+	// * If there is no table to the right of this one, redraw the graph based
+	// * on the changed data.
+	// */
+	// public void refreshProfiledBinaryData(int drawMode)
+	// {
+	// // Must have a table to its left
+	// if ( (drawMode != Defines.THREADS_BINARIES)
+	// && (drawMode != Defines.THREADS_BINARIES_FUNCTIONS)
+	// && (drawMode != Defines.THREADS_FUNCTIONS_BINARIES)
+	// && (drawMode != Defines.FUNCTIONS_BINARIES)
+	// && (drawMode != Defines.FUNCTIONS_BINARIES_THREADS)
+	// && (drawMode != Defines.FUNCTIONS_THREADS_BINARIES)
+	// )
+	// {
+	//	        System.out.println(Messages.getString("GppTraceGraph.wrongDrawMode"));  //$NON-NLS-1$
+	// return;
+	// }
+	//
+	// // boolean to use inside loops (never trust a compiler...)
+	// boolean basedOnThreads = (drawMode == Defines.THREADS_BINARIES)
+	// || (drawMode == Defines.THREADS_BINARIES_FUNCTIONS)
+	// || (drawMode == Defines.FUNCTIONS_THREADS_BINARIES);
+	//
+	// Hashtable<String,ProfiledBinary> profiledBinaries = new
+	// Hashtable<String,ProfiledBinary>();
+	//		
+	// GenericSampledTrace trace = (GenericSampledTrace)this.getTrace();
+	// int granularityValue = trace.samples.size() >
+	// GppTraceGraph.GRANULARITY_VALUE ? GppTraceGraph.GRANULARITY_VALUE :
+	// trace.samples.size();
+	//
+	// String[] selectedItems;
+	// int[] selectedThreadIds = null;
+	// int[] selectedFunctionHashCodes = null;
+	// int count = 0;
+	// int timeStamp = 0;
+	// int stepValue = granularityValue;
+	//		int samplingInterval = (Integer) NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.address.samplingInterval"); //$NON-NLS-1$
+	// boolean exit = false;
+	//		
+	// Hashtable<ProfiledBinary,Integer> percentages = new
+	// Hashtable<ProfiledBinary,Integer>();
+	// PIVisualSharedData shared = this.getSharedDataInstance();
+	//		
+	// if (basedOnThreads)
+	// {
+	// selectedItems = shared.GPP_SelectedThreadNames;
+	// if (selectedItems == null)
+	// {
+	// selectedItems = new String[0];
+	// }
+	// int[] tmpThreadIds = new int[selectedItems.length];
+	// for (int i = 0; i < selectedItems.length; i++)
+	// {
+	// String tmp = selectedItems[i].substring(selectedItems[i].lastIndexOf('_')
+	// + 1,
+	// selectedItems[i].length());
+	// tmpThreadIds[i] = Integer.parseInt(tmp);
+	// }
+	// selectedThreadIds = tmpThreadIds;
+	// }
+	// else
+	// {
+	// selectedItems = shared.GPP_SelectedFunctionNames;
+	// if (selectedItems == null)
+	// {
+	// selectedItems = new String[0];
+	// }
+	// int[] tmpHashCodes = new int[selectedItems.length];
+	// for (int i = 0; i < selectedItems.length; i++)
+	// {
+	// String tmp = selectedItems[i];
+	// tmpHashCodes[i] = tmp.hashCode();
+	// }
+	// selectedFunctionHashCodes = tmpHashCodes;
+	// }
+	//		
+	// for (Enumeration enumer = trace.getSamples(); !exit;)
+	// {
+	// exit = !enumer.hasMoreElements();
+	// if (exit)
+	// {
+	// // for the final samples, modify the step value
+	// // so that they will also be included
+	// // now there are no new samples, so proceed directly to
+	// // adding the final values to the percent list
+	// stepValue = count;
+	// }
+	// else
+	// {
+	// count++;
+	// int compareValue = 0;
+	// boolean match = false;
+	// GppSample sample = (GppSample)enumer.nextElement();
+	// if (basedOnThreads)
+	// {
+	// compareValue = sample.thread.threadId.intValue();
+	// for (int i = 0; i < selectedThreadIds.length; i++)
+	// {
+	// if (compareValue == selectedThreadIds[i])
+	// {
+	// match = true;
+	// break;
+	// }
+	// }
+	// }
+	// else
+	// {
+	// compareValue = GppTraceGraphUtil.getFunctionName(sample).hashCode();
+	// for (int i = 0; i < selectedFunctionHashCodes.length; i++)
+	// {
+	// if (compareValue == selectedFunctionHashCodes[i])
+	// {
+	// match = true;
+	// break;
+	// }
+	// }
+	// }
+	//			    
+	// if (match)
+	// {
+	// ProfiledBinary pb = null;
+	// String name = GppTraceGraphUtil.getFunctionName(sample);
+	// if (profiledBinaries.containsKey(name))
+	// {
+	// pb = profiledBinaries.get(name);
+	// }
+	//				
+	// if (pb == null)
+	// {
+	// pb = new ProfiledBinary();
+	//						
+	// pb.setNameString(name);
+	// pb.setColor(((GppTrace)this.getTrace()).getBinaryColorPalette().getColor(name));
+	//						
+	// pb.setActivityMarkCount((trace.samples.size() + granularityValue) /
+	// granularityValue + 1);
+	// for (int i = 0; i < timeStamp + stepValue * samplingInterval; i +=
+	// stepValue * samplingInterval)
+	// {
+	// pb.zeroActivityMarkValues(i);
+	// }
+	// profiledBinaries.put(name, pb);
+	// }
+	//	
+	// if (percentages.containsKey(pb))
+	// {
+	// Integer value = percentages.get(pb);
+	// value = Integer.valueOf(value.intValue()+1);
+	// percentages.remove(pb);
+	// percentages.put(pb,value);
+	// }
+	// else
+	// {
+	// percentages.put(pb,Integer.valueOf(1));
+	// }
+	// }
+	// }
+	//
+	// if (stepValue != 0 && count == stepValue)
+	// {
+	// Vector<ProfiledGeneric> v = new
+	// Vector<ProfiledGeneric>(profiledBinaries.values());
+	// Enumeration<ProfiledGeneric> pfEnum = v.elements();
+	// while (pfEnum.hasMoreElements())
+	// {
+	// ProfiledFunction updatePf = (ProfiledFunction)pfEnum.nextElement();
+	// if (percentages.containsKey(updatePf))
+	// {
+	// int samples = ((percentages.get(updatePf))).intValue();
+	// int finalPerc = (samples * 100) / stepValue;
+	// updatePf.addActivityMarkValues(timeStamp + stepValue * samplingInterval,
+	// finalPerc, samples);
+	// }
+	// else
+	// {
+	// updatePf.zeroActivityMarkValues(timeStamp + stepValue *
+	// samplingInterval);
+	// }
+	// }
+	//				
+	// percentages.clear();
+	// count = 0;
+	// timeStamp += stepValue * samplingInterval;
+	// }
+	// }
+	//
+	// this.binaryTable.getTable().deselectAll();
+	// this.binaryTable.updateProfiledAndItemData(true);
+	// this.binaryTable.getTable().redraw();
+	//
+	// // if this is not the last table, set the selected names to set up
+	// // the next table
+	// if ( (drawMode == Defines.THREADS_BINARIES_FUNCTIONS)
+	// || (drawMode == Defines.FUNCTIONS_BINARIES_THREADS))
+	// {
+	// this.binaryTable.setSelectedNames();
+	// }
+	// else
+	// {
+	// // This may not be needed
+	// shared.GPP_SelectedBinaryNames = new String[0];
+	// }
+	// }
 
-	    // boolean to use inside loops (never trust a compiler...)
-	    boolean basedOnThreads = (drawMode == Defines.THREADS_BINARIES)
-	    					  || (drawMode == Defines.THREADS_BINARIES_FUNCTIONS)
-	    					  || (drawMode == Defines.FUNCTIONS_THREADS_BINARIES); 
+	// public void updateGraph()
+	// {
+	// if (drawMode == Defines.BINARIES)
+	// {
+	// vPanel.refreshCumulativeThreadTable();
+	// }
+	// else if (drawMode == Defines.THREADS)
+	// {
+	// vPanel.refreshCumulativeThreadTable();
+	// }
+	//
+	// this.repaint();
+	// }
 
-	    Hashtable<String,ProfiledBinary> profiledBinaries = new Hashtable<String,ProfiledBinary>();
-		
-	    GenericSampledTrace trace = (GenericSampledTrace)this.getTrace();
-		int granularityValue = trace.samples.size() > GppTraceGraph.granularityValue ? GppTraceGraph.granularityValue : trace.samples.size();  
-
-		String[] selectedItems;
-		int[] selectedThreadIds = null;
-		int[] selectedFunctionHashCodes = null;
-		int count = 0;
-		int timeStamp = 0;
-		int stepValue = granularityValue;
-		int samplingInterval = (Integer) NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.address.samplingInterval"); //$NON-NLS-1$
-		boolean exit = false;
-		
-		Hashtable<ProfiledBinary,Integer> percentages = new Hashtable<ProfiledBinary,Integer>();
-		PIVisualSharedData shared = this.getSharedDataInstance();
-		
-	    if (basedOnThreads)
-	    {
-	    	selectedItems = shared.GPP_SelectedThreadNames;
-		    if (selectedItems == null)
-		    {
-		        selectedItems = new String[0];
-		    }
-		    int[] tmpThreadIds = new int[selectedItems.length];
-		    for (int i = 0; i < selectedItems.length; i++)
-		    {
-		        String tmp = selectedItems[i].substring(selectedItems[i].lastIndexOf('_') + 1,
-		                selectedItems[i].length());
-		        tmpThreadIds[i] = Integer.parseInt(tmp);
-		    }
-		    selectedThreadIds = tmpThreadIds;
-		}
-		else
-		{
-		    selectedItems = shared.GPP_SelectedFunctionNames;
-		    if (selectedItems == null) 
-	        {
-		        selectedItems = new String[0];
-	        }
-		    int[] tmpHashCodes = new int[selectedItems.length];
-		    for (int i = 0; i < selectedItems.length; i++)
-		    {
-		        String tmp = selectedItems[i];
-		        tmpHashCodes[i] = tmp.hashCode();
-		    }
-		    selectedFunctionHashCodes = tmpHashCodes;
-		}
-		
-		for (Enumeration enumer = trace.getSamples(); !exit;)
-		{
-		    exit = !enumer.hasMoreElements();
-			if (exit) 
-			{
-				// for the final samples, modify the step value
-				// so that they will also be included
-				// now there are no new samples, so proceed directly to
-				// adding the final values to the percent list
-				stepValue = count;
-			}
-			else
-			{
-			    count++;
-			    int compareValue = 0;
-			    boolean match = false;
-			    GppSample sample = (GppSample)enumer.nextElement();
-			    if (basedOnThreads)
-			    {
-				    compareValue = sample.thread.threadId.intValue();
-				    for (int i = 0; i < selectedThreadIds.length; i++)
-				    {
-				        if (compareValue == selectedThreadIds[i])
-				        {
-				            match = true;
-				            break;
-				        }
-				    }
-			    }
-				else
-				{
-				    compareValue = getFunctionName(sample).hashCode();
-				    for (int i = 0; i < selectedFunctionHashCodes.length; i++)
-				    {
-				        if (compareValue == selectedFunctionHashCodes[i])
-				        {
-				            match = true;
-				            break;
-				        }
-				    }
-				}
-			    
-			    if (match)
-			    {
-			        ProfiledBinary pb = null;
-			        String name = getFunctionName(sample);
-					if (profiledBinaries.containsKey(name))
-					{
-						pb = (ProfiledBinary)profiledBinaries.get(name);
-					}
-				
-					if (pb == null)
-					{
-						pb = new ProfiledBinary();
-						
-						pb.setNameString(name);
-						pb.setColor(((GppTrace)this.getTrace()).getBinaryColorPalette().getColor(name));
-						
-						pb.setActivityMarkCount((trace.samples.size() + granularityValue) / granularityValue + 1);
-						for (int i = 0; i < timeStamp + stepValue * samplingInterval; i += stepValue * samplingInterval)
-						{
-							pb.zeroActivityMarkValues(i);
-						}
-						profiledBinaries.put(name, pb);
-					}
-	
-					if (percentages.containsKey(pb))
-					{
-						Integer value = (Integer)percentages.get(pb);
-						value = new Integer(value.intValue()+1);
-						percentages.remove(pb);
-						percentages.put(pb,value);
-					}
-					else
-					{
-						percentages.put(pb,new Integer(1));
-					}
-			    }
-			}
-
-			if (stepValue != 0 && count == stepValue)
-			{	
-				Vector<ProfiledGeneric> v = new Vector<ProfiledGeneric>(profiledBinaries.values());
-				Enumeration<ProfiledGeneric> pfEnum = v.elements();
-				while (pfEnum.hasMoreElements())
-				{
-					ProfiledFunction updatePf = (ProfiledFunction)pfEnum.nextElement();
-					if (percentages.containsKey(updatePf))
-					{
-						int samples = ((Integer)(percentages.get(updatePf))).intValue();
-						int finalPerc = (samples * 100) / stepValue;
-						updatePf.addActivityMarkValues(timeStamp + stepValue * samplingInterval, finalPerc, samples);
-					}
-					else
-					{
-						updatePf.zeroActivityMarkValues(timeStamp + stepValue * samplingInterval);
-					}					
-				}
-				
-				percentages.clear();
-				count = 0;
-				timeStamp += stepValue * samplingInterval;
-			}
-		}
-
-		this.binaryTable.getTable().deselectAll();
-		this.binaryTable.updateProfiledAndItemData(true);
-		this.binaryTable.getTable().redraw();
-
-		// if this is not the last table, set the selected names to set up
-		// the next table
-	    if (   (drawMode == Defines.THREADS_BINARIES_FUNCTIONS)
-	    	|| (drawMode == Defines.FUNCTIONS_BINARIES_THREADS))
-	    {
-	    	this.binaryTable.setSelectedNames();
-	    }
-	    else
-	    {
-	    	// This may not be needed
-			shared.GPP_SelectedBinaryNames = new String[0];
-	    }
-	}
-	
-	// sort profiled generics by decreasing total sample count
-	private static void sortProfiledGenerics(Hashtable<String,ProfiledGeneric> prof, GppTrace gppTrace)
-	{
-		// use an insertion sort to create a sorted linked list
-		// from the hashtable values
-		Collection<ProfiledGeneric> values = prof.values();
-		Vector<ProfiledGeneric> unsorted =   new Vector<ProfiledGeneric>(values);
-		LinkedList<ProfiledGeneric> sorted = new LinkedList<ProfiledGeneric>();
-
-		Enumeration<ProfiledGeneric> prEnum = unsorted.elements();
-		while (prEnum.hasMoreElements())
-		{
-			ProfiledGeneric pg = prEnum.nextElement();
-			if (sorted.size() == 0)
-			{
-				sorted.addFirst(pg);
-			}
-			else 
-			{
-				Iterator i = sorted.iterator();
-				boolean ok = false;
-				while (i.hasNext())
-				{
-					ProfiledGeneric next = (ProfiledGeneric)i.next();
-					if (next.getTotalSampleCount() < pg.getTotalSampleCount())
-					{
-						sorted.add(sorted.indexOf(next), pg);
-						ok = true;
-						break;
-					}
-				}
-				if (!ok)
-					sorted.addLast(pg);
-			}
-		}
-		
-		// Add the sorted data 
-		Iterator<ProfiledGeneric> iterator = sorted.iterator();
-		if (sorted.size() > 0)
-		{
-			Vector<ProfiledGeneric> v = null;
-			if (sorted.get(0) instanceof ProfiledThread)
-			{
-				v = gppTrace.getSortedThreads();
-			}
-			else if (sorted.get(0) instanceof ProfiledBinary)
-			{
-				v = gppTrace.getSortedBinaries();
-			}
-			else if (sorted.get(0) instanceof ProfiledFunction)
-			{
-				v = gppTrace.getSortedFunctions();
-			}
-			if (v != null)
-			{
-				v.clear();
-				while (iterator.hasNext())
-					v.add(0, iterator.next());
-			}
-		}
-	}
-	
-	public void updateGraph()
-	{
-	    if (drawMode == Defines.BINARIES)
-	    {
-	        vPanel.refreshCumulativeThreadTable();
-	    }
-	    else if (drawMode == Defines.THREADS)
-	    {
-	        vPanel.refreshCumulativeThreadTable();
-	    }
-
-		this.repaint();
-	}
-	
-	public void updateThreadTablePriorities(Hashtable<Integer,String> priorities)
-	{
+	public void updateThreadTablePriorities(
+			Hashtable<Integer, String> priorities) {
 		this.threadTable.addPriorityColumn(priorities);
 	}
-	
-	static private String stringNotFound = Messages.getString("GppTraceGraph.notFound");  //$NON-NLS-1$
 
-	static private String stringBinaryAt         = Messages.getString("GppTraceGraph.binaryAt");  //$NON-NLS-1$
-	static private String stringBinaryForAddress = Messages.getString("GppTraceGraph.binaryForAddress");  //$NON-NLS-1$
-	static private String stringBinaryNotFound   = Messages.getString("GppTraceGraph.binaryNotFound");  //$NON-NLS-1$
-
-	static private String stringFunctionAt         = Messages.getString("GppTraceGraph.functionAt"); //$NON-NLS-1$
-	static private String stringFunctionForAddress = Messages.getString("GppTraceGraph.functionForAddress"); //$NON-NLS-1$
-	static private String stringFunctionNotFound   = Messages.getString("GppTraceGraph.functionNotFound"); //$NON-NLS-1$
-	
-	public static String getBinaryName(GppSample s)
-	{
-	    String name = null;
-	    
-	    if (s.currentFunctionSym != null)
-	    	name = s.currentFunctionSym.functionBinary.binaryName;
-
-        if (   (s.currentFunctionItt != null)
-           	&& ((name == null) || name.endsWith(stringNotFound)))
-        {
-            name = s.currentFunctionItt.functionBinary.binaryName;
-        }
-	    
-	    if (   name == null
-	    	|| name.startsWith(stringBinaryAt)
-	    	|| name.startsWith(stringBinaryForAddress))
-	    {
-	        name = stringBinaryNotFound;
-	    }
-	    return name;
-	}
-	
-	public static String getFunctionName(GppSample s)
-	{
-	    String name = null;
-	    if (s.currentFunctionSym != null)
-	    	name = s.currentFunctionSym.functionName;
-	    
-        if (   (s.currentFunctionItt != null)
-        	&& ((name == null) || name.endsWith(stringNotFound)))
-        {
-        	name = s.currentFunctionItt.functionName;
-        }
-
-	    if (   (name == null)
-	    	|| (name.startsWith(stringFunctionAt))
-	    	|| (name.startsWith(stringFunctionForAddress)))
-	    {
-	        name = stringFunctionNotFound;
-	    }
-	    
-	    return name;
-	}
-	
-	public static long getFunctionAddress(GppSample s)
-	{
-	    if (s.currentFunctionSym != null)
-	    {
-	        String name = s.currentFunctionSym.functionName;
-	        if (   (s.currentFunctionItt != null)
-	        	&& (name == null || name.endsWith(Messages.getString("GppTraceGraph.notFound"))))  //$NON-NLS-1$
-	        {
-        		return s.currentFunctionItt.startAddress.longValue();
-	        }
-	        else
-	        {
-	        	return s.currentFunctionSym.startAddress.longValue();
-	        }
-	    }
-	    else if (s.currentFunctionItt != null)
-	    {
-	        if (s.currentFunctionItt.functionName == null)
-	        {
-	        	if (s.currentFunctionSym != null)
-	        		return s.currentFunctionSym.startAddress.longValue();
-	        }
-	        else
-	        {
-        		return s.currentFunctionItt.startAddress.longValue();
-	        }
-	    }
-
-	    return 0;
+	public int getDrawMode() {
+		return drawMode;
 	}
 
-	public int getDrawMode()
-    {
-        return drawMode;
-    }
+	public void setDrawMode(int drawMode) {
+		if ((drawMode == Defines.THREADS)
+				|| (drawMode == Defines.THREADS_FUNCTIONS)
+				|| (drawMode == Defines.THREADS_FUNCTIONS_BINARIES)
+				|| (drawMode == Defines.THREADS_BINARIES)
+				|| (drawMode == Defines.THREADS_BINARIES_FUNCTIONS)
+				|| (drawMode == Defines.BINARIES)
+				|| (drawMode == Defines.BINARIES_THREADS)
+				|| (drawMode == Defines.BINARIES_THREADS_FUNCTIONS)
+				|| (drawMode == Defines.BINARIES_FUNCTIONS)
+				|| (drawMode == Defines.BINARIES_FUNCTIONS_THREADS)
+				|| (drawMode == Defines.FUNCTIONS)
+				|| (drawMode == Defines.FUNCTIONS_THREADS)
+				|| (drawMode == Defines.FUNCTIONS_THREADS_BINARIES)
+				|| (drawMode == Defines.FUNCTIONS_BINARIES)
+				|| (drawMode == Defines.FUNCTIONS_BINARIES_THREADS)) {
+			if (this.drawMode != drawMode) {
+				this.setGraphImageChanged(true);
+				this.drawMode = drawMode;
+				refreshMode();
+				if (this.graphChangeListener != null){
+					graphChangeListener.onTitleChange(getTitle());
+				}
+			}
+		} else {
+			throw new IllegalArgumentException(Messages
+					.getString("GppTraceGraph.unknownDrawMode")); //$NON-NLS-1$
+		}
+	}
 
-    public void setDrawMode(int drawMode)
-    {
-    	if (
-    		   (drawMode == Defines.THREADS)
-    		|| (drawMode == Defines.THREADS_FUNCTIONS)
-    		|| (drawMode == Defines.THREADS_FUNCTIONS_BINARIES)
-    		|| (drawMode == Defines.THREADS_BINARIES)
-    		|| (drawMode == Defines.THREADS_BINARIES_FUNCTIONS)
-    		|| (drawMode == Defines.BINARIES)
-    		|| (drawMode == Defines.BINARIES_THREADS)
-    		|| (drawMode == Defines.BINARIES_THREADS_FUNCTIONS)
-    		|| (drawMode == Defines.BINARIES_FUNCTIONS)
-    		|| (drawMode == Defines.BINARIES_FUNCTIONS_THREADS)
-    		|| (drawMode == Defines.FUNCTIONS)
-    		|| (drawMode == Defines.FUNCTIONS_THREADS)
-    		|| (drawMode == Defines.FUNCTIONS_THREADS_BINARIES)
-    		|| (drawMode == Defines.FUNCTIONS_BINARIES)
-    		|| (drawMode == Defines.FUNCTIONS_BINARIES_THREADS))
-    	{
-    		if (this.drawMode != drawMode) {
-    			this.setGraphImageChanged(true);
-    		}
-	        this.drawMode = drawMode;
-	        refreshMode();
-        }
-        else
-        {
-            System.out.println(Messages.getString("GppTraceGraph.unknownDrawMode"));  //$NON-NLS-1$
-            this.drawMode = Defines.THREADS;
-            refreshMode();
-        }
-    }
-    
-    private void refreshMode()
-    {
-    	this.vPanel.refreshCumulativeThreadTable();
-    }
+	private void refreshMode() {
+		this.vPanel.refreshCumulativeThreadTable();
+	}
 
 	public int getUid() {
 		return this.uid;
 	}
-	
-	public GppTraceGraph getTraceGraph() {
-		return this.thisTraceGraph;
-	}
-	
+
 	public void setLeftSash(Sash leftSash) {
 		this.leftSash = leftSash;
 	}
-	
+
 	public Sash getLeftSash() {
 		return this.leftSash;
 	}
-	
+
 	public void setRightSash(Sash rightSash) {
 		this.rightSash = rightSash;
 	}
-	
+
 	public Sash getRightSash() {
 		return this.rightSash;
 	}
@@ -2305,11 +2139,11 @@ public class GppTraceGraph extends GenericTraceGraph implements ActionListener,
 	public void setProfiledThreads(Vector<ProfiledGeneric> profiledThreads) {
 		this.profiledThreads = profiledThreads;
 	}
-	
+
 	public Vector<ProfiledGeneric> getProfiledThreads() {
 		return this.profiledThreads;
 	}
-	
+
 	public Vector<ProfiledGeneric> getSortedThreads() {
 		return this.sortedProfiledThreads;
 	}
@@ -2317,11 +2151,11 @@ public class GppTraceGraph extends GenericTraceGraph implements ActionListener,
 	public void setProfiledBinaries(Vector<ProfiledGeneric> profiledBinaries) {
 		this.profiledBinaries = profiledBinaries;
 	}
-	
+
 	public Vector<ProfiledGeneric> getProfiledBinaries() {
 		return this.profiledBinaries;
 	}
-	
+
 	public Vector<ProfiledGeneric> getSortedBinaries() {
 		return this.sortedProfiledBinaries;
 	}
@@ -2329,27 +2163,206 @@ public class GppTraceGraph extends GenericTraceGraph implements ActionListener,
 	public void setProfiledFunctions(Vector<ProfiledGeneric> profiledFunctions) {
 		this.profiledFunctions = profiledFunctions;
 	}
-	
+
 	public Vector<ProfiledGeneric> getProfiledFunctions() {
 		return this.profiledFunctions;
 	}
-	
+
 	public Vector<ProfiledGeneric> getSortedFunctions() {
 		return this.sortedProfiledFunctions;
 	}
-	
+
 	public ProfiledThreshold getThresholdThread() {
 		return thresholdThread;
 	}
-	
+
 	public ProfiledThreshold getThresholdBinary() {
 		return thresholdBinary;
 	}
-	
+
 	public ProfiledThreshold getThresholdFunction() {
 		return thresholdFunction;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.swt.events.MouseMoveListener#mouseMove(org.eclipse.swt.events
+	 * .MouseEvent)
+	 */
 	public void mouseMove(org.eclipse.swt.events.MouseEvent e) {
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph#graphVisibilityChanged(boolean)
+	 */
+	@Override
+	public void graphVisibilityChanged(boolean visible){
+		getGppTrace().setLegendVisible(graphIndex, visible, holdTablesComposite);	
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph#graphMaximized(boolean)
+	 */
+	@Override
+	public void graphMaximized(boolean value){
+		//TODO this needs to be re-implemented probably using setVisible() on all graphs (rather than calling max on one graph)
+		getGppTrace().setLegendMaximised(graphIndex, value, holdTablesComposite);	
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph#graphMaximized(boolean)
+	 */
+	public void refreshColoursFromTrace() {
+		if (graphIndex == PIPageEditor.THREADS_PAGE) {
+			getThreadTable().addColor(Defines.THREADS);
+		} else if (graphIndex == PIPageEditor.BINARIES_PAGE) {
+			getBinaryTable().addColor(Defines.BINARIES);
+		} else if (graphIndex == PIPageEditor.FUNCTIONS_PAGE) {
+			getFunctionTable().addColor(Defines.FUNCTIONS);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph#doGetActivityList(com.nokia.carbide.cpp.internal.pi.model.ProfiledGeneric)
+	 */
+	@Override
+	protected float[] doGetActivityList(ProfiledGeneric pg) {
+		return adapter.getActivityList(pg);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.pi.visual.IGenericTraceGraph#getTitle()
+	 */
+	@Override
+	public String getTitle() {
+		return String.format(Messages.getString("GppTraceGraph.2"), title, getTranslatedDrawMode()); //$NON-NLS-1$
+	}
+
+	private String getTranslatedDrawMode() {
+		String s = EMPTY_STRING;
+
+		switch (this.drawMode) {
+		case Defines.THREADS: {
+			s = Messages.getString("GppTraceGraph.3"); //$NON-NLS-1$
+			break;
+		}
+		case Defines.THREADS_FUNCTIONS: {
+			s = Messages.getString("GppTraceGraph.4"); //$NON-NLS-1$
+			break;
+		}
+		case Defines.THREADS_FUNCTIONS_BINARIES: {
+			s = Messages.getString("GppTraceGraph.5"); //$NON-NLS-1$
+			break;
+		}
+		case Defines.THREADS_BINARIES: {
+			s = Messages.getString("GppTraceGraph.6"); //$NON-NLS-1$
+			break;
+		}
+		case Defines.THREADS_BINARIES_FUNCTIONS: {
+			s = Messages.getString("GppTraceGraph.7"); //$NON-NLS-1$
+			break;
+		}
+		case Defines.BINARIES: {
+			s = Messages.getString("GppTraceGraph.8"); //$NON-NLS-1$
+			break;
+		}
+		case Defines.BINARIES_THREADS: {
+			s = Messages.getString("GppTraceGraph.9"); //$NON-NLS-1$
+			break;
+		}
+		case Defines.BINARIES_THREADS_FUNCTIONS: {
+			s = Messages.getString("GppTraceGraph.10"); //$NON-NLS-1$
+			break;
+		}
+		case Defines.BINARIES_FUNCTIONS: {
+			s = Messages.getString("GppTraceGraph.11"); //$NON-NLS-1$
+			break;
+		}
+		case Defines.BINARIES_FUNCTIONS_THREADS: {
+			s = Messages.getString("GppTraceGraph.12"); //$NON-NLS-1$
+			break;
+		}
+		case Defines.FUNCTIONS: {
+			s = Messages.getString("GppTraceGraph.13"); //$NON-NLS-1$
+			break;
+		}
+		case Defines.FUNCTIONS_THREADS: {
+			s = Messages.getString("GppTraceGraph.14"); //$NON-NLS-1$
+			break;
+		}
+		case Defines.FUNCTIONS_THREADS_BINARIES: {
+			s = Messages.getString("GppTraceGraph.15"); //$NON-NLS-1$
+			break;
+		}
+		case Defines.FUNCTIONS_BINARIES: {
+			s = Messages.getString("GppTraceGraph.16"); //$NON-NLS-1$
+			break;
+		}
+		case Defines.FUNCTIONS_BINARIES_THREADS: {
+			s = Messages.getString("GppTraceGraph.17"); //$NON-NLS-1$
+			break;
+		}
+		default:
+			break;
+		}
+		return s;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph#getShortTitle()
+	 */
+	@Override
+	public String getShortTitle() {
+		return shortTitle;
+	}
+
+	public Action[] addTitleBarMenuItems() {
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITitleBarMenu#getContextHelpId()
+	 */
+	public String getContextHelpId() {
+		return AddressPlugin.getPageHelpContextId(GppTraceUtil.getPageIndex(graphIndex));
+	}
+
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph#setVisible(boolean)
+	 */
+	@Override
+	public void setVisible(boolean show) {
+		super.setVisible(show); //this sets visibility of the graph component
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph#isGraphMinimizedWhenOpened()
+	 */
+	@Override
+	public boolean isGraphMinimizedWhenOpened(){
+		// CPU load graph is shown when view is opened
+		return false;
+	}
+
+	public void addContextMenuItems(Menu menu,
+			org.eclipse.swt.events.MouseEvent me) {
+		if (getGppTrace() != null && getGppTrace().getCPUCount() > 1){
+			new MenuItem(menu, SWT.SEPARATOR);
+			
+			final boolean isSeparate = this instanceof GppTraceGraphSMP; 
+
+			MenuItem changeViewAction = new MenuItem(menu, SWT.PUSH);
+			changeViewAction.setText(isSeparate ? Messages.getString("GppTraceGraph.18") : Messages.getString("GppTraceGraph.19"));  //$NON-NLS-1$ //$NON-NLS-2$
+			changeViewAction.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					AddressPlugin.getDefault().receiveSelectionEvent(isSeparate ? AddressPlugin.ACTION_COMBINED_CPU_VIEW : AddressPlugin.ACTION_SEPARATE_CPU_VIEW);
+				}
+			});			
+		}
+		
+	}
+	
 }

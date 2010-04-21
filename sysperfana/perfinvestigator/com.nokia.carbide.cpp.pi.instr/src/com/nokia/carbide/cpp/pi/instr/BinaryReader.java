@@ -82,9 +82,9 @@ public class BinaryReader
 
   public BinaryReaderResult findSequence(IttSample sample, Binary b)
   {
-    if (this.processedFiles.containsKey(b.binaryName))
+    if (this.processedFiles.containsKey(b.getBinaryName()))
     {
-      ProcessedBinary pf = (ProcessedBinary)this.processedFiles.get(b.binaryName);
+      ProcessedBinary pf = (ProcessedBinary)this.processedFiles.get(b.getBinaryName());
       return this.findSequence(sample,pf);
     }
     return null;
@@ -103,15 +103,15 @@ public class BinaryReader
   
   public boolean checkSampleInBinary(IttSample sample,Binary binary,int differencesAllowed)
   {
-  	ProcessedBinary pb = this.getProcessedBinaryForName(binary.binaryName);
+  	ProcessedBinary pb = this.getProcessedBinaryForName(binary.getBinaryName());
   	if (pb == null)
   	{
-  		System.out.println(Messages.getString("BinaryReader.cannotFindBinary")+binary.binaryName); //$NON-NLS-1$
+  		System.out.println(Messages.getString("BinaryReader.cannotFindBinary")+binary.getBinaryName()); //$NON-NLS-1$
 		return false;
   	}
   	
-  	if (binary.startAddress <= sample.programCounter &&
-  	   binary.startAddress+binary.length >= sample.programCounter)
+  	if (binary.getStartAddress() <= sample.programCounter &&
+  	   binary.getStartAddress()+binary.getLength() >= sample.programCounter)
   	{
   		// the program counter value indicates that the sample
   		// is within the binary
@@ -121,9 +121,9 @@ public class BinaryReader
   		{
   			
   			long instruction = reversedInstructions[i];
-  			long offset = (long)(sample.programCounter-binary.startAddress);
+  			long offset = (long)(sample.programCounter-binary.getStartAddress());
 
-  			if (offset < binary.length)
+  			if (offset < binary.getLength())
   			{
   				// add the amount of bytes that match in the next 4 bytes
   				matches += this.testNextFourBytes((int)offset+(i*4),instruction,pb);
@@ -185,7 +185,7 @@ public class BinaryReader
 
             int match = 0;
             
-            if (i < pf.length - 5)
+            if (i < pf.getLength() - 5)
             {
               if (pf.data[i] == (byte) first) match++;
               
@@ -219,13 +219,13 @@ public class BinaryReader
                         {
 
                           // add this location to possible binaries
-                          Binary b = new Binary(pf.binaryName);
-                          b.length = pf.length;
-                          b.offsetToCodeStart = pf.offsetToCodeStart;
-                          b.type = pf.type;
+                          Binary b = new Binary(pf.getBinaryName());
+                          b.setLength(pf.getLength());
+                          b.setOffsetToCodeStart(pf.getOffsetToCodeStart());
+                          b.setType(pf.getType());
 
                           // binary start address is the this address - this offset
-                          b.startAddress = sample.programCounter-i;
+                          b.setStartAddress(sample.programCounter-i);
                           possibleBinaries.add(b);
 
                           //System.out.println (	"CHECKSUM MATCH at "+pf.binaryName+"@0x"+Long.toHexString(b.startAddress-b.offsetToCodeStart)+
@@ -240,13 +240,13 @@ public class BinaryReader
 
                           // add this location to possible binaries
 
-                          Binary b = new Binary(pf.binaryName);
-                          b.length = pf.length;
-                          b.offsetToCodeStart = pf.offsetToCodeStart;
-                          b.type = pf.type;
+                          Binary b = new Binary(pf.getBinaryName());
+                          b.setLength(pf.getLength());
+                          b.setOffsetToCodeStart(pf.getOffsetToCodeStart());
+                          b.setType(pf.getType());
 
                           // binary start address is this address - this offset
-                          b.startAddress = sample.programCounter-i;
+                          b.setStartAddress(sample.programCounter-i);
                           possibleBinaries.add(b);
 
                           //System.out.println(	"MATCH at "+pf.binaryName+"@0x"+Long.toHexString(b.startAddress-b.offsetToCodeStart)+
@@ -274,7 +274,7 @@ public class BinaryReader
 
   public void printBinaryFromOffset(ProcessedBinary pf, int offset, int length)
   {
-    if (pf.length < offset+length) return;
+    if (pf.getLength() < offset+length) return;
     int c = 0;
 
     for (int i=offset;i<offset+length;i++)
@@ -301,7 +301,7 @@ public class BinaryReader
 
       int matches = 0;
       
-      if (pf.length > offset+4)
+      if (pf.getLength() > offset+4)
       {
         if (pf.data[offset] == (byte)first) matches++; 
         
@@ -336,7 +336,7 @@ public class BinaryReader
       if (length == -1)
         {
           startOffset = 0;
-          length = pf.length;
+          length = pf.getLength();
         }
 
       for (int i=startOffset;i<startOffset+length;i++)
@@ -412,14 +412,14 @@ public class BinaryReader
         name = name.substring(name.indexOf(File.separator),name.length());
 
         if (!(this.processedFiles.containsKey(name) &&
-              (((ProcessedBinary)this.processedFiles.get(name)).length == f.length())))
+              (((ProcessedBinary)this.processedFiles.get(name)).getLength() == f.length())))
         {
           try
           {
             ProcessedBinary pf = processFile(f);
             //System.out.println(f.getName());
-            this.processedFiles.put(pf.binaryName, pf);
-            length += pf.length;
+            this.processedFiles.put(pf.getBinaryName(), pf);
+            length += pf.getLength();
             addedFiles++;
           }
           catch (Exception e)

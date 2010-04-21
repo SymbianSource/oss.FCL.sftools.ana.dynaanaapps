@@ -23,15 +23,14 @@ import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Enumeration;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import com.nokia.carbide.cpp.internal.pi.analyser.NpiInstanceRepository;
-import com.nokia.carbide.cpp.internal.pi.model.GenericTrace;
 import com.nokia.carbide.cpp.internal.pi.model.ParsedTraceData;
 import com.nokia.carbide.cpp.internal.pi.model.Parser;
 import com.nokia.carbide.cpp.internal.pi.model.TraceDataContainer;
@@ -45,19 +44,65 @@ public class GppTraceParser extends Parser
   private String samplerVersion;
   private Hashtable<Integer,GppProcess> processes;
   private Hashtable<Integer,GppThread> threads;
-  private GppSample[] traceData;
-  private GppThread[] sortedThreads;
-  private TraceDataContainer container; 
-  private Hashtable<Long,String> threadAddressToName;
+  private HashMap<Long,String> threadAddressToName;
+
+  // smp specific
+  private int currentCpuNumber = 0;
+  private int cpuCount = 0;
+
 
   public GppTraceParser() throws IOException
   {
     this.processes = new Hashtable<Integer,GppProcess>();
     this.threads   = new Hashtable<Integer,GppThread>();
-    this.threadAddressToName = new Hashtable<Long,String>();
+    this.threadAddressToName = new HashMap<Long,String>();
   }
 
-  public ParsedTraceData parse(File traceInput) throws IOException
+	/**
+	 * Parses all given input trace files and returns the resulting ParsedTraceData. 
+	 * @param traceInputs the trace data files to parse
+	 * @return ParsedTraceData containing parsed trace
+	 * @throws IOException
+	 */
+	public ParsedTraceData parse(File[] traceInputs) throws IOException {
+		List<GppSample> samples = new ArrayList<GppSample>();
+		
+		for (File traceInput : traceInputs) {
+			//each part of the trace file is independent of each other 
+			//so clear previous state
+			processes.clear();
+			threads.clear();
+			internalParse(traceInput, samples);			
+		}
+
+		ParsedTraceData pd = new ParsedTraceData();
+		pd.traceData = this.getTrace(samples);
+		pd.staticData = createTraceContainer();
+		return pd;
+	}
+
+	private TraceDataContainer createTraceContainer() {
+		TraceDataContainer container = new TraceDataContainer("GPP_address2threadname",new String[]{"address","threadname"}); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		for (Map.Entry<Long, String> entry : threadAddressToName.entrySet()) {
+	    	container.addDataToColumn("threadname",entry.getKey()); //$NON-NLS-1$
+	    	container.addDataToColumn("address",entry.getValue()); //$NON-NLS-1$			
+		}
+	    this.threadAddressToName = null;
+		return container;
+	}
+
+	/**
+	 * Parses the given input trace file and returns the resulting ParsedTraceData. 
+	 * @param traceInput the trace data file to parse
+	 * @return ParsedTraceData containing parsed trace
+	 * @throws IOException
+	 */
+	@Override
+	public ParsedTraceData parse(File traceInput) throws IOException {
+		return parse(new File[]{traceInput});
+	}
+	
+  private void internalParse(File traceInput, List<GppSample> gppSamples) throws IOException
   {
     if (!traceInput.exists())
     	throw new IOException(Messages.getString("GppTraceParser.0"));  //$NON-NLS-1$
@@ -74,8 +119,6 @@ public class GppTraceParser extends Parser
     int samples = 0;
     long time = 0;
 
-    Vector<GppSample> intermediateTraceData = new Vector<GppSample>();
-    
     // determine the base sampling period (address/thread sampling period) 
     int addrThreadPeriod = 1;
     
@@ -89,7 +132,7 @@ public class GppTraceParser extends Parser
 	// initialize the address/thread base sampling rate
 	NpiInstanceRepository.getInstance().activeUidSetPersistState(
 								"com.nokia.carbide.cpp.pi.address.samplingInterval", //$NON-NLS-1$
-								new Integer(addrThreadPeriod)); //$NON-NLS-1$
+								Integer.valueOf(addrThreadPeriod)); //$NON-NLS-1$
     
     while (dis.available() > 0)
     {
@@ -115,9 +158,9 @@ public class GppTraceParser extends Parser
           samples++;
           time += addrThreadPeriod;
           
-          if (samples == 1 && thread == null)
+          if (samples < 3 && thread == null)
           {
-	       	// the first sample may be recorded before its thread's name
+	       	// the first sample (or couple of samples for SMP) may be recorded before its thread's name
 
         	// create a new sample object for this sample
             GppSample gppSample = new GppSample();
@@ -143,7 +186,9 @@ public class GppTraceParser extends Parser
             this.threads.put(-1,unknownThread);
 
             gppSample.thread = unknownThread;
-            intermediateTraceData.add(gppSample);
+        	gppSample.cpuNumber = currentCpuNumber;
+            
+        	gppSamples.add(gppSample);
           }
           else if (thread.index >= -1)
 	      {
@@ -164,8 +209,9 @@ public class GppTraceParser extends Parser
             
             gppSample.sampleSynchTime = time;
             gppSample.thread = thread;
+        	gppSample.cpuNumber = currentCpuNumber;
             thread.samples++;
-            intermediateTraceData.add(gppSample);
+            gppSamples.add(gppSample);
           }
         }
       }
@@ -173,76 +219,6 @@ public class GppTraceParser extends Parser
     }
     if (debug) System.out.println(Messages.getString("GppTraceParser.2"));  //$NON-NLS-1$
     // all samples have been parsed
-    this.traceData = new GppSample[intermediateTraceData.size()];
-
-    // store the trace data into an array
-    intermediateTraceData.toArray(this.traceData);
-
-    // sort the threads into an ordered array
-    this.sortThreads();
-    
-    container = new TraceDataContainer("GPP_address2threadname",new String[]{"address","threadname"}); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-    Enumeration<Long> ke = this.threadAddressToName.keys();
-    Iterator<String>  vi = this.threadAddressToName.values().iterator();
-    
-    while(ke.hasMoreElements())
-    {
-    	Long address = ke.nextElement();
-    	String name = vi.next();
-    	container.addDataToColumn("threadname",name); //$NON-NLS-1$
-    	container.addDataToColumn("address",address); //$NON-NLS-1$
-    }
-    this.threadAddressToName.clear();
-    this.threadAddressToName = null;
-    
-    ParsedTraceData pd = new ParsedTraceData();
-    pd.traceData = this.getTrace();
-        
-    return pd;
-  }
-  
-  private void sortThreads()
-  {
-    if (this.threads != null)
-    {
-      boolean sorted = false;
-
-      GppThread[] tArray = new GppThread[this.threads.size()];
-      Collection<GppThread> threadCollection = this.threads.values();
-      threadCollection.toArray(tArray);
-
-      // set initial sort order to the order in which
-      // the threads appear in the array
-      for (int i = 0; i < tArray.length; i++)
-      {
-        tArray[i].sortOrder = i;
-      }
-
-      // sort threads using bubble sort
-      while (sorted == false)
-      {
-        sorted = true;
-        for (int i = 0; i < tArray.length - 1; i++)
-        {
-          if (tArray[i].samples < tArray[i + 1].samples)
-          {
-              // switch the sort order
-              GppThread store = tArray[i];
-              tArray[i] = tArray[i + 1];
-              tArray[i + 1] = store;
-              sorted = false;
-          }
-        }
-      }
-
-      // finally, store the ordered array
-      this.sortedThreads = tArray;
-      for (int i=0;i<this.sortedThreads.length;i++)
-      {
-        this.sortedThreads[i].sortOrder = i;
-      }
-
-    }
   }
 
   private boolean validate(DataInputStream dis) throws IOException
@@ -276,12 +252,19 @@ public class GppTraceParser extends Parser
     		{
     			this.samplerVersion = st.nextToken();
     		}
+    		else if(id.equals("CPU"))
+    		{
+    			
+    			this.currentCpuNumber = Integer.parseInt(st.nextToken());
+    			cpuCount++;
+    		}
     	}
                
-        System.out.println(Messages.getString("GppTraceParser.4")+traceVersion+Messages.getString("GppTraceParser.5")+profilerVersion+Messages.getString("GppTraceParser.6")+samplerVersion);    //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        System.out.println(Messages.getString("GppTraceParser.4")+traceVersion+Messages.getString("GppTraceParser.5")+profilerVersion+Messages.getString("GppTraceParser.6")+samplerVersion+" CPU: "+currentCpuNumber);    //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		
 		if (   (traceVersion.indexOf("V1.10") != -1)	//$NON-NLS-1$
 			|| (traceVersion.indexOf("V1.64") != -1)	//$NON-NLS-1$
+			|| (traceVersion.indexOf("V2.00") != -1)	//$NON-NLS-1$
 			|| (traceVersion.indexOf("V2.01") != -1))	//$NON-NLS-1$
             return true;
       	else
@@ -291,7 +274,7 @@ public class GppTraceParser extends Parser
     return false;
   }
 
-  	public static void encodeInt(int number, DataOutputStream dos) throws IOException
+  private static void encodeInt(int number, DataOutputStream dos) throws IOException
 	{
 		int digit;
 		for (;;) {
@@ -306,7 +289,7 @@ public class GppTraceParser extends Parser
 		dos.flush();
 	}
 	
-	public static void encodeUInt(int number, DataOutputStream dos) throws IOException
+  private static void encodeUInt(int number, DataOutputStream dos) throws IOException
 	{
 		int digit;
 		for (;;) {
@@ -319,7 +302,7 @@ public class GppTraceParser extends Parser
 		dos.write(digit | 0x80);		
 	}
   
-  public static long decodeInt(DataInputStream dis) throws IOException
+  private static long decodeInt(DataInputStream dis) throws IOException
   {
     //System.out.println("DECODING INT");
 
@@ -347,7 +330,7 @@ public class GppTraceParser extends Parser
   }
 
 
-  public static long decodeUInt(DataInputStream dis) throws IOException
+  private static long decodeUInt(DataInputStream dis) throws IOException
   {
     //System.out.println("DECODING UINT");
     long val = 0;
@@ -383,7 +366,7 @@ public class GppTraceParser extends Parser
   private GppProcess decodeProcess(DataInputStream dis) throws IOException
   {
     //System.out.println("DECODING PROCESS");
-    Integer pid = new Integer((int)decodeUInt(dis));
+    Integer pid = Integer.valueOf((int)decodeUInt(dis));
 
     if (this.processes.containsKey(pid))
     {
@@ -402,7 +385,7 @@ public class GppTraceParser extends Parser
   private GppThread decodeThread(DataInputStream dis) throws IOException
   {
     //System.out.println("DECODING THREAD");
-    Integer tid = new Integer((int)decodeUInt(dis));
+    Integer tid = Integer.valueOf((int)decodeUInt(dis));
 
     if (this.threads.containsKey(tid))
     {
@@ -418,7 +401,8 @@ public class GppTraceParser extends Parser
     	{
     		String l = name.substring(name.lastIndexOf("[")+1,name.lastIndexOf("]")); //$NON-NLS-1$ //$NON-NLS-2$
     		Long threadAddress = Long.decode("0x"+l); //$NON-NLS-1$
-    		this.threadAddressToName.put(threadAddress,name);
+//    		this.threadAddressToName.put(threadAddress,name);
+    		this.threadAddressToName.put(threadAddress,p.name+"::"+name);
     		name = name.substring(0,name.lastIndexOf("[")); //$NON-NLS-1$
     	}
 	}
@@ -438,13 +422,13 @@ public class GppTraceParser extends Parser
     return nt;
   }
   
-  private GenericTrace getTrace()
+  private GppTrace getTrace(List<GppSample> samples)
   {
   	GppTrace trace = new GppTrace();
-  	for (int i = 0; i < traceData.length; i++)
-  	{
-  		trace.addSample(this.traceData[i]);
-  	}
+  	for (GppSample gppSample : samples) {
+  		trace.addSample(gppSample);
+	}
+  	trace.setCPUCount(cpuCount == 0 ? 1 : cpuCount);
   	return trace;
   }
 }

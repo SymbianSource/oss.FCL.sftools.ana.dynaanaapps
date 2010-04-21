@@ -17,15 +17,22 @@
 
 package com.nokia.carbide.cpp.pi.instr;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Vector;
 
+import com.nokia.carbide.cpp.internal.pi.analyser.NpiInstanceRepository;
 import com.nokia.carbide.cpp.internal.pi.model.Binary;
 import com.nokia.carbide.cpp.internal.pi.model.Function;
 import com.nokia.carbide.cpp.internal.pi.model.GenericEvent;
 import com.nokia.carbide.cpp.internal.pi.model.GenericEventTrace;
+import com.nokia.carbide.cpp.internal.pi.model.ParsedTraceData;
+import com.nokia.carbide.cpp.internal.pi.model.TraceDataRepository;
+import com.nokia.carbide.cpp.pi.address.GppTrace;
 
 
 public class IttTrace122 extends GenericEventTrace
@@ -50,16 +57,17 @@ public class IttTrace122 extends GenericEventTrace
 			if (   (address >= ev.binaryLocation)
 				&& (address < (ev.binaryLocation + ev.binaryLength)) )
 			{
-				//System.out.println("Found "+Long.toHexString(address));
-				return ev.binary;			
+				return ev.getBinary();			
 			}
 		}
 		
 		return null;
 	}
 
-	public Binary getBinaryForAddressNew(long address)
+	
+	public Binary getBinaryForAddressNew(long address, float sampleTime)
 	{
+		List<IttEvent122> foundedEvents  = new ArrayList<IttEvent122>();
 		if (!sortedEvents) {
 			sorted = this.getEvents().toArray();
 			Arrays.sort(sorted, new Comparator<Object>() {
@@ -74,7 +82,7 @@ public class IttTrace122 extends GenericEventTrace
 			});
 			sortedEvents = true;
 		}
-
+		
 		int high = sorted.length;
 		int low = -1;
 		int next;
@@ -83,10 +91,19 @@ public class IttTrace122 extends GenericEventTrace
 		while (high - low > 1) {
 			next = (low + high) >>> 1;
 			IttEvent122 event = (IttEvent122)sorted[next];
-
 			if (   (address >= event.binaryLocation)
 				&& (address < (event.binaryLocation + event.binaryLength)) ) {
-				return event.binary;
+				// first suitable event of the list is found and let's find also next ones
+				for( int i=next ; i < sorted.length ; i++ ){
+					IttEvent122 ie = (IttEvent122)sorted[i];
+					if (   (address >= ie.binaryLocation)
+							&& (address < (ie.binaryLocation + ie.binaryLength)) ) {
+						foundedEvents.add(ie);
+					}else{
+						break;
+					}
+				}
+				break;
 			}
 
 			if (event.binaryLocation >= address) {
@@ -95,13 +112,35 @@ public class IttTrace122 extends GenericEventTrace
 				low = next;
 			}
 		}
-
+		
+		if(!foundedEvents.isEmpty()){
+			if(foundedEvents.size() == 1){
+				return foundedEvents.get(0).getBinary();
+			}else{
+				if(sampleTime <= 0){
+					// if sample time is not known just pick up first event of the list
+					return foundedEvents.get(0).getBinary();
+				}
+				for (IttEvent122 event : foundedEvents) {
+					if (sampleTime >= event.eventTime
+							&& (sampleTime < event.eventEndTime)) {
+						// event is in the time frame
+						return event.getBinary();
+					} else if (sampleTime >= event.eventTime
+							&& event.eventEndTime <= 0.0) {
+						// event is started in the time frame
+						return event.getBinary();
+					}
+				}
+			}
+		}
 		return null;
 	}
-
-	public Function getFunctionForAddress(long address,BinaryReader122 br)
-	{
-		Binary b = this.getBinaryForAddressNew(address);
+	
+	public Function getFunctionForAddress(long address, long sampleSynchTime, BinaryReader122 br)
+	{		
+		float sampleTime = calculateSampleTime(sampleSynchTime);
+		Binary b = this.getBinaryForAddressNew(address, sampleTime);
 		if (b != null)
 		{	
 			MapFile mf = br.getMapFileForBinary(b);
@@ -109,15 +148,15 @@ public class IttTrace122 extends GenericEventTrace
 			
 			if (mf != null)
 			{
-				f = mf.getFunctionForOffset(address-b.startAddress);
+				f = mf.getFunctionForOffset(address-b.getStartAddress());
 				if (f != null)
 				{
-					f.startAddress = new Long(b.startAddress+mf.getOffsetFromBinaryStartForFunction(f.functionName));
-					if (f.startAddress != null)
+					f.setStartAddress(Long.valueOf(b.getStartAddress()+mf.getOffsetFromBinaryStartForFunction(f.getFunctionName())));
+					if (f.getStartAddress() != null)
 					{
-						if (f.functionBinary != null) 
+						if (f.getFunctionBinary() != null) 
 						{
-							f.functionBinary = b;
+							f.setFunctionBinary(b);
 						}
 						//System.out.println("Resolved function to "+f.functionName+" "+Long.toHexString(f.startAddress.longValue()));
 						return f;
@@ -128,7 +167,7 @@ public class IttTrace122 extends GenericEventTrace
 			}
 			else
 			{
-				if (debug)System.out.println(Messages.getString("IttTrace122.mapfileNotFound1")+b.binaryName+Messages.getString("IttTrace122.mapfileNotFound2")); //$NON-NLS-1$ //$NON-NLS-2$
+				if (debug)System.out.println(Messages.getString("IttTrace122.mapfileNotFound1")+b.getBinaryName()+Messages.getString("IttTrace122.mapfileNotFound2")); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			
 			if (f != null)
@@ -142,10 +181,10 @@ public class IttTrace122 extends GenericEventTrace
 				f = this.knownFunctions.get(fName);
 				
 				if (f == null) {
-					f = new Function(fName, new Long(address), b.binaryName);
-					f.functionBinary = b;
-					f.length = 1;
-					f.offsetFromBinaryStart = 0;
+					f = new Function(fName, Long.valueOf(address), b.getBinaryName());
+					f.setFunctionBinary(b);
+					f.setLength(1);
+					f.setOffsetFromBinaryStart(0);
 					
 					this.knownFunctions.put(fName, f);
 				}
@@ -155,30 +194,40 @@ public class IttTrace122 extends GenericEventTrace
 		}
 		else
 			return null;
-//		{
-//			String bName = Messages.getString("IttTrace122.binaryForAddressNotFound1")+Long.toHexString(address)+Messages.getString("IttTrace122.binaryForAddressNotFound2"); //$NON-NLS-1$ //$NON-NLS-2$
-//
-//			b = this.knownBinaries.get(bName);
-//			
-//			if (b == null) {
-//				b = new Binary(bName);
-//				b.length = 1;
-//				b.offsetToCodeStart = 0;
-//				b.startAddress = address;
-//				b.type = Messages.getString("IttTrace122.unknownBinaryType"); //$NON-NLS-1$
-//				this.knownBinaries.put(bName, b);
-//			}
-//			
-//			Function f = new Function(	Messages.getString("IttTrace122.functionForAddressNotFound1")+Long.toHexString(address)+Messages.getString("IttTrace122.functionForAddressNotFound2"), //$NON-NLS-1$ //$NON-NLS-2$
-//										new Long(address),
-//										bName);
-//			
-//			f.functionBinary = b;
-//			f.length = 1;
-//			f.offsetFromBinaryStart = 0;
-//			
-//			return f;			
-//		}
+	}
+
+	/**
+	 * Calculate an event time from given sample synch time
+	 * 
+	 * @param sampleSynchTime
+	 * @return the sample time
+	 */
+	@SuppressWarnings("restriction")
+	protected float calculateSampleTime(long sampleSynchTime) {
+		if (sampleSynchTime <= 0) {
+			// sampleSynchTime is not used
+			return sampleSynchTime;
+		}
+		int cpuCount = 1;
+		int samplingInterval = 1;
+		try {
+			ParsedTraceData ptd = TraceDataRepository.getInstance().getTrace(
+					NpiInstanceRepository.getInstance().activeUid(),
+					GppTrace.class);
+
+			final GppTrace gppTraceTmp = (GppTrace) ptd.traceData;
+			cpuCount = gppTraceTmp.getCPUCount();
+			samplingInterval = (Integer) NpiInstanceRepository
+					.getInstance()
+					.activeUidGetPersistState(
+							"com.nokia.carbide.cpp.pi.address.samplingInterval"); //$NON-NLS-1$
+
+		} catch (Exception e) {
+			// use default values for the calculation
+		}
+		
+		return (((sampleSynchTime * samplingInterval) / cpuCount) + 1)
+				* (1 / 1000.0f) - 0.0005f;
 	}
 	
 	  public Binary getBinaryForFileName(String fileName)
@@ -188,8 +237,43 @@ public class IttTrace122 extends GenericEventTrace
 		  {
 			  IttEvent122 e = (IttEvent122)en.nextElement();
 			  if (e.binaryName.toLowerCase().indexOf(fileName.toLowerCase()) != -1)
-				  return e.binary;
+				  return e.getBinary();
 		  }
 		  return null;
 	  }
-  }
+	 
+	/**
+	 * Add given event into the event table. If version 2.x is used updates
+	 * event's end time for the same event which is founded earlier otherwise
+	 * event is added into the table
+	 * 
+	 * @param ge
+	 * @param isVersion2x
+	 *            is used 2.x version or earlier 1.22 version
+	 */
+	public void addEvent(GenericEvent ge, boolean isVersion2x) {
+		if (!isVersion2x) {
+			super.addEvent(ge);
+			return;
+		}
+
+		IttEvent122 e = (IttEvent122) ge;
+		Vector<GenericEvent> eventVector = getEvents();
+		for (int i = (eventVector.size() - 1) ; i >= 0 ; i--) {
+			IttEvent122 ie = (IttEvent122) eventVector.get(i);
+			if (ie.getBinary().getLength() == e.getBinary().getLength()
+					&& ie.binaryLocation == e.binaryLocation
+					&& ie.binaryName.equals(e.binaryName)) {
+				if (ie.eventTime > 0.0 && ie.eventEndTime <= 0.0) {	
+					// set event's end time
+					ie.eventEndTime = e.eventTime;
+					return;
+				} else {
+					break;
+				}
+			}
+		}
+		// Given event is a new one or it is created again
+		super.addEvent(ge);
+	}
+}

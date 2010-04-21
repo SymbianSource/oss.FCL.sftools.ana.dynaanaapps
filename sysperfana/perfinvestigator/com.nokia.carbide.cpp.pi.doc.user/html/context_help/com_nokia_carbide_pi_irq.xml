@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<!-- Define help for Debug Perspective default views -->
+<!-- plugin="com.nokia.carbide.cpp.pi.address" -->
+
+<contexts>
+
+	<!-- THREAD TAB -->
+	<context id="irqPageContext"  >
+		<description>Use the Interrupts view to visualise profiling data from hardware and software interrupts.</description>
+		<topic label="Interrupts View"    					href="html/reference/analyzer/interrupts_view.htm" />
+  <topic href="html/reference/analyzer/main_view.htm" label="Analyzer View"/>
+		<topic label="Using the Analyzer"  				href="html/reference/analyzer/an_use_case_features.htm" />
+		<topic label="Setting Time Interval"  			href="html/tasks/analyser/time_interval.htm" />
+	</context>
+
+	<!-- BINARIES TAB -->
+
+	<!-- FUNCTIONS TAB -->
+
+</contexts>

@@ -57,7 +57,7 @@ public class ThreadColorPalette extends TableColorPalette {
 		
 		pro_string = pro_string.substring(0, mark);
 		
-	    if (pro_string.equalsIgnoreCase("EKern") && thr_string.equalsIgnoreCase("NULL")) { //$NON-NLS-1$ //$NON-NLS-2$
+	    if (pro_string.equalsIgnoreCase("EKern") && thr_string.toUpperCase().startsWith("NULL")) { //$NON-NLS-1$ //$NON-NLS-2$
 	    	return new RGB(192,192,192); // AWT Color.lightGray
 	    }
 	    if (pro_string.equalsIgnoreCase("CarbideProf") && thr_string.equalsIgnoreCase("Profiler")) { //$NON-NLS-1$ //$NON-NLS-2$

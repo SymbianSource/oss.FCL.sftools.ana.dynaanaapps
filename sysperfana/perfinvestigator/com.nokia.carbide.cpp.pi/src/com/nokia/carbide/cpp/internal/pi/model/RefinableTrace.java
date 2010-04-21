@@ -19,9 +19,14 @@ package com.nokia.carbide.cpp.internal.pi.model;
 
 public interface RefinableTrace 
 {
-	// resolve or further resolve addresses to entities like binaries and functions
+	/**
+	 *  resolve or further resolve addresses to entities like binaries and functions
+	 * @param resolver
+	 */
 	public void refineTrace(FunctionResolver resolver);
 	
-	// after all refinement is done, do any final touches to the samples
+	/**
+	 *  after all refinement is done, do any final touches to the samples
+	 */
 	public void finalizeTrace();
 }

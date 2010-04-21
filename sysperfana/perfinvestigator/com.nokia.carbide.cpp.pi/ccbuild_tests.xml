@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.nokia.carbide.cpp.pi" default="cc" basedir=".">
+
+	
+	<!-- Build PI only: -->
+	<!--<target name="cc" depends="build, analyze, feature, zip" description="Build, instrument and analyze code"/>-->
+	
+	<!-- Build PI and tests and run tests: -->
+	<!--<target name="cc" depends="clean, build, analyze, feature, pde_test, generate_report, check_results,zip" description="Build, instrument, run unit tests and analyze code"/>-->
+
+	<!-- Build and run tests: -->
+	<target name="cc" depends="pde_test, generate_report, check_results" description="Build and run unit tests"/>
+
+	
+
+	<property name="basews" value="${ws}"/>
+	<property name="baseos" value="${os}"/>
+	<property name="basearch" value="${arch}"/>
+	<property name="basenl" value="${nl}"/>
+
+	<!-- Compiler settings -->
+	<property name="javacFailOnError" value="true"/>
+	<property name="javacDebugInfo" value="on"/>
+	<property name="javacVerbose" value="false"/>
+	<property name="logExtension" value=".log"/>
+	<property name="compilerArg" value=""/>
+	<property name="javacSource" value="5"/>
+	<property name="javacTarget" value="5"/>
+	
+	<property name="bootclasspath" refid="path_bootclasspath"/>
+	<property name="bundleJavacSource" value="${javacSource}"/>
+	<property name="bundleJavacTarget" value="${javacTarget}"/>
+	<property name="bundleBootClasspath" value="${bootclasspath}"/>
+	
+	<property name="help.project.name" value="${ant.project.name}.help"/>
+	<property name="core.project.name" value="${ant.project.name}.corecomponents"/>
+	<property name="trace.project.name" value="${ant.project.name}.trace"/>
+	<property name="internal.project.name" value="${ant.project.name}.internal"/>
+	<property name="feature.project.folder" location="../com.nokia.carbide.cpp.pi-feature"/>
+	<property name="feature.project.name" value="com.nokia.carbide.cpp.pi-feature"/>
+	<property name="feature.name" value="PIAnalyser"/>
+	<property name="test.plugin.name" 					 value="com.nokia.carbide.cpp.pi.tests"/>
+  	<property name="feature.project.name" 		 	 value="com.nokia.carbide.cpp.pi-feature"/>
+	<property name="jar.filename" value="${ant.project.name}.jar"/>
+	
+	<!-- Folder definitions -->
+	<property name="carbide.sym.folder" location="g:/Sym_240/plugins"/>
+	<property name="carbide.idl.folder" location="g:/IDL/plugins"/>
+	<property name="carbide.adt.folder" location="g:/ADT/plugins"/>
+	<property name="test.eclipse.folder" location="C:/eclipse"/>
+	<property name="binaries.folder" location="${basedir}/../${feature.name}.binaries"/>
+	<property name="reports.folder" location="../reports"/>
+	<property name="reports.emma" location="${reports.folder}/emma"/>
+	<property name="instr.folder" location="instr"/>
+	
+
+	<!-- TEST plug-ins -->
+	<property name="address.tests" location="../tests/com.nokia.carbide.cpp.pi.address.tests"/>
+	<property name="classes.address.tests.folder" location="${address.tests}/classes"/>
+
+	<property name="button.tests" location="../tests/com.nokia.carbide.cpp.pi.button.tests"/>
+	<property name="classes.button.tests.folder" location="${button.tests}/classes"/>
+
+	<property name="call.tests" location="../tests/com.nokia.carbide.cpp.pi.call.tests"/>
+	<property name="classes.call.tests.folder" location="${call.tests}/classes"/>
+
+	<property name="core.tests" location="../tests/com.nokia.carbide.cpp.pi.core.tests"/>
+	<property name="classes.core.tests.folder" location="${core.tests}/classes"/>
+
+	<property name="instr.tests" location="../tests/com.nokia.carbide.cpp.pi.instr.tests"/>
+	<property name="classes.instr.tests.folder" location="${instr.tests}/classes"/>
+
+	<property name="util.tests" location="../tests/com.nokia.carbide.cpp.pi.util.tests"/>
+	<property name="classes.util.tests.folder" location="${util.tests}/classes"/>
+
+	<property name="memory.tests" location="../tests/com.nokia.carbide.cpp.pi.memory.tests"/>
+	<property name="classes.memory.tests.folder" location="${memory.tests}/classes"/>
+	
+	<property name="pi.tests" location="../tests/com.nokia.carbide.cpp.pi.tests"/>
+	<property name="classes.pi.tests.folder"  location="${pi.tests}/classes"/>
+	
+	<property name="testsupport" location="../tests/com.nokia.carbide.cpp.pi.testsupport"/>
+	<property name="classes.testsupport.folder"  location="${testsupport}/classes"/>
+
+	<property name="wizards.tests" location="../tests/com.nokia.carbide.cpp.pi.wizards.tests"/>
+	<property name="classes.wizards.tests.folder"              location="${wizards.tests}/classes"/>
+
+	<property name="irq.tests" location="../tests/com.nokia.carbide.cpp.pi.irq.tests"/>
+	<property name="classes.irq.tests.folder"              location="${irq.tests}/classes"/>
+
+	<property name="perfcounters.tests" location="../tests/com.nokia.carbide.cpp.pi.perfcounters.tests"/>
+	<property name="classes.perfcounters.tests.folder"              location="${perfcounters.tests}/classes"/>
+
+	<property name="peccommon.tests" location="../tests/com.nokia.carbide.cpp.pi.peccommon.tests"/>
+	<property name="classes.peccommon.tests.folder"              location="${peccommon.tests}/classes"/>
+	
+	<property name="ipc.tests" location="../tests/com.nokia.carbide.cpp.pi.ipc.tests"/>
+	<property name="classes.ipc.tests.folder"              location="${ipc.tests}/classes"/>
+
+	
+	<!-- Tests build classpath -->
+	<path id="test.build.class.path">
+ 
+        <!-- Instrumented class files -->
+		   			<pathelement location="${instr.folder}"/>
+       
+       			<!--<pathelement location="${test.folder}/src"/>-->
+			
+    				<!-- Normal class files -->
+    				<pathelement path="${binaries.folder}/${jar.filename}"/>
+    		
+		   			<!-- EMMA -->
+		   			<pathelement path="${ant.home}/lib/emma.jar"/>
+		   	
+        <fileset dir="${carbide.idl.folder}" includes="**/*.jar">
+        
+        </fileset>
+  </path>
+		
+	<!--  pde.test.listener.class.path -->
+	<path id="pde.test.listener.class.path">
+        <!--<path refid="build.pde.class.path"/>-->
+        <pathelement location="${binaries.folder}/pde.test.utils.jar"/>
+        <fileset dir="${test.eclipse.folder}/plugins" includes="**/*.jar"/>
+  </path>
+		
+	<!--  pde.test.port.locator.classpath -->
+	<path id="pde.test.port.locator.class.path">
+        <pathelement location="${binaries.folder}/pde.test.utils.jar"/>
+        <fileset dir="${carbide.idl.folder}">
+            <include name="org.junit_4.*/**/junit.jar"/>
+        </fileset>
+  </path>
+  
+  <!--  Carbide launcher classpath -->
+  <path id="equinox.launcher.class.path">			
+			 
+			 <fileset dir="${carbide.idl.folder}">
+            <include name="org.eclipse.equinox.launcher_*.jar"/>
+            <include name="instr.${jar.filename}"/>
+       </fileset>			 
+
+       			<!-- Instrumented class files -->
+		   <pathelement location="${instr.folder}"/>
+       
+       			<!--<pathelement location="${test.folder}/src"/>-->
+			
+    				<!-- Normal class files -->
+    				<!--<pathelement path="${binaries.folder}/${jar.filename}"/>-->
+    		
+		   	<!-- EMMA -->
+		   	<pathelement path="${ant.home}/lib/emma.jar"/>
+		   	
+		   			<!--<path refid="build_classpath" />-->
+        
+  </path>
+  
+  <path id="test_classpath">
+			<!-- Test classes -->
+			<pathelement location="${wizards.test}/src"/>
+			
+			<!-- Instrumented class files -->
+		   	<pathelement location="${instr.folder}"/>
+		   	
+    		<!-- Normal class files -->
+    		<pathelement path="${binaries.folder}/*.jar"/>
+
+		   	<!-- EMMA -->
+		   	<pathelement path="${ant.home}/lib/emma.jar"/>
+		   	
+		   	<path refid="test.build.class.path" />
+		</path>
+	
+	
+	<!-- EMMA configuration -->
+ 	<path id="emma.lib" >
+    	<pathelement location="${ant.home}/lib/emma.jar" />
+    	<pathelement location="${ant.home}/lib/emma_ant.jar" />
+  	</path>
+
+  	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
+	
+	<!-- PMD configuration -->
+	<path id="pmd.lib" >
+    	<pathelement location="${ant.home}/lib/pmd-4.2.5.jar" />
+    	<pathelement location="${ant.home}/lib/asm-3.1.jar" />
+    	<pathelement location="${ant.home}/lib/jaxen-1.1.1.jar" />
+  	</path>
+	
+	<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.lib" />
+	
+	<path id="path_bootclasspath">
+		<fileset dir="${java.home}/lib">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	
+	<path id="build_classpath">
+		<fileset dir="../plugins" includes="**/*.jar" />
+		<fileset dir="${carbide.idl.folder}" includes="**/*.jar" />
+	</path>
+
+	<path id="test_carbide_classpath">
+		<fileset dir="${carbide.adt.folder}" includes="**/*.jar" />
+	</path>
+	
+	<target name="properties" if="eclipse.running">
+		<property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+	</target>
+
+	
+	<!-- Initialization -->
+	<target name="init" depends="properties">
+		<condition property="pluginTemp" value="${buildTempFolder}/plugins">
+			<isset property="buildTempFolder"/>
+		</condition>
+		<property name="pluginTemp" value="${basedir}"/>
+		<condition property="build.result.folder" value="${pluginTemp}/${ant.project.name}">
+			<isset property="buildTempFolder"/>
+		</condition>
+		<property name="build.result.folder" value="${basedir}"/>
+		<property name="temp.folder" value="${basedir}/temp.folder"/>
+		<property name="plugin.destination" value="${basedir}"/>
+
+		<property name="jar.filename" value="${ant.project.name}.jar"/>
+		
+		<delete dir="../plugins"/>
+		<mkdir dir="../plugins"/>
+		
+		<delete dir="${reports.folder}"/>
+		<mkdir dir="${reports.folder}"/>
+		
+		
+		
+		
+		<exec executable="svn" dir="../.">
+			<arg line="up"/>
+		</exec>
+	</target>
+
+	<!-- pde_test target -->
+		
+	<target name="pde_test">
+        <delete>
+            <!--<fileset dir="${test.eclipse.folder}/configuration" includes="**/*" excludes="config.ini"/>-->
+            <fileset dir="${test.eclipse.folder}/plugins" includes="${project.name}*.jar"/>
+            <!--<fileset dir="${test.eclipse.folder}/plugins" includes="pde.test.utils*.jar"/>-->
+        </delete>
+				
+		<!-- Build tests -->
+		
+		<!-- Test support plug-in. This should be build before all other plug-ins.-->
+	    <mkdir dir="${classes.testsupport.folder}"/>
+        <javac srcdir="${testsupport}" destdir="${classes.testsupport.folder}" debug="${debug}" deprecation="${deprecation}" classpathref="test_classpath" includeantruntime="false"/>
+        <zip destfile="${carbide.idl.folder}/${ant.project.name}.testsupport.jar">
+            <zipfileset dir="${testsupport}" includes="**/*.MF"/>
+            <zipfileset dir="${classes.testsupport.folder}"/>
+			<zipfileset dir="${testsupport}/testdata" prefix="testdata/"/>
+        </zip>
+            	
+		<!-- Wizard plug-in tests -->
+        <mkdir dir="${classes.wizards.tests.folder}"/>
+        <javac srcdir="${wizards.tests}" destdir="${classes.wizards.tests.folder}" debug="${debug}" deprecation="${deprecation}" classpathref="test_classpath" includeantruntime="false"/>
+        <zip destfile="${carbide.idl.folder}/${ant.project.name}.wizards.tests.jar">
+            <zipfileset dir="${wizards.tests}" includes="**/*.MF"/>
+            <zipfileset dir="${classes.wizards.tests.folder}"/>
+        </zip>
+
+		<!-- Irq plug-in tests -->
+	    <mkdir dir="${classes.irq.tests.folder}"/>
+        <javac srcdir="${irq.tests}" destdir="${classes.irq.tests.folder}" debug="${debug}" deprecation="${deprecation}" classpathref="test_classpath" includeantruntime="false"/>
+        <zip destfile="${carbide.idl.folder}/${ant.project.name}.irq.tests.jar">
+            <zipfileset dir="${irq.tests}" includes="**/*.MF"/>
+            <zipfileset dir="${classes.irq.tests.folder}"/>
+			<zipfileset dir="${irq.tests}/testdata" prefix="testdata/"/>
+        </zip>
+
+		<!-- Memory plug-in tests -->
+	    <mkdir dir="${classes.memory.tests.folder}"/>
+        <javac srcdir="${memory.tests}" destdir="${classes.memory.tests.folder}" debug="${debug}" deprecation="${deprecation}" classpathref="test_classpath" includeantruntime="false"/>
+        <zip destfile="${carbide.idl.folder}/${ant.project.name}.memory.tests.jar">
+            <zipfileset dir="${memory.tests}" includes="**/*.MF"/>
+            <zipfileset dir="${classes.memory.tests.folder}"/>
+        </zip>	
+		
+		<!-- Address plug-in tests -->
+	    <mkdir dir="${classes.address.tests.folder}"/>
+        <javac srcdir="${address.tests}" destdir="${classes.address.tests.folder}" debug="${debug}" deprecation="${deprecation}" classpathref="test_classpath" includeantruntime="false"/>
+        <zip destfile="${carbide.idl.folder}/${ant.project.name}.address.tests.jar">
+            <zipfileset dir="${address.tests}" includes="**/*.MF"/>
+            <zipfileset dir="${classes.address.tests.folder}"/>
+			<zipfileset dir="${address.tests}/testdata" prefix="testdata/"/>
+        </zip>	
+		
+		<!-- Call plug-in tests -->
+        <mkdir dir="${classes.call.tests.folder}"/>
+        <javac srcdir="${call.tests}" destdir="${classes.call.tests.folder}" debug="${debug}" deprecation="${deprecation}" classpathref="test_classpath" includeantruntime="false"/>
+        <zip destfile="${carbide.idl.folder}/${ant.project.name}.call.tests.jar">
+            <zipfileset dir="${call.tests}" includes="**/*.MF"/>
+            <zipfileset dir="${classes.call.tests.folder}"/>
+			<zipfileset dir="${address.tests}/testdata" prefix="testdata/"/>
+        </zip>	
+        
+		<!-- Button plug-in tests -->
+	    <mkdir dir="${classes.button.tests.folder}"/>
+        <javac srcdir="${button.tests}" destdir="${classes.button.tests.folder}" debug="${debug}" deprecation="${deprecation}" classpathref="test_classpath" includeantruntime="false"/>
+        <zip destfile="${carbide.idl.folder}/${ant.project.name}.button.tests.jar">
+            <zipfileset dir="${button.tests}" includes="**/*.MF"/>
+            <zipfileset dir="${classes.button.tests.folder}"/>
+        </zip>	
+		
+		<!-- Instr plug-in tests -->
+        <mkdir dir="${classes.instr.tests.folder}"/>
+        <javac srcdir="${instr.tests}" destdir="${classes.instr.tests.folder}" debug="${debug}" deprecation="${deprecation}" classpathref="test_classpath" includeantruntime="false"/>
+        <zip destfile="${carbide.idl.folder}/${ant.project.name}.instr.tests.jar">
+            <zipfileset dir="${instr.tests}" includes="**/*.MF"/>
+            <zipfileset dir="${classes.instr.tests.folder}"/>
+        </zip>	
+		
+		<!-- Peccommon plug-in tests -->
+        <mkdir dir="${classes.peccommon.tests.folder}"/>
+        <javac srcdir="${peccommon.tests}" destdir="${classes.peccommon.tests.folder}" debug="${debug}" deprecation="${deprecation}" classpathref="test_classpath" includeantruntime="false"/>
+        <zip destfile="${carbide.idl.folder}/${ant.project.name}.peccommon.tests.jar">
+            <zipfileset dir="${peccommon.tests}" includes="**/*.MF"/>
+            <zipfileset dir="${classes.peccommon.tests.folder}"/>
+        </zip>	
+          
+		<!-- Ipc plug-in tests -->
+        <mkdir dir="${classes.ipc.tests.folder}"/>
+        <javac srcdir="${ipc.tests}" destdir="${classes.ipc.tests.folder}" debug="${debug}" deprecation="${deprecation}" classpathref="test_classpath" includeantruntime="false"/>
+        <zip destfile="${carbide.idl.folder}/${ant.project.name}.ipc.tests.jar">
+            <zipfileset dir="${ipc.tests}" includes="**/*.MF"/>
+            <zipfileset dir="${classes.ipc.tests.folder}"/>
+			<zipfileset dir="${ipc.tests}/testdata" prefix="testdata/"/>
+        </zip>	
+		
+		<!-- Perfcounters plug-in tests -->
+        <mkdir dir="${classes.perfcounters.tests.folder}"/>
+        <javac srcdir="${perfcounters.tests}" destdir="${classes.perfcounters.tests.folder}" debug="${debug}" deprecation="${deprecation}" classpathref="test_classpath" includeantruntime="false"/>
+        <zip destfile="${carbide.idl.folder}/${ant.project.name}.perfcounters.tests.jar">
+            <zipfileset dir="${perfcounters.tests}" includes="**/*.MF"/>
+            <zipfileset dir="${classes.perfcounters.tests.folder}"/>
+			<zipfileset dir="${perfcounters.tests}/testdata" prefix="testdata/"/>
+
+        </zip>	
+		
+		<!-- PI test plug-in, this should be built after all other plug-ins since it needs all plug-in classes -->
+		<mkdir dir="${classes.pi.tests.folder}"/>
+        <javac srcdir="${pi.tests}" destdir="${classes.pi.tests.folder}" debug="${debug}" deprecation="${deprecation}" classpathref="test_classpath" includeantruntime="false"/>
+        <zip destfile="${carbide.idl.folder}/${ant.project.name}.tests.jar">
+            <zipfileset dir="${pi.tests}" includes="**/*.MF"/>
+            <zipfileset dir="${classes.pi.tests.folder}"/>
+			<zipfileset dir="${pi.tests}/testdata" prefix="testdata/"/>
+
+        </zip>		
+
+		
+        <!-- Load plugin and pde tests plugin fragment into test eclipse installation -->
+        <!--<copy todir="${carbide.idl.folder}" overwrite="true">
+            <fileset dir="${binaries.folder}">
+            		<include name="*.jar"/>
+            </fileset>
+        </copy>
+				 <echo message="Created plugins copied to Carbide/plugins "/>
+		-->
+				<!-- Get pde_test port number -->
+        <delete file="pde_test_port.properties"/> <!-- properties file generated by PDETestPortLocator class in pde.test.utils -->
+        <java classname="pde.test.utils.PDETestPortLocator" fork="true" classpathref="pde.test.port.locator.class.path"/>
+        <waitfor maxwait="10" maxwaitunit="second" checkevery="100" checkeveryunit="millisecond">
+            <available file="pde_test_port.properties"/>
+        </waitfor>
+        <property file="pde_test_port.properties"/>
+        		<echo message="Using port ${pde.test.port} for listening to PDE Test run"/>
+
+        <parallel>
+            <daemons>
+                <antcall target="run_pde_test_listener"/>
+            </daemons>
+            <sequential>
+                <sleep seconds="5"/> <!-- Give the listener a few seconds to start up -->
+                <antcall target="run_pde_tests"/>
+            </sequential>
+        </parallel>
+
+        <!--<delete>
+            <fileset dir="${test.eclipse.folder}/plugins" includes="${feature.name}*.jar"/>
+        </delete>-->
+
+        <mkdir dir="${test.reports.folder}"/>
+        <move todir="${test.reports.folder}">
+            <fileset dir=".">
+                <include name="**/TEST-*.xml"/>
+            </fileset>
+        </move>
+    </target>
+	
+		<!-- Run PDE listener -->
+		<target name="run_pde_test_listener">
+        <java classname="pde.test.utils.PDETestResultsCollector" fork="true" classpathref="pde.test.listener.class.path">
+            <arg line="${feature.name} ${pde.test.port}"/>
+        </java>
+    </target>
+    
+    <!-- Run PDE tests -->
+    <target name="run_pde_tests">
+    
+        <property name="test.classes.list" value="${test.plugin.name}.AllJUnitPluginTests"/>
+        <mkdir dir="${test.reports.folder}/output/ws"/>
+        <java dir="${carbide.idl.folder}" classname="org.eclipse.equinox.launcher.Main" fork="true" classpathref="equinox.launcher.class.path" maxmemory="1024m">
+        	<arg line="-Xmx1024m" />
+            <arg line="-application org.eclipse.pde.junit.runtime.uitestapplication -data ${test.reports.folder}/output/ws -dev bin -clean -port ${pde.test.port} -testpluginname ${test.plugin.name} -classnames ${test.classes.list}"/>				
+		        		
+				</java>
+				<junit>
+				
+						<classpath refid="test_classpath" />
+	      	
+	      		<!-- Plain format and XML -->
+	      		<formatter type="plain" />
+	      		<formatter type="xml" />
+				
+						<jvmarg value="-Demma.coverage.out.file=${reports.emma}\coverage.emma" />
+	    			<jvmarg value="-Demma.coverage.out.merge=true" />
+	    		
+	    	</junit>
+    	
+
+        
+   
+        <!--<emma enabled="true" >
+      			<report sourcepath="src" >
+        				<fileset dir="${reports.emma}" >
+          					<include name="*.emma" />
+        				</fileset>
+        				<xml outfile="${reports.emma}/coverage.xml" depth="method"/>
+
+      			</report>
+    		</emma>-->
+	
+		
+    </target>
+		
+		<!-- Generate test report -->
+	  <target name="generate_report">
+        <junitreport todir="${test.reports.folder}">
+            <fileset dir="${test.reports.folder}">
+                <include name="TEST-*.xml" />
+            </fileset>
+            <report todir="${test.reports.folder}" />
+        </junitreport>
+    </target>
+
+		<!-- Generate html report -->
+    <target name="check_results">
+        <loadfile srcfile="${test.reports.folder}/overview-summary.html" property="full.results.summary"/> <!-- works if you load 2 times ?? -->
+        <loadfile srcfile="${test.reports.folder}/overview-summary.html" property="results.summary">
+            <filterchain>
+                <headfilter lines="30" />
+                <linecontains>
+                    <contains value="%&lt;/td&gt;" />
+                </linecontains>
+            </filterchain>
+        </loadfile>
+
+        <condition property="tests.passed">
+            <contains string="${results.summary}" substring="100.00%" />
+        </condition>
+        <fail message="FAILED - some tests failed - see ${test.reports.folder}\index.html for more details" unless="tests.passed" />
+        <echo message="SUCCESS - all tests passed - see ${test.reports.folder}\index.html for more details" />
+    
+    </target>
+			
+			
+	<!-- Clean tests target -->
+  <target name="clean-test" description="Clean test">
+    	<!--<delete>
+      		<fileset dir="${test.folder}" includes="**/*.class" />
+    	</delete>-->
+    	<!--<delete dir="${instr.folder}"/>-->
+    	<!--<delete dir="${reports.folder}"/>-->
+    	<delete file="pde_test_port.properties"/>
+  </target>
+			
+	
+</project>

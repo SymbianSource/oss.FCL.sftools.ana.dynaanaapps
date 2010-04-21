@@ -59,6 +59,8 @@ implements INewPIWizardSettings {
 	private Composite buttonComposite = null;	
 	private Button addPkgButton = null;
 	private Button removeButton = null;
+	private boolean isSisBuilderConfigurationChecked;
+	private PkgListTreeContentProvider pkgListTreeContentProvider;
 	
 	// data model
 	PkgListTree pkgListRoot = null;
@@ -96,7 +98,7 @@ implements INewPIWizardSettings {
 		projectTreeViewer = new PkgListTreeViewer(filelistComposite, SWT.H_SCROLL | SWT.BORDER);
 		pkgListRoot = new PkgListTree();
 		projectTreeViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		projectTreeViewer.setContentProvider(new PkgListTreeContentProvider(pkgListRoot));
+		projectTreeViewer.setContentProvider(pkgListTreeContentProvider = new PkgListTreeContentProvider(pkgListRoot));
 		projectTreeViewer.setLabelProvider(new DecoratingLabelProvider(
 				new PkgListTreeLabelProvider(), PlatformUI.getWorkbench()
                         .getDecoratorManager().getLabelDecorator()));
@@ -283,4 +285,15 @@ implements INewPIWizardSettings {
 
 	public void validatePage() {
 	}
+
+	@Override
+	public void setVisible(boolean visable) {
+		super.setVisible(visable);
+		// show possible sis builder configuration warnings once during the wizard session
+		if(visable && !isSisBuilderConfigurationChecked){
+			isSisBuilderConfigurationChecked = true;
+			pkgListTreeContentProvider.getCarbideCppProjects(true);
+		}
+	}
+	
 }

@@ -134,7 +134,7 @@ public class PluginClassLoader extends ClassLoader
 						int amount = zis.read(tempBytes);
 						if (amount != -1) 
 						{
-							amounts.add(new Integer(amount));
+							amounts.add(Integer.valueOf(amount));
 							totalAmount+=amount;
 							data.add(tempBytes);
 						}

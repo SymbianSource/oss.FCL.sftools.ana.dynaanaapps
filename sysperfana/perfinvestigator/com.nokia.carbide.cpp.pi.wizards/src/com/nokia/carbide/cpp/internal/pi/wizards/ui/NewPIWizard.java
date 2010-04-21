@@ -18,11 +18,11 @@
 package com.nokia.carbide.cpp.internal.pi.wizards.ui;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
 
 import org.eclipse.core.resources.IFile;
@@ -30,8 +30,11 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jface.dialogs.DialogSettings;
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
@@ -40,16 +43,21 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.progress.IProgressService;
 
 import com.nokia.carbide.cdt.builder.builder.CarbideCPPBuilder;
 import com.nokia.carbide.cdt.builder.project.ICarbideBuildConfiguration;
 import com.nokia.carbide.cdt.builder.project.ISISBuilderInfo;
 import com.nokia.carbide.cpp.internal.api.sdk.SymbianBuildContext;
+import com.nokia.carbide.cpp.internal.pi.analyser.AnalyserDataProcessor;
+import com.nokia.carbide.cpp.internal.pi.utils.PIUtilities;
 import com.nokia.carbide.cpp.internal.pi.wizards.ui.util.IPkgEntry;
 import com.nokia.carbide.cpp.internal.pi.wizards.ui.util.RofsObySymbolPair;
 import com.nokia.carbide.cpp.pi.button.BupEventMapManager;
 import com.nokia.carbide.cpp.pi.button.ButtonPlugin;
 import com.nokia.carbide.cpp.pi.importer.SampleImporter;
+import com.nokia.carbide.cpp.pi.util.GeneralMessages;
 import com.nokia.carbide.cpp.pi.wizards.WizardsPlugin;
 import com.nokia.carbide.cpp.sdk.core.ISymbianBuildContext;
 import com.nokia.carbide.cpp.ui.CarbideUIPlugin;
@@ -76,12 +84,13 @@ public class NewPIWizard extends Wizard implements IImportWizard, INewWizard{
 	private NewPIWizardPageBupMapTask pageBupMap;
 	private NewPIWizardPageOutputTask pageOutput;
 	private ArrayList<IFile> tmpPkgList = new ArrayList<IFile>();
-	private Set<Integer> traceSet;
 	
 	protected IProject piProject;
 	IWorkbench workbench;
 	
 	NewPIWizardSettings wizardSettings = NewPIWizardSettings.getInstance();
+
+	private List<ProfilerDataPlugins> profilerDataPlugins;
 
 	/**
 	 * Constructor for NewPIWizard.
@@ -145,7 +154,6 @@ public class NewPIWizard extends Wizard implements IImportWizard, INewWizard{
 	 * will create an operation and run it using wizard as execution context.
 	 */
 	public boolean performFinish() {
-		pageOutput.regenerateOutputIfIntputChanged(); // this must stay out of asyncExec() since it require treeviewer selection
 		Display.getDefault().asyncExec( new Runnable() {
 			public void run () {
 				//DialogSettings dialogSettings = (DialogSettings) WizardsPlugin.getDefault().getDialogSettings();
@@ -206,12 +214,12 @@ public class NewPIWizard extends Wizard implements IImportWizard, INewWizard{
 	}
 
 	private void createNewProject() {
-		SampleImporter sampleImporter = SampleImporter.getInstance();
+		
+		final SampleImporter sampleImporter = SampleImporter.getInstance();
 		NewPIWizardSettings wizardSettings = NewPIWizardSettings.getInstance();
 		Map<Object, IFile> preprocessedMap = new HashMap<Object, IFile>();
 		sampleImporter.clear();
 		
-		sampleImporter.setDatFileName(wizardSettings.sampleFileName);
 		String container = wizardSettings.outputContainer.getFullPath().toString();
 		if (container.startsWith("/")) //$NON-NLS-1$
 			container = container.substring(1, container.length());
@@ -305,9 +313,45 @@ public class NewPIWizard extends Wizard implements IImportWizard, INewWizard{
 				sampleImporter.setBupMapIsWorkspace(true);
 			}			
 		}
-
-		sampleImporter.importSamples(false);	// not waiting NPI save complete for responsive UI, save NPI on background
 		
+
+		if(profilerDataPlugins.size() <= 1){
+			for(ProfilerDataPlugins pdp : profilerDataPlugins){
+				sampleImporter.setDatFileName(pdp.getProfilerDataPath().toString());	
+				// due to PI shortcomings (i.e. plugins that create pages have to come first)
+				// the plugins have to be sorted by trace id
+				sampleImporter.importSamples(false, PIUtilities.sortPlugins(pdp.getSelectedPlugins()), true, null, null);						
+				break;
+			}
+		}	
+		else{		
+			final int[] i={1};
+			final int count = profilerDataPlugins.size();
+			IProgressService progressService = PlatformUI.getWorkbench().getProgressService();
+			IRunnableWithProgress runnable= new IRunnableWithProgress() {
+
+				public void run(IProgressMonitor progressMonitor) {					
+					progressMonitor.beginTask("", count*AnalyserDataProcessor.TOTAL_PROGRESS_COUNT); //$NON-NLS-1$
+					String suffixTaskName;
+					for (ProfilerDataPlugins pdp : profilerDataPlugins) {
+						if(progressMonitor.isCanceled()){
+							break;
+						}						
+						suffixTaskName = MessageFormat.format(Messages.getString("NewPIWizard.suffixTaskName"), i[0]++, count);						 //$NON-NLS-1$
+						sampleImporter.setDatFileName(pdp.getProfilerDataPath().toString());	
+						sampleImporter.importSamples(false, PIUtilities
+								.sortPlugins(pdp.getSelectedPlugins()), false, suffixTaskName,
+								new SubProgressMonitor(progressMonitor, AnalyserDataProcessor.TOTAL_PROGRESS_COUNT));
+					}		
+				}
+
+			};
+			try {
+				progressService.busyCursorWhile(runnable);
+			} catch (Exception e) {
+				GeneralMessages.showErrorMessage(e.getMessage());
+			}
+		}
 		cleanTempPkgFile();
 	}
 	
@@ -340,21 +384,11 @@ public class NewPIWizard extends Wizard implements IImportWizard, INewWizard{
 		return true;
 	}
 	
-	// all trace ID, we can check this for trace specific handling
-	public Set<Integer> getTraceSet() {
-		return traceSet;
-	}
-	
-	// all trace ID, we can do trace specific handling later
-	public void setTraceSet(Set<Integer> myTraceSet) {
-		traceSet = myTraceSet;
-	}
-	
 	public IWizardPage getPreviousPage (IWizardPage page) {
 		NewPIWizardSettings settings = NewPIWizardSettings.getInstance();
 		if (page == pageOutput && settings.enableCust == false) {
 			return getPreviousPage(pageCustom);
-		} else if (page == pageCustom && getTraceSet().contains(ButtonPlugin.getDefault().getTraceId()) == false){
+		} else if (page == pageCustom && isButtonPluginUsed() == false){
 			return getPreviousPage(pageBupMap);
 		} else if (page == pageBupMap && wizardSettings.haveRomOnly == false && wizardSettings.haveAppRom == false) {
 			return getPreviousPage(pageObySym);
@@ -370,12 +404,27 @@ public class NewPIWizard extends Wizard implements IImportWizard, INewWizard{
 			return getNextPage(pagePkgList);
 		} else if (page == pagePkgList && wizardSettings.haveRomOnly == false && wizardSettings.haveAppRom == false) {
 			return getNextPage(pageObySym);
-		} else if (page == pageObySym && getTraceSet().contains(ButtonPlugin.getDefault().getTraceId()) == false) {
+		} else if (page == pageObySym && isButtonPluginUsed() == false) {
 			return getNextPage(pageBupMap);
 		} else if (page == pageBupMap && wizardSettings.enableCust == false) {
 			return getNextPage(pageCustom);
 		}
 		return super.getNextPage(page);
+	}
+	
+	public void setProfilerDataFiles(List<ProfilerDataPlugins> profilerDataPlugins){
+		this.profilerDataPlugins = profilerDataPlugins;
+	}
+	
+	private boolean isButtonPluginUsed(){
+		if(profilerDataPlugins != null){
+			for(ProfilerDataPlugins pdp : profilerDataPlugins){
+				if(pdp.getSelectedPlugins().contains(ButtonPlugin.getDefault())){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 }

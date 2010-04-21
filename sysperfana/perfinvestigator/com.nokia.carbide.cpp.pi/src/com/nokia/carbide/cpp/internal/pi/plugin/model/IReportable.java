@@ -34,6 +34,7 @@ public interface IReportable extends ITrace
 	public ArrayList<Boolean> getColumnSortTypes(); // This gives feedback to the system whether column data strings should be sorted by name or the first number they may contain. 
 										// Boolean values SORT_BY_NAME and SORT_BY_NUMBER are meant to be used to indicate this information.
 	public Hashtable<Integer,Object> getSummaryTable(double startTime, double endTime);
+	//CH: this doesn't seem to be used anywhere, most plugins return null for this
 	public String getActiveInfo(Object key, double startTime, double endTime);
 	public String getGeneralInfo(); // this is reserved for future implementation and has no functionality at the moment
 

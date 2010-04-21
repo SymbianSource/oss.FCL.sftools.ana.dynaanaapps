@@ -152,6 +152,13 @@ public class CallPlugin extends AbstractPiPlugin
 		return "Function Call"; //$NON-NLS-1$
 	}
 
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#getTraceTitle()
+	 */
+	public String getTraceTitle() {
+		return Messages.getString("CallPlugin.1"); //$NON-NLS-1$
+	}
+
 	public int getTraceId() {
 		return 2;
 	}
@@ -245,16 +252,7 @@ public class CallPlugin extends AbstractPiPlugin
 
 		PIPageEditor pageEditor = PIPageEditor.currentPageEditor();
 		
-		this.callVisualiser = new CallVisualiser(pageEditor, pageIndex, profileVisualiser.getTopComposite().getSashForm(), this.trace);
-	    
-		this.profileVisualiser.getTitle().setText(Messages.getString("CallPlugin.functionCallAnalysis")); //$NON-NLS-1$
-		this.profileVisualiser.getTitle().setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-		this.profileVisualiser.getTitle().setFont(PIPageEditor.helvetica_12);
-
-		this.profileVisualiser.getTitle2().setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-
-		this.profileVisualiser.getTimeString().setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-		this.profileVisualiser.getTimeString().setFont(PIPageEditor.helvetica_10);
+		this.callVisualiser = new CallVisualiser(pageEditor, pageIndex, profileVisualiser.getTopComposite().getSashForm(), this.trace, this.profileVisualiser.getContentPane());
 
 		Object objCallList = NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.call.CallPlugin.callVisualiserList"); //$NON-NLS-1$
 		ArrayList<CallVisualiser> callVisualiserList = (ArrayList<CallVisualiser>) objCallList;
@@ -324,17 +322,10 @@ public class CallPlugin extends AbstractPiPlugin
 					callVisualiserList.get(i).setStartAndEnd(event.start, event.end);
 					double startTime = PIPageEditor.currentPageEditor().getStartTime();
 					double endTime   = PIPageEditor.currentPageEditor().getEndTime();
-					profileVisualiserList.get(i).getTimeString().setText(ProfileVisualiser.getTimeInterval(startTime, endTime));
+					profileVisualiserList.get(i).updateStatusBarTimeInterval(startTime, endTime);
 				}
 			}
 		}
-	}
-
-	/* (non-Javadoc)
-	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.IVisualizable#getGraphTitle(int)
-	 */
-	public String getGraphTitle(int graphIndex) {
-		return null;
 	}
 
 	public void setActions(boolean entering, int pageIndex) {
@@ -352,5 +343,12 @@ public class CallPlugin extends AbstractPiPlugin
 			PIPageEditor.getZoomToSelectionAction().setEnabled(true);
 			PIPageEditor.getZoomToTraceAction().setEnabled(true);
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#parseTraceFiles(java.io.File[])
+	 */
+	public ParsedTraceData parseTraceFiles(File[] files) throws Exception {
+		throw new UnsupportedOperationException();
 	}
 }

@@ -19,9 +19,9 @@ package com.nokia.carbide.cpp.pi.instr;
 
 import java.io.File;
 
-import com.nokia.carbide.cpp.internal.pi.model.Binary;
-import com.nokia.carbide.cpp.internal.pi.model.Function;
 import com.nokia.carbide.cpp.internal.pi.model.FunctionResolver;
+import com.nokia.carbide.cpp.internal.pi.model.IBinary;
+import com.nokia.carbide.cpp.internal.pi.model.IFunction;
 import com.nokia.carbide.cpp.internal.pi.resolvers.RofsSymbolFileFunctionResolver;
 import com.nokia.carbide.cpp.pi.importer.SampleImporter;
 
@@ -56,20 +56,24 @@ public class PiInstrFunctionResolver implements FunctionResolver {
 		rofsResolver.adjustRuntimeBinary(binaryReader122.getHostNameToBinary());		
 	}
 	
-	public Binary findBinaryForAddress(long address) {
-		Function f = this.findFunctionForAddress(address);
+	public IBinary findBinaryForAddress(long address, long sampleSynchTime) {
+		IFunction f = this.findFunctionForAddress(address, sampleSynchTime);
 		
 		if (f != null)
-			return f.functionBinary;
+			return f.getFunctionBinary();
 		else 
 			return null;
 	}
+	
+	public IBinary findBinaryForAddress(long address) {
+		return findBinaryForAddress(address, -1);
+	}
 
 	public String findBinaryNameForAddress(long address) {
-		Function f = this.findFunctionForAddress(address);
+		IFunction f = this.findFunctionForAddress(address);
 		if (f != null)
 		{
-			return f.functionBinary.binaryName;
+			return f.getFunctionBinary().getBinaryName();
 		}
 		else
 		{
@@ -77,20 +81,25 @@ public class PiInstrFunctionResolver implements FunctionResolver {
 		}
 	}
 
-	public Function findFunctionForAddress(long address) {
-		Function f;
+	public IFunction findFunctionForAddress(long address, long sampleSynchTime) {
+		IFunction f;
 		f = this.rofsResolver.findFunctionForAddress(address);
 		if (f == null) {	//$NON-NLS-1$
-			f = this.ittTrace122.getFunctionForAddress(address,this.binaryReader122);
+			f = this.ittTrace122.getFunctionForAddress(address, sampleSynchTime, this.binaryReader122);
 		}
 		return f;
 	}
 
+	public IFunction findFunctionForAddress(long address) {
+		return findFunctionForAddress(address, -1);
+	}
+
+	
 	public String findFunctionNameForAddress(long address) {
-		Function f = this.findFunctionForAddress(address);
+		IFunction f = this.findFunctionForAddress(address);
 		if (f != null)
 		{
-			return f.functionName;
+			return f.getFunctionName();
 		}
 		else
 		{

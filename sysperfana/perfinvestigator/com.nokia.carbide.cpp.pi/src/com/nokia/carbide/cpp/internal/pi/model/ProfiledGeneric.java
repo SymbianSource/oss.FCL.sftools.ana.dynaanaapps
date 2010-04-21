@@ -25,48 +25,131 @@ import org.eclipse.swt.graphics.RGB;
 
 import com.nokia.carbide.cpp.pi.util.ColorPalette;
 
+/**
+ * Generic class for a profiled element, such as a thread, a binary or a function
+ *
+ */
 public abstract class ProfiledGeneric
 {
+	/** number of graphs */
+	protected static final int GRAPH_COUNT = 3;
+	
+	/**
+	 * Unique ordinal for this profiled element, given on creation. The first created profiled element
+	 * of this kind has an index of zero, each following is incremented by one.
+	 */
     protected int index = -1;
+    /** Name of this profiled element */
     private String nameString;
+    /** Colour with which this profiled element is represented in any graph or legend view*/
     protected Color color;
-    protected int totalSampleCount;
+    /** overall sample count of this profiled element in the trace */
+	protected int totalSampleCount;
+	/** timestamp of the first sample for this profiled element */
     protected int firstSample = -1;
+	/** timestamp of the last sample for this profiled element */
     protected int lastSample = -1;
-    private int   recentSample = -1;
-    private int   recentSampleCount = 0;
-    private int   recentPercentage = -1;
-    protected int[] activityList;
-    private int[] sampleList;
-    private int[][] cumulativeList = new int[3][];
-    
+
 	// since each instance may be used by table viewers for multiple graphs,
 	// keep per graph (for a maximum of 3 graphs):
     //	whether the thread/binary/function is currently enabled
     //	sample count in the selected graph area
     //	% load in the selected graph area
 	//  string version of graph percent load
-    protected boolean[] enableValue = {true, true, true};
-	protected int[]   graphSampleCount = { 0, 0, 0 };
-	protected float[] graphPercentLoad = { 0.0f, 0.0f, 0.0f };
-    private String[]  averageLoadValueString = { "", "", "" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	
-    private PointList[] pointList  = {new PointList(), new PointList(), new PointList()};
-    protected int[] activityP = null;
+    
+    /**
+  	 * The cumulative list contains for each bucket the 
+  	 * cumulative sample percentage of the same bucket of all ProfiledGenerics
+  	 * so far processed (not including the values of the current ProfiledGeneric).
+  	 * 
+  	 * In other words it's containing the bottom or start value of this
+  	 * profiled element to draw on the graph (the graph drawn just underneath the 
+  	 * graph of this profiled element)
+  	 */
+    private float[][] cumulativeList;
+    /** checkbox enabled state of this profiled element for each of the graphs */
+    protected boolean[] enableValue;
+    /** current sample count of this profiled element for each of the graphs, changes with enabled state, selected time frame, master filtering */
+	protected int[]   graphSampleCount;
+    /** current sample percentage load of this profiled element for each of the graphs, changes with enabled state, selected time frame, master filtering */
+	protected float[] graphPercentLoad;
+    /** current sample average load of this profiled element for each of the graphs, changes with enabled state, selected time frame, master filtering */
+    private String[]  averageLoadValueString; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$	
+    /** PointList for each graphs polyline */
+    private PointList[] pointList;
+    
+    //  bucket values 
+    //
+    /** holds the sample count value for all buckets, calculated as one-off when trace is first processed */
+    private int[] activityN = null;
+    /** holds percentage value for all buckets, calculated as one-off when trace is first processed */
+    protected float[] activityP = null;
+    /** holds start timestamp of all buckets, calculated as one-off when trace is first processed */
     private int[] activityT = null;
+    /** the index of the bucket currently updated */
     protected int activityIndx = 0;
     
-    public ProfiledGeneric()
-    {
-      // default to light gray
-      this.color = ColorPalette.getColor(new RGB(192, 192, 192));
-     }
+    /** total number of CPUs in the system; 1 for non-SMP trace */
+	private int cpuCount;
+
+    //for SMP
+    protected boolean isSMP;
+	protected int[] totalSampleCountSMP;
     
+    protected float[][] activityPSMP;
+    private int[][] activityNSMP;
+    
+	/**
+	 * Constructor
+	 * @param cpuCount number of CPUs present in the trace
+	 * @param graphCount number of graphs to display
+	 */
+	public ProfiledGeneric(int cpuCount, int graphCount) {
+		if (graphCount < 0){
+			throw new IllegalArgumentException("graphCount must be greater than 0.");
+		}
+		// default to light gray
+		this.color = ColorPalette.getColor(new RGB(192, 192, 192));
+		this.cpuCount = cpuCount;
+		
+		// init variables for values per graph
+		cumulativeList = new float[graphCount][];
+		enableValue = new boolean[graphCount];
+		graphSampleCount = new int[graphCount];
+		graphPercentLoad = new float[graphCount];
+		averageLoadValueString = new String[graphCount];
+		pointList = new PointList[graphCount];
+		for (int graph = 0; graph < graphCount; graph++) {
+		    enableValue[graph] = true;
+			averageLoadValueString[graph] = ""; //$NON-NLS-1$
+			pointList[graph] = new PointList();
+		}
+
+		if (cpuCount > 1) { // SMP
+
+			isSMP = true;
+			totalSampleCountSMP = new int[cpuCount];
+
+			activityPSMP = new float[cpuCount][];
+			activityNSMP = new int[cpuCount][];
+		}
+	}
+    
+    /**
+     * Setter for the name of the profiled element
+     * @param nameString
+     */
     public void setNameString(String nameString)
     {
     	this.nameString = nameString;
     }
     
+    /**
+     * Adds a point to the PointList of the given graph
+     * @param graphIndex the graph to use
+     * @param x the X-coordinate of the point
+     * @param y the Y-coordinate of the point
+     */
     public void addPointToPolyline(int graphIndex, int x, int y)
     {
     	pointList[graphIndex].addPoint(x, y);
@@ -87,51 +170,92 @@ public abstract class ProfiledGeneric
     	return this.index;
     }
     
-    public void setActivityMarkCount(int size)
-    {
-    	this.activityP = new int[size];
-    	this.activityT = new int[size];
+    /**
+     * Creates bucket arrays. This also propagates to SMP bucket arrays.  
+     * @param numberOfBuckets The total number of buckets to use.
+     */
+    public void createBuckets(int numberOfBuckets){
+    	this.activityP = new float[numberOfBuckets];
+    	this.activityT = new int[numberOfBuckets];
+    	this.activityN = new int[numberOfBuckets];
+    	if (isSMP){
+			for (int cpu = 0; cpu < cpuCount; cpu++) {
+		    	this.activityPSMP[cpu] = new float[numberOfBuckets];
+		    	this.activityNSMP[cpu] = new int[numberOfBuckets];
+			}						    		
+    	}
     }
     
-    // zero the samples of this profiled generic in the time range starting at the time stamp
-    public void zeroActivityMarkValues(int timeStamp)
-    {
-        addActivityMarkValues(timeStamp, 0, 0);
+    /**
+     * this is intended to initialise the newly created bucket arrays
+     * @param duration length of time each bucket represents 
+     */
+    public void initialiseBuckets(int duration){
+    	for (int i = 0; i < activityT.length; i++) {
+			//this is important for calculating the x values later, so use mid-bucket values
+    		activityT[i] = duration*i + duration / 2;
+		}
     }
-
-    // set the samples of of this profiled generic in the time range starting at the time stamp
-    public void addActivityMarkValues(int timeStamp, int percentage, int sampleCount)
-    {
-      this.activityT[this.activityIndx] = timeStamp;
-      this.activityP[this.activityIndx] = percentage;
-
-      if (this.firstSample == -1 && percentage != 0)
-      {
-    	  this.firstSample = this.recentSample;
-      }
-
-   	  if (this.recentSampleCount > 0)
-   		  this.lastSample = timeStamp;
-
-      this.recentSample      = timeStamp;
-      this.recentSampleCount = sampleCount;
-      this.recentPercentage  = percentage;
-      this.activityIndx++;
+    
+    /**
+     * Updates the bucket percentage values. This requires that sample counts have
+     * already been calculated for each bucket.
+     * @param bucketTotalArr Total number of samples per bucket
+     * @param bucketTotalArrSMP total number of samples per cpu and bucket. May be null for non-SMP systems.
+     */
+    public void calculateBucketPercentages(int[] bucketTotalArr, int[][] bucketTotalArrSMP){
+    	if (activityN != null){ 
+        	for (int b = 0; b < activityN.length; b++) {//loop through sample counts per bucket
+        		if (bucketTotalArr[b] > 0){
+            		activityP[b] = (float)activityN[b]*100/bucketTotalArr[b];
+        			
+        		}
+        		
+        		activityIndx = activityP.length; //TODO: temporarily needed, remove later
+        		
+    			if (isSMP){
+    				for (int cpu = 0; cpu < bucketTotalArrSMP.length; cpu++) {
+    					if (bucketTotalArrSMP[cpu][b]>0){
+    						activityPSMP[cpu][b] = (float)activityNSMP[cpu][b]*100/bucketTotalArrSMP[cpu][b];
+    					}
+					}
+    			}
+    		}    		
+    	}	    		
     }
-
-    public void addActivityMark(int timeStamp, int percentage)
-    {
-      this.activityT[this.activityIndx] = timeStamp;
-      this.activityP[this.activityIndx] = percentage;
-      this.activityIndx++;
+    
+    /**
+     * Increases total sample count as well as sample count for the given bucket. Takes care of SMP values
+     * if SMP trace.
+     * @param bucketIndex The index of the bucket to use
+     * @param timestamp the timestamp of the sample
+     * @param cpu the CPU number of the sample
+     */
+    public void increaseSampleCount(int bucketIndex, int timestamp, int cpu){
+    	//note, activityT (bucket times) is constant and has been set during initialisation
+    	//activityP (bucket percentages) will be calculated after all samples have been processed
+    	
+		incTotalSampleCount();
+		if (isSMP){
+			incTotalSampleCountForSMP(cpu);				
+		}
+		
+    	this.activityN[bucketIndex]++; //increase sample count in bucket
+    	if (firstSample == -1){
+    		firstSample = timestamp;
+    	}
+    	lastSample = timestamp;
+    	if (isSMP){
+    		this.activityNSMP[cpu][bucketIndex]++;
+    	}
     }
 
   	public void setupCumulativeList(int graphIndex)
   	{
-  		if (this.activityIndx != 0)
+  		if (this.activityT != null && activityT.length != 0)
   		{	
   			if (cumulativeList[graphIndex] == null)
-  				cumulativeList[graphIndex] = new int[this.activityIndx];
+  				cumulativeList[graphIndex] = new float[this.activityT.length];
   			else
   			{
   				for (int i = 0; i < cumulativeList[graphIndex].length; i++)
@@ -142,47 +266,77 @@ public abstract class ProfiledGeneric
   		}
   	}
 
-  	public int[] getCumulativeList(int graphIndex)
+  	/**
+  	 * The cumulative list contains for each bucket the 
+  	 * cumulative sample percentage of the same bucket of all ProfiledGenerics
+  	 * so far processed (not including the values of the current ProfiledGeneric).
+  	 * 
+  	 * Typically used for drawing a stacked-area chart
+  	 * @param graphIndex the graph ordinal to use
+  	 * @return
+  	 */
+  	public float[] getCumulativeList(int graphIndex)
   	{
   		return this.cumulativeList[graphIndex];
   	}
 
-  	public void setCumulativeValue(int graphIndex, int index, int value)
+  	public void setCumulativeValue(int graphIndex, int index, float value)
   	{
   		this.cumulativeList[graphIndex][index] = value;
   	}
   	
-  	//returns x-coordinates
+  	/**
+  	 * returns x-coordinates
+  	 * @return
+  	 */
   	public int[] getSampleList()
   	{
-  		if (sampleList == null && this.activityIndx != 0)
-  		{
-  			sampleList = new int[this.activityIndx];
- 
-  			for (int i = 0; i < this.activityIndx; i++)
-  			{
-  				this.sampleList[i] = this.activityT[i];
-  			}
-  			this.activityT = null;
+  		if (activityT != null){
+  			//Arrays.copyOf() is only supported from Java 6
+  			//return Arrays.copyOf(this.activityT, this.activityT.length);
+  			int[] ret = new int[activityT.length];
+  			for (int i = 0; i < ret.length; i++) {
+				ret[i] = activityT[i];
+			}
+  			return ret;
   		}
-  		return this.sampleList;
+  		return null;
   	}
   	
-  	// returns y-coordinates
-  	public int[] getActivityList()
-  	{
-  		if (activityList == null && this.activityIndx != 0)
-  		{
-  			activityList = new int[this.activityIndx];
-
-  			for (int i = 0; i < this.activityIndx; i++)
-  			{
-  			  activityList[i] = this.activityP[i];
-  			}
-  			this.activityP = null;
+  	/**
+  	 *  returns y-coordinates
+  	 * @return
+  	 */
+  	public float[] getActivityList(){
+  		if (activityP != null){
+  			//Arrays.copyOf() is only supported from Java 6
+  			//return Arrays.copyOf(this.activityP, this.activityP.length);
+  			float[] ret = new float[activityP.length];
+  			for (int i = 0; i < ret.length; i++) {
+				ret[i] = activityP[i];
+			}
+  			return ret;
   		}
-
-  		return this.activityList;
+  		return null;
+   	}
+  	
+  	/**
+  	 *  returns y-coordinates (percentage values of activity)
+  	 * @param cpu 
+  	 * @return
+  	 */
+  	public float[] getActivityListForSMP(int cpu)
+  	{
+  		if (isSMP && this.activityPSMP[cpu] != null){
+  			//Arrays.copyOf() is only supported from Java 6
+  			//return Arrays.copyOf(activityPSMP[cpu], activityPSMP[cpu].length);
+  			float[] ret = new float[activityPSMP[cpu].length];
+  			for (int i = 0; i < ret.length; i++) {
+				ret[i] = activityPSMP[cpu][i];
+			}
+  			return ret;
+  		}
+  		return null;
   	}
 
     public int getFirstSample()
@@ -193,10 +347,6 @@ public abstract class ProfiledGeneric
     	  return this.firstSample;
     }
 
-    public int getRealFirstSample()
-    {
-   	  return this.firstSample;
-    }
 
     public int getLastSample()
     {
@@ -215,130 +365,11 @@ public abstract class ProfiledGeneric
     {
     	this.lastSample = lastSample;
     }
-
-    private int findNearestSampleIndexFromStart(int sampleNum)
-    {
-    	int i = 0;
-    	while (i < this.sampleList.length && this.sampleList[i] < sampleNum)
-    	{
-    		i++;
-    	}    
-    	return i;
-    }
-
-    private int findNearestSampleIndexFromEnd(int sampleNum)
-    {
-    	int i = sampleList.length - 1;
-    	while (this.sampleList[i] > sampleNum && i > 0)
-    	{
-    		i--;
-    	}
-    	return i;
-    }
-
-    public float getAverageLoad(double startTime, double endTime)
-    {
-        return getAverageLoad((int) startTime,(int) endTime);
-    }
     
-    public float getAverageLoad(int startSample,int endSample)
-    {
-    	if (startSample == -1 || endSample == -1) return -666;
-    	if (endSample < startSample) return -777;
-
-    	if (this.activityList == null || this.sampleList == null) return -888;
-
-    	int firstSampleIndx = 0;
-    	int lastSampleIndx = 0;
-
-    	firstSampleIndx = this.findNearestSampleIndexFromStart(startSample) + 1;
-    	lastSampleIndx  = this.findNearestSampleIndexFromEnd(endSample) + 1;
-   
-    	if (firstSampleIndx < 0)
-    		firstSampleIndx = 0;
-    	if (firstSampleIndx >= activityList.length)
-    		firstSampleIndx = activityList.length - 1;
-    	
-    	if (lastSampleIndx < 0)
-    		lastSampleIndx = 0;
-    	if (lastSampleIndx >= activityList.length)
-    		lastSampleIndx = activityList.length - 1;
-      
-    	if (firstSampleIndx > lastSampleIndx)
-    	{
-    		int temp = firstSampleIndx;
-    		firstSampleIndx = lastSampleIndx;
-    		lastSampleIndx = temp;
-    	}
-    	
-    	int totalTime = sampleList[lastSampleIndx - 1] - sampleList[firstSampleIndx - 1];
-    	int totalLoad = 0;
-    	
-    	for (int i = firstSampleIndx; i < lastSampleIndx; i++)
-    	{
-    		totalLoad += this.activityList[i];
-    	}
-     	
-    	totalLoad *= (sampleList[1] - sampleList[0]);
-
-    	if (totalTime == 0)
-    	{
-    		return 0;
-    	}
-    	else
-    	{
-    		return (float)(((float)totalLoad) / ((float)totalTime));
-    	}
-    }
-    
-    public int getTotalLoad(int startSample,int endSample)
-    {
-    	if (startSample == -1 || endSample == -1) return -666;
-    	if (endSample < startSample) return -777;
-
-    	if (this.activityList == null || this.sampleList == null) return -888;
-
-    	int firstSampleIndx = 0;
-    	int lastSampleIndx = 0;
-
-    	firstSampleIndx = this.findNearestSampleIndexFromStart(startSample) + 1;
-    	lastSampleIndx  = this.findNearestSampleIndexFromEnd(endSample) + 1;
-  
-    	if (firstSampleIndx < 0)
-    		firstSampleIndx = 0;
-    	if (firstSampleIndx >= activityList.length)
-    		firstSampleIndx = activityList.length - 1;
-    	
-    	if (lastSampleIndx < 0)
-    		lastSampleIndx = 0;
-    	if (lastSampleIndx >= activityList.length)
-    		lastSampleIndx = activityList.length - 1;
-      
-    	if (firstSampleIndx > lastSampleIndx)
-    	{
-    		int temp = firstSampleIndx;
-    		firstSampleIndx = lastSampleIndx;
-    		lastSampleIndx = temp;
-    	}
-    	
-    	int totalTime = sampleList[lastSampleIndx - 1] - sampleList[firstSampleIndx - 1];
-    	int totalLoad = 0;
-   	
-    	for (int i = firstSampleIndx; i < lastSampleIndx; i++)
-    	{
-    		totalLoad += this.activityList[i];
-    	}
-     	
-    	if (totalTime == 0)
-    	{
-    		return 0;
-    	}
-    	else
-    	{
-    		return (int) totalLoad;
-    	}
-    }
-    
+    /**
+     * Setter for this ordinal of this profiled element
+     * @param index the ordinal to set
+     */
     public void setIndex(int index)
     {
     	this.index = index;
@@ -354,51 +385,97 @@ public abstract class ProfiledGeneric
     	this.averageLoadValueString[graphIndex] = (new DecimalFormat(Messages.getString("ProfiledGeneric.decimalFormat"))).format(value); //$NON-NLS-1$
     }
 
-    public void setAverageLoadValueString(int graphIndex)
-    {
-    	this.averageLoadValueString[graphIndex] = (new DecimalFormat(Messages.getString("ProfiledGeneric.decimalFormat"))).format(this.graphPercentLoad[graphIndex]); //$NON-NLS-1$
-    }
 
     public String getAverageLoadValueString(int graphIndex)
     {
     	return this.averageLoadValueString[graphIndex];
     }
 
+    /**
+     * Setter for this colour of this profiled element
+     * @param c the colour to set
+     */
     public void setColor(Color c)
     {
     	this.color = c;
     }
 
+    /**
+     * Sets enabled state for this profiled element in the given graph
+     * @param graphIndex the graph index to use
+     * @param enableValue true for enabled, false for disabled
+     */
     public void setEnabled(int graphIndex, boolean enableValue)
     {
     	this.enableValue[graphIndex] = enableValue;
     }
 
+    /**
+     * Checks enabled state for this profiled element in the given graph
+     * @param graphIndex the graph index to use
+     * @return true if enabled, false if disabled
+     */
     public boolean isEnabled(int graphIndex)
     {
     	return enableValue[graphIndex];
     }
 
+    /**
+     * @return the colour of this profiled element
+     */
     public Color getColor()
     {
     	return this.color;
     }
     
+    /**
+     * @return the name of this profiled element
+     */
     public String getNameString()
     {
     	return this.nameString;
     }
     
+    /**
+     * @return the total sample count of this profiled element over the entire trace data
+     */
     public int getTotalSampleCount()
     {
     	return this.totalSampleCount;
     }
     
-    public void incTotalSampleCount()
+    /**
+     * Increased the total sample count of this profiled element by one
+     */
+   public void incTotalSampleCount()
     {
     	this.totalSampleCount++;
     }
+    
+    /**
+     * returns the total sample count over the entire trace data for the given CPU
+     * @param cpu the CPU to use
+     * @return the total sample count for given CPU
+     */
+    public int getTotalSampleCountForSMP(int cpu)
+    {
+    	return this.totalSampleCountSMP[cpu];
+    }
+    
+    /**
+     * Increases the total sample count for the given CPU by one
+     * @param cpu the CPU to use
+     */
+    public void incTotalSampleCountForSMP(int cpu)
+    {
+    	this.totalSampleCountSMP[cpu]++;
+    }
 
+	/**
+	 * Getter for the given graph's sample count
+	 * @param graphIndex
+	 * @return
+	 */
 	public int getSampleCount(int graphIndex)
 	{
 		return this.graphSampleCount[graphIndex];
@@ -412,13 +489,6 @@ public abstract class ProfiledGeneric
 	public void incSampleCount(int graphIndex)
 	{
 		this.graphSampleCount[graphIndex]++;
-	}
-	
-	public void setSampleCounts(int sampleCount0, int sampleCount1, int sampleCount2)
-	{
-		this.graphSampleCount[0] = sampleCount0;
-		this.graphSampleCount[1] = sampleCount1;
-		this.graphSampleCount[2] = sampleCount2;
 	}
 	
 	public float getPercentLoad(int graphIndex)
@@ -437,26 +507,6 @@ public abstract class ProfiledGeneric
 		else
 			this.averageLoadValueString[graphIndex] = Messages.getString("ProfiledGeneric.zeroFormat"); //$NON-NLS-1$
 	}
-	
-	public void setPercentLoads(float percentLoad0, float percentLoad1, float percentLoad2)
-	{
-		this.graphPercentLoad[0] = percentLoad0;
-		this.graphPercentLoad[1] = percentLoad1;
-		this.graphPercentLoad[2] = percentLoad2;
 
-		// doesn't hurt to set the strings here, too
-		// you may not need to set the strings when you set the float
-		if (percentLoad0 >= 0.005f)
-			this.averageLoadValueString[0] = (new DecimalFormat(Messages.getString("ProfiledGeneric.decimalFormat"))).format(percentLoad0); //$NON-NLS-1$
-		else
-			this.averageLoadValueString[0] = Messages.getString("ProfiledGeneric.zeroFormat"); //$NON-NLS-1$
-		if (percentLoad1 >= 0.005f)
-			this.averageLoadValueString[1] = (new DecimalFormat(Messages.getString("ProfiledGeneric.decimalFormat"))).format(percentLoad1); //$NON-NLS-1$
-		else
-			this.averageLoadValueString[1] = Messages.getString("ProfiledGeneric.zeroFormat"); //$NON-NLS-1$
-		if (percentLoad2 >= 0.005f)
-			this.averageLoadValueString[2] = (new DecimalFormat(Messages.getString("ProfiledGeneric.decimalFormat"))).format(percentLoad2); //$NON-NLS-1$
-		else
-			this.averageLoadValueString[2] = Messages.getString("ProfiledGeneric.zeroFormat"); //$NON-NLS-1$
-	}
+	
 }

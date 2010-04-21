@@ -46,6 +46,7 @@ import org.eclipse.swt.widgets.Shell;
 import com.nokia.carbide.cpp.internal.pi.actions.SaveSamples;
 import com.nokia.carbide.cpp.internal.pi.analyser.NpiInstanceRepository;
 import com.nokia.carbide.cpp.internal.pi.interfaces.ISaveSamples;
+import com.nokia.carbide.cpp.internal.pi.model.GenericSample;
 import com.nokia.carbide.cpp.internal.pi.model.GenericSampledTrace;
 import com.nokia.carbide.cpp.internal.pi.plugin.model.IContextMenu;
 import com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph;
@@ -178,6 +179,7 @@ public class BupTraceGraph extends GenericTraceGraph implements MouseMoveListene
 		double scale = this.getScale();
 		int height = this.getVisualSize().height;
 		String eventName;
+		int lastXLabelEnd = -1; //the x coordinate at which the last drawn label ended
 
 		while (samples.hasMoreElements())
 		{
@@ -196,12 +198,16 @@ public class BupTraceGraph extends GenericTraceGraph implements MouseMoveListene
 			Point point = gc.stringExtent(eventName);
 			gc.dispose();
 
-			if (sa.isLabelModified()) {
-				graphics.setForegroundColor(ColorConstants.blue);
-			} else {
-				graphics.setForegroundColor(ColorConstants.red);
+			int xLabelStart = x - (point.x / 2);
+			if (xLabelStart > lastXLabelEnd){ //only draw label if it doesn't overlap with previous
+				if (sa.isLabelModified()) {
+					graphics.setForegroundColor(ColorConstants.blue);
+				} else {
+					graphics.setForegroundColor(ColorConstants.red);
+				}
+				graphics.drawString(eventName, xLabelStart, height - EVENT_BOTTOMOFLINE + 3 + EVENT_RECTHEIGHT);
+				lastXLabelEnd = x + (point.x / 2);				
 			}
-			graphics.drawString(eventName, x - (point.x / 2), height - EVENT_BOTTOMOFLINE + 3 + EVENT_RECTHEIGHT);
 
 			// events with comments will have blue rectangles; otherwise, red triangles
 			if ((sa.getComment() != null) && (!sa.getComment().equals(""))) //$NON-NLS-1$
@@ -220,10 +226,6 @@ public class BupTraceGraph extends GenericTraceGraph implements MouseMoveListene
 	}
 
 	public void repaint()
-	{
-	}
-
-	public void refreshDataFromTrace()
 	{
 	}
 
@@ -441,8 +443,9 @@ public class BupTraceGraph extends GenericTraceGraph implements MouseMoveListene
 			}
 			
 			if (eventDialog.getNewSamePropagate()) {
-				Vector<BupSample> allSamples = (Vector<BupSample>)((GenericSampledTrace)this.getTrace()).samples;
-				for (BupSample currentSample : allSamples) {
+				Vector<GenericSample> allSamples = ((GenericSampledTrace)this.getTrace()).samples;
+				for (GenericSample genericSample : allSamples) {
+					BupSample currentSample = (BupSample)genericSample;
 					if (currentSample.getKeyCode() == sample.getKeyCode()) {
 						currentSample.setLabel(eventDialog.getNewName());
 					}
@@ -501,8 +504,9 @@ public class BupTraceGraph extends GenericTraceGraph implements MouseMoveListene
 		}
 			
 		if (eventDialog.getNewSamePropagate()) {
-			Vector<BupSample> allSamples = (Vector<BupSample>)bupTrace.samples;
-			for (BupSample currentSample : allSamples) {
+			Vector<GenericSample> allSamples = bupTrace.samples;
+			for (GenericSample genericSample : allSamples) {
+				BupSample currentSample = (BupSample)genericSample;
 				if (currentSample.getKeyCode() == sample.getKeyCode()) {
 					currentSample.setLabel(eventDialog.getNewName());
 				}

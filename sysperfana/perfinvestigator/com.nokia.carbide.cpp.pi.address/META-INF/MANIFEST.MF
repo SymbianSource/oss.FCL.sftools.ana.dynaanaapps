@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Carbide.c++ Performance Investigator Threads and Addresses
 Bundle-SymbolicName: com.nokia.carbide.cpp.pi.address;singleton:=true
-Bundle-Version: 1.5.0.qualifier
+Bundle-Version: 2.3.0.qualifier
 Bundle-Activator: com.nokia.carbide.cpp.pi.address.AddressPlugin
 Bundle-Vendor: Nokia
 Require-Bundle: org.eclipse.ui,
@@ -14,4 +14,5 @@ Require-Bundle: org.eclipse.ui,
  com.nokia.carbide.cpp.pi.core,
  com.nokia.carbide.cpp.pi.util
 Bundle-ActivationPolicy: lazy
-Export-Package: com.nokia.carbide.cpp.pi.address;x-friends:="com.nokia.carbide.cpp.pi.tests"
+Eclipse-ExtensibleAPI: true 
+Export-Package: com.nokia.carbide.cpp.pi.address;x-friends:="com.nokia.carbide.cpp.pi.tests,com.nokia.carbide.cpp.pi.irq"

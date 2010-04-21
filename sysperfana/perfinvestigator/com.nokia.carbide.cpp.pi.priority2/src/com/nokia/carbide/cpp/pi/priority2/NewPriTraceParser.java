@@ -166,8 +166,8 @@ public class NewPriTraceParser extends Parser
 				   		threadName = rawName;
 				   	}
 								    	
-				   	priTrace.addFirstSynchTime(new Integer((int)threadId), new Integer(sampleNum));
-				   	priSamples.add(new NewPriThread(new Integer((int)threadId), threadName, processName));
+				   	priTrace.addFirstSynchTime(Integer.valueOf((int)threadId), Integer.valueOf(sampleNum));
+				   	priSamples.add(new NewPriThread(Integer.valueOf((int)threadId), threadName, processName));
 
 				   	// read the next length
 					length = dis.readUnsignedByte();readCount++;
@@ -234,7 +234,7 @@ public class NewPriTraceParser extends Parser
 	    			break;
 	    		}
 	    	}
-	    	priTrace.addLastSynchTime(new Integer(threadId), new Integer(sampleNum));
+	    	priTrace.addLastSynchTime(Integer.valueOf(threadId), Integer.valueOf(sampleNum));
 	    }
 	    System.out.println(Messages.getString("NewPriTraceParser.doneParsing")); //$NON-NLS-1$
 	}

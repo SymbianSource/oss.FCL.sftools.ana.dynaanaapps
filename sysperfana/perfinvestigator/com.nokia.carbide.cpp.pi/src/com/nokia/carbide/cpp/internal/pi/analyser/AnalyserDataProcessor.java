@@ -28,12 +28,14 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
@@ -59,13 +61,14 @@ import com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace;
 import com.nokia.carbide.cpp.internal.pi.plugin.model.IVisualizable;
 import com.nokia.carbide.cpp.internal.pi.test.AnalysisInfoHandler;
 import com.nokia.carbide.cpp.internal.pi.test.IProvideTraceAdditionalInfo;
-import com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph;
 import com.nokia.carbide.cpp.internal.pi.visual.GraphDrawRequest;
 import com.nokia.carbide.cpp.internal.pi.visual.PICompositePanel;
+import com.nokia.carbide.cpp.pi.PiPlugin;
 import com.nokia.carbide.cpp.pi.editors.PIPageEditor;
 import com.nokia.carbide.cpp.pi.importer.SampleImporter;
 import com.nokia.carbide.cpp.pi.util.GeneralMessages;
 import com.nokia.carbide.cpp.pi.util.PIExceptionRuntime;
+import com.nokia.carbide.cpp.pi.visual.IGenericTraceGraph;
 
 
 /*
@@ -73,6 +76,7 @@ import com.nokia.carbide.cpp.pi.util.PIExceptionRuntime;
  */
 
 public class AnalyserDataProcessor {
+	protected static final int MAX_CPU = 4;
 	// whether the profile file was read correctly
 	public static int STATE_OK				= 0;
 	public static int STATE_IMPORTING		= 1;
@@ -126,7 +130,7 @@ public class AnalyserDataProcessor {
 		return lastException;
 	}
 	
-	private void importNewAnalysis(Hashtable<Integer,String> traceFileNames, int uid) throws InterruptedException, InvocationTargetException {
+	private void importNewAnalysis(Hashtable<Integer,String> traceFileNames, int uid, List<ITrace> pluginsToUse) throws InterruptedException, InvocationTargetException {
 		analyserDataProcessorState = STATE_IMPORTING;
 		final int workUnitsForImport = TOTAL_PROGRESS_COUNT * 60 / 100;
 		int workUnitsLeft = workUnitsForImport * 99 / 100;
@@ -134,16 +138,8 @@ public class AnalyserDataProcessor {
 		checkCancelledThrowIE();
 			
 		// loop through all the plugins associated with traces
-		Enumeration<AbstractPiPlugin> enumer = PluginInitialiser.getPluginInstances(uid, "com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace"); //$NON-NLS-1$
-		Enumeration<AbstractPiPlugin> tmpEnum = PluginInitialiser.getPluginInstances(uid, "com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace"); //$NON-NLS-1$
-		int numberOfPlugins = 0;
-		while (tmpEnum.hasMoreElements()) {
-			numberOfPlugins++;
-			tmpEnum.nextElement();
-		}
-		while (enumer.hasMoreElements())
-    	{
-    		ITrace plugin = (ITrace)enumer.nextElement();
+		int numberOfPlugins = pluginsToUse.size();
+		for (ITrace plugin : pluginsToUse) {
     		int traceId = plugin.getTraceId();
     		AbstractPiPlugin p = (AbstractPiPlugin)plugin;
     		
@@ -151,13 +147,32 @@ public class AnalyserDataProcessor {
     		NpiInstanceRepository.getInstance().addPlugin(uid, p);
     		if (traceId != -1)
     		{
-    			String fileName = traceFileNames.get(traceId);
-    			if (fileName != null)
-    			{
-    				File traceFile = new File(fileName);
-    				if (traceFile.exists()) 
-						if (traceFile.getName().endsWith(".dat"))  //$NON-NLS-1$
-							ProfileReader.getInstance().readTraceFile(plugin, traceFile, this,uid);
+    			if (traceId == 1){ //support SMP by expecting one file per CPU
+					List<File> files = new ArrayList<File>();
+    				for (int i = 0; i < MAX_CPU; i++) {
+    					int smpTraceId = traceId + i * 20;
+    					{
+    	        			String fileName = traceFileNames.get(smpTraceId);
+    	        			if (fileName != null && fileName.endsWith(".dat")) //$NON-NLS-1$
+    	        			{
+    	        				File traceFile = new File(fileName);
+    	        				if (traceFile.exists()){
+    	        					files.add(traceFile);
+    	        				}
+    	        			}    						
+    					}
+    				}
+					ProfileReader.getInstance().readTraceFile(plugin, files.toArray(new File[files.size()]), this,uid);
+    				 
+    			} else {
+        			String fileName = traceFileNames.get(traceId);
+        			if (fileName != null)
+        			{
+        				File traceFile = new File(fileName);
+        				if (traceFile.exists()) 
+    						if (traceFile.getName().endsWith(".dat"))  //$NON-NLS-1$
+    							ProfileReader.getInstance().readTraceFile(plugin, traceFile, this,uid);
+        			}    				
     			}
     		}
             // assume this load takes 39%
@@ -344,7 +359,7 @@ public class AnalyserDataProcessor {
 
 	}
 		
-	public void importSaveAndOpen(final IFile analysisFile, boolean pollTillNpiSaved) {
+	public void importSaveAndOpen(final IFile analysisFile, boolean pollTillNpiSaved, final List<ITrace> pluginsToUse) {
 		analyserDataProcessorState = STATE_IMPORTING;
 		setProgressMonitor(null);
 		
@@ -356,147 +371,21 @@ public class AnalyserDataProcessor {
 
 			public void run(IProgressMonitor progressMonitor)
 					throws InvocationTargetException, InterruptedException {
-				setProgressMonitor(progressMonitor);
-				progressMonitor.beginTask(Messages.getString("AnalyserDataProcessor.17") + analysisFile.getName(), TOTAL_PROGRESS_COUNT);   //$NON-NLS-1$
-				// open a profile data file that should contain at least thread/address information
-
-				// import new .dat
-				assertThrowITE(SampleImporter.getInstance().validate(), Messages.getString("AnalyserDataProcessor.18"));	  //$NON-NLS-1$
-				
-				// invoke analysis-specific plugin instances
-				PluginInitialiser.invokePluginInstances(uid, "com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace"); //$NON-NLS-1$
-
-				StreamFileParser stp;
-				try {
-					stp = new StreamFileParser(new File(SampleImporter.getInstance().getDatFileName()));
-					Hashtable<Integer,String> traceFileNames = new Hashtable<Integer,String>();
-					ArrayList<File> tracesForCleanUp = new ArrayList<File>();
-
-					// loop through all the plugins associated with traces and note their trace IDs names
-					Enumeration<AbstractPiPlugin> enumer = PluginInitialiser.getPluginInstances(uid, "com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace"); //$NON-NLS-1$
-					while (enumer.hasMoreElements())
-					{
-						File tempFile;
-						ITrace plugin = (ITrace)enumer.nextElement();
-						int traceId = plugin.getTraceId();
-						if (traceId != -1)
-						{
-							try {
-								tempFile = stp.getTempFileForTraceType(traceId);
-								if (tempFile != null)
-								{
-									tempFile.deleteOnExit();
-									traceFileNames.put(traceId, tempFile.getAbsolutePath());
-									tracesForCleanUp.add(tempFile);
-								}
-
-							} catch (IOException e) {
-								throw new InvocationTargetException(e, Messages.getString("AnalyserDataProcessor.25")); //$NON-NLS-1$
-							}
-						}
-					}
-					
-					// import a new analysis
-					importNewAnalysis(traceFileNames, uid);
-
-					// clean up temp file for each trace
-					for (File traceFile : tracesForCleanUp) {
-						traceFile.delete();
-					}
-				} catch (IOException e) {
-					throw new InvocationTargetException(e, Messages.getString("AnalyserDataProcessor.26") + SampleImporter.getInstance().getDatFileName()); //$NON-NLS-1$
-				}
-
-				if (progressMonitor.isCanceled()) {
-					throw new InterruptedException(Messages.getString("AnalyserDataProcessor.19"));   //$NON-NLS-1$
-				}
-
-				// give the .NPI file null contents
-				byte[] b = new byte[0];
-				try {
-					analysisFile.create(new ByteArrayInputStream(b), true, null);
-					// make sure we can open an input stream to the trace file
-					analysisFile.getContents();
-				} catch (CoreException e) {
-					throw new InvocationTargetException(e, Messages.getString("AnalyserDataProcessor.14") + analysisFile.getName()); //$NON-NLS-1$
-				}
-				
-				// extract additional info from importer
-				int numberOfTraces = 0;
-				Iterator<ParsedTraceData> enuTraces = TraceDataRepository.getInstance().getTraceCollectionIter(uid);
-				AnalysisInfoHandler handler = NpiInstanceRepository.getInstance().activeUidGetAnalysisInfoHandler();
-
-				// for all traces exist in .dat set up their additional info
-			    while (enuTraces.hasNext()) {
-			    	Object object = enuTraces.next();
-
-			    	numberOfTraces++;
-			    	
-			    	if (object instanceof ParsedTraceData) {
-			    		ParsedTraceData parsedTraceData = (ParsedTraceData) object;
-			    		if (parsedTraceData.traceData != null) {
-				    		Class traceClass = parsedTraceData.traceData.getClass();
-
-							// this code is clumsy because the plugin, not the trace, has the trace ID info
-				    		Enumeration<AbstractPiPlugin> enuPlugins = PluginInitialiser.getPluginInstances(uid, "com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace"); //$NON-NLS-1$
-							while (enuPlugins.hasMoreElements())
-							{
-								ITrace plugin = (ITrace)enuPlugins.nextElement();
-								// only do when trace exist in .data
-								if (traceClass == plugin.getTraceClass()) {
-							    	if (plugin instanceof IProvideTraceAdditionalInfo) {
-										((IProvideTraceAdditionalInfo)plugin).setupInfoHandler(handler);						    		
-							    	}
-								}
-							}			
-			    		}
-			    	}
-			    }
-				
-				// refresh so project know the update done by Java(non-Eclipse API)
-				try {
-					analysisFile.refreshLocal(0, null);
-				} catch (CoreException e) {
-					throw new InvocationTargetException(e, Messages.getString("AnalyserDataProcessor.15") + analysisFile.getName()); //$NON-NLS-1$
-				}		
+				importAndSave(analysisFile, uid, pluginsToUse, null,progressMonitor);
 			}
 		};
-		
+				
 		IRunnableWithProgress runnableOpen = new IRunnableWithProgress() {
 
 			public void run(IProgressMonitor arg0)
 					throws InvocationTargetException, InterruptedException {
 				// open the saved file
-				if (analysisFile.exists() && AnalyserDataProcessor.getInstance().getState() == STATE_IMPORTING ) {
-						// open the file itself
-					
-					// need to open in UI context
-					Display.getDefault().syncExec(new Runnable() {
-
-						public void run() {
-							IEditorPart editor = null;
-							try {
-								editor = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage() , analysisFile, true);
-							} catch (PartInitException e) {
-								try {
-									assertThrowITE(e, analysisFile.getName() + Messages.getString("AnalyserDataProcessor.24")); //$NON-NLS-1$
-								} catch (InvocationTargetException e1) {
-									//already set data structure proper, do nothing
-								}
-							}
-							if (AnalyserDataProcessor.getInstance().getState() == STATE_CANCELED) {
-								// close the editor file view
-								editor.getSite().getPage().closeEditor(editor, false);
-							} else if (AnalyserDataProcessor.getInstance().getState() != STATE_OK ) {
-								// close the editor file view
-								editor.getSite().getPage().closeEditor(editor, false);
-							}							
-						}
-					});
-				}
+				openFile(analysisFile);
 			}
 			
 		};
+		
+		
 		
 		try {
 			progressService.busyCursorWhile(runnableImportAndSave);
@@ -506,13 +395,13 @@ public class AnalyserDataProcessor {
 				public IStatus runInWorkspace(IProgressMonitor monitor)
 						throws CoreException {
 					try {
-						ProfileReader.getInstance().writeAnalysisFile(analysisFile.getLocation().toString(), monitor, uid);
+						ProfileReader.getInstance().writeAnalysisFile(analysisFile.getLocation().toString(), monitor, null, uid);
 					} catch (InvocationTargetException e) {
-						return new Status(IStatus.ERROR, "com.nokia.carbide.cpp.pi", Messages.getString("AnalyserDataProcessor.invocationTargetException"), e); //$NON-NLS-1$ //$NON-NLS-2$
+						return new Status(IStatus.ERROR, PiPlugin.PLUGIN_ID, Messages.getString("AnalyserDataProcessor.invocationTargetException"), e); //$NON-NLS-1$ //$NON-NLS-2$
 					} catch (InterruptedException e) {
-						return new Status(IStatus.CANCEL, "com.nokia.carbide.cpp.pi", Messages.getString("AnalyserDataProcessor.interruptedException"), e); //$NON-NLS-1$ //$NON-NLS-2$
+						return new Status(IStatus.CANCEL, PiPlugin.PLUGIN_ID, Messages.getString("AnalyserDataProcessor.interruptedException"), e); //$NON-NLS-1$ //$NON-NLS-2$
 					}
-					return new Status(IStatus.OK, "com.nokia.carbide.cpp.pi", Messages.getString("AnalyserDataProcessor.ok"), null); //$NON-NLS-1$ //$NON-NLS-2$
+					return new Status(IStatus.OK, PiPlugin.PLUGIN_ID, Messages.getString("AnalyserDataProcessor.ok"), null); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 				
 			};
@@ -530,7 +419,7 @@ public class AnalyserDataProcessor {
 
 				public void done(IJobChangeEvent event) {
 					if (saveNpi.getResult().getSeverity()  != IStatus.OK) {
-						HandleRunnableException (saveNpi.getResult().getException(), uid, analysisFile);
+						handleRunnableException (saveNpi.getResult().getException(), uid, analysisFile);
 					}
 				}
 
@@ -554,13 +443,187 @@ public class AnalyserDataProcessor {
 			}
 			
 		} catch (InvocationTargetException e) {
-			HandleRunnableException(e, uid, analysisFile);
+			handleRunnableException(e, uid, analysisFile);
 		} catch (InterruptedException e) {
-			HandleRunnableException(e, uid, analysisFile);
+			handleRunnableException(e, uid, analysisFile);
 		}							
 	}
 	
-	private void HandleRunnableException(Throwable throwable, final int uid, IFile analysisFile) {
+	public void importSave(final IFile analysisFile, final List<ITrace> pluginsToUse, String suffixTaskName, IProgressMonitor monitor) {
+		analyserDataProcessorState = STATE_IMPORTING;
+		setUp();
+		setProgressMonitor(monitor);		
+		final int uid = NpiInstanceRepository.getInstance().register(null);	
+		try{
+			importAndSave(analysisFile, uid, pluginsToUse, suffixTaskName, monitor);	
+			ProfileReader.getInstance().writeAnalysisFile(analysisFile.getLocation().toString(), monitor, suffixTaskName, uid);				
+			analyserDataProcessorState = STATE_OK;
+		}catch (Exception e) {
+			handleRunnableException(e, uid, analysisFile);
+			monitor.setCanceled(true);
+		}
+		
+	}
+	
+	private void importAndSave(final IFile analysisFile, final int uid, List<ITrace> pluginsToUse, String suffixTaskName,IProgressMonitor progressMonitor) throws InvocationTargetException, InterruptedException{
+		if(progressMonitor == null){
+			progressMonitor = new NullProgressMonitor();
+		}
+		setProgressMonitor(progressMonitor);
+		String taskName = Messages.getString("AnalyserDataProcessor.17") + analysisFile.getName();; //$NON-NLS-1$
+		if(suffixTaskName != null){
+			taskName += " "+suffixTaskName; //$NON-NLS-1$
+		}
+
+	    progressMonitor.beginTask(taskName, TOTAL_PROGRESS_COUNT);   //$NON-NLS-1$
+		progressMonitor.setTaskName(taskName);
+		// open a profile data file that should contain at least thread/address information
+
+		// import new .dat
+		assertThrowITE(SampleImporter.getInstance().validate(), Messages.getString("AnalyserDataProcessor.18"));	  //$NON-NLS-1$
+		
+		// invoke analysis-specific plugin instances
+		PluginInitialiser.invokePluginInstances(uid, "com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace"); //$NON-NLS-1$
+
+		StreamFileParser stp;
+		try {
+			stp = new StreamFileParser(new File(SampleImporter.getInstance().getDatFileName()));
+			Hashtable<Integer,String> traceFileNames = new Hashtable<Integer,String>();
+			ArrayList<File> tracesForCleanUp = new ArrayList<File>();
+
+			// loop through all the plugins associated with traces and note their trace IDs names
+			
+				
+			for (ITrace plugin : pluginsToUse) {
+				File tempFile;
+				int traceId = plugin.getTraceId();
+				if (traceId != -1)
+				{
+					try {
+						
+						if (traceId == 1) {// the SMP change; separate temp data files for each CPU
+							for (int i = 0; i < MAX_CPU; i++) {
+								int smpTraceId = traceId + i * 20;
+								tempFile = stp.getTempFileForTraceType(smpTraceId);
+								if (tempFile != null) {
+									tempFile.deleteOnExit();
+									traceFileNames.put(smpTraceId, tempFile.getAbsolutePath());
+									tracesForCleanUp.add(tempFile);
+								}
+							}
+						} else {
+							tempFile = stp.getTempFileForTraceType(traceId);
+							if (tempFile != null)
+							{
+								tempFile.deleteOnExit();
+								traceFileNames.put(traceId, tempFile.getAbsolutePath());
+								tracesForCleanUp.add(tempFile);
+							}									
+						}
+
+					} catch (IOException e) {
+						throw new InvocationTargetException(e, Messages.getString("AnalyserDataProcessor.25")); //$NON-NLS-1$
+					}
+				}
+			}
+			
+			// import a new analysis
+			importNewAnalysis(traceFileNames, uid, pluginsToUse);
+
+			// clean up temp file for each trace
+			for (File traceFile : tracesForCleanUp) {
+				traceFile.delete();
+			}
+		} catch (IOException e) {
+			throw new InvocationTargetException(e, Messages.getString("AnalyserDataProcessor.26") + SampleImporter.getInstance().getDatFileName()); //$NON-NLS-1$
+		}
+
+		if (progressMonitor.isCanceled()) {
+			throw new InterruptedException(Messages.getString("AnalyserDataProcessor.19"));   //$NON-NLS-1$
+		}
+
+		// give the .NPI file null contents
+		byte[] b = new byte[0];
+		try {
+			analysisFile.create(new ByteArrayInputStream(b), true, null);
+			// make sure we can open an input stream to the trace file
+			analysisFile.getContents();
+		} catch (CoreException e) {
+			throw new InvocationTargetException(e, Messages.getString("AnalyserDataProcessor.14") + analysisFile.getName()); //$NON-NLS-1$
+		}
+		
+		// extract additional info from importer
+		int numberOfTraces = 0;
+		Iterator<ParsedTraceData> enuTraces = TraceDataRepository.getInstance().getTraceCollectionIter(uid);
+		AnalysisInfoHandler handler = NpiInstanceRepository.getInstance().activeUidGetAnalysisInfoHandler();
+
+		// for all traces exist in .dat set up their additional info
+	    while (enuTraces.hasNext()) {
+	    	Object object = enuTraces.next();
+
+	    	numberOfTraces++;
+	    	
+	    	if (object instanceof ParsedTraceData) {
+	    		ParsedTraceData parsedTraceData = (ParsedTraceData) object;
+	    		if (parsedTraceData.traceData != null) {
+		    		Class traceClass = parsedTraceData.traceData.getClass();
+
+					// this code is clumsy because the plugin, not the trace, has the trace ID info
+		    		Enumeration<AbstractPiPlugin> enuPlugins = PluginInitialiser.getPluginInstances(uid, "com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace"); //$NON-NLS-1$
+					while (enuPlugins.hasMoreElements())
+					{
+						ITrace plugin = (ITrace)enuPlugins.nextElement();
+						// only do when trace exist in .data
+						if (traceClass == plugin.getTraceClass()) {
+					    	if (plugin instanceof IProvideTraceAdditionalInfo) {
+								((IProvideTraceAdditionalInfo)plugin).setupInfoHandler(handler);						    		
+					    	}
+						}
+					}			
+	    		}
+	    	}
+	    }
+		
+		// refresh so project know the update done by Java(non-Eclipse API)
+		try {
+			analysisFile.refreshLocal(0, null);
+		} catch (CoreException e) {
+			throw new InvocationTargetException(e, Messages.getString("AnalyserDataProcessor.15") + analysisFile.getName()); //$NON-NLS-1$
+		}		
+	}	
+	
+	private void openFile(final IFile analysisFile) {
+		// open the saved file
+		if (analysisFile.exists() && AnalyserDataProcessor.getInstance().getState() == STATE_IMPORTING ) {
+				// open the file itself
+			
+			// need to open in UI context
+			Display.getDefault().syncExec(new Runnable() {
+
+				public void run() {
+					IEditorPart editor = null;
+					try {
+						editor = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage() , analysisFile, true);
+					} catch (PartInitException e) {
+						try {
+							assertThrowITE(e, analysisFile.getName() + Messages.getString("AnalyserDataProcessor.24")); //$NON-NLS-1$
+						} catch (InvocationTargetException e1) {
+							//already set data structure proper, do nothing
+						}
+					}
+					if (AnalyserDataProcessor.getInstance().getState() == STATE_CANCELED) {
+						// close the editor file view
+						editor.getSite().getPage().closeEditor(editor, false);
+					} else if (AnalyserDataProcessor.getInstance().getState() != STATE_OK ) {
+						// close the editor file view
+						editor.getSite().getPage().closeEditor(editor, false);
+					}							
+				}
+			});
+		}
+	}
+	
+	private void handleRunnableException(Throwable throwable, final int uid, IFile analysisFile) {
 		NpiInstanceRepository.getInstance().unregister(uid);
 		if (throwable instanceof InvocationTargetException) {
 			String error = Messages.getString("AnalyserDataProcessor.20"); //$NON-NLS-1$
@@ -634,7 +697,7 @@ public class AnalyserDataProcessor {
 
 	// save profiling data to NPI file
 	private void saveAnalysisInternal(final String filename, final int uid) throws InvocationTargetException, InterruptedException {
-		ProfileReader.getInstance().writeAnalysisFile(filename, getProgressMonitor(), uid);
+		ProfileReader.getInstance().writeAnalysisFile(filename, getProgressMonitor(), null,uid);
 	}
 	
 	private void processVisualizableItem(ITrace plugin)
@@ -672,15 +735,14 @@ public class AnalyserDataProcessor {
 		for (int i = 0; i < visualizable.getGraphCount(); i++)
 		{
 			GraphDrawRequest gdr   = visualizable.getDrawRequest(i);
-			GenericTraceGraph gtg  = visualizable.getTraceGraph(i);
-			String title           = visualizable.getGraphTitle(i);
+			IGenericTraceGraph gtg  = visualizable.getTraceGraph(i);
 			int	pageNumber         = visualizable.getPageNumber(i);
 			
 			ProfileVisualiser page = NpiInstanceRepository.getInstance().getProfilePage(uid, pageNumber);
 
 			if (gtg != null)
 			{
-				page.getTopComposite().addGraphComponent(gtg, title, visualizable.getClass(), gdr);
+				page.getTopComposite().addGraphComponent(gtg, visualizable.getClass(), gdr);
 			}
 
 			Integer lastSample = visualizable.getLastSample(i);
@@ -742,7 +804,7 @@ public class AnalyserDataProcessor {
 						        	final PICompositePanel visibleComposite = page.getTopComposite();
 						        	visibleComposite.performZoomToGraph(visibleComposite, parent.getBounds().width);
 						        	
-						        	//TODO uncomment when performance issues relating to gfc are solved
+						        	//TODO uncomment when performance issues relating to fcc are solved
 						        	//Select whole graph
 						        	//visibleComposite.selectWholeGraph();
 								}

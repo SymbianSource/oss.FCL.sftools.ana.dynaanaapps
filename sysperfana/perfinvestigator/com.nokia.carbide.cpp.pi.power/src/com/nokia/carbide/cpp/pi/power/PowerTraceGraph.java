@@ -31,6 +31,7 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.Panel;
+import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -49,6 +50,7 @@ import com.nokia.carbide.cpp.internal.pi.analyser.NpiInstanceRepository;
 import com.nokia.carbide.cpp.internal.pi.interfaces.ISaveSamples;
 import com.nokia.carbide.cpp.internal.pi.model.GenericSampledTrace;
 import com.nokia.carbide.cpp.internal.pi.plugin.model.IContextMenu;
+import com.nokia.carbide.cpp.internal.pi.plugin.model.ITitleBarMenu;
 import com.nokia.carbide.cpp.internal.pi.power.actions.PowerSettingsDialog;
 import com.nokia.carbide.cpp.internal.pi.power.actions.PowerStatisticsDialog;
 import com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph;
@@ -60,12 +62,14 @@ import com.nokia.carbide.cpp.pi.address.GppSample;
 import com.nokia.carbide.cpp.pi.address.GppTrace;
 import com.nokia.carbide.cpp.pi.editors.PIPageEditor;
 import com.nokia.carbide.cpp.pi.util.ColorPalette;
+import com.nokia.carbide.cpp.pi.visual.IGenericTraceGraph;
 
 
 public class PowerTraceGraph extends GenericTraceGraph implements ActionListener,
 																  PIEventListener,
 																  MouseMotionListener,
-																  IContextMenu
+																  IContextMenu,
+																  ITitleBarMenu
 {
 	
     private int[] DTrace; // used for synchronizing the power and gpptraces.
@@ -341,17 +345,13 @@ public class PowerTraceGraph extends GenericTraceGraph implements ActionListener
 
 		case PIEvent.SCROLLED:
 			Event event = ((Event)be.getValueObject());
-			this.parentComponent.setScrolledOrigin(event.x, event.y);
+			this.parentComponent.setScrolledOrigin(event.x, event.y, (FigureCanvas)event.data);
 			this.repaint();
 			break;
 
 		default:
         	break;
 	    }
-	}
-	
-	public void refreshDataFromTrace()
-	{
 	}
 
 	public void enablePowerLine( boolean state )
@@ -702,7 +702,7 @@ public class PowerTraceGraph extends GenericTraceGraph implements ActionListener
 
 		// this does cause some overhead and could be removed since it only provides some aesthetics.
 		updateVisibleBorders();
-		leftBorder = this.parentComponent.getScrolledOrigin().x;
+		leftBorder = this.parentComponent.getScrolledOrigin(this).x;
 //		leftBorder = this.getVisibleLeftBorder();
 		if( leftBorder < 0 )
 			leftBorder = 0;	
@@ -914,8 +914,8 @@ public class PowerTraceGraph extends GenericTraceGraph implements ActionListener
 						                  + (sample.thread.threadName != null ? sample.thread.threadName
 											   : Messages.getString("PowerTraceGraph.11")) + Messages.getString("PowerTraceGraph.12") //$NON-NLS-1$ //$NON-NLS-2$
 					   							   + sample.thread.threadId + Messages.getString("PowerTraceGraph.13") //$NON-NLS-1$
-					   							   + sample.currentFunctionSym.functionName + Messages.getString("PowerTraceGraph.14") //$NON-NLS-1$
-					   							   + Long.toHexString(sample.currentFunctionSym.startAddress.longValue()) ),
+					   							   + sample.getCurrentFunctionSym().getFunctionName() + Messages.getString("PowerTraceGraph.14") //$NON-NLS-1$
+					   							   + Long.toHexString(sample.getCurrentFunctionSym().getStartAddress().longValue()) ),
 					   			Messages.getString("PowerTraceGraph.15") ) == null ) //$NON-NLS-1$
 			{
 				numTransitions++;
@@ -1138,11 +1138,11 @@ public class PowerTraceGraph extends GenericTraceGraph implements ActionListener
 			
 			Point extent = gc.stringExtent(legend);
 			
-			gc.drawLine(GenericTraceGraph.yLegendWidth - 3, (int)y + 1, GenericTraceGraph.yLegendWidth, (int)y + 1);
+			gc.drawLine(IGenericTraceGraph.Y_LEGEND_WIDTH - 3, (int)y + 1, IGenericTraceGraph.Y_LEGEND_WIDTH, (int)y + 1);
 
 			if (y >= previousBottom)
 			{
-				gc.drawString(legend, GenericTraceGraph.yLegendWidth - extent.x - 4, (int)y);
+				gc.drawString(legend, IGenericTraceGraph.Y_LEGEND_WIDTH - extent.x - 4, (int)y);
 				previousBottom = (int)y + extent.y;
 			}
 		}
@@ -1151,5 +1151,27 @@ public class PowerTraceGraph extends GenericTraceGraph implements ActionListener
 			gc.dispose();
 			figureCanvas.redraw();
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.pi.visual.IGenericTraceGraph#getTitle()
+	 */
+	@Override
+	public String getTitle() {
+		return Messages.getString("PowerPlugin.pluginTitle"); //$NON-NLS-1$
+	}
+
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITitleBarMenu#addTitleBarMenuItems()
+	 */
+	public Action[] addTitleBarMenuItems() {
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITitleBarMenu#getContextHelpId()
+	 */
+	public String getContextHelpId() {
+		return PowerPlugin.HELP_CONTEXT_ID_MAIN_PAGE;
 	}
 }

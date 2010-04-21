@@ -100,14 +100,17 @@ public class ProfileReader
 	{
 		//singleton
 	}
+	public boolean readTraceFile(ITrace plugin, File[] traceFiles, AnalyserDataProcessor dataInstance, int instanceUID){
 
-	// read a plugin's information from a profile data file
-	public boolean readTraceFile(ITrace plugin, File traceFile, AnalyserDataProcessor dataInstance, int instanceUID)
-	{
 		// prepare the trace repository
 		try 
 		{
-			ParsedTraceData parsedTraceData = plugin.parseTraceFile(traceFile);
+			ParsedTraceData parsedTraceData = null;
+			if (traceFiles.length == 1){
+				parsedTraceData = plugin.parseTraceFile(traceFiles[0]);
+			} else {
+				parsedTraceData = plugin.parseTraceFiles(traceFiles);
+			}
 			
 			if (parsedTraceData != null) 
 			{
@@ -135,6 +138,12 @@ public class ProfileReader
 			return false;
 		}
 		return true;
+	
+	}
+
+	// read a plugin's information from a profile data file
+	public boolean readTraceFile(ITrace plugin, File traceFile, AnalyserDataProcessor dataInstance, int instanceUID){
+		return readTraceFile(plugin, new File[]{traceFile}, dataInstance, instanceUID);
 	}
 	
 	public void loadAnalysisFile(String filePath, String displayName, IProgressMonitor progressMonitor, int instanceUID) throws IOException, InterruptedException
@@ -686,7 +695,7 @@ public class ProfileReader
 		}
 	}
 
-	void writeAnalysisFile(String fileName, IProgressMonitor monitor, int instanceUID) throws InvocationTargetException, InterruptedException {
+	void writeAnalysisFile(String fileName, IProgressMonitor monitor, String suffixTaskName, int instanceUID) throws InvocationTargetException, InterruptedException {
 		final int workUnitsForSave = AnalyserDataProcessor.TOTAL_PROGRESS_COUNT * 20 / 100;
 		FileOutputStream fos = null;
 		GZIPOutputStream gzo = null;
@@ -702,8 +711,12 @@ public class ProfileReader
 		    fos = new FileOutputStream(f);
 		    gzo = new GZIPOutputStream(fos);
 		    oos = new ObjectOutputStream(gzo);
-
-		    monitor.setTaskName(Messages.getString("ProfileReader.15") + f.getName());  //$NON-NLS-1$
+		    
+			String taskName = Messages.getString("ProfileReader.15")+ f.getName(); //$NON-NLS-1$
+			if(suffixTaskName != null){
+				taskName += " "+suffixTaskName; //$NON-NLS-1$
+			}
+		    monitor.setTaskName(taskName );  //$NON-NLS-1$
 		    monitor.worked(workUnitsForSave * 1 / 100);
 			int workUnitsLeft = workUnitsForSave;
 			monitor.worked(workUnitsForSave * 1 / 100); // kick it start to please user

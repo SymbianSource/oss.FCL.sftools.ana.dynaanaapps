@@ -2,42 +2,99 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Thread Load</title>
-    <link href="../../../book.css" rel="stylesheet" type="text/css">
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Thread Load</title>
+  <link href="../../../book.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
 <h2>Thread Load</h2>
-<p>Select the Threads tab to display the Thread Load. The Thread Load graph and related table show information about threads that were active during the selected time period. The graph and table show the CPU load separated according to the executed thread, independent of the binary or function in which execution took place. Figure 1 shows an example graph with the Threads tab selected.</p>
-<p align="center"><img src="images/thread_mode_graph.png" width="705" height="659"> </p>
-<p align="center" class="figure">Figure 1. Thread Load Graph</p>
-<p>You can check or uncheck items to be displayed in the graph or right-click to display a context menu of various options. The color next to a checkbox corresponds to that item’s color in the graph.</p>
+
+<p>Select the Threads tab to display the Thread Load. The Thread Load graph and
+related table show information about threads that were active during the
+selected time period. The graph and table show the CPU load separated according
+to the executed thread, independent of the binary or function in which
+execution took place. Figure 1 shows an example graph with the Threads tab
+selected.</p>
+
+<p align="center"><img src="images/thread_mode_graph.png" width="710"
+height="728"> </p>
+
+<p align="center" class="figure">Figure 1. Thread Load Graph displaying
+combined CPU graph</p>
+
 <p>Description of table columns:</p>
 <ul>
-  <li>The <b>% Load</b> column indicates what percentage of the CPU load was spent in each thread during the selected time interval.</li>
-<li>The <b>Thread</b> column identifies the thread by name and executable which is composed of:
+  <li>The <b>% Load</b> column indicates what percentage of the CPU load was
+    spent in each thread during the selected time interval.</li>
+  <li>The <b>Thread</b> column identifies the thread by name and executable
+    which is composed of: 
     <ul>
-      <li>Executable or process  name &#8212; name of the binary as identified by the OS</li>
-      <li>Process ID (PID) &#8212;  the process ID that uniquely identifies the process to the OS </li>
-      <li>Thread name  &#8212;the name of the thread</li>
-      <li>Thread ID (TID) &#8212;  the thread ID that uniquely identifies the thread </li>
+      <li>Executable or process name — name of the binary as identified by
+        the OS</li>
+      <li>Process ID (PID) — the process ID that uniquely identifies the
+        process to the OS </li>
+      <li>Thread name —the name of the thread</li>
+      <li>Thread ID (TID) — the thread ID that uniquely identifies the thread
+      </li>
     </ul>
-</li>
-  <li>The <b>Samples</b> column indicates how many samples were taken during the selected time interval (in this case between 8.16 and 8.5 seconds).</li>
-<li>If the profiler data file contained thread priority information, then a <b>Priority List</b> column will be shown.  The column lists the time at which a thread was assigned that priority. Sometimes you will see more than one priority listed for each thread.</li>
+  </li>
+  <li>The <b>Samples</b> column indicates how many samples were taken during
+    the selected time interval (in this case between 8.16 and 8.5 seconds).</li>
+  <li>If the profiler data file contained thread priority information, then a
+    <b>Priority List</b> column will be shown. The column lists the time at
+    which a thread was assigned that priority. Sometimes you will see more than
+    one priority listed for each thread.</li>
 </ul>
-<p>Columns may be reordered, resized, and sorted by clicking or dragging column headers.</p>
-<p> The final row of the information section contains summary information about all threads below a threshold, if a threshold limit has been specified. The threshold row is not affected by sorting, it is always the last row.</p>
+
+<p>Columns may be reordered, resized, and sorted by clicking or dragging column
+headers.</p>
+
+<p>The final row of the information section contains summary information about
+all threads below a threshold, if a threshold limit has been specified. The
+threshold row is not affected by sorting, it is always the last row.</p>
+
+<p>You can check or uncheck items to be displayed in the graph or right-click
+to display a context menu of various options. The color next to a checkbox
+corresponds to that item’s color in the graph.</p>
+
+<p>For SMP systems with more than one CPU it is also possible to select to</p>
+<ul>
+  <li><b>Show Combined CPU Graph</b>, that is, to view all CPUs merged into one
+    graph, as in Figure 1, or</li>
+  <li><b>Show Separate CPU Graphs</b>, that is, to view a separate graph and
+    table for each CPU, as in Figure 2.</li>
+</ul>
+
+<p>This is done by using either the context menu, which you can open by
+right-clicking on the CPU graph; or in the <a
+href="investigator_menu.htm">Investigator menu</a>'s CPU Load Graphs part.</p>
+
+<p align="center"><img src="images/thread_mode_separate_graphs.png" width="712"
+height="689"> </p>
+
+<p align="center" class="figure">Figure 2. Thread Load Graph displaying
+separate CPU graphs</p>
+
+<p>In the separate graphs view, there is also a separate legend table created
+for each graph. You can choose the table you want to view by using the tabs
+above the table. </p>
+
 <p><strong>Related references</strong></p>
 <ul>
   <li><a href="main_view.htm">Analyzer View</a></li>
-<li><a href="../profiler/GPP_trace.htm">Address/Thread Trace</a></li>
+  <li><a href="investigator_menu.htm">Investigator menu</a></li>
+  <li><a href="../profiler/GPP_trace.htm">Address/Thread Trace</a></li>
   <li><a href="binary_load.htm">Binary Load</a></li>
   <li><a href="function_load.htm">Function Load</a></li>
-<li><a href="function_calls.htm">Function Calls</a></li>
-<li><a href="threshold.htm">Threshold Limits for Traced Data</a></li>
+  <li><a href="function_calls.htm">Function Calls</a></li>
+  <li><a href="threshold.htm">Threshold Limits for Traced Data</a></li>
 </ul>
-<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. <br>
+License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
 </body>
 </html>

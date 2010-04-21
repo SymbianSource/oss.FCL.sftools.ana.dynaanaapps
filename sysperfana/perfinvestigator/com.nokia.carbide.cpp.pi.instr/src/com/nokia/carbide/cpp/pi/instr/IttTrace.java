@@ -18,7 +18,6 @@
 package com.nokia.carbide.cpp.pi.instr;
 
 import com.nokia.carbide.cpp.internal.pi.model.GenericSampledTraceWithFunctions;
-import com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph;
 
 
 public class IttTrace extends GenericSampledTraceWithFunctions
@@ -33,16 +32,5 @@ public class IttTrace extends GenericSampledTraceWithFunctions
 	public IttSample getIttSample(int number)
 	{
 		return (IttSample)this.samples.elementAt(number);
-	}
-
-	public GenericTraceGraph getTraceGraph() {
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.nokia.carbide.cpp.internal.pi.model.GenericSampledTrace#getTraceGraph(int, com.nokia.carbide.cpp.internal.pi.analyser.AnalyseTab)
-	 */
-	public GenericTraceGraph getTraceGraph(int graphNumber) {
-		return null;
 	}
 }

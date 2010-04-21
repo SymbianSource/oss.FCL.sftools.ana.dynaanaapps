@@ -38,7 +38,7 @@ public class CusSample extends GenericSample {
 	
 	public String toString()
 	{
-		String sampleNum = new Long(sampleSynchTime).toString();
+		String sampleNum = Long.valueOf(sampleSynchTime).toString();
 		String valueString = new Double(value).toString();
 		return sampleNum+" "+name+" "+valueString+" "+color.toString(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}

@@ -20,13 +20,19 @@ package com.nokia.carbide.cpp.internal.pi.model;
 public interface FunctionResolver 
 {
 	// find the function corresponding to an address
-	public Function findFunctionForAddress(long address);
+	public IFunction findFunctionForAddress(long address);
+	
+	// find the function corresponding to an address and a sample synch time
+	public IFunction findFunctionForAddress(long address, long sampleSynchTime);
 
 	// find the function name corresponding to an address
 	public String findFunctionNameForAddress(long address);
 	
 	// find the binary corresponding to an address
-	public Binary findBinaryForAddress(long address);
+	public IBinary findBinaryForAddress(long address);
+	
+	// find the binary corresponding to an address and a sample synch time
+	public IBinary findBinaryForAddress(long address, long sampleSynchTime);
 
 	// find the binary name corresponding to an address
 	public String findBinaryNameForAddress(long address);

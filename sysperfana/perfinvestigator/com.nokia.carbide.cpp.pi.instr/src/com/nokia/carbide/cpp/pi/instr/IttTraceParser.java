@@ -25,6 +25,7 @@ import java.util.Vector;
 
 import com.nokia.carbide.cpp.internal.pi.analyser.NpiInstanceRepository;
 import com.nokia.carbide.cpp.internal.pi.model.FunctionResolver;
+import com.nokia.carbide.cpp.internal.pi.model.GenericEvent;
 import com.nokia.carbide.cpp.internal.pi.model.GenericTrace;
 import com.nokia.carbide.cpp.internal.pi.model.ParsedTraceData;
 import com.nokia.carbide.cpp.internal.pi.model.Parser;
@@ -215,10 +216,13 @@ public class IttTraceParser extends Parser
 	   		// end of trace
 	   	}
     }
-    else if (traceVersion.indexOf("ITT_V1.22") != -1 || traceVersion.indexOf("ITT_V2.01") != -1) //$NON-NLS-1$ //$NON-NLS-2$
+    else if (traceVersion.indexOf("ITT_V1.22") != -1 ) //$NON-NLS-1$ 
     {
-    	boolean isVersion201 = traceVersion.indexOf("ITT_V2.01") != -1; //$NON-NLS-1$
-    	this.trace122 = parse122IttTrace(traceArray, isVersion201);
+    	this.trace122 = parse122IttTrace(traceArray, false);
+    }
+    else if (traceVersion.indexOf("ITT_V2.00") != -1 || traceVersion.indexOf("ITT_V2.01") != -1) //$NON-NLS-1$ //$NON-NLS-2$
+    {
+    	this.trace122 = parse122IttTrace(traceArray, true);
     }
     else
     {
@@ -226,7 +230,7 @@ public class IttTraceParser extends Parser
     }
   }
    
-  private IttTrace122 parse122IttTrace(byte[] traceArray, boolean isVersion201)
+  private IttTrace122 parse122IttTrace(byte[] traceArray, boolean isVersion2x)
   {
 	  IttTrace122 trace = new IttTrace122();
 	  
@@ -235,24 +239,26 @@ public class IttTraceParser extends Parser
 	  // read the first header
 	  byte length = traceArray[ptr++];
 	  String txt = new String(traceArray,ptr,length);ptr+=length;
-	  
-	  Vector sortables = new Vector();
-	  
+	
 	  class SortableString implements Sortable
 	  {
 		  String string;
 		  long value;
 		  long startAddress;
 		  long endAddress;
-		  double samplingTime;
+		  double sampleStartTime;
+		  double sampleRemoveTime;
 		  
 		  public long valueOf()
 		  {
 			  return this.value;
 		  }
 	  }
+	  Vector<SortableString> sortables = new Vector<SortableString>();
 	  
-	  int adjust = isVersion201 ? 12 : 8;
+
+	  
+	  int adjust = isVersion2x ? 12 : 8;
 	  
 	  while(ptr < traceArray.length)
 	  {
@@ -284,7 +290,7 @@ public class IttTraceParser extends Parser
 		  len = (len<<32)>>>32;
 		  event.binaryLength = len;
 		  
-		  if (isVersion201) {
+		  if (isVersion2x) {
 			  long time = getUnsignedByte(traceArray[ptr++]);
 			  time |= (getUnsignedByte(traceArray[ptr++])<<8);
 			  time |= (getUnsignedByte(traceArray[ptr++])<<16);
@@ -297,35 +303,56 @@ public class IttTraceParser extends Parser
 
 		  event.createBinary();
 		  
-		  trace.addEvent(event);
-		  if (debug)
-		  {
-			  SortableString s = new SortableString();
-			  s.string = Long.toHexString(adr)+" - "+Long.toHexString(adr+len)+" \t "+event.binary.binaryName+" length:"+len; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			  s.value = adr;
-			  s.startAddress = adr;
-			  s.endAddress = adr+len;
-			  s.samplingTime = event.eventTime;
-			  sortables.add(s);
-		  }
+		  trace.addEvent(event, isVersion2x);
 	  }
 	  
 	  if (debug)
 	  {
+		  for(GenericEvent ge : trace.getEvents())
+		  {
+			  IttEvent122 ie = (IttEvent122)ge;
+			  SortableString s = new SortableString();
+			  if(isVersion2x){
+				  s.string = Long.toHexString(ie.binaryLocation)+" - "+Long.toHexString(ie.binaryLocation+ie.binaryLength)+" \t "+ie.getBinary().getBinaryName()+" length:"+ie.binaryLength+"\tEvent Start Time: "+ie.eventTime+"\tEvent End Time: "+ie.eventEndTime; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$  //$NON-NLS-4$ //$NON-NLS-5$  
+			  }else{
+				  s.string = Long.toHexString(ie.binaryLocation)+" - "+Long.toHexString(ie.binaryLocation+ie.binaryLength)+" \t "+ie.getBinary().getBinaryName()+" length:"+ie.binaryLength; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
+			  }
+			  
+			  s.value = ie.binaryLocation;
+			  s.startAddress = ie.binaryLocation;
+			  s.endAddress = ie.binaryLocation+ie.binaryLength;
+			  s.sampleStartTime = ie.eventTime;
+			  s.sampleRemoveTime = ie.eventEndTime;
+			  sortables.add(s);
+		  }
 		  QuickSortImpl.sort(sortables);
-		  Enumeration e = sortables.elements();
+		  Enumeration<SortableString> e = sortables.elements();
 		  SortableString prev = null;
 		  while (e.hasMoreElements())
 		  {
 			  SortableString s = (SortableString)e.nextElement();
 			  if (prev != null)
 			  {
-				 // System.out.println("Empty:"+(s.startAddress - prev.endAddress)+" bytes");
-				  if (s.startAddress < prev.endAddress) {
-					  System.out.println(Messages.getString("IttTraceParser.debugOverlapping")); //$NON-NLS-1$
-					  System.out.println(Messages.getString("IttTraceParser.previous") + prev.string); //$NON-NLS-1$
-					  System.out.println(Messages.getString("IttTraceParser.this") + s.string); //$NON-NLS-1$
+				  if(isVersion2x){
+					  if(prev.sampleRemoveTime <= 0){
+						  prev.sampleRemoveTime = Double.MAX_VALUE;
+					  }
+					  if(s.sampleRemoveTime <= 0){
+						  s.sampleRemoveTime = Double.MAX_VALUE;
+					  }
+					  if (s.startAddress < prev.endAddress && s.sampleStartTime < prev.sampleRemoveTime && s.sampleRemoveTime > prev.startAddress) {
+						  System.out.println(Messages.getString("IttTraceParser.debugOverlapping")); //$NON-NLS-1$
+						  System.out.println(Messages.getString("IttTraceParser.previous") + prev.string); //$NON-NLS-1$
+						  System.out.println(Messages.getString("IttTraceParser.this") + s.string); //$NON-NLS-1$
+					  }
+				  }else{
+					  if (s.startAddress < prev.endAddress) {
+						  System.out.println(Messages.getString("IttTraceParser.debugOverlapping")); //$NON-NLS-1$
+						  System.out.println(Messages.getString("IttTraceParser.previous") + prev.string); //$NON-NLS-1$
+						  System.out.println(Messages.getString("IttTraceParser.this") + s.string); //$NON-NLS-1$
+					  } 
 				  }
+			
 			  }
 			  System.out.println(s.string);
 			  prev = s;
@@ -431,7 +458,7 @@ public class IttTraceParser extends Parser
     return this.samples.elements();
   }
 
-  private GenericTrace getTrace()
+  public GenericTrace getTrace()
   {
 	  if (this.trace122 == null)
 	  {

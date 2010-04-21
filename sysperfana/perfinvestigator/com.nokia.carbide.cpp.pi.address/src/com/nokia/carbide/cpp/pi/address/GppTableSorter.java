@@ -220,10 +220,10 @@ public class GppTableSorter
 			tmp2 = (ProfiledThread)e.nextElement();
 			if (tmp1 != null)
 			{
-				Integer p1 = (Integer)priorities.get(new Integer(tmp1.getThreadId()));
-				Integer p2 = (Integer)priorities.get(new Integer(tmp2.getThreadId()));
-				p1 = (p1 == null) ? new Integer(Integer.MIN_VALUE) : p1;
-				p2 = (p2 == null) ? new Integer(Integer.MIN_VALUE) : p2;
+				Integer p1 = (Integer)priorities.get(Integer.valueOf(tmp1.getThreadId()));
+				Integer p2 = (Integer)priorities.get(Integer.valueOf(tmp2.getThreadId()));
+				p1 = (p1 == null) ? Integer.valueOf(Integer.MIN_VALUE) : p1;
+				p2 = (p2 == null) ? Integer.valueOf(Integer.MIN_VALUE) : p2;
 
 				if ((p1.compareTo(p2) != 0) && (p1.compareTo(p2) < 0) ^ sortAscending)
 				{
@@ -1246,8 +1246,8 @@ public class GppTableSorter
 		highToLowIndex = highIndex;
 		pivotIndex = (lowToHighIndex + highToLowIndex) / 2;
 		pivotValue = (ProfiledThread)elements.elementAt(pivotIndex);
-		Integer pivot = (Integer)priorities.get(new Integer(pivotValue.getThreadId()));
-		pivot = (pivot == null) ? new Integer(Integer.MIN_VALUE) : pivot;
+		Integer pivot = (Integer)priorities.get(Integer.valueOf(pivotValue.getThreadId()));
+		pivot = (pivot == null) ? Integer.valueOf(Integer.MIN_VALUE) : pivot;
 
 		newLowIndex = highIndex + 1;
 		newHighIndex = lowIndex - 1;
@@ -1256,29 +1256,29 @@ public class GppTableSorter
 		while ((newHighIndex + 1) < newLowIndex) // loop until partition complete
 		{
 			lowToHighValue = (ProfiledThread)elements.elementAt(lowToHighIndex);
-			Integer low = (Integer)priorities.get(new Integer(lowToHighValue.getThreadId()));
-			low = (low == null) ? new Integer(Integer.MIN_VALUE) : low;
+			Integer low = (Integer)priorities.get(Integer.valueOf(lowToHighValue.getThreadId()));
+			low = (low == null) ? Integer.valueOf(Integer.MIN_VALUE) : low;
 			while (lowToHighIndex < newLowIndex
 					&& ((low.compareTo(pivot) != 0) && ((low.compareTo(pivot) > 0) ^ sortAscending)))
 			{
 				newHighIndex = lowToHighIndex; // add element to lower part
 				lowToHighIndex ++;
 				lowToHighValue = (ProfiledThread)elements.elementAt(lowToHighIndex);
-				low = (Integer)priorities.get(new Integer(lowToHighValue.getThreadId()));
-				low = (low == null) ? new Integer(Integer.MIN_VALUE) : low;
+				low = (Integer)priorities.get(Integer.valueOf(lowToHighValue.getThreadId()));
+				low = (low == null) ? Integer.valueOf(Integer.MIN_VALUE) : low;
 			}
 
 			highToLowValue = (ProfiledThread)elements.elementAt(highToLowIndex);
-			Integer high = (Integer)priorities.get(new Integer(highToLowValue.getThreadId()));
-			high = (high == null) ? new Integer(Integer.MIN_VALUE) : high;
+			Integer high = (Integer)priorities.get(Integer.valueOf(highToLowValue.getThreadId()));
+			high = (high == null) ? Integer.valueOf(Integer.MIN_VALUE) : high;
 			while (newHighIndex <= highToLowIndex
 					&& ((high.compareTo(pivot) != 0) && ((high.compareTo(pivot) < 0) ^ sortAscending)))
 			{
 				newLowIndex = highToLowIndex; // add element to higher part
 				highToLowIndex --;
 				highToLowValue = (ProfiledThread)elements.elementAt(highToLowIndex);
-				high = (Integer)priorities.get(new Integer(highToLowValue.getThreadId()));
-			  	high = (high == null) ? new Integer(Integer.MIN_VALUE) : high;
+				high = (Integer)priorities.get(Integer.valueOf(highToLowValue.getThreadId()));
+			  	high = (high == null) ? Integer.valueOf(Integer.MIN_VALUE) : high;
 			}
 
 			// swap if needed
@@ -1288,10 +1288,10 @@ public class GppTableSorter
 			}
 			else if (lowToHighIndex < highToLowIndex) // not last element yet
 			{
-				high = (Integer)priorities.get(new Integer(highToLowValue.getThreadId()));
-				high = (high == null) ? new Integer(Integer.MIN_VALUE) : high;
-				low  = (Integer)priorities.get(new Integer(lowToHighValue.getThreadId()));
-				low  = (low == null) ? new Integer(Integer.MIN_VALUE) : low;
+				high = (Integer)priorities.get(Integer.valueOf(highToLowValue.getThreadId()));
+				high = (high == null) ? Integer.valueOf(Integer.MIN_VALUE) : high;
+				low  = (Integer)priorities.get(Integer.valueOf(lowToHighValue.getThreadId()));
+				low  = (low == null) ? Integer.valueOf(Integer.MIN_VALUE) : low;
 
 				compareResult = low.compareTo(high);
 				if ((compareResult == 0) || ((compareResult < 0) ^ sortAscending))

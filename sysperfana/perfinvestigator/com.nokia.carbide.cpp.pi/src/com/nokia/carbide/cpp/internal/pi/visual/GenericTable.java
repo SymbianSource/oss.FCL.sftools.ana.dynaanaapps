@@ -64,11 +64,22 @@ public abstract class GenericTable
 	protected static final int COLUMN_ID_IN_BINARY_PATH = 10;
 	protected static final int COLUMN_ID_START_ADDR     = 11;
 	protected static final int COLUMN_ID_PRIORITY       = 12;
+
 	
 	// these are never used as actual column headers - they indicate a double sort
 	protected static final int COLUMN_ID_FULL_PATH      = 13;
 	protected static final int COLUMN_ID_FULL_IN_PATH   = 14;
 
+	public static final int COLUMN_ID_SWI_THREAD		= 15;
+	public static final int COLUMN_ID_ADDRESS			= 16;
+	public static final int COLUMN_ID_SWI_FUNCTION		= 17;
+	public static final int COLUMN_ID_RETURN_ADDRESS	= 18;
+	public static final int COLUMN_ID_SWI_COUNT			= 19;
+	public static final int COLUMN_ID_IRQ_LINE			= 20;
+	public static final int COLUMN_ID_IRQ_COUNT			= 21;
+	public static final int COLUMN_ID_SWI_CHECK			= 22;
+
+	
 	protected static final int COLOR_COLUMN_INDEX = 0;
 	
 	// table column headings
@@ -88,7 +99,10 @@ public abstract class GenericTable
 	protected static final String COLUMN_HEAD_MEMORY_STACK  = Messages.getString("GenericTable.stackHeap"); //$NON-NLS-1$
 	protected static final String COLUMN_HEAD_MEMORY_TOTAL  = Messages.getString("GenericTable.memoryTotal"); //$NON-NLS-1$
 	protected static final String COLUMN_HEAD_MEMORY_NAME   = Messages.getString("GenericTable.threadProcess"); //$NON-NLS-1$
-
+	protected static final String COLUMN_HEAD_LIBRARY_NAME   = Messages.getString("GenericTable.libraryName"); //$NON-NLS-1$
+	protected static final String COLUMN_HEAD_LIBRARY_LOAD_SIZE = Messages.getString("GenericTable.libraryLoadSize"); //$NON-NLS-1$
+	protected static final String COLUMN_HEAD_LIBRARY_SELECTION_LOAD_COUNT = Messages.getString("GenericTable.librarySelectionLoadCount"); //$NON-NLS-1$
+	
 	// table column widths
 	protected static final int COLUMN_WIDTH_SHOW           =  40;
 	protected static final int COLUMN_WIDTH_PERCENT_LOAD   =  52;
@@ -109,8 +123,18 @@ public abstract class GenericTable
 	protected static final int COLUMN_WIDTH_MEMORY_CHUNKS  =  80;
 	protected static final int COLUMN_WIDTH_MEMORY_STACK   =  80;
 	protected static final int COLUMN_WIDTH_MEMORY_TOTAL   =  80;
-	protected static final int COLUMN_WIDTH_MEMORY_NAME    = 300;
-    
+	protected static final int COLUMN_WIDTH_MEMORY_NAME    	= 300;
+	protected static final int COLUMN_WIDTH_THREAD_IRQ_LINE = 300;
+	protected static final int COLUMN_WIDTH_LIBRARY_LOAD_SIZE  =  80;
+	protected static final int COLUMN_WIDTH_LIBRARY_NAME    = 250;
+    protected static final int COLUMN_WIDTH_LIBRARY_SELECTION_COUNT   =  160;
+    protected static final int COLUMN_WIDTH_ADDRESS_COUNT 	= 100;
+	protected static final int COLUMN_WIDTH_RETURN_ADDRESS 	= 90;
+	protected static final int COLUMN_WIDTH_COUNT 			= 50;
+	protected static final int COLUMN_WIDTH_SWI_FUNCTION 	= 250;
+	protected static final int COLUMN_WIDTH_CHECK_COLUMN	= 40;
+
+	
     // colors are now included with the checkbox column
     protected static final int COLOR_COLUMN = 0;
     
@@ -226,7 +250,7 @@ public abstract class GenericTable
 	    {
 	        if (e.nextElement().equals(anObject))
 	        {
-	            return new Integer(counter);
+	            return Integer.valueOf(counter);
 	        }
 	        counter++;
 	    }

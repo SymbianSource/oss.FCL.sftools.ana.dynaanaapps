@@ -194,7 +194,27 @@ public class SdkChooserBase {
 			if (sdk != null) {
 				directoryDataLabel.setText(sdk.getEPOCROOT());
 				osVersionDataLabel.setText(sdk.getOSVersion().toString());
-				platformDataLabel.setText(sdk.getAvailablePlatforms().toString());
+				
+				// separate too long lines 
+				String platforms = ""; //$NON-NLS-1$
+				final int maxLineLength = 80;
+				int count = 1;
+				for(String platform : sdk.getAvailablePlatforms()){						
+					platforms += platform;
+					platforms += ", ";			 //$NON-NLS-1$
+					if((platforms.length() / maxLineLength) == count){
+						platforms += "\n";					 //$NON-NLS-1$
+						count++;
+					}
+				}
+				int index = platforms.lastIndexOf(",");  //$NON-NLS-1$
+				if(index != -1){
+					platforms = platforms.substring(0, index);	
+				}			
+				else{
+					platforms = "-";
+				}
+				platformDataLabel.setText(platforms);
 			}
 		} else {
 			directoryDataLabel.setText(Messages.getString("SdkChooserBase.directorydata.label")); //$NON-NLS-1$

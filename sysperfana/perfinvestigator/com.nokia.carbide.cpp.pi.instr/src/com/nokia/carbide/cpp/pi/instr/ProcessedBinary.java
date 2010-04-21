@@ -142,15 +142,15 @@ public class ProcessedBinary extends Binary
   		
   		long offsetFromBinaryStart = this.mapFile.getOffsetFromBinaryStartForFunction(name); 
   		// this cannot be resolved here, since the address is not known
-  		Long addr = new Long(0);
+  		Long addr = Long.valueOf(0);
   		
   		String search = name + dllName;
   		Function f = this.knownFunctions.get(search);
   		
   		if (f == null) {
 	  		f = new Function(name,addr,dllName);
-	  		f.offsetFromBinaryStart = offsetFromBinaryStart;
-	  		f.length = this.mapFile.getFunctionLengthForOffset(offset);
+	  		f.setOffsetFromBinaryStart(offsetFromBinaryStart);
+	  		f.setLength(this.mapFile.getFunctionLengthForOffset(offset));
 	  		this.knownFunctions.put(search, f);
   		}
   		

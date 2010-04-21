@@ -103,6 +103,7 @@ public class PIEvent
 	// no value object required
 
 	public static final int CHANGED_MEMORY_TABLE = 29;
+	public static final int CHANGED_LIBRARY_TABLE = 31;
 	// no value object required
 	
 	public static final int SCROLLED = 30;

@@ -25,7 +25,12 @@ package com.nokia.carbide.cpp.internal.pi.plugin.model;
  */
 public interface IFinalizeTrace {
 	
-	/* this routine is run before editor UID is disposed */
+	/** this routine is run before editor UID is disposed */
 	public void runOnDispose();
+	
+	/**
+	 * called when the EditorPart opens
+	 */
+	public void runOnPartOpened();
 
 }

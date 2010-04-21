@@ -24,6 +24,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 
 import javax.swing.JDialog;
 
@@ -33,6 +34,7 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.Panel;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ControlAdapter;
@@ -61,9 +63,11 @@ import com.nokia.carbide.cpp.internal.pi.analyser.TestGUI;
 import com.nokia.carbide.cpp.internal.pi.manager.PluginInitialiser;
 import com.nokia.carbide.cpp.internal.pi.plugin.model.IContextMenu;
 import com.nokia.carbide.cpp.internal.pi.plugin.model.IEventListener;
+import com.nokia.carbide.cpp.internal.pi.plugin.model.ITitleBarMenu;
 import com.nokia.carbide.cpp.pi.editors.PIPageEditor;
 import com.nokia.carbide.cpp.pi.util.ColorPalette;
 import com.nokia.carbide.cpp.pi.util.GeneralMessages;
+import com.nokia.carbide.cpp.pi.visual.IGenericTraceGraph;
 
 public class PICompositePanel implements ActionListener, PIEventListener {
 	private SashForm sashForm;
@@ -98,7 +102,7 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 	JDialog dialog = null;
 
 	SynchroniseDialog dialogPanel = null;
-	private GenericTraceGraph activeGraph = null;
+	private IGenericTraceGraph activeGraph = null;
 
 	// create a ScrollComposite, with a horizontal scrollbar, containing a
 	// sashForm without a scrollbar
@@ -163,7 +167,7 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 
 	// returns true if the graph needs to be updated (it is either
 	// active or visible)
-	public boolean hasToBeUpdated(GenericTraceGraph graph) {
+	public boolean hasToBeUpdated(IGenericTraceGraph graph) {
 		if (graph.getVisualSize().height > 0)
 			return true;
 		else if (graph.equals(this.getActiveGraph()))
@@ -174,7 +178,7 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 
 	// this method adds listeners to graph selections
 	private void addMouseListeners(final GraphComponentWrapper wrap,
-			FigureCanvas graphCanvas) {
+			final FigureCanvas graphCanvas) {
 		if (wrap.panel == null)
 			return;
 
@@ -198,15 +202,14 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 		if (graphCanvas == null)
 			return;
 
-		final FigureCanvas graphCanvasFinal = graphCanvas;
 		graphCanvas.addMouseListener(new MouseListener() {
 			public void mouseDown(MouseEvent me) {
 				// for button 3, show the popup context menu
 				if (me.button == 3) // button 3
 				{
 					final int x = me.x; // don't worry about me.x, this is
-										// always a valid coordinate within the
-										// panel
+					// always a valid coordinate within the
+					// panel
 					final int y = me.y;
 					final MouseEvent meFinal = me;
 					Display.getDefault().syncExec(new Runnable() {
@@ -218,7 +221,7 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 
 							// add submenu items
 							addSubGraphMenuItems(menu, meFinal);
-							menu.setLocation(graphCanvasFinal.toDisplay(x, y));
+							menu.setLocation(graphCanvas.toDisplay(x, y));
 						}
 					});
 					return;
@@ -234,20 +237,20 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 				// me.x will always be a valid coordinate within the Widget,
 				// rounded to the nearest millisecond
 				// since this is the FigureCanvas, not the Panel, adjust x
-				selectionStart = (int) ((me.x + getScrolledOrigin().x) * scale + .0005);
+				selectionStart = (int) ((me.x + getScrolledOrigin(wrap.getGraphComponent()).x) * scale + .0005);
 
 				origStart = selectionStart;
 
 				// send the message to the component under the mouse
 				if (me.getSource() instanceof GraphComponentWrapper) {
-					GenericTraceGraph source = ((GraphComponentWrapper) me
+					IGenericTraceGraph source = ((GraphComponentWrapper) me
 							.getSource()).getGraphComponent();
 					if (source instanceof PIEventListener
 							&& hasToBeUpdated(source)) {
 						PIEventListener lis = (PIEventListener) source;
 
 						for (int i = 0; i < graphComponents.size(); i++) {
-							GenericTraceGraph possible = (GenericTraceGraph) graphComponents
+							IGenericTraceGraph possible = (IGenericTraceGraph) graphComponents
 									.get(i).graphComponent;
 							if (possible.equals(source)) {
 								PIEvent be = new PIEvent(source,
@@ -285,17 +288,11 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 						// no range is selected
 						selectionStart = 0;
 						selectionEnd = 0;
-						profVisu.getTimeString().setText(
-								ProfileVisualiser.getTimeInterval(
-										selectionStart / 1000,
-										selectionEnd / 1000));
 					} else if (selectionEnd > maxEndTime) {
 						selectionEnd = maxEndTime + .0005;
-						profVisu.getTimeString().setText(
-								ProfileVisualiser.getTimeInterval(
-										selectionStart / 1000,
-										selectionEnd / 1000));
 					}
+					profVisu.updateStatusBarTimeInterval(
+							selectionStart / 1000, selectionEnd / 1000);
 
 					setSelectionFields();
 
@@ -339,7 +336,7 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 		graphCanvas.addMouseMoveListener(new MouseMoveListener() {
 			public void mouseMove(MouseEvent me) {
 
-				int xOrigin = getScrolledOrigin().x;
+				int xOrigin = getScrolledOrigin(wrap.getGraphComponent()).x;
 
 				me.x += xOrigin;
 
@@ -381,11 +378,10 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 
 				// until mouse button is released, change the time interval
 				// display only on this page
-				profVisu.getTimeString().setText(
-						ProfileVisualiser.getTimeInterval(
-								selectionStart / 1000, selectionEnd / 1000));
+				profVisu.updateStatusBarTimeInterval(
+						selectionStart / 1000, selectionEnd / 1000);
 
-				drawSelectionRect(me);
+				drawSelectionRect(me, graphCanvas);
 				repaintComponent();
 
 				// why is this not in repaintComponent?
@@ -394,7 +390,7 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 		});
 	}
 
-	private void drawSelectionRect(MouseEvent me) {
+	private void drawSelectionRect(MouseEvent me, FigureCanvas originFigureCanvas) {
 		if ((me.getSource() == null)
 				|| !(me.getSource() instanceof Control/* Panel */))
 			return;
@@ -403,7 +399,7 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 		// whole
 		// length, not the visable one
 		Rectangle rect = this.sashForm.getBounds();
-		Point origin = getScrolledOrigin();
+		Point origin = 	((FigureCanvas)me.getSource()).getViewport().getViewLocation();
 
 		int newX;
 		int tmpMeX = me.x;
@@ -429,11 +425,11 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 		// rectangle is visible
 		if (newX < origin.x) {
 			// scroll to the left
-			this.setScrolledOrigin(newX, origin.y);
+			this.setScrolledOrigin(newX, origin.y, null);
 			changeOrigin = true;
 		} else if (newX > origin.x + rect.width) {
 			// scroll to the right
-			this.setScrolledOrigin(newX - rect.width, origin.y);
+			this.setScrolledOrigin(newX - rect.width, origin.y, null);
 			changeOrigin = true;
 		}
 
@@ -446,11 +442,11 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 							.activeUid(),
 							"com.nokia.carbide.cpp.internal.pi.plugin.model.IEventListener"); //$NON-NLS-1$
 			if (enu != null) {
-				origin = getScrolledOrigin();
+				origin = ((FigureCanvas)me.getSource()).getViewport().getViewLocation();
 				Event event = new Event();
 				event.x = origin.x;
 				event.y = origin.y;
-				event.data = "FigureCanvas"; //$NON-NLS-1$
+				event.data = originFigureCanvas; //$NON-NLS-1$
 
 				while (enu.hasMoreElements()) {
 					IEventListener plugin = (IEventListener) enu.nextElement();
@@ -464,7 +460,7 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 		return this.sharedData;
 	}
 
-	public void setToolTipTextForGraphComponent(GenericTraceGraph graph,
+	public void setToolTipTextForGraphComponent(IGenericTraceGraph graph,
 			String text) {
 		if (this.graphComponents != null) {
 			for (int i = 0; i < graphComponents.size(); i++) {
@@ -476,7 +472,15 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 		}
 	}
 
-	public void setScrolledOrigin(int x, int y) {
+	/**
+	 * Moves the position of all graphComponent's FigureCanvas to the given location.
+	 * If an original FigureCanvas is given, it is skipped since it has already
+	 * performed the operation. 
+	 * @param x The new location to set to
+	 * @param y
+	 * @param origin If not null, the FigureCanvas to omit from the operation
+	 */
+	public void setScrolledOrigin(int x, int y, FigureCanvas origin) {
 		if (this.graphComponents != null) {
 			for (int i = 0; i < graphComponents.size(); i++) {
 				FigureCanvas figureCanvas = graphComponents.get(i).figureCanvas;
@@ -484,25 +488,39 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 				if (figureCanvas == null)
 					continue;
 
-				figureCanvas.getViewport().setViewLocation(x, y);
-				if (figureCanvas.getViewport().getViewLocation().x != x) {
-					// force the viewport to accept the new value
-					figureCanvas.getViewport().getHorizontalRangeModel()
-							.setMaximum(this.sizeX);
+				if ((origin == null || figureCanvas != origin) && figureCanvas.getViewport().getViewLocation().x != x){
 					figureCanvas.getViewport().setViewLocation(x, y);
+					if (figureCanvas.getViewport().getViewLocation().x != x) {
+						// force the viewport to accept the new value
+						figureCanvas.getViewport().getHorizontalRangeModel()
+								.setMaximum(this.sizeX);
+						figureCanvas.getViewport().setViewLocation(x, y);
+					}					
 				}
 			}
 		}
 	}
 
-	public Point getScrolledOrigin() {
-		// this assumes that setScrolledOrigin() is keeping all graphs scrolled
-		// the same amount
-		if (this.graphComponents == null)
+	public Point getScrolledOrigin(IGenericTraceGraph graph) {
+		if (this.graphComponents == null) {
 			return null;
-		else
-			return graphComponents.get(0).figureCanvas.getViewport()
-					.getViewLocation();
+		} else {
+			if (graph == null) {
+				return graphComponents.get(0).figureCanvas.getViewport()
+						.getViewLocation();
+
+			} else {
+				Iterator<GraphComponentWrapper> iterator = graphComponents
+						.iterator();
+				while (iterator.hasNext()) {
+					GraphComponentWrapper gcw = iterator.next();
+					if (gcw.graphComponent == graph) {
+						return gcw.figureCanvas.getViewport().getViewLocation();
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 	public void setCurrentInfoComponent(Component currentComponent) {
@@ -581,11 +599,12 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 						.addContextMenuItems(menu, me);
 			}
 		}
+
 	}
 
 	private void sendEventToSubComponents(Object event) {
 		for (int i = 0; i < graphComponents.size(); i++) {
-			GenericTraceGraph component = graphComponents.get(i)
+			IGenericTraceGraph component = graphComponents.get(i)
 					.getGraphComponent();
 
 			// forward the events only if the component has height
@@ -685,7 +704,7 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 			// for each graph component set updated values
 			for (int i = 0; i < graphComponents.size(); i++) {
 				GraphComponentWrapper wrap = graphComponents.get(i);
-				GenericTraceGraph component = wrap.getGraphComponent();
+				IGenericTraceGraph component = wrap.getGraphComponent();
 				component.setSize(this.sizeX, this.sizeY);
 				component.setScale(this.scale);
 				component.setSelectionEnd(this.selectionEnd);
@@ -701,7 +720,7 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 		}
 	}
 
-	public void addGraphComponent(GenericTraceGraph component, String title,
+	public void addGraphComponent(IGenericTraceGraph component,
 			Class pluginClass, GraphDrawRequest request) {
 		// insert CompositePanel into wrapper and put it into top part of the
 		// splitpane
@@ -716,10 +735,11 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 
 		FigureCanvas graphCanvas = null;
 
+
 		// This treats all getGraphClassToDraw editor pages the same
 		if (request == null
-				|| request.getGraphClassToDraw(component.graphIndex).size() == 0) {
-			graphCanvas = wrap.setCanvas(component, title, this.sashForm,
+				|| request.getGraphClassToDraw(component.getGraphIndex()).size() == 0) {
+			graphCanvas = wrap.setCanvas(component, this.sashForm,
 					SWT.NONE);
 		}
 
@@ -904,11 +924,11 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 		this.sashForm.redraw();
 	}
 
-	public void setActive(GenericTraceGraph graph) {
+	public void setActive(IGenericTraceGraph graph) {
 		activeGraph = graph;
 	}
 
-	public GenericTraceGraph getActiveGraph() {
+	public IGenericTraceGraph getActiveGraph() {
 		return activeGraph;
 	}
 
@@ -941,7 +961,7 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 			newPositionX = 0;
 		}
 
-		this.setScrolledOrigin(newPositionX, 0);
+		this.setScrolledOrigin(newPositionX, 0, null);
 		repaintComponent();
 	}
 
@@ -1060,7 +1080,7 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 		// the rest are all real zoom command that need repaint on of the image
 		for (int i = 0; i < graphComponents.size(); i++) {
 			GraphComponentWrapper wrap = graphComponents.get(i);
-			GenericTraceGraph component = wrap.getGraphComponent();
+			IGenericTraceGraph component = wrap.getGraphComponent();
 			component.setGraphImageChanged(true);
 		}
 
@@ -1082,7 +1102,7 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 
 			// bail out if we already made the whole graph visible
 			if (visibleComposite.lastSampleX / scale <= parent.getBounds().width) // TODO
-																					// visibleComposite
+				// visibleComposite
 				return;
 
 			// if the scale will not change, do not redraw
@@ -1143,7 +1163,7 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 
 	public void performZoomToGraph(PICompositePanel visibleComposite, int width) {
 		// left margin is not available for painting
-		int availableWidth = width - GenericTraceGraph.yLegendWidth;
+		int availableWidth = width - IGenericTraceGraph.Y_LEGEND_WIDTH;
 		// NOTE: assumes tabs without graphs have sample == 0
 		if (visibleComposite.lastSampleX <= 0)
 			return;
@@ -1171,7 +1191,7 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 	}
 
 	public class GraphComponentWrapper {
-		public GenericTraceGraph graphComponent;
+		public IGenericTraceGraph graphComponent;
 		public FigureCanvas leftLegend;
 		public FigureCanvas figureCanvas;
 		public Panel panel = null;
@@ -1181,7 +1201,7 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 		private PICompositePanel compositePanel;
 
 		public GraphComponentWrapper(PICompositePanel compositePanel,
-				GenericTraceGraph graph, GraphDrawRequest howToDraw,
+				IGenericTraceGraph graph, GraphDrawRequest howToDraw,
 				String myPluginName) {
 			this.compositePanel = compositePanel;
 			this.graphComponent = graph;
@@ -1191,23 +1211,25 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 			this.subGraphs = new ArrayList<GraphComponentWrapper>();
 		}
 
-		public FigureCanvas setCanvas(GenericTraceGraph component,
-				String title, Composite parent, int style) {
-			final GenericTraceGraph componentFinal = component;
+		public FigureCanvas setCanvas(IGenericTraceGraph component,
+				Composite parent, int style) {
+			final IGenericTraceGraph componentFinal = component;
 			final ArrayList<GraphComponentWrapper> subGraphsFinal = this.subGraphs;
 			final GraphComponentWrapper wrapFinal = this;
 			final PICompositePanel compositePanelFinal = this.compositePanel;
 
-			GraphComposite composite = new GraphComposite(parent, style, title);
+			GraphComposite composite = new GraphComposite(parent, style, component.getTitle(),
+					compositePanel, component instanceof ITitleBarMenu ? (ITitleBarMenu)component : null, this);
 			this.leftLegend = composite.leftLegend;
 			this.figureCanvas = composite.figureCanvas;
+			component.setVisibilityListener(composite);
 
 			this.leftLegend.setBackground(ColorPalette.getColor(new RGB(255,
 					255, 255)));
 			final FigureCanvas leftLegendFinal = leftLegend;
 			leftLegend.addControlListener(new ControlAdapter() {
 				public void controlResized(ControlEvent e) {
-					leftLegendFinal.setSize(GenericTraceGraph.yLegendWidth,
+					leftLegendFinal.setSize(IGenericTraceGraph.Y_LEGEND_WIDTH,
 							leftLegendFinal.getSize().y);
 					componentFinal.paintLeftLegend(leftLegendFinal, null);
 				}
@@ -1260,7 +1282,7 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 						Event event = new Event();
 						event.x = figureCanvas.getViewport().getViewLocation().x;
 						event.y = figureCanvas.getViewport().getViewLocation().y;
-						event.data = "FigureCanvas"; //$NON-NLS-1$
+						event.data = figureCanvas; 
 
 						while (enu.hasMoreElements()) {
 							IEventListener plugin = (IEventListener) enu
@@ -1296,14 +1318,14 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 			if (graphComponent == null)
 				return;
 
-			GenericTraceGraph gtg = parent.getGraphComponent();
+			IGenericTraceGraph gtg = parent.getGraphComponent();
 			this.graphComponent.setScale(gtg.getScale());
 			this.graphComponent.setVisualSize(gtg.getVisualSizeX(), gtg
 					.getVisualSizeY());
 		}
 
 		public void newPluginAdded()// ArrayList<GraphComponentWrapper>
-									// graphComponents)
+		// graphComponents)
 		{
 			if (this.myPluginName == null)
 				return;
@@ -1315,7 +1337,7 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 				if (wrap.howToDraw != null) {
 					// This treats all getGraphClassToDraw editor pages the same
 					ArrayList e2 = wrap.howToDraw
-							.getGraphClassToDraw(wrap.graphComponent.graphIndex);
+							.getGraphClassToDraw(wrap.graphComponent.getGraphIndex());
 					for (int j = 0; j < e2.size(); j++) {
 						String s = (String) e2.get(j);
 						if (this.myPluginName.equals(s)) {
@@ -1326,7 +1348,7 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 			}
 		}
 
-		public GenericTraceGraph getGraphComponent() {
+		public IGenericTraceGraph getGraphComponent() {
 			return this.graphComponent;
 		}
 	}
@@ -1376,6 +1398,47 @@ public class PICompositePanel implements ActionListener, PIEventListener {
 				plugin.receiveEvent("changeSelection", event); //$NON-NLS-1$
 			}
 		}
-		//
+
 	}
+
+
+	/**
+	 * Updates the enabled state of all graph actions (min, max etc.)
+	 */
+	public void updateGraphActionState() {
+		for (final Control control : this.sashForm.getChildren()) {
+			if (control instanceof GraphComposite){
+				//find the first graph on the page
+				//and have all action buttons (min, max etc.) updated for all graphs
+				
+				Runnable refreshRunnable = new Runnable() {
+					public void run() {
+						GraphComposite graphComposite = (GraphComposite) control;
+						graphComposite.updateAllGraphsButtons();
+					}
+				};
+
+				Display.getDefault().asyncExec(refreshRunnable);
+				break;
+			}
+		}
+		
+	}
+
+	/**
+	 * Calls initialisation code for all graphs on this page. This
+	 * method is called on editor part activation.
+	 */	
+	public void initialiseGraphs() {
+		for (Control control : this.sashForm.getChildren()) {
+			if (control instanceof GraphComposite){
+				//find the first graph on the page
+				//and have all action buttons (min, max etc.) updated for all graphs
+				GraphComposite graphComposite = (GraphComposite) control;
+				graphComposite.initialiseGraphs();
+			}
+		}
+		
+	}
+
 }

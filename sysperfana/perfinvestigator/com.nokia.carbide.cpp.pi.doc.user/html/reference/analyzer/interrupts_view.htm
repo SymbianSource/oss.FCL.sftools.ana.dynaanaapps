@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Thread Load</title>
+  <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Interrupts View</h2>
+
+<p>Use the Interrupts View to display information about data collected from SWI
+and IRQ interrupts. The graph portion of the Interrupts view shows the amount
+of interrupts per millisecond.</p>
+
+<p>The Interrupts View has two different view options: Software interrupts (see
+Figure 2.) or Hardware interrupts (see Figure 3.). The display is different
+depending upon the view option selected in the Title bar drop-down menu, shown
+in Figure 1.</p>
+
+<p align="center"><img src="images/interrupts_view_drop-down.png" width="113"
+height="46"></p>
+
+<p align="center" class="figure">Figure 1. Interrupts view Title bar drop-down
+menu</p>
+
+<p><strong>Software interrupts</strong></p>
+
+<p>The Software interrupts graph displays the interrupts according to the
+threads and SWI functions selected in the legend tables. A separate line of
+graph is displayed for each selected thread, with the thread name in the top
+left-hand corner. In the graph, the height of the column shows the amount of
+interrupts, and each color represents an SWI function. The scaling of the
+graphs is shown at the left side of the graph.</p>
+
+<p align="center"><img src="images/interrupts_view_SW.png" width="705"
+height="591"></p>
+
+<p align="center" class="figure">Figure 2. Software interrupts view</p>
+
+<p>There are two legend tables displayed below the software interrupts graph:
+One for the threads from a device and another for SWI functions.</p>
+
+<p>Description of columns in the Threads table:</p>
+<ul>
+  <li>The <b>Thread</b> column identifies the thread by name and executable
+    which is composed of: 
+    <ul>
+      <li>Executable or process name — name of the binary as identified by
+        the OS</li>
+      <li>Process ID (PID) — the process ID that uniquely identifies the
+        process to the OS </li>
+      <li>Thread name —the name of the thread</li>
+    </ul>
+  </li>
+  <li>The <b>Address</b> column indicates the address of the thread object that
+    was under execution during the time of the SWI.</li>
+</ul>
+
+<p>You can select the threads you want to display in the graph by checking the
+box next to the thread name in the table. A separate line of graph is displayed
+for each selected thread, with the thread name in the top left-hand corner.</p>
+
+<p></p>
+
+<p>Description of columns in the SWI Function table:</p>
+<ul>
+  <li>The <b>SWI Function</b> column indicates the name of the function</li>
+  <li>The <b>Return Address</b> column indicates the return address for the SWI
+    call, i.e. the address for the “caller function” of each software
+    interrupt</li>
+  <li>The <b>Count</b> column indicates the number of interrupts for the
+    selected area of the graph.</li>
+</ul>
+
+<p>You can select the functions you want to be displayed in the graph by
+checking the box next to the function. Each function is represented by a unique
+colour, shown next to the function name in the Function table.</p>
+
+<p>The columns in the tables may be reordered, resized, and sorted by clicking
+or dragging column headers.</p>
+
+<p></p>
+
+<p><strong>Hardware interrupts</strong></p>
+
+<p>The Hardware interrupts graph displays the interrupts for the selected IRQ
+lines. A separate line of graph is displayed for each selected IRQ line, with
+the line ID in the top left-hand corner. In the graph, the height of the column
+shows the amount of interrupts. The scaling of the graphs is shown at the left
+side of the graph.</p>
+
+<p> A legend table is displayed below the graph. </p>
+
+<p align="center"><img src="images/interrupts_view_HW.png" width="679"
+height="493"></p>
+
+<p align="center" class="figure">Figure 3. Hardware interrupts view</p>
+
+<p>Description of the columns in the IRQ lines table:</p>
+<ul>
+  <li>The <b>IRQ line</b> column indicates the ID of the actual IRQ line.</li>
+  <li>The <b>Count</b> column indicates the number of interrupts for the
+    selected area of the graph.</li>
+</ul>
+
+<p>You can select the IRQ line you want to be displayed in the graph by
+checking the box next to the line ID in the table. The color next to a check
+box corresponds to that item’s color in the graph.</p>
+
+<p>The columns in the tables may be reordered, resized, and sorted by clicking
+or dragging column header.</p>
+
+<p></p>
+
+<p><strong>Related references</strong></p>
+<ul>
+  <li><a href="main_view.htm">Analyzer View</a></li>
+</ul>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. <br>
+License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

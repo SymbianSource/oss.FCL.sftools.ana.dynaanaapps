@@ -65,6 +65,7 @@ import com.nokia.carbide.cpp.internal.pi.model.Function;
 import com.nokia.carbide.cpp.internal.pi.model.GUITooltips;
 import com.nokia.carbide.cpp.internal.pi.model.GenericSampledTrace;
 import com.nokia.carbide.cpp.internal.pi.model.GenericTrace;
+import com.nokia.carbide.cpp.internal.pi.model.IFunction;
 import com.nokia.carbide.cpp.internal.pi.model.ParsedTraceData;
 import com.nokia.carbide.cpp.internal.pi.model.TraceDataRepository;
 import com.nokia.carbide.cpp.internal.pi.test.PIAnalyser;
@@ -503,13 +504,13 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 			{
 				threads.put(s,sample.thread);
 				//listData.add(sample.thread.process.name+"::"+sample.thread.threadName);
-				threadSampleAmount.put(s,new Integer(1));
+				threadSampleAmount.put(s,Integer.valueOf(1));
 			}
 			else
 			{
 				int value = ((Integer)threadSampleAmount.get(s)).intValue();
 				threadSampleAmount.remove(s);
-				threadSampleAmount.put(s,new Integer(value+1));
+				threadSampleAmount.put(s,Integer.valueOf(value+1));
 			}
 		}
 		
@@ -561,7 +562,7 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 							if (this.originallySelectedThreads[i].equals(test))
 							{
 								//System.out.println("Match:"+this.originallySelectedThreads[i]+" index "+k);
-								selectedIndx.add(new Integer(k));
+								selectedIndx.add(Integer.valueOf(k));
 							}
 						}
 					}
@@ -607,7 +608,7 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 			if (!containsKey)
 		    {
 		        binaries.put(bi, sample);
-		        binarySampleAmount.put(bi, new Integer(1));
+		        binarySampleAmount.put(bi, Integer.valueOf(1));
 		    }
 		    else
 		    {
@@ -618,7 +619,7 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 		            {
 		                int value = ((Integer)binarySampleAmount.get(biTemp)).intValue();
 		                binarySampleAmount.remove(biTemp);
-						binarySampleAmount.put(biTemp, new Integer(value+1));
+						binarySampleAmount.put(biTemp, Integer.valueOf(value+1));
 		            }
 		        }
 		    }
@@ -683,7 +684,7 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 							if (this.originallySelectedBinaries[i].equalsIgnoreCase(test))
 							{
 								//System.out.println("Match:"+this.originallySelectedThreads[i]+" index "+k);
-								selectedIndx.add(new Integer(k));
+								selectedIndx.add(Integer.valueOf(k));
 							}
 						}
 					}
@@ -734,7 +735,7 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 				if (!threadVector.contains(threadName))
 				{
 					threadVector.add(threadName);
-					threadSampleAmount.add(new Integer(1));
+					threadSampleAmount.add(Integer.valueOf(1));
 				}
 				else
 				{	
@@ -743,7 +744,7 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 					int value = ((Integer)threadSampleAmount.get(index)).intValue();
 					
 					threadSampleAmount.remove(index);
-					threadSampleAmount.add(index,new Integer(value+1));
+					threadSampleAmount.add(index,Integer.valueOf(value+1));
 				}
 			}
 		}
@@ -807,7 +808,7 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 			    int index = (found) ? counter : -1;
 				if (index != -1)
 				{
-					indexStore.add(new Integer(index));
+					indexStore.add(Integer.valueOf(index));
 				}
 				else
 				{
@@ -836,7 +837,7 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 //				int index = listData.indexOf(value);
 				if (index != -1)
 				{
-					indexStore.add(new Integer(index));
+					indexStore.add(Integer.valueOf(index));
 				}
 				else
 				{
@@ -891,7 +892,7 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 				if (!binaryVector.contains(binaryName))
 				{
 					binaryVector.add(binaryName);
-					binarySampleAmount.add(new Integer(1));
+					binarySampleAmount.add(Integer.valueOf(1));
 				}
 				else
 				{	
@@ -900,7 +901,7 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 					int value = ((Integer)binarySampleAmount.get(index)).intValue();
 					
 					binarySampleAmount.remove(index);
-					binarySampleAmount.add(index,new Integer(value+1));
+					binarySampleAmount.add(index,Integer.valueOf(value+1));
 				}
 			}
 		}
@@ -956,7 +957,7 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 				int index = listData.indexOf(valueStore[i]);
 				if (index != -1)
 				{
-					indexStore.add(new Integer(index));
+					indexStore.add(Integer.valueOf(index));
 				}
 				else
 				{
@@ -970,7 +971,7 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 				int index = listData.indexOf(value);
 				if (index != -1)
 				{
-					indexStore.add(new Integer(index));
+					indexStore.add(Integer.valueOf(index));
 				}
 				else
 				{
@@ -1093,7 +1094,7 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 					percentData.add(getFunctionNameForGppSample(s));
 					// this is the first sample for this function, thus add number 1
 					// to the percent value list
-					percentValueList.add(new Integer(1));
+					percentValueList.add(Integer.valueOf(1));
 					// add a vector for the function offset values
 					
 					if (this.functionPercents.isSelected() == true)
@@ -1119,7 +1120,7 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 					
 					Integer value = (Integer)percentValueList.elementAt(index);
 					percentValueList.remove(index);
-					percentValueList.add(index,new Integer(value.intValue()+1));
+					percentValueList.add(index,Integer.valueOf(value.intValue()+1));
 					
 					if (this.functionPercents.isSelected() == true)
 					{					
@@ -1230,30 +1231,30 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 		String binaryName;
 		if (this.symbolPrimary || this.ittTrace == null)
 		{
-			binaryName = s.currentFunctionSym.functionBinary.binaryName;
+			binaryName = s.getCurrentFunctionSym().getFunctionBinary().getBinaryName();
 			if (!binaryName.endsWith(Messages.getString("NewFunctionAnalyse.notFound"))) //$NON-NLS-1$
 				return new BinaryNameItem(binaryName,false);
 		}
 
-		if (s.currentFunctionItt != null)
+		if (s.getCurrentFunctionItt() != null)
 		{
-			binaryName = s.currentFunctionItt.functionBinary.binaryName;
+			binaryName = s.getCurrentFunctionItt().getFunctionBinary().getBinaryName();
 			if (!binaryName.endsWith(Messages.getString("NewFunctionAnalyse.notFound"))) //$NON-NLS-1$
 			{
 				return new BinaryNameItem(binaryName,true);
 			}
 			else
 			{
-				binaryName = s.currentFunctionSym.functionBinary.binaryName;
+				binaryName = s.getCurrentFunctionSym().getFunctionBinary().getBinaryName();
 				if (binaryName.endsWith(Messages.getString("NewFunctionAnalyse.notFound"))) //$NON-NLS-1$
 					return new BinaryNameItem(Messages.getString("NewFunctionAnalyse.binaryNotFound"),true); //$NON-NLS-1$
 				else
 					return new BinaryNameItem(binaryName,false);
 			}			
 		}
-		else if (!s.currentFunctionSym.functionBinary.binaryName.endsWith(Messages.getString("NewFunctionAnalyse.notFound"))) //$NON-NLS-1$
+		else if (!s.getCurrentFunctionSym().getFunctionBinary().getBinaryName().endsWith(Messages.getString("NewFunctionAnalyse.notFound"))) //$NON-NLS-1$
 		{
-			binaryName = s.currentFunctionSym.functionBinary.binaryName;
+			binaryName = s.getCurrentFunctionSym().getFunctionBinary().getBinaryName();
 			return new BinaryNameItem(binaryName,false);
 		}
 		else
@@ -1336,18 +1337,18 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 	{
 		//String functionName;
 		if ((this.symbolPrimary || this.ittTrace == null) && 
-				!s.currentFunctionSym.functionBinary.binaryName.endsWith(Messages.getString("NewFunctionAnalyse.notFound")) ) //$NON-NLS-1$
+				!s.getCurrentFunctionSym().getFunctionBinary().getBinaryName().endsWith(Messages.getString("NewFunctionAnalyse.notFound")) ) //$NON-NLS-1$
 		{
-			return new Long(s.programCounter-s.currentFunctionSym.startAddress.longValue());
+			return new Long(s.programCounter-s.getCurrentFunctionSym().getStartAddress().longValue());
 		}
-		if (s.currentFunctionItt != null && !s.currentFunctionItt.functionName.endsWith(Messages.getString("NewFunctionAnalyse.notFound"))) //$NON-NLS-1$
+		if (s.getCurrentFunctionItt() != null && !s.getCurrentFunctionItt().getFunctionName().endsWith(Messages.getString("NewFunctionAnalyse.notFound"))) //$NON-NLS-1$
 		{
 			//System.out.println("OFF:"+(s.programCounter-s.currentFunctionItt.startAddress.longValue())+" PC: "+Long.toHexString(s.programCounter)+" start"+Long.toHexString(s.currentFunctionItt.startAddress.longValue()));
-			return new Long(s.programCounter-s.currentFunctionItt.startAddress.longValue());
+			return new Long(s.programCounter-s.getCurrentFunctionItt().getStartAddress().longValue());
 		}
-		else if (s.currentFunctionSym != null)
+		else if (s.getCurrentFunctionSym() != null)
 		{
-			return new Long(s.programCounter-s.currentFunctionSym.startAddress.longValue());
+			return new Long(s.programCounter-s.getCurrentFunctionSym().getStartAddress().longValue());
 		}
 		else
 		{
@@ -1370,26 +1371,26 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 			}
 			else
 			{
-				functionName = s.currentFunctionSym.functionName;
+				functionName = s.getCurrentFunctionSym().getFunctionName();
 				if (!functionName.endsWith(Messages.getString("NewFunctionAnalyse.notFound"))) //$NON-NLS-1$
 				{					
-					item = new FunctionNameItem(functionName,s.currentFunctionSym,false);
+					item = new FunctionNameItem(functionName,s.getCurrentFunctionSym(),false);
 					this.functionNameCacheSym.put(s,item);
 					return item;
 				}
 			}
 		}
 		
-		if (s.currentFunctionItt != null)
+		if (s.getCurrentFunctionItt() != null)
 		{
 			FunctionNameItem item = (FunctionNameItem)this.functionNameCacheItt.get(s);
 			if (item != null) return item;
 			
-			functionName = s.currentFunctionItt.functionName;
+			functionName = s.getCurrentFunctionItt().getFunctionName();
 
 			if (!functionName.endsWith(Messages.getString("NewFunctionAnalyse.notFound"))) //$NON-NLS-1$
 			{
-				item = new FunctionNameItem(functionName,s.currentFunctionItt,true);
+				item = new FunctionNameItem(functionName,s.getCurrentFunctionItt(),true);
 				this.functionNameCacheItt.put(s,item);
 				return item;
 //				return new FunctionNameItem(functionName,s.currentFunctionItt,true);
@@ -1399,20 +1400,20 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 				item = (FunctionNameItem)this.functionNameCacheSym.get(s);
 				if (item != null) return item;
 				
-				functionName = s.currentFunctionSym.functionName;
-				item = new FunctionNameItem(functionName,s.currentFunctionSym,false);
+				functionName = s.getCurrentFunctionSym().getFunctionName();
+				item = new FunctionNameItem(functionName,s.getCurrentFunctionSym(),false);
 				this.functionNameCacheSym.put(s,item);
 				return item;
 //				return new FunctionNameItem(functionName,s.currentFunctionSym,false);
 			}
 		}
-		else if (s.currentFunctionSym != null)
+		else if (s.getCurrentFunctionSym() != null)
 		{
 			FunctionNameItem item = (FunctionNameItem)this.functionNameCacheSym.get(s);
 			if (item != null) return item;
 			
-			functionName = s.currentFunctionSym.functionName;
-			item = new FunctionNameItem(functionName,s.currentFunctionSym,false);
+			functionName = s.getCurrentFunctionSym().getFunctionName();
+			item = new FunctionNameItem(functionName,s.getCurrentFunctionSym(),false);
 			this.functionNameCacheSym.put(s,item);
 			return item;
 //			return new FunctionNameItem(functionName,s.currentFunctionSym,false);
@@ -1777,11 +1778,11 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 		public boolean itt;
 		public int sampleAmount;
 		public int totalSamples;
-		public Function function;
+		public IFunction function;
 		public Vector offsetVector;
 		public double currentPercent;
 		
-		public FunctionNameItem(String name, Function function, boolean itt)
+		public FunctionNameItem(String name, IFunction function, boolean itt)
 		{
 			this.offsetVector = new Vector();
 			this.sampleAmount = 0;
@@ -1857,7 +1858,7 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 			if (this.functionNameItem != null && this.functionNameItem.offsetVector != null)
 			{
 				
-				long length = this.functionNameItem.function.length;
+				long length = this.functionNameItem.function.getLength();
 				g.setColor(
 						// AWT
 					    AWTColorPalette.getColor(new RGB(255, 255, 255))
@@ -2082,16 +2083,16 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 				
 				if (item.function != null)
 				{
-					if (item.function.functionBinary != null && item.function.functionBinary.binaryName != null)
+					if (item.function.getFunctionBinary() != null && item.function.getFunctionBinary().getBinaryName() != null)
 					{
-						this.setToolTipText(Messages.getString("NewFunctionAnalyse.function1")+item.function.functionName+Messages.getString("NewFunctionAnalyse.function2")+ //$NON-NLS-1$ //$NON-NLS-2$
-								Long.toHexString(item.function.startAddress.longValue())+
-								Messages.getString("NewFunctionAnalyse.function3")+item.function.functionBinary.binaryName); //$NON-NLS-1$
+						this.setToolTipText(Messages.getString("NewFunctionAnalyse.function1")+item.function.getFunctionName()+Messages.getString("NewFunctionAnalyse.function2")+ //$NON-NLS-1$ //$NON-NLS-2$
+								Long.toHexString(item.function.getStartAddress().longValue())+
+								Messages.getString("NewFunctionAnalyse.function3")+item.function.getFunctionBinary().getBinaryName()); //$NON-NLS-1$
 					}
 					else
 					{
-						this.setToolTipText(Messages.getString("NewFunctionAnalyse.function1")+item.function.functionName+Messages.getString("NewFunctionAnalyse.function2")+ //$NON-NLS-1$ //$NON-NLS-2$
-								Long.toHexString(item.function.startAddress.longValue())+
+						this.setToolTipText(Messages.getString("NewFunctionAnalyse.function1")+item.function.getFunctionName()+Messages.getString("NewFunctionAnalyse.function2")+ //$NON-NLS-1$ //$NON-NLS-2$
+								Long.toHexString(item.function.getStartAddress().longValue())+
 								Messages.getString("NewFunctionAnalyse.function3") + Messages.getString("NewFunctionAnalyse.binaryNotFound")); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 				}

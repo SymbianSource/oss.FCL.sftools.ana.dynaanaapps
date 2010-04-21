@@ -49,12 +49,14 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.ide.IIDEActionConstants;
 
+import com.nokia.carbide.cpp.internal.pi.address.GppModelAdapter;
 import com.nokia.carbide.cpp.internal.pi.interfaces.ISaveSamples;
 import com.nokia.carbide.cpp.internal.pi.interfaces.ISaveTable;
 import com.nokia.carbide.cpp.internal.pi.model.ProfiledBinary;
 import com.nokia.carbide.cpp.internal.pi.model.ProfiledFunction;
 import com.nokia.carbide.cpp.internal.pi.model.ProfiledGeneric;
 import com.nokia.carbide.cpp.internal.pi.model.ProfiledThread;
+import com.nokia.carbide.cpp.internal.pi.model.ProfiledThreshold;
 import com.nokia.carbide.cpp.internal.pi.save.SaveTableWizard;
 import com.nokia.carbide.cpp.internal.pi.visual.Defines;
 import com.nokia.carbide.cpp.internal.pi.visual.GenericTable;
@@ -65,6 +67,7 @@ public abstract class GenericAddrTable extends GenericTable
 {
 	protected GppTraceGraph myGraph;
 	protected Composite     parent;
+	protected GppModelAdapter adapter;
 
 	// sorting column and order
 	protected int     sortColumn = COLUMN_ID_SAMPLE_COUNT;
@@ -86,6 +89,13 @@ public abstract class GenericAddrTable extends GenericTable
 	protected Action saveDrilldownAction;
 	
 	protected static int SAMPLES_AT_ONE_TIME = 1000;
+	
+	public GenericAddrTable(GppTraceGraph myGraph, Composite parent, GppModelAdapter adapter)
+	{
+		this.myGraph = myGraph;
+		this.parent  = parent;
+		this.adapter = adapter;
+	}
 
 	// class to pass sample data to the save wizard
     public class SaveSampleString implements ISaveSamples {
@@ -317,54 +327,55 @@ public abstract class GenericAddrTable extends GenericTable
 		}
 	}
 
-	/*
-	 * Find if any threads with checkboxes checked
-	 */
-	protected boolean haveCheckedThread(GppTrace trace, int graphIndex)
-	{
-		ProfiledThread pThread;
-		for (ProfiledGeneric pGeneric: trace.getIndexedThreads()) {
-			if (pGeneric instanceof ProfiledThread) {
-				pThread = (ProfiledThread) pGeneric;
-				if (pThread.isEnabled(graphIndex))
-					return true;
-			}
-		}
-		return false;
-	}
-	
-
-	/*
-	 * Find if any binaries with checkboxes checked
-	 */
-	protected boolean haveCheckedBinary(GppTrace trace, int graphIndex)
-	{
-		ProfiledBinary pBinary;
-		for (ProfiledGeneric pGeneric: trace.getIndexedBinaries()) {
-			if (pGeneric instanceof ProfiledBinary) {
-				pBinary = (ProfiledBinary) pGeneric;
-				if (pBinary.isEnabled(graphIndex))
-					return true;
-			}
-		}
-		return false;
-	}
-
-	/*
-	 * Find if any functions with checkboxes checked
-	 */
-	protected boolean haveCheckedFunction(GppTrace trace, int graphIndex)
-	{
-		ProfiledFunction pFunction;
-		for (ProfiledGeneric pGeneric: trace.getIndexedFunctions()) {
-			if (pGeneric instanceof ProfiledFunction) {
-				pFunction = (ProfiledFunction) pGeneric;
-				if (pFunction.isEnabled(graphIndex))
-					return true;
-			}
-		}
-		return false;
-	}
+	//unused?
+//	/*
+//	 * Find if any threads with checkboxes checked
+//	 */
+//	protected boolean haveCheckedThread(GppTrace trace, int graphIndex)
+//	{
+//		ProfiledThread pThread;
+//		for (ProfiledGeneric pGeneric: trace.getIndexedThreads()) {
+//			if (pGeneric instanceof ProfiledThread) {
+//				pThread = (ProfiledThread) pGeneric;
+//				if (pThread.isEnabled(graphIndex))
+//					return true;
+//			}
+//		}
+//		return false;
+//	}
+//	
+//
+//	/*
+//	 * Find if any binaries with checkboxes checked
+//	 */
+//	protected boolean haveCheckedBinary(GppTrace trace, int graphIndex)
+//	{
+//		ProfiledBinary pBinary;
+//		for (ProfiledGeneric pGeneric: trace.getIndexedBinaries()) {
+//			if (pGeneric instanceof ProfiledBinary) {
+//				pBinary = (ProfiledBinary) pGeneric;
+//				if (pBinary.isEnabled(graphIndex))
+//					return true;
+//			}
+//		}
+//		return false;
+//	}
+//
+//	/*
+//	 * Find if any functions with checkboxes checked
+//	 */
+//	protected boolean haveCheckedFunction(GppTrace trace, int graphIndex)
+//	{
+//		ProfiledFunction pFunction;
+//		for (ProfiledGeneric pGeneric: trace.getIndexedFunctions()) {
+//			if (pGeneric instanceof ProfiledFunction) {
+//				pFunction = (ProfiledFunction) pGeneric;
+//				if (pFunction.isEnabled(graphIndex))
+//					return true;
+//			}
+//		}
+//		return false;
+//	}
 	
 	/* 
 	 * get list of matching samples based on draw mode 
@@ -372,9 +383,9 @@ public abstract class GenericAddrTable extends GenericTable
 	private ArrayList<GppSample> getMatchingSamples(int drawMode, GppTrace trace, int startIndex, int endIndex, int graphIndex)
 	{
 		ArrayList<GppSample> samplesArray = new ArrayList<GppSample>(endIndex - startIndex > 1000 ? 1000 : endIndex - startIndex);
-		Vector<ProfiledGeneric> traceThreads   = trace.getIndexedThreads();
-		Vector<ProfiledGeneric> traceBinaries  = trace.getIndexedBinaries();
-		Vector<ProfiledGeneric> traceFunctions = trace.getIndexedFunctions();
+		Vector<ProfiledThread> traceThreads   = trace.getIndexedThreads();
+		Vector<ProfiledBinary> traceBinaries  = trace.getIndexedBinaries();
+		Vector<ProfiledFunction> traceFunctions = trace.getIndexedFunctions();
 		GppSample[] samples = trace.getSortedGppSamples();
 		GppSample sample;
 
@@ -516,7 +527,7 @@ public abstract class GenericAddrTable extends GenericTable
 		String returnString = ""; //$NON-NLS-1$
 		
 		if (threads) {
-			Vector<ProfiledGeneric> traceThreads   = trace.getIndexedThreads();
+			Vector<ProfiledThread> traceThreads   = trace.getIndexedThreads();
 			if (startIndex == 0)
 				returnString = Messages.getString("GenericAddrTable.threadSampleHeading");  //$NON-NLS-1$
 			
@@ -1153,4 +1164,5 @@ public abstract class GenericAddrTable extends GenericTable
 			fileMenuManager.remove("PISaveDrilldown");  //$NON-NLS-1$
 		}
 	}
+
 }

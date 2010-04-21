@@ -28,6 +28,16 @@ public interface ITrace
 	public Class getTraceClass();
 	public void initialiseTrace(GenericTrace trace);
 	public String getTraceName();
+	/** like trace name but can be more descriptive */
+	public String getTraceTitle();
 	public int getTraceId();
 	public ParsedTraceData parseTraceFile(File file /*, ProgressBar progressBar*/) throws Exception;
+	
+	/**
+	 * Parses the given array of input files and returns the resulting ParsedTraceData
+	 * @param files the files to parse
+	 * @return the parsed traced trace data 
+	 * @throws Exception
+	 */
+	public ParsedTraceData parseTraceFiles(File[] files) throws Exception;
 }

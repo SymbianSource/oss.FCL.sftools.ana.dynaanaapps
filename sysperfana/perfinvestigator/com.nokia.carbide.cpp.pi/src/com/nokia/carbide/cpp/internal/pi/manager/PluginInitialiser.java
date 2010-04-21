@@ -115,7 +115,7 @@ public class PluginInitialiser
 		{
 			// make sure the cast is valid
 			try {
-				tmp = pluginInstanceReferences.get(new Integer(id));
+				tmp = pluginInstanceReferences.get(Integer.valueOf(id));
 			} catch (ClassCastException e1) {
 				e1.printStackTrace();
 			}
@@ -131,7 +131,7 @@ public class PluginInitialiser
 		if (pluginInstanceReferences == null)
 			return instances.elements();
 
-		Vector<AbstractPiPlugin> tmp = pluginInstanceReferences.get(new Integer(id));
+		Vector<AbstractPiPlugin> tmp = pluginInstanceReferences.get(Integer.valueOf(id));
 		if (tmp != null)
 		{
 			AbstractPiPlugin plugin = null;
@@ -243,7 +243,7 @@ public class PluginInitialiser
 		if (id == 0) return; //not removing top level plugin instances
 		if (pluginInstanceReferences != null)
 		{
-			pluginInstanceReferences.remove(new Integer(id));
+			pluginInstanceReferences.remove(Integer.valueOf(id));
 		}
 	}
 	
@@ -265,7 +265,7 @@ public class PluginInitialiser
 	{
 		if (pluginInstanceReferences == null)
 			pluginInstanceReferences = new Hashtable<Integer, Vector<AbstractPiPlugin>>();
-		Vector<AbstractPiPlugin> tmp = pluginInstanceReferences.get(new Integer(id));
+		Vector<AbstractPiPlugin> tmp = pluginInstanceReferences.get(Integer.valueOf(id));
 		if (tmp != null)
 		{
 			// do not allow duplicate plugins
@@ -276,7 +276,7 @@ public class PluginInitialiser
 		{
 			Vector<AbstractPiPlugin> tmp2 = new Vector<AbstractPiPlugin>();
 			tmp2.add(plugin);
-			pluginInstanceReferences.put(new Integer(id), tmp2);
+			pluginInstanceReferences.put(Integer.valueOf(id), tmp2);
 		}
 	}
 }

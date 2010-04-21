@@ -46,7 +46,7 @@ public class MapFile
 	private Function lastGccFunction = null;
 	
 	// RVCT/RVDS map file line
-	private static final Pattern rvctLinePattern = Pattern.compile("\\p{Blank}*((?!\\d)\\S.+)\\p{Blank}+(0[x|X]\\p{XDigit}+|\\d+)\\p{Blank}+(?:ARM Code|Thumb Code)\\p{Blank}+(0x\\p{XDigit}+|\\d+)\\p{Blank}*.*");	//$NON-NLS-1$
+	private static final Pattern rvctLinePattern = Pattern.compile("^\\p{Blank}*((?!\\d)\\S.+)\\p{Blank}+(0[x|X]\\p{XDigit}+|\\d+)\\p{Blank}+(?:ARM Code|Thumb Code)\\p{Blank}+(0x\\p{XDigit}+|\\d+)\\p{Blank}.*\\(\\.text\\)$");	//$NON-NLS-1$
 
 	// a GCC map file line looks like this:
 	// <%x|%d> <symbol name> for function symbols
@@ -57,6 +57,7 @@ public class MapFile
 	// *fill* <%x|%d> <%x|%d> 00000000 for filler
 	private static final Pattern gccLibOrFillerLinePattern = Pattern.compile("\\p{Blank}*(?:\\S*)\\p{Blank}*(0[x|X]\\p{XDigit}+|\\d+)\\p{Blank}+(0[x|X]\\p{XDigit}+|\\d+)\\p{Blank}+(\\S.+)"); //$NON-NLS-1$
 
+	private static final String EXPORTED = " (EXPORTED)";
 
 	public MapFile(File file, String referencePath, long referenceLineNumber)
 	{
@@ -107,21 +108,21 @@ public class MapFile
 			// is the asked offset within the area of this function
 			// test first is the offset equal or past the first
 			// instruction of the function
-			if (offset >= f.offsetFromBinaryStart)
+			if (offset >= f.getOffsetFromBinaryStart())
 			{
 				// if so, make sure that the offset is less
 				// or equal to the last instruction within 
 				// this function
-				if (offset < (f.offsetFromBinaryStart+f.length))
+				if (offset < (f.getOffsetFromBinaryStart()+f.getLength()))
 				{
-					return f.functionName;
+					return f.getFunctionName();
 				}
 			}
 		}
 		
 		return Messages.getString("MapFile.functionWithOffsetNotFound1")+offset+Messages.getString("MapFile.functionWithOffsetNotFound2")+this.name+ //$NON-NLS-1$ //$NON-NLS-2$
 				Messages.getString("MapFile.functionWithOffsetNotFound3")+ //$NON-NLS-1$
-				(this.sortedFunctionData.get(this.sortedFunctionData.size() - 1)).offsetFromBinaryStart; 		 //$NON-NLS-1$
+				(this.sortedFunctionData.get(this.sortedFunctionData.size() - 1)).getOffsetFromBinaryStart(); 		 //$NON-NLS-1$
 	}
 	
 	public Function getFunctionForOffset(long offset)
@@ -136,12 +137,12 @@ public class MapFile
 			// is the asked offset within the area of this function
 			// test first is the offset equal or past the first
 			// instruction of the function
-			if (offset >= f.offsetFromBinaryStart)
+			if (offset >= f.getOffsetFromBinaryStart())
 			{
 				// if so, make sure that the offset is less
 				// or equal to the last instruction within 
 				// this function
-				if (offset < (f.offsetFromBinaryStart+f.length))
+				if (offset < (f.getOffsetFromBinaryStart()+f.getLength()))
 				{
 					return f;
 				}
@@ -163,14 +164,14 @@ public class MapFile
 			// is the asked offset within the area of this function
 			// test first is the offset equal or past the first
 			// instruction of the function
-			if (offset >= f.offsetFromBinaryStart)
+			if (offset >= f.getOffsetFromBinaryStart())
 			{
 				// if so, make sure that the offset is less
 				// or equal to the last instruction within 
 				// this function
-				if (offset < (f.offsetFromBinaryStart+f.length))
+				if (offset < (f.getOffsetFromBinaryStart()+f.getLength()))
 				{
-					return f.length;
+					return f.getLength();
 				}
 			}
 		}
@@ -186,9 +187,9 @@ public class MapFile
 
 		for (Function f : sortedFunctionData)
 		{
-			if (f.functionName.equals(functionName))
+			if (f.getFunctionName().equals(functionName))
 			{
-				return f.offsetFromBinaryStart;
+				return f.getOffsetFromBinaryStart();
 			}
 		}
 		return -1;
@@ -196,11 +197,11 @@ public class MapFile
 	
 	private Function FunctionFromTokens(String funcNameToken, String funcOffsetToken, String funcLengthToken)
 	{	
-		Function f = new Function(funcNameToken,new Long(0),null);
+		Function f = new Function(funcNameToken,Long.valueOf(0),null);
 		// look for length, set it tentatively
 		// we may adjust it later
-		f.length = Long.decode(funcLengthToken);
-		f.offsetFromBinaryStart = Long.decode(funcOffsetToken);
+		f.setLength(Long.decode(funcLengthToken));
+		f.setOffsetFromBinaryStart( Long.decode(funcOffsetToken));
 
 		return f;
 	}
@@ -296,10 +297,13 @@ public class MapFile
 			// internal symbol, not a function
 			if (funcNameToken.indexOf(Messages.getString("MapFile.dollarSign")) != -1) //$NON-NLS-1$
 				return;
+			if(funcNameToken.endsWith(EXPORTED)){
+				funcNameToken = funcNameToken.substring(0, funcNameToken.lastIndexOf(EXPORTED));
+			}
 			
 			String funcOffsetToken = rvctLineMatcher.group(2).trim();
 			
-			if (funcOffsetToken.equalsIgnoreCase("0x00000001") && line.contains("Thumb Code"))
+			if (funcOffsetToken.equalsIgnoreCase("0x00000001") && line.contains("Thumb Code")) //$NON-NLS-1$ //$NON-NLS-2$
 				return;
 			
 			String funcLengthToken = rvctLineMatcher.group(3).trim();
@@ -364,15 +368,15 @@ public class MapFile
 			f = FunctionFromTokens(funcNameToken, funcOffsetToken, funcLengthToken);
 			
 			// Some GCC symbol may be bogus
-			if (qualifyGCCSymbol(f.offsetFromBinaryStart, funcNameToken)) {
+			if (qualifyGCCSymbol(f.getOffsetFromBinaryStart(), funcNameToken)) {
 				this.insertToFunctionData(f);
 			} 
 			
 			if (lastGccFunction != null){
 				// calculate size of last function with offset from current line
-				if (f.offsetFromBinaryStart > lastGccFunction.offsetFromBinaryStart &&
-						f.offsetFromBinaryStart < currentGccLibEndingOffset) {
-					currentLineOffset = f.offsetFromBinaryStart;
+				if (f.getOffsetFromBinaryStart() > lastGccFunction.getOffsetFromBinaryStart() &&
+						f.getOffsetFromBinaryStart() < currentGccLibEndingOffset) {
+					currentLineOffset = f.getOffsetFromBinaryStart();
 				}
 			}
 			
@@ -389,8 +393,8 @@ public class MapFile
 		// update last function's size if needed
 		if (lastGccFunction != null)
 		{
-			if (currentLineOffset > lastGccFunction.offsetFromBinaryStart) {
-				lastGccFunction.length = currentLineOffset - lastGccFunction.offsetFromBinaryStart;
+			if (currentLineOffset > lastGccFunction.getOffsetFromBinaryStart()) {
+				lastGccFunction.setLength(currentLineOffset - lastGccFunction.getOffsetFromBinaryStart());
 			}
 		}
 		
@@ -405,13 +409,13 @@ public class MapFile
 		{
 			functionData.addFirst(function);
 		}
-		else if ((functionData.getFirst()).offsetFromBinaryStart 
-					< function.offsetFromBinaryStart)
+		else if ((functionData.getFirst()).getOffsetFromBinaryStart() 
+					< function.getOffsetFromBinaryStart())
 		{
 			functionData.addFirst(function);
 		}
-		else if ((functionData.getLast()).offsetFromBinaryStart 
-					> function.offsetFromBinaryStart)
+		else if ((functionData.getLast()).getOffsetFromBinaryStart() 
+					> function.getOffsetFromBinaryStart())
 		{
 			functionData.addLast(function);
 		}
@@ -419,8 +423,8 @@ public class MapFile
 		{
 			for (int i=0;i<functionData.size();i++)
 			{
-				if ((functionData.get(i)).offsetFromBinaryStart 
-						< function.offsetFromBinaryStart)
+				if ((functionData.get(i)).getOffsetFromBinaryStart() 
+						< function.getOffsetFromBinaryStart())
 				{
 					functionData.add(i,function);
 					break;
@@ -435,7 +439,7 @@ public class MapFile
 			return;
 		}
 		this.sortedFunctionData.clear();
-		long start = (this.functionData.getLast()).offsetFromBinaryStart;
+		long start = (this.functionData.getLast()).getOffsetFromBinaryStart();
 		Function previous = null;
 		boolean reallyAdded = false;
 		
@@ -443,7 +447,7 @@ public class MapFile
 		{
 			//System.out.println(i);
 			Function f = this.functionData.get(i);
-			f.offsetFromBinaryStart = f.offsetFromBinaryStart - start;
+			f.setOffsetFromBinaryStart(f.getOffsetFromBinaryStart() - start);
 			
 			if (this.sortedFunctionData.size() == 0)
 			{
@@ -451,13 +455,13 @@ public class MapFile
 				this.sortedFunctionData.add(f);
 				reallyAdded = true;
 			}
-			else if ( (this.sortedFunctionData.get(this.sortedFunctionData.size()-1)).offsetFromBinaryStart != f.offsetFromBinaryStart)
+			else if ( (this.sortedFunctionData.get(this.sortedFunctionData.size()-1)).getOffsetFromBinaryStart() != f.getOffsetFromBinaryStart())
 			{
 				// add the function if the offset is not the same as with the previous line
 				this.sortedFunctionData.add(f);
 				reallyAdded = true;
 			}	
-			else if ( (this.sortedFunctionData.get(this.sortedFunctionData.size()-1)).functionName.startsWith("_")) //$NON-NLS-1$
+			else if ( (this.sortedFunctionData.get(this.sortedFunctionData.size()-1)).getFunctionName().startsWith("_")) //$NON-NLS-1$
 			{	
 				// if there is a key with this offset, discard the previous with prefix "_"
 				this.sortedFunctionData.remove(this.sortedFunctionData.get(this.sortedFunctionData.size()-1));
@@ -471,7 +475,7 @@ public class MapFile
 			{
 				// store the length of the previous function
 				if (previous != null)
-					previous.length = f.offsetFromBinaryStart - previous.offsetFromBinaryStart;
+					previous.setLength(f.getOffsetFromBinaryStart() - previous.getOffsetFromBinaryStart());
 				previous = f;	
 				reallyAdded = false;
 			}
@@ -495,15 +499,16 @@ public class MapFile
 	*/
 	
 	private void flagFileNotFound(File file, String referencePath, long referenceLineNumber) {
-		  String myMessage = Messages.getString("MapFile.map.file") +  file.getAbsoluteFile().getName() + Messages.getString("MapFile.not.found"); //$NON-NLS-1$ //$NON-NLS-2$
+		  String myMessage = Messages.getString("MapFile.map.file") +  file.getAbsoluteFile() + Messages.getString("MapFile.not.found"); //$NON-NLS-1$ //$NON-NLS-2$
+		  myMessage += Messages.getString("MapFile.map.check.project"); //$NON-NLS-1$
 		  if (referencePath != null && referencePath.length() > 0) {
 			  myMessage += Messages.getString("MapFile.referenced.by") + referencePath; //$NON-NLS-1$
 		  }
 		  if (referenceLineNumber > 0) {
 			  myMessage += Messages.getString("MapFile.line.number") + referenceLineNumber; //$NON-NLS-1$
 		  }
-
-    	  GeneralMessages.PiLog(myMessage, GeneralMessages.ERROR);
+		  
+    	  GeneralMessages.PiLog(myMessage, GeneralMessages.WARNING);
 	}
 
 	private void flagIOException(File file, String referencePath, long referenceLineNumber) {

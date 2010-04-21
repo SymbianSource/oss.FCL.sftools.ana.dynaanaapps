@@ -242,7 +242,7 @@ public class GfcFunctionItem implements Serializable
 	public void addUnknownCaller(Integer callTime)
 	{
 		// store unknown callers with an address -1
-		if (!this.callerData.containsKey(new Long(-1)) )
+		if (!this.callerData.containsKey(Long.valueOf(-1)) )
 		{
 			GfcFunctionItemData newData = new GfcFunctionItemData();
 			newData.function = null;
@@ -250,12 +250,12 @@ public class GfcFunctionItem implements Serializable
 			newData.callTimes.add(callTime);
 
 			// add a new caller
-			this.callerData.put(new Long(-1),newData);
+			this.callerData.put(Long.valueOf(-1),newData);
 		}
 		else
 		{
 			// just add the call count of an existing caller
-			GfcFunctionItemData oldData = (GfcFunctionItemData)this.callerData.get(new Long(-1));
+			GfcFunctionItemData oldData = (GfcFunctionItemData)this.callerData.get(Long.valueOf(-1));
 			this.totalCallerAmount++;
 			oldData.callTimes.add(callTime);
 		}
@@ -266,7 +266,7 @@ public class GfcFunctionItem implements Serializable
 	// this function has been called
 	public void addCaller(GfcFunctionItem caller, Integer callTime)
 	{
-		Long address = new Long(caller.address);
+		Long address = Long.valueOf(caller.address);
 		if (!this.callerData.containsKey(address))
 		{
 			GfcFunctionItemData newData = new GfcFunctionItemData();
@@ -293,7 +293,7 @@ public class GfcFunctionItem implements Serializable
 	// this function has called another function
 	public void addCallee(GfcFunctionItem callee, Integer callTime)
 	{
-		Long address = new Long(callee.address);
+		Long address = Long.valueOf(callee.address);
 		if (!this.calleeData.containsKey(address))
 		{
 			GfcFunctionItemData newData = new GfcFunctionItemData();

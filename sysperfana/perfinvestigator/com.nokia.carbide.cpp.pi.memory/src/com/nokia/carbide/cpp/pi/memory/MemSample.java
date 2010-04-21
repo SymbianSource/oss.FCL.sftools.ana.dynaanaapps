@@ -50,4 +50,14 @@ public class MemSample extends GenericSample
 		this.type = type;
 		this.sampleSynchTime = sampleNum;
 	}
+	
+	public MemSample(MemThread thread, int libSize, int libCount, int libThread, int sampleNum, int type)
+	{
+		this.thread = thread;
+		this.heapSize = libSize;
+		this.stackSize = libThread;
+		this.sampleNum = libCount;
+		this.type = type;
+		this.sampleSynchTime = sampleNum;
+	}
 }

@@ -21,12 +21,6 @@
 	</topic>
 	<topic label="Examining a Profiling Project"  		href="html/Getting_Started/example_project.htm" />
 
-	<topic label="Memory Usage" href="html/concepts/memory_usage_capture.htm" >
-		<topic label="Memory Usage view" 	href="html/reference/analyzer/view_memory_usage.htm" />
-		<topic label="Memory Usage Statistics" 	href="html/reference/analyzer/wnd_memory_usage_statistics.htm" />
-		<topic label="Memory Usage menu" 	href="html/reference/analyzer/menu_memory_graph.htm" />
-	</topic>
-
 	<topic label="Menus">
 		<topic label="Context Menu Options" 	href="html/reference/analyzer/context_menu.htm" />
 		<topic label="Save Table" 				href="html/reference/analyzer/save_table.htm" />
@@ -36,6 +30,28 @@
 		<topic label="Show Button Events" 		href="html/tasks/analyser/btn_press_show.htm" />
 	</topic>
 
+	<topic label="Memory Usage" href="html/concepts/memory_usage_capture.htm" >
+		<topic label="Memory Usage view" 	href="html/reference/analyzer/view_memory_usage.htm" />
+		<topic label="Memory Usage Statistics" 	href="html/reference/analyzer/wnd_memory_usage_statistics.htm" />
+		<topic label="Memory Usage menu" 	href="html/reference/analyzer/menu_memory_graph.htm" />
+	</topic>
+
+	<topic label="Power Usage" 					href="html/reference/analyzer/view_power_usage.htm" >
+		<topic label="Power Usage Settings" 	href="html/reference/analyzer/wnd_power_graph_settings.htm" />
+		<topic label="Power Usage Statistics" 	href="html/reference/analyzer/wnd_power_usage_statistics.htm" />
+		<topic label="Power Graph menu" 		href="html/reference/analyzer/menu_power_graph.htm" />
+	</topic>
+ <topic href="html/reference/analyzer/interrupts_view.htm" label="Interrupts View">
+ </topic>
+ <topic href="html/reference/analyzer/view_performance_counters.htm" label="Performance Counters View">
+    <topic href="html/reference/analyzer/traceable_events.htm" label="Traceable Event Types">
+    </topic>
+    <topic href="html/reference/profiler/Prof_counter_settings.htm" label="PIProfiler Performance Counter Settings">
+    </topic>
+ </topic>
+ <topic href="html/reference/analyzer/view_IPC.htm" label="Interconnect Performance Counters">
+ </topic>
+
 	<topic label="Options"  >
 		<topic label="Changing Button Event Information" 	href="html/tasks/analyser/btn_press_change.htm" />
 		<topic label="Changing Graph Colors" 				href="html/tasks/analyser/chng_graphcolor.htm" />
@@ -43,12 +59,6 @@
 		<topic label="Setting Time Interval" 				href="html/tasks/analyser/time_interval.htm" />
 		<topic label="Setting Key Press Profile" 			href="html/tasks/analyser/key_profile_pref.htm" />
 
-	</topic>
-
-	<topic label="Power Usage" 					href="html/reference/analyzer/view_power_usage.htm" >
-		<topic label="Power Usage Settings" 	href="html/reference/analyzer/wnd_power_graph_settings.htm" />
-		<topic label="Power Usage Statistics" 	href="html/reference/analyzer/wnd_power_usage_statistics.htm" />
-		<topic label="Power Graph menu" 		href="html/reference/analyzer/menu_power_graph.htm" />
 	</topic>
 
 	<topic label="Using Source Lookup" 					href="html/tasks/analyser/source_lookup.htm" />

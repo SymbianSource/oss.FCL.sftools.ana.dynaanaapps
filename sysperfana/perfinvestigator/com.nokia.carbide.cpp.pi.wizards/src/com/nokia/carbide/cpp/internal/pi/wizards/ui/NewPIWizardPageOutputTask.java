@@ -28,7 +28,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -41,16 +40,12 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.PlatformUI;
@@ -61,9 +56,6 @@ import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 import com.nokia.carbide.cpp.internal.pi.wizards.ui.util.CarbidePiWizardHelpIds;
 
 public class NewPIWizardPageOutputTask extends NewPIWizardPage implements INewPIWizardSettings {
-	
-	private final static String DOT_NPI= ".npi"; //$NON-NLS-1$
-	private final static String EMPTY_STRING = ""; //$NON-NLS-1$
 
 	// Provides all folder in workspace
 	private class ProjectContentProvider
@@ -124,8 +116,6 @@ public class NewPIWizardPageOutputTask extends NewPIWizardPage implements INewPI
 	private Composite buttonComposite = null;
 	private TreeViewer outputChooserTreeViewer = null;
 	private Button createButton = null;
-	private Label fileLabel = null;
-	private Text outputText = null;
 	
 	protected NewPIWizardPageOutputTask() {
 		super(""); //$NON-NLS-1$
@@ -134,7 +124,7 @@ public class NewPIWizardPageOutputTask extends NewPIWizardPage implements INewPI
 	}
 
 	public void validatePage() {
-		if (outputText.getText().length() < 1 || outputChooserTreeViewer.getTree().getSelection().length < 1) {
+		if (outputChooserTreeViewer.getTree().getSelection().length < 1) {
 			setErrorMessage(Messages.getString("NewPIWizardPageOutputTask.choose.output.project")); //$NON-NLS-1$
 			setPageComplete(false);
 			return;
@@ -152,26 +142,6 @@ public class NewPIWizardPageOutputTask extends NewPIWizardPage implements INewPI
 		composite.setLayout(gridLayout1);
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		createProjectComposite();
-		fileLabel = new Label (composite, SWT.NONE);
-		fileLabel.setText(Messages.getString("NewPIWizardPageOutputTask.output.file.name")); //$NON-NLS-1$
-		outputText = new Text(composite, SWT.BORDER);
-		outputText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		outputText.addSelectionListener(new SelectionListener () {
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-			}
-
-			public void widgetSelected(SelectionEvent arg0) {
-				validatePage();
-			}	
-		});
-		outputText.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent arg0) {
-				NewPIWizardSettings.getInstance().piFileName = outputText.getText();		
-				NewPIWizardSettings.getInstance().piFileNameModifiedNanoTime = System.nanoTime();
-			}
-			
-		});
 		
 		validatePage();
 
@@ -201,8 +171,7 @@ public class NewPIWizardPageOutputTask extends NewPIWizardPage implements INewPI
 			public void widgetDefaultSelected(SelectionEvent arg0) {
 			}
 
-			public void widgetSelected(SelectionEvent arg0) {
-				outputText.setText(generateNpiFileName(outputText.getText()));
+			public void widgetSelected(SelectionEvent arg0) {	
 				validatePage();
 			}
 		});
@@ -243,88 +212,13 @@ public class NewPIWizardPageOutputTask extends NewPIWizardPage implements INewPI
 				wizard.init(PlatformUI.getWorkbench(), new TreeSelection());
 				WizardDialog dialog = new WizardDialog(getShell(), wizard);
 				dialog.open();
-				if (outputChooserTreeViewer.getTree().getItemCount() == 1) {
-					outputText.setText(generateNpiFileName(outputText.getText()));
+				if (outputChooserTreeViewer.getTree().getItemCount() == 1) {					
 					validatePage();
 				}
 			}
 			
 		});
-	}
-	
-	private boolean isPositiveLong(String x) {
-		try {
-			if (Long.parseLong(x) >= 0) {
-				return true;
-			}
-		} catch (NumberFormatException e) {
-			return false;
-		}
-		return false;
-	}
-	
-	private String generateNpiFileName(String initialFilename) {
-		// First look for the container
-		IContainer container = NewPIWizardSettings.getInstance().outputContainer;
-		
-		TreeSelection selection = (TreeSelection) outputChooserTreeViewer.getSelection();
-		if (selection == null)
-			return EMPTY_STRING;
-		if (selection.getFirstElement() == null)
-			return EMPTY_STRING;
-		if ((selection.getFirstElement() instanceof IContainer) == false)
-			return EMPTY_STRING;
-		container = (IContainer) selection.getFirstElement();				
-		try {
-			// in case user dump a file of the same name without telling eclipse
-			container.refreshLocal(1, null);
-		} catch (CoreException e) {
-			// this is likely harmless
-			e.printStackTrace();
-		}
-
-		// Then see if we find a matching file name
-		initialFilename.trim();
-		if (initialFilename.length()==0) {
-			// generate from sample file if input file is empty
-			initialFilename = NewPIWizardSettings.getInstance().sampleFileName;
-		}
-		// get just the file name(last part)
-		initialFilename = new java.io.File(initialFilename).getName();
-		
-		String baseName;
-		Long suffixNumber = new Long(0);
-		
-		int dot = initialFilename.lastIndexOf("."); //$NON-NLS-1$
-		if (dot > 1) {
-			baseName = initialFilename.substring(0, dot); //$NON-NLS-1$
-		} else {
-			baseName = initialFilename;
-		}
-		
-		if (initialFilename.endsWith(".npi")) {	//$NON-NLS-1$
-			// the input is a .npi doesn't exist in container, user should have manually typed it
-			if (container.getFile(new Path(initialFilename)).exists() == false) {
-				return initialFilename;
-			}
-			
-			// this is probably an ***_<number>.npi we need to increament
-			// just suffix _<number> if the name was derived from input sample name
-			if (baseName.lastIndexOf("_") > 1 && 	//$NON-NLS-1$
-				isPositiveLong(baseName.substring(baseName.lastIndexOf("_") + 1)))	//$NON-NLS-1$
-			{
-				suffixNumber = Long.parseLong(baseName.substring(baseName.lastIndexOf("_") + 1)); //$NON-NLS-1$
-				baseName = baseName.substring(0, baseName.lastIndexOf("_"));	//$NON-NLS-1$
-			}
-		}
-				
-		// check existing npi and bump number
-		while (container.getFile(new Path(baseName + "_" + suffixNumber.toString() + DOT_NPI)).exists()) { //$NON-NLS-1$
-			suffixNumber++;
-		}
-
-		return baseName + "_" + suffixNumber.toString() + DOT_NPI; //$NON-NLS-1$
-	}
+	}	
 
 	public void setupPageFromFromNewPIWizardSettings() {
 		outputChooserTreeViewer.getTree().deselectAll();
@@ -349,7 +243,6 @@ public class NewPIWizardPageOutputTask extends NewPIWizardPage implements INewPI
 		// setup using last session persisted. If user changed input file, 
 		// regenerateOutputIfIntputChanged() will derive the new output name base on input 
 		// upon finish, or output page become visible
-		outputText.setText(generateNpiFileName(NewPIWizardSettings.getInstance().piFileName));
 		validatePage();
 	}
 
@@ -380,21 +273,11 @@ public class NewPIWizardPageOutputTask extends NewPIWizardPage implements INewPI
 		}
 		return result;
 	}
-
-	public void regenerateOutputIfIntputChanged() {
-		// if both time stamps are set and input sample is later than NPI, regenerate it
-		if (NewPIWizardSettings.getInstance().sampleFileNameModifiedNanoTime != 0 &&
-			NewPIWizardSettings.getInstance().piFileNameModifiedNanoTime != 0 &&
-			NewPIWizardSettings.getInstance().sampleFileNameModifiedNanoTime - NewPIWizardSettings.getInstance().piFileNameModifiedNanoTime > 0) {
-			outputText.setText(generateNpiFileName(NewPIWizardSettings.getInstance().sampleFileName));
-		}
-	}
 	
 	public void setVisible(boolean visable) {
 		super.setVisible(visable);
 		if (visable) {
 			// see if we input changed
-			regenerateOutputIfIntputChanged();
 			validatePage();
 		}
 	}

@@ -27,7 +27,8 @@ public class IttEvent122 extends GenericEvent
 	public String binaryName;
 	public long binaryLength;
 	public long binaryLocation;
-	public Binary binary;
+	private Binary binary;
+	public double eventEndTime;
 
 	public IttEvent122()
 	{
@@ -37,9 +38,19 @@ public class IttEvent122 extends GenericEvent
 	public void createBinary()
 	{
 		binary = new Binary(this.binaryName);
-		binary.length = (int)this.binaryLength;
-		binary.offsetToCodeStart = 0;
-		binary.startAddress = this.binaryLocation;
-		binary.type = Messages.getString("IttEvent122.unknownBinaryType"); //$NON-NLS-1$
+		binary.setLength((int)this.binaryLength);
+		binary.setOffsetToCodeStart(0);
+		binary.setStartAddress(this.binaryLocation);
+		binary.setType(Messages.getString("IttEvent122.unknownBinaryType")); //$NON-NLS-1$
 	}
+
+	/**
+	 * Getter for the binary
+	 * @return the binary
+	 */
+	public Binary getBinary() {
+		return binary;
+	}
+	
+	
   }

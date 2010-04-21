@@ -24,7 +24,9 @@ import java.util.Set;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
@@ -105,9 +107,9 @@ public class NewPIWizardPageBupMapTask extends NewPIWizardPage implements
 	 */
 	public void setupPageFromFromNewPIWizardSettings() {
 		if (settings.keyMapProfile != null) {
-			profileTreeViewer.collapseAll();
-			profileTreeViewer.reveal(settings.keyMapProfile);
+			profileTreeViewer.expandAll();
 			profileTreeViewer.setSelection(new StructuredSelection(settings.keyMapProfile));
+			profileTreeViewer.reveal(settings.keyMapProfile);
 		}
 	}
 
@@ -169,9 +171,8 @@ public class NewPIWizardPageBupMapTask extends NewPIWizardPage implements
 			if (profiles.size() == 1) {
 				IBupEventMapProfile profile = profiles.get(0);
 				rationaleText.setText(Messages.getString("NewPIWizardPageBupMapTask.6") + profile.getProfileId() + Messages.getString("NewPIWizardPageBupMapTask.7") + profile.getSDK().getUniqueId()+ Messages.getString("NewPIWizardPageBupMapTask.8")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				profileTreeViewer.collapseAll();
-				profileTreeViewer.reveal(profile);
 				profileTreeViewer.setSelection(new StructuredSelection(profile));
+				profileTreeViewer.reveal(profile);
 				return true;
 
 			} else {
@@ -203,9 +204,8 @@ public class NewPIWizardPageBupMapTask extends NewPIWizardPage implements
 				if (profiles.size() == 1) {
 					IBupEventMapProfile profile = profiles.get(0);
 					rationaleText.setText(Messages.getString("NewPIWizardPageBupMapTask.11") + profile.getProfileId() + Messages.getString("NewPIWizardPageBupMapTask.12") + profile.getSDK().getUniqueId()+ Messages.getString("NewPIWizardPageBupMapTask.13")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-					profileTreeViewer.collapseAll();
-					profileTreeViewer.reveal(profile);
 					profileTreeViewer.setSelection(new StructuredSelection(profile));
+					profileTreeViewer.reveal(profile);
 					return true;
 				} else {
 					rationaleText.setText(Messages.getString("NewPIWizardPageBupMapTask.14") + sdks.get(0).getUniqueId()+ Messages.getString("NewPIWizardPageBupMapTask.15")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -219,10 +219,10 @@ public class NewPIWizardPageBupMapTask extends NewPIWizardPage implements
 			}	
 		}
 		
-		profileTreeViewer.collapseAll();
-		profileTreeViewer.reveal(BupEventMapManager.getInstance().getPrefSelectedProfile());
-		profileTreeViewer.setSelection(new StructuredSelection(BupEventMapManager.getInstance().getPrefSelectedProfile()));
-
+		IBupEventMapProfile profile = BupEventMapManager.getInstance().getPrefSelectedProfile();
+		profileTreeViewer.setSelection(new StructuredSelection(profile));
+		profileTreeViewer.reveal(profile);
+		
 		return false;
 	}
 	

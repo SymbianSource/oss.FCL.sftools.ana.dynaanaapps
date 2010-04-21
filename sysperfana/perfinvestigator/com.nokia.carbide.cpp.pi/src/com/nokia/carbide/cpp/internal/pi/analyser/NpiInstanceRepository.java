@@ -39,6 +39,11 @@ import com.nokia.carbide.cpp.pi.util.GeneralMessages;
 public class NpiInstanceRepository {
 	
 	static public final int DISPOSED_UID = -1;
+	/** Constant for maximum number of CPUs in an SMP system */
+	public static final int MAX_CPU_COUNT = 4;
+
+	/** Constant for persisting the state of Show Combined CPU View in the Address plugin */
+	public static final String PERSISTED_SHOW_COMBINED_CPU_VIEW = "com.nokia.carbide.cpp.pi.address.showCombinedCPUView";//$NON-NLS-1$
 	
 	private class UidObject {
 		// this is just for generating UID
@@ -72,7 +77,7 @@ public class NpiInstanceRepository {
 	
 	public int register(Composite composite) {
 		UidObject uidObject = new UidObject();
-		Integer uid = new Integer(uidObject.hashCode());
+		Integer uid = Integer.valueOf(uidObject.hashCode());
 		uidObjectMap.put(uid, uidObject);
 		HashMap<String,GenericTrace> traceCollection = new HashMap<String,GenericTrace>();
 		traceCollectionMap.put(uid, traceCollection);
@@ -92,20 +97,28 @@ public class NpiInstanceRepository {
 	}
 	
 	public void unregister(int instanceUid) {
-		Integer uidInteger = new Integer(instanceUid);
+		Integer uidInteger = Integer.valueOf(instanceUid);
 		uidObjectMap.remove(uidInteger);
 		HashMap<String,GenericTrace> traceCollection = traceCollectionMap.get(uidInteger);
-		traceCollection.clear();
-		traceCollectionMap.remove(uidInteger);
+		if (traceCollection != null){
+			traceCollection.clear();
+			traceCollectionMap.remove(uidInteger);			
+		}
 		HashMap<String,Object> persistCollection =  persistCollectionMap.get(uidInteger);
-		persistCollection.clear();
-		persistCollectionMap.remove(uidInteger);
+		if (persistCollection != null){
+			persistCollection.clear();
+			persistCollectionMap.remove(uidInteger);			
+		}
 		ArrayList<AbstractPiPlugin> pluginList =  pluginListMap.get(uidInteger);
-		pluginList.clear();
-		pluginListMap.remove(uidInteger);
+		if (pluginList != null){
+			pluginList.clear();
+			pluginListMap.remove(uidInteger);			
+		}
 		ArrayList<ProfileVisualiser> profilePages = profilePagesMap.get(uidInteger);
-		profilePages.clear();
-		profilePagesMap.remove(uidInteger);
+		if (profilePages != null){
+			profilePages.clear();
+			profilePagesMap.remove(uidInteger);			
+		}
 		parentCompositeMap.remove(uidInteger);
 		analysisInfoHandlerMap.remove(uidInteger);
 		TraceDataRepository.getInstance().removeTraces(instanceUid);
@@ -260,17 +273,16 @@ public class NpiInstanceRepository {
 		if (key.equals("com.nokia.carbide.cpp.pi.address.thresholdCountThread") || //$NON-NLS-1$
 				key.equals("com.nokia.carbide.cpp.pi.address.thresholdCountBinary") || //$NON-NLS-1$
 				key.equals("com.nokia.carbide.cpp.pi.address.thresholdCountFunction") ) { //$NON-NLS-1$
-			return new Integer(-1);
-		}
-		if (key.equals("com.nokia.carbide.cpp.pi.address.thresholdLoadThread") || //$NON-NLS-1$
+			return Integer.valueOf(-1);
+		} else if (key.equals("com.nokia.carbide.cpp.pi.address.thresholdLoadThread") || //$NON-NLS-1$
 				key.equals("com.nokia.carbide.cpp.pi.address.thresholdLoadBinary")) { //$NON-NLS-1$
-			return new Double(0.001);
-		}
-		if (key.equals("com.nokia.carbide.cpp.pi.address.thresholdLoadFunction")) { //$NON-NLS-1$
-			return new Double(0.0001);
-		}
-		if (key.equals("com.nokia.carbide.cpp.pi.address.useOnlyThreadThresholds")) {	//$NON-NLS-1$
-			return new Boolean(false);
+			return Double.valueOf(0.001);
+		} else if (key.equals("com.nokia.carbide.cpp.pi.address.thresholdLoadFunction")) { //$NON-NLS-1$
+			return Double.valueOf(0.0001);
+		} else if (key.equals("com.nokia.carbide.cpp.pi.address.useOnlyThreadThresholds")) {	//$NON-NLS-1$
+			return Boolean.FALSE;
+		} else if (key.equals(PERSISTED_SHOW_COMBINED_CPU_VIEW)){
+			return Boolean.TRUE;
 		}
 		return null;
 	}

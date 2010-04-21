@@ -18,6 +18,7 @@
 package com.nokia.carbide.cpp.pi;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.BundleContext;
 
 import com.nokia.carbide.cpp.internal.pi.model.Binary;
@@ -32,12 +33,10 @@ import com.nokia.carbide.cpp.internal.pi.model.GenericSampledTraceWithFunctions;
 import com.nokia.carbide.cpp.internal.pi.model.GenericThread;
 import com.nokia.carbide.cpp.internal.pi.model.GenericTrace;
 import com.nokia.carbide.cpp.internal.pi.plugin.model.AbstractPiPlugin;
-import com.nokia.carbide.cpp.internal.pi.plugin.model.IClassReplacer;
+import com.nokia.carbide.cpp.internal.pi.test.BappeaAnalysisInfo;
 import com.nokia.carbide.cpp.internal.pi.test.EnabledTrace;
 import com.nokia.carbide.cpp.internal.pi.test.PIAnalysisInfo;
-import com.nokia.carbide.cpp.internal.pi.test.BappeaAnalysisInfo;
 import com.nokia.carbide.cpp.internal.pi.test.TraceAdditionalInfo;
-import com.nokia.carbide.cpp.internal.pi.visual.AnalyserVisualState;
 
 
 /**
@@ -47,6 +46,8 @@ public class PiPlugin extends AbstractPiPlugin {
 
 	//The shared instance.
 	private static PiPlugin plugin;
+	
+	public final static String PLUGIN_ID = "com.nokia.carbide.cpp.pi"; //$NON-NLS-1$
 	
 	private static void setPlugin(PiPlugin localPlugin) {
 		plugin = localPlugin;
@@ -89,7 +90,23 @@ public class PiPlugin extends AbstractPiPlugin {
 	 * @return the image descriptor
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
-		return AbstractPiPlugin.imageDescriptorFromPlugin("com.nokia.carbide.cpp.pi", path); //$NON-NLS-1$
+		ImageDescriptor descriptor = getDefault().getImageRegistry().getDescriptor(path);
+		if (descriptor == null) {
+			descriptor = ImageDescriptor.createFromURL(getDefault().getBundle().getEntry(path));
+			getDefault().getImageRegistry().put(path, descriptor);
+		}
+		return descriptor;
+	}
+	/**
+	 * Returns an Image for the image file at the given
+	 * plug-in relative path. The Image is stored in the image 
+	 * registry if not already there. 
+	 * @param aLocation path of the image
+	 * @return the Image for the given image location
+	 */
+	public static Image getImage(String aLocation){
+		getImageDescriptor(aLocation); //make sure the ImageDescriptor gets created
+		return getDefault().getImageRegistry().get(aLocation);
 	}
 
 	public static Class getReplacedClass(String className) {
@@ -154,10 +171,6 @@ public class PiPlugin extends AbstractPiPlugin {
 
         if (className.equals("fi.vtt.bappea.test.BappeaAnalysisInfo")) { //$NON-NLS-1$
         	return BappeaAnalysisInfo.class;
-        }
-
-        if (className.equals("fi.vtt.bappea.visual.AnalyserVisualState")) { //$NON-NLS-1$
-        	return AnalyserVisualState.class;
         }
 
 		return null;

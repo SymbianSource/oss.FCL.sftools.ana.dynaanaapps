@@ -25,8 +25,12 @@ import java.awt.event.FocusEvent;
 import java.awt.event.MouseEvent;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.Vector;
 
 import org.eclipse.jface.action.Action;
@@ -50,8 +54,10 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
@@ -130,57 +136,99 @@ public class MemThreadTable extends GenericTable
 		int endTime   = (int) (PIPageEditor.currentPageEditor().getEndTime()   * 1000.0 + 0.0005);
 		
 		MemTrace trace = this.myGraph.getMemTrace();
-		ArrayList<MemSampleByTime> drawDataByTime = trace.getDrawDataByTime();
-		
-		if (drawDataByTime == null || drawDataByTime.size() == 0)
-			return "";	// should have been checked so this never happens //$NON-NLS-1$
-		
-		String returnString = Messages.getString("MemThreadTable.saveSamplesHeading"); //$NON-NLS-1$
-
-		if (drawDataByTime.get(0).getTime() > startTime) {
-			int graphIndex = this.myGraph.getGraphIndex();
-			TableItem[] items = this.table.getItems();
+		if(trace.getVersion() >= 202){
+			String returnString = Messages.getString("MemThreadTable.saveSamplesHeading"); //$NON-NLS-1$
+	
+			TreeMap<Long, ArrayList<MemSample>> sorted = new TreeMap<Long, ArrayList<MemSample>>();		
+			Enumeration<TreeMap<Long, MemSample>> enume = trace.getDrawDataByMemThread().elements();
+			while(enume.hasMoreElements()){
+				TreeMap<Long, MemSample> map = enume.nextElement();	
+				Iterator<MemSample> iterator = map.values().iterator();
+				while(iterator.hasNext()) {
+					MemSample memSample = iterator.next();
+					ArrayList<MemSample> memList = sorted.get(memSample.sampleSynchTime);
+					if(memList == null){
+						memList = new ArrayList<MemSample>();
+					}
+					memList.add(memSample);		
+					sorted.put(memSample.sampleSynchTime, memList);
+				}			
+			}
 			
-			for (int i = 0; i < items.length; i++) {
-				Object data = items[i].getData();
-				
-				if (!(data instanceof MemThread))
-					continue;
-				
-				MemThread pmt = (MemThread) data;
-				
-				if (!pmt.enabled[graphIndex])
-					continue;
-				
-				returnString +=   Messages.getString("MemThreadTable.notRecorded1") + items[i].getText() + Messages.getString("MemThreadTable.notRecorded2"); //$NON-NLS-1$ //$NON-NLS-2$
+			SortedMap<Long, ArrayList<MemSample>> selectionAreaMap = sorted.subMap((long)startTime, (long)endTime);
+			Iterator<ArrayList<MemSample>> iterator = selectionAreaMap.values().iterator();
+						
+			while (iterator.hasNext()) {
+				ArrayList<MemSample> memSamples = iterator.next();
+				for(MemSample memSample : memSamples){
+					if (memSample.thread.isEnabled(myGraph.getGraphIndex()) && !memSample.thread.fullName.equals("TOTAL_MEMORY::TOTAL_MEMORY_-1162089814")) {
+						
+						returnString += memSample.sampleSynchTime
+								+ Messages.getString("MemThreadTable.comma") //$NON-NLS-1$
+								+ memSample.thread.fullName							
+								+ Messages.getString("MemThreadTable.comma") //$NON-NLS-1$
+								+ ((memSample.heapSize + 512)/1024)
+								+ Messages.getString("MemThreadTable.comma") //$NON-NLS-1$
+								+ ((memSample.stackSize + 512)/1024) + "\n"; //$NON-NLS-1$
+					}
+				}			
 			}
-		}
-		
-		// find least sampling time greater than or equal to the start time
-		int i = 0;
-		long sampleTime = 0;
-		for ( ; i < drawDataByTime.size(); i++)	{
-			sampleTime = drawDataByTime.get(i).getTime(); 
-			if (sampleTime > startTime)
-				break;
-		}
-		
-		if (i != 0)
-			i--;
+			
+			return returnString;
+		}else{
+			ArrayList<MemSampleByTime> drawDataByTime = trace.getDrawDataByTime();
+			
+			if (drawDataByTime == null || drawDataByTime.size() == 0)
+				return "";	// should have been checked so this never happens //$NON-NLS-1$
+			
+			String returnString = Messages.getString("MemThreadTable.saveSamplesHeading"); //$NON-NLS-1$
 
-		int graphIndex = myGraph.getGraphIndex();
-		for ( ; i < drawDataByTime.size() && drawDataByTime.get(i).getTime() <= endTime; i++) {
-			ArrayList<MemSample> samples = drawDataByTime.get(i).getSamples();
-			for (MemSample sample : samples) {
-				if (!sample.thread.enabled[graphIndex])
-					continue;
+			if (drawDataByTime.get(0).getTime() > startTime) {
+				int graphIndex = this.myGraph.getGraphIndex();
+				TableItem[] items = this.table.getItems();
+				
+				for (int i = 0; i < items.length; i++) {
+					Object data = items[i].getData();
 					
-				returnString +=   sample.sampleSynchTime + Messages.getString("MemThreadTable.comma") + sample.thread.fullName //$NON-NLS-1$
-								+ Messages.getString("MemThreadTable.comma") + (sample.heapSize / 1024) + Messages.getString("MemThreadTable.comma") + (sample.stackSize / 1024) + "\n"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					if (!(data instanceof MemThread))
+						continue;
+					
+					MemThread pmt = (MemThread) data;
+					
+					if (!pmt.enabled[graphIndex])
+						continue;
+					
+					returnString +=   Messages.getString("MemThreadTable.notRecorded1") + items[i].getText() + Messages.getString("MemThreadTable.notRecorded2"); //$NON-NLS-1$ //$NON-NLS-2$
+				}
 			}
-		}
+			
+			// find least sampling time greater than or equal to the start time
+			int i = 0;
+			long sampleTime = 0;
+			for ( ; i < drawDataByTime.size(); i++)	{
+				sampleTime = drawDataByTime.get(i).getTime(); 
+				if (sampleTime > startTime)
+					break;
+			}
+			
+			if (i != 0)
+				i--;
 
-		return returnString;
+			int graphIndex = myGraph.getGraphIndex();
+			for ( ; i < drawDataByTime.size() && drawDataByTime.get(i).getTime() <= endTime; i++) {
+				ArrayList<MemSample> samples = drawDataByTime.get(i).getSamples();
+				for (MemSample sample : samples) {
+					if (!sample.thread.enabled[graphIndex])
+						continue;
+						
+					returnString +=   sample.sampleSynchTime + Messages.getString("MemThreadTable.comma") + sample.thread.fullName //$NON-NLS-1$
+									+ Messages.getString("MemThreadTable.comma") + (sample.heapSize / 1024) + Messages.getString("MemThreadTable.comma") + (sample.stackSize / 1024) + "\n"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				}
+			}
+
+			return returnString;
+		}
+	
 	}
 
 	protected MenuItem getSaveSamplesItem(Menu menu, boolean enabled) {
@@ -202,10 +250,27 @@ public class MemThreadTable extends GenericTable
 
 	public MemThreadTable(MemTraceGraph myGraph, Composite parent)
 	{
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridLayout gl = new GridLayout();
+		gl.marginHeight = 0;
+		gl.marginWidth = 0;
+		gl.marginLeft = 0;
+		gl.marginRight = 0;	
+		composite.setLayout(gl);
 		this.myGraph = myGraph;
-		this.parent  = parent;
+		this.parent  = composite;
 
-		this.tableViewer = CheckboxTableViewer.newCheckList(parent,
+		Label label = new Label(composite, SWT.CENTER);
+		label
+				.setBackground(composite.getDisplay().getSystemColor(
+						SWT.COLOR_WHITE));
+		label.setFont(PIPageEditor.helvetica_8);
+		label.setText(Messages.getString("MemThreadTable.title")); //$NON-NLS-1$
+		
+		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+
+		this.tableViewer = CheckboxTableViewer.newCheckList(composite,
   				SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		this.table = this.tableViewer.getTable();
 		this.table.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -231,7 +296,7 @@ public class MemThreadTable extends GenericTable
 		column = new TableColumn(this.table, SWT.CENTER);
 		column.setText(COLUMN_HEAD_MEMORY_NAME);
 		column.setWidth(COLUMN_WIDTH_MEMORY_NAME + 15); // extra space for the checkbox
-		column.setData(new Integer(COLUMN_ID_MEMORY_NAME));
+		column.setData(Integer.valueOf(COLUMN_ID_MEMORY_NAME));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new ColumnSelectionHandler());
@@ -239,7 +304,7 @@ public class MemThreadTable extends GenericTable
 		column = new TableColumn(tableViewer.getTable(), SWT.RIGHT);
 		column.setText(COLUMN_HEAD_MEMORY_CHUNKS);
 		column.setWidth(COLUMN_WIDTH_MEMORY_CHUNKS);
-		column.setData(new Integer(COLUMN_ID_MEMORY_CHUNKS));
+		column.setData(Integer.valueOf(COLUMN_ID_MEMORY_CHUNKS));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new ColumnSelectionHandler());
@@ -247,7 +312,7 @@ public class MemThreadTable extends GenericTable
 		column = new TableColumn(tableViewer.getTable(), SWT.RIGHT);
 		column.setText(COLUMN_HEAD_MEMORY_STACK);
 		column.setWidth(COLUMN_WIDTH_MEMORY_STACK);
-		column.setData(new Integer(COLUMN_ID_MEMORY_STACK));
+		column.setData(Integer.valueOf(COLUMN_ID_MEMORY_STACK));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new ColumnSelectionHandler());
@@ -255,7 +320,7 @@ public class MemThreadTable extends GenericTable
 		column = new TableColumn(tableViewer.getTable(), SWT.RIGHT);
 		column.setText(COLUMN_HEAD_MEMORY_TOTAL);
 		column.setWidth(COLUMN_WIDTH_MEMORY_TOTAL);
-		column.setData(new Integer(COLUMN_ID_MEMORY_TOTAL));
+		column.setData(Integer.valueOf(COLUMN_ID_MEMORY_TOTAL));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new ColumnSelectionHandler());

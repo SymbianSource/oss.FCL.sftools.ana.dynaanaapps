@@ -119,7 +119,7 @@ public class GppTraceCsvPrinter
     
     private void formCsvPrint(Enumeration profiledThreads, File threadFile)
     {
-    	Hashtable<String,int[]> activityByName = new Hashtable<String,int[]>();
+    	Hashtable<String,float[]> activityByName = new Hashtable<String,float[]>();
     	Vector fixedThreads = getFixedThreadTable(threadFile);
     	Vector<ObjectMap> resultVector = new Vector<ObjectMap>();
     	boolean nullListFormed = false;
@@ -136,8 +136,8 @@ public class GppTraceCsvPrinter
     		String name = formatThreadName(pt.getNameString());
     		if (activityByName.containsKey(name))
     		{
-    			int[] existingList = activityByName.get(name);
-    			int[] combinedList = combineLists(pt.getActivityList(), existingList);
+    			float[] existingList = activityByName.get(name);
+    			float[] combinedList = combineLists(pt.getActivityList(), existingList);
     			activityByName.put(name, combinedList);
     		}
     		else
@@ -214,11 +214,11 @@ public class GppTraceCsvPrinter
     	
     }
     
-    private int[] combineLists(int[] p1List, int[] p2List)
+    private float[] combineLists(float[] p1List, float[] p2List)
     {
     	if (p1List.length < p2List.length)
     		return null;
-    	int[] combinedList = new int[p2List.length];
+    	float[] combinedList = new float[p2List.length];
     	for (int i = 0; i < p2List.length; i++)
     	{
     		combinedList[i] = p2List[i] + p1List[i];

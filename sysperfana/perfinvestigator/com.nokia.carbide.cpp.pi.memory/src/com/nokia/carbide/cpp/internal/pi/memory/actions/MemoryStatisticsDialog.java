@@ -232,9 +232,9 @@ public class MemoryStatisticsDialog {
 
 	private static String showTimeInterval(double startTime, double endTime)
 	{
-		return ProfileVisualiser.timeFormat.format(startTime)
-		     + Messages.getString("MemoryStatisticsDialog.interval1") + ProfileVisualiser.timeFormat.format(endTime) //$NON-NLS-1$
-		     + Messages.getString("MemoryStatisticsDialog.interval2") + ProfileVisualiser.timeFormat.format(endTime - startTime) //$NON-NLS-1$
+		return ProfileVisualiser.TIME_FORMAT.format(startTime)
+		     + Messages.getString("MemoryStatisticsDialog.interval1") + ProfileVisualiser.TIME_FORMAT.format(endTime) //$NON-NLS-1$
+		     + Messages.getString("MemoryStatisticsDialog.interval2") + ProfileVisualiser.TIME_FORMAT.format(endTime - startTime) //$NON-NLS-1$
 		     + Messages.getString("MemoryStatisticsDialog.interval3"); //$NON-NLS-1$
 	}
 }

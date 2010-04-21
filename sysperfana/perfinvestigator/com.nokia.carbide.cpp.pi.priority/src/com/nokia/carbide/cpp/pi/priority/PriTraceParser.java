@@ -201,8 +201,8 @@ public class PriTraceParser extends Parser
 				   		threadName = rawName;
 				   	}
 								    	
-				   	priTrace.addFirstSynchTime(new Integer((int)threadId), new Integer(sampleNum));
-				   	priSamples.add(new PriThread(new Integer((int)threadId), threadName, processName));
+				   	priTrace.addFirstSynchTime(Integer.valueOf((int)threadId), Integer.valueOf(sampleNum));
+				   	priSamples.add(new PriThread(Integer.valueOf((int)threadId), threadName, processName));
 
 				   	// read the next length
 					length = dis.readUnsignedByte();readCount++;
@@ -290,8 +290,8 @@ public class PriTraceParser extends Parser
 	    			break;
 	    		}
 	    	}
-//	    	memTrace.addLastSynchTime(new Integer(threadId), new Integer(sampleNum));
-	    	priTrace.addLastSynchTime(new Integer(threadId), new Integer(sampleNum));
+//	    	memTrace.addLastSynchTime(Integer.valueOf(threadId), Integer.valueOf(sampleNum));
+	    	priTrace.addLastSynchTime(Integer.valueOf(threadId), Integer.valueOf(sampleNum));
 	    }
 	    System.out.println(Messages.getString("PriTraceParser.done")); //$NON-NLS-1$
 	}
@@ -384,10 +384,10 @@ public class PriTraceParser extends Parser
 				   		threadName = rawName;
 				   	}
 								    	
-					//memTrace.addFirstSynchTime(new Integer((int)threadId),new Integer((int)sample));
-				   	//memSamples.add(new MemThread(new Integer((int)threadId), threadName, processName));
-				   	priTrace.addFirstSynchTime(new Integer((int)threadId), new Integer(sampleNum));
-				   	priSamples.add(new PriThread(new Integer((int)threadId), threadName, processName));
+					//memTrace.addFirstSynchTime(Integer.valueOf((int)threadId),Integer.valueOf((int)sample));
+				   	//memSamples.add(new MemThread(Integer.valueOf((int)threadId), threadName, processName));
+				   	priTrace.addFirstSynchTime(Integer.valueOf((int)threadId), Integer.valueOf(sampleNum));
+				   	priSamples.add(new PriThread(Integer.valueOf((int)threadId), threadName, processName));
 
 				   	// read the next length
 					length = dis.readUnsignedByte();readCount++;
@@ -485,8 +485,8 @@ public class PriTraceParser extends Parser
 	    			break;
 	    		}
 	    	}
-//	    	memTrace.addLastSynchTime(new Integer(threadId), new Integer(sampleNum));
-	    	priTrace.addLastSynchTime(new Integer(threadId), new Integer(sampleNum));
+//	    	memTrace.addLastSynchTime(Integer.valueOf(threadId), Integer.valueOf(sampleNum));
+	    	priTrace.addLastSynchTime(Integer.valueOf(threadId), Integer.valueOf(sampleNum));
 	    }
 	    System.out.println(Messages.getString("PriTraceParser.done")); //$NON-NLS-1$
 	}
@@ -724,10 +724,10 @@ public class PriTraceParser extends Parser
 	    	processName = unparsedName.substring(0,index-1);
 	    	threadName = unparsedName.substring(index+1, j);
 //	    	int tmp = threadName.length();
-//	    	memTrace.addFirstSynchTime(new Integer(threadId), new Integer(sampleNum));
-//	    	memSamples.add(new MemThread(new Integer(threadId), threadName, processName));
-	    	priTrace.addFirstSynchTime(new Integer(threadId), new Integer(sampleNum));
-	    	priSamples.add(new PriThread(new Integer(threadId), threadName, processName));
+//	    	memTrace.addFirstSynchTime(Integer.valueOf(threadId), Integer.valueOf(sampleNum));
+//	    	memSamples.add(new MemThread(Integer.valueOf(threadId), threadName, processName));
+	    	priTrace.addFirstSynchTime(Integer.valueOf(threadId), Integer.valueOf(sampleNum));
+	    	priSamples.add(new PriThread(Integer.valueOf(threadId), threadName, processName));
 	    	//buffer = null; int threadId, String threadName, String processName
 	    	i += buffer.length + 8;
 	    }
@@ -778,8 +778,8 @@ public class PriTraceParser extends Parser
 	    			break;
 	    		}
 	    	}
-//	    	memTrace.addLastSynchTime(new Integer(threadId), new Integer(sampleNum));
-	    	priTrace.addLastSynchTime(new Integer(threadId), new Integer(sampleNum));
+//	    	memTrace.addLastSynchTime(Integer.valueOf(threadId), Integer.valueOf(sampleNum));
+	    	priTrace.addLastSynchTime(Integer.valueOf(threadId), Integer.valueOf(sampleNum));
 	    	k += 16;
 	    }
 	    System.out.println(Messages.getString("PriTraceParser.done")); //$NON-NLS-1$

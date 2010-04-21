@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<!-- Define help for Debug Perspective default views -->
+<!-- plugin="com.nokia.carbide.cpp.pi.address" -->
+
+<contexts>
+
+	<!-- THREAD TAB -->
+	<context id="pecPageContext"  >
+		<description>Use the Performance Counters view to visualise profiling data from performance counters.</description>
+		<topic label="Performance Counters View"    					href="html/reference/analyzer/view_performance_counters.htm" />
+  <topic href="html/reference/analyzer/traceable_events.htm" label="Traceable Event Types"/>
+  <topic href="html/reference/analyzer/main_view.htm" label="Analyzer View"/>
+  <topic href="html/reference/analyzer/view_IPC.htm" label="Interconnect Performance Counters View"/>
+		<topic label="Using the Analyzer"  				href="html/reference/analyzer/an_use_case_features.htm" />
+		<topic label="Setting Time Interval"  			href="html/tasks/analyser/time_interval.htm" />
+  <topic href="html/reference/profiler/Prof_counter_settings.htm" label="PIProfiler Performance Counter Settings"/>
+	</context>
+
+	<!-- BINARIES TAB -->
+
+	<!-- FUNCTIONS TAB -->
+
+</contexts>

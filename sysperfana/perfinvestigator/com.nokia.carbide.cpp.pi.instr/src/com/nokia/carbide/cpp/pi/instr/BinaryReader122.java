@@ -25,8 +25,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.eclipse.core.runtime.Path;
 
 import com.nokia.carbide.cpp.internal.pi.model.Binary;
 import com.nokia.carbide.cpp.pi.importer.SampleImporter;
@@ -83,8 +87,32 @@ public class BinaryReader122
 	}
 	
 	public MapFile getMapFileForBinary(Binary b)
-	{
-		return this.binaryToMapFile.get(b);
+	{	
+		MapFile mf = binaryToMapFile.get(b);
+		if(mf == null){
+			String binaryName = b.getBinaryName();
+			try{
+				binaryName = new Path(b.getBinaryName()).lastSegment();
+			}catch (Exception e) {
+				// use defaults
+			}		
+			Iterator<Entry<Binary, MapFile>> iterator = binaryToMapFile.entrySet().iterator();
+			while(iterator.hasNext()){
+				Entry<Binary, MapFile> entry = iterator.next();			
+				String name = entry.getKey().getBinaryName();
+				try{
+					name = new Path(name).lastSegment();
+				}catch (Exception e) {
+					// use defaults
+				}
+				if(name.equals(binaryName)){
+					b.setBinaryName(entry.getKey().getBinaryName());
+					mf = entry.getValue();
+					break;
+				}
+			}
+		}
+		return mf;
 	}
 	
 	public Binary getBinaryForHostName(String s)
@@ -169,9 +197,9 @@ public class BinaryReader122
 				        	  
 					          if (binary != null)
 					          {
-					        	  if (debug)System.out.println(Messages.getString("BinaryReader122.foundPkgBinary1")+binary.binaryName+Messages.getString("BinaryReader122.foundPkgBinary2")+localFile); //$NON-NLS-1$ //$NON-NLS-2$
-				        		  binary.binaryName = localFile;
-				        		  getHostNameToBinary().put(binary.binaryName, binary);
+					        	  if (debug)System.out.println(Messages.getString("BinaryReader122.foundPkgBinary1")+binary.getBinaryName()+Messages.getString("BinaryReader122.foundPkgBinary2")+localFile); //$NON-NLS-1$ //$NON-NLS-2$
+				        		  binary.setBinaryName(localFile);
+				        		  getHostNameToBinary().put(binary.getBinaryName(), binary);
 					          }
 							  
 					          mapName = localFile+".map"; //$NON-NLS-1$
@@ -183,7 +211,7 @@ public class BinaryReader122
 			        			  {
 			        				  if (binary != null)
 			        				  {
-							        	  if (debug)System.out.println(Messages.getString("BinaryReader122.canGetBinaryFrom1")+binary.binaryName+Messages.getString("BinaryReader122.canGetBinaryFrom2")+localFile); //$NON-NLS-1$ //$NON-NLS-2$
+							        	  if (debug)System.out.println(Messages.getString("BinaryReader122.canGetBinaryFrom1")+binary.getBinaryName()+Messages.getString("BinaryReader122.canGetBinaryFrom2")+localFile); //$NON-NLS-1$ //$NON-NLS-2$
 			        					  binaryToMapFile.put(binary,mf);
 			        				  }
 			        				  else
@@ -227,8 +255,8 @@ public class BinaryReader122
 					if (fileSpecMatcher.matches()) {
 						Binary binary = ittTrace122.getBinaryForFileName(fileSpecMatcher.group(2).trim());
 						if (binary != null) {
-							binary.binaryName = fileSpecMatcher.group(1).trim();
-							getHostNameToBinary().put(binary.binaryName, binary);
+							binary.setBinaryName(fileSpecMatcher.group(1).trim());
+							getHostNameToBinary().put(binary.getBinaryName(), binary);
 							
 							String pcFileName = fileSpecMatcher.group(1).trim();
 							// .OBY is referring everything as root relative,

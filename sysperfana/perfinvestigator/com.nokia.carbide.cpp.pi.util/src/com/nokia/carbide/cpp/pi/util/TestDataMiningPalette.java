@@ -103,7 +103,7 @@ public class TestDataMiningPalette {
 			button.setBackground(new Color(Display.getCurrent(), palette.getRGB(entry)));
 			button.addSelectionListener(new SelectionAdapter() {
             	public void widgetSelected(SelectionEvent e) {
-            		Integer index = new Integer(button.getText());
+            		Integer index = Integer.valueOf(button.getText());
             		if(palette.recolorEntryDialog(sShell, index))
             		{
             			RGB newRGB = palette.getRGB(index);

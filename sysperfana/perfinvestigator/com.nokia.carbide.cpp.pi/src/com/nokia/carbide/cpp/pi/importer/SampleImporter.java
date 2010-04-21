@@ -18,7 +18,9 @@
 package com.nokia.carbide.cpp.pi.importer;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -29,11 +31,14 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
 import com.nokia.carbide.cpp.internal.pi.analyser.AnalyserDataProcessor;
+import com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace;
+import com.nokia.carbide.cpp.internal.pi.utils.PIUtilities;
 import com.nokia.carbide.cpp.pi.util.GeneralMessages;
 
 
@@ -387,7 +392,29 @@ public class SampleImporter {
 		return true;
 	}
 
+	
+	/**
+	 * Kick-starts the import of an analysis file with the current settings in SampleImporter
+	 * @param pollTillNpiSaved if true, will poll until the .npi file is saved
+	 */
 	public void importSamples(boolean pollTillNpiSaved) {
+		try {
+			List<ITrace> pluginsInTraceFile  = PIUtilities.getPluginsForTraceFile(SampleImporter.getInstance().getDatFileName());
+			importSamples(pollTillNpiSaved, pluginsInTraceFile, true, null, null);
+		} catch (IOException e) {
+			GeneralMessages.showErrorMessage(Messages.getString("SampleImporter.0") + e.getLocalizedMessage()); //$NON-NLS-1$
+		}		
+	}
+	
+	/**
+	 * Kick-starts the import of an analysis file with the current settings in SampleImporter
+	 * @param pollTillNpiSaved if true, will poll until the .npi file is saved
+	 * @param pluginsInTraceFile List of plugins to use for the import. The purpose is to be able to select which analysis to perform.
+	 * @param activate if true, will open an editor and activate it otherwise will import the file
+	 * @param suffixTaskName suffix for IProgressMonitor task name
+	 * @param progressMonitor instance of IProgressMonitor
+	 */
+	public void importSamples(boolean pollTillNpiSaved, List<ITrace> pluginsInTraceFile, boolean activate, String suffixTaskName, IProgressMonitor progressMonitor) {
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		IResource resource = root.findMember(getProjectName());
 		
@@ -410,27 +437,82 @@ public class SampleImporter {
 			}
 		}
 
-		try {	
-			// import the new project according to wizard
-			piFile = piContainer.getFile(new Path(getPiFileName()));
 
-			if (piFile.exists())
-			{
-				piFile.delete(true, null);
-			}
-		} catch (CoreException e) {
-			GeneralMessages.showErrorMessage(com.nokia.carbide.cpp.pi.importer.Messages.getString("SampleImporter.importerInternalError"));  //$NON-NLS-1$
-			GeneralMessages.PiLog(com.nokia.carbide.cpp.pi.importer.Messages.getString("SampleImporter.importerCoreException"), GeneralMessages.ERROR);  //$NON-NLS-1$
-			return;
+		// import the new project according to wizard
+		piFileName = new Path(getDatFileName()).removeFileExtension().addFileExtension("npi").lastSegment(); //$NON-NLS-1$
+		piFile = piContainer.getFile(new Path(piFileName));
+
+		if (piFile.exists())
+		{
+			piFile = piContainer.getFile(new Path(generateNpiFileName(piContainer, piFileName)));
 		}
-		
+
 		// import and save the file as npi
-		AnalyserDataProcessor.getInstance().importSaveAndOpen(piFile, pollTillNpiSaved);
+		if(activate){
+			AnalyserDataProcessor.getInstance().importSaveAndOpen(piFile, pollTillNpiSaved, pluginsInTraceFile);
+		}else{				
+			AnalyserDataProcessor.getInstance().importSave(piFile, pluginsInTraceFile, suffixTaskName, progressMonitor);				
+		}
 		
 		if (dummySymbol != null) {
-			dummySymbol.delete();
+			if(getRomSymbolFile().equals(dummySymbol.toString())){
+				dummySymbol.delete();
+				dummySymbol = null;
+				setRomSymbolFile(null);
+			}			
+		}
+	}
+	
+	private String generateNpiFileName(IContainer container, String initialFilename) {
+		// get just the file name(last part)
+		initialFilename = new java.io.File(initialFilename).getName();
+		
+		String baseName;
+		Long suffixNumber = new Long(0);
+		
+		int dot = initialFilename.lastIndexOf("."); //$NON-NLS-1$
+		if (dot > 1) {
+			baseName = initialFilename.substring(0, dot); //$NON-NLS-1$
+		} else {
+			baseName = initialFilename;
+		}
+		
+		if (initialFilename.endsWith(".npi")) {	//$NON-NLS-1$
+			// the input is a .npi doesn't exist in container, user should have manually typed it
+			if (container.getFile(new Path(initialFilename)).exists() == false) {
+				return initialFilename;
+			}
+			
+			// this is probably an ***(<number>).npi we need to increament
+			// just suffix (<number>) if the name was derived from input sample name
+	
+			if(baseName.lastIndexOf(")") == (baseName.length() - 1) && baseName.lastIndexOf("(") != -1){ //$NON-NLS-1$ //$NON-NLS-2$
+				String number = baseName.substring(baseName.lastIndexOf("(") + 1, baseName.lastIndexOf(")")); //$NON-NLS-1$ //$NON-NLS-2$
+				if(isPositiveLong(number)){
+					suffixNumber = Long.parseLong(number); 
+					baseName = baseName.substring(0, baseName.lastIndexOf("(")); //$NON-NLS-1$
+				}
+			
+			}
+		}
+				
+		// check existing npi and bump number
+		while (container.getFile(new Path(baseName + "(" + suffixNumber.toString()+ ")" + ".npi")).exists()) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			suffixNumber++;
 		}
 
+		return baseName + "(" + suffixNumber.toString() + ")" +  ".npi"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	}
+	
+	private boolean isPositiveLong(String x) {
+		try {
+			if (Long.parseLong(x) >= 0) {
+				return true;
+			}
+		} catch (NumberFormatException e) {
+			return false;
+		}
+		return false;
 	}
 	
 	// support for removing timestamp to support test

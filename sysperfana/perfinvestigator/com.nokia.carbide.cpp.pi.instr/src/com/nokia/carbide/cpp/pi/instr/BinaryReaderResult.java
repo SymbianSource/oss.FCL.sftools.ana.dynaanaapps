@@ -30,7 +30,7 @@ public class BinaryReaderResult
     String s = ""; //$NON-NLS-1$
     for (int i=0;i<possibleBinaries.length;i++)
     {
-      s = s+"\n"+possibleBinaries[i].binaryName+" @ "+possibleBinaries[i].startAddress+" "+checksumValues[i].booleanValue(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+      s = s+"\n"+possibleBinaries[i].getBinaryName()+" @ "+possibleBinaries[i].getStartAddress()+" "+checksumValues[i].booleanValue(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
     return s;
   }

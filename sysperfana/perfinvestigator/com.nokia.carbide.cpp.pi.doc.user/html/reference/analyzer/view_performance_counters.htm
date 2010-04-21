@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Performance Counters View</title>
+  <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Performance Counters View</h2>
+
+<p>Use the <strong>Performance Counters</strong> view to display information on
+performance counter traces. By default, the Performance Counters view opens up
+as minimised on the PIAnalyzer main view. To view the graphs, click the restore
+button <img src="images\minimize_restore_graph.png" width="16" height="16"> or
+the maximize button <img src="images\maximize_graph.png" width="16"
+height="16"> on the Title bar.</p>
+
+<p>The Performance Counters displayed in the view include two user selected
+traces (A and B in Figure 1) and CPU cycles (C in Figure 1). A MIPS (Million
+Instructions Per Second) counter is also available if <b>Instructions
+executed</b> has been selected as one of the traces.</p>
+
+<p>You can select which traces are displayed in the graphs view by clicking the
+check box next to the trace name in the legend table below the graphs. When
+several traces are selected, a separate graph line is displayed for each trace,
+as shown in Figure 1. </p>
+
+<p>In the top left-hand corner of each graph line, the following information
+displayed:</p>
+<ul>
+  <li>type of the trace,</li>
+  <li>the sampling interval (1 sample per millisecond in Figure 1),</li>
+  <li>the minimum and maximum values over the whole duration of the trace.
+    (Note that the legend table lists the minimum and maximum values only for
+    the selected timeframe.) </li>
+</ul>
+
+<p>Note that the scaling of the graphs changes according to the maximum values
+for each graph. You can see the vertical axis values for each graph on the left
+side of the graph.</p>
+
+<p>A legend table is displayed below the graphs.</p>
+
+<p align="center"><img
+src="images/performance_counters_view_all_graphs.png"></p>
+
+<p class="figure">Figure 1. Performance Counters view with all trace graphs
+displayed</p>
+
+<p></p>
+
+<p>Description of the table columns: </p>
+<ul>
+  <li>The <b>Char</b> column contains an identifier for each trace.</li>
+  <li>The <b>Name</b> column contains the type of performance counter that was
+    traced.</li>
+  <li>The <b>Average (1/ms)</b> column contains the average occurrence of the
+    event that was traced, within the selected timeframe (for example, the
+    average number of cache misses per millisecond, as shown in Figure 1).</li>
+  <li>The <b>Sum</b> column contains the total number of event occurrences
+    within the selected timeframe. (not included for MIPS)</li>
+  <li>The <b>Min (1/ms)</b> column contains the minimum occurrence of the event
+    that was traced, within the selected timeframe (for example, minimum number
+    of data stalls per millisecond, as show in Figure 1).</li>
+  <li>The <b>Max (1/ms)</b> column contains the maximum occurrence of the event
+    that was traced, within the selected timeframe (for example, maximum number
+    of data stalls per millisecond, as show in Figure 1).</li>
+  <li>The <b>Per A</b> / <b>Per B</b> / <b>Per C</b> columns show the ratio of
+    the values of the different traces (For example, Per A shows the number of
+    events in the sum column of each trace divided by the sum of trace A). (not
+    included for MIPS)</li>
+</ul>
+
+<p>Check the boxes at the right side of the table to select the traces for the
+graphs view.</p>
+
+<p>Columns may be reordered, resized, and sorted by clicking or dragging column
+headers.</p>
+
+<p>You can right-click on the table to open a context menu, where you can
+select to copy either selected lines or the entire table to clipboard; or to
+save the table to CSV format. </p>
+<br>
+
+
+<p><strong>MIPS counter and graph</strong></p>
+
+<p>The Million Instructions Per Second (MIPS) graph gives you a general idea of
+CPU speed in a measured use case. The basic use case for the MIPS analysis
+would be to check any low areas in the graph since they may reveal unoptimized
+features, for example, in terms of memory access (reads and writes). The higher
+the MIPS values, the better and the faster the CPU is in executing
+instructions.</p>
+
+<p>A MIPS (Million Instructions Per Millisecond) graph is displayed in the
+Performance Counters view, when <b>Instructions executed</b> has been selected
+as one of the counters. If <b>Instructions executed</b> has been selected, the
+dialog below is displayed during PIAnalyser file import:</p>
+
+<p align="center"><img src="images/MIPS_speed_dialog.png"></p>
+
+<p class="figure">Figure 1. MIPS Graph Generation</p>
+
+<p>The processor speed information is needed for calculating the data for the
+MIPS graph. The rest of the data for the calculation is included in the
+<b>Instructions executed</b> and <b>CPU cycles</b> counters.</p>
+
+<p>The MIPS counter information is displayed in the graphs view and the legend
+table together with the other performance counters. Note, however, that for
+MIPS only <b>Average (1/ms)</b>, <b>Min (1/ms)</b>, and <b>Max (1/ms)</b>
+information is displayed in the legend table.</p>
+
+<p><br>
+</p>
+
+<p><strong>Related references </strong></p>
+<ul>
+  <li><a href="../../reference/analyzer/traceable_events.htm">Traceable Event
+    Types</a></li>
+  <li><a href="../../reference/profiler/Prof_counter_settings.htm">PIProfiler
+    Performance Counter Settings</a></li>
+  <li><a href="main_view.htm">Analyzer View</a></li>
+</ul>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. <br>
+License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

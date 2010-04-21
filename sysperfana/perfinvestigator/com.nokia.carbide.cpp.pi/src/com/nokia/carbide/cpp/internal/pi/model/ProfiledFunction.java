@@ -24,12 +24,12 @@ public class ProfiledFunction extends ProfiledGeneric
 	long   functionAddress;
     String functionBinaryName;
 //	String functionBinaryPathName;
-    Vector threadIds;
+    Vector<Integer> threadIds;
     
-    public ProfiledFunction()
+    public ProfiledFunction(int cpuNumber, int graphCount)
     {
-        super();
-        this.threadIds = new Vector();
+        super(cpuNumber, graphCount);
+        this.threadIds = new Vector<Integer>();
         //setEnabled(false);
     }
     /**
@@ -80,7 +80,7 @@ public class ProfiledFunction extends ProfiledGeneric
     
     public void addThreadId(int id)
     {
-    	Integer integer = new Integer(id);
+    	Integer integer = Integer.valueOf(id);
     	if (!this.threadIds.contains(integer))
     	{
     		this.threadIds.add(integer);
@@ -89,10 +89,11 @@ public class ProfiledFunction extends ProfiledGeneric
     
     public boolean containsThreadId(int id)
     {
-    	return this.threadIds.contains(new Integer(id));
+    	return this.threadIds.contains(Integer.valueOf(id));
     }
 
-    public boolean equals(Object anObject)
+    @Override
+	public boolean equals(Object anObject)
     {
         if (anObject == null)
             return false;
@@ -105,20 +106,22 @@ public class ProfiledFunction extends ProfiledGeneric
             return false;
     }
     
-    public int hashCode()
+    @Override
+	public int hashCode()
     {
     	return this.getNameString().hashCode();
     }
-    
-    public String toString(int graphIndex)
-    {
-    	if (this.isEnabled(graphIndex))
-    	{
-    		return "true  " + this.getAverageLoadValueString(graphIndex) + getNameString(); //$NON-NLS-1$
-	  	}
-		else
-		{
-	      	return "false " + this.getAverageLoadValueString(graphIndex) + getNameString(); //$NON-NLS-1$
-		}
-    }   
+
+    //unused?
+//    public String toString(int graphIndex)
+//    {
+//    	if (this.isEnabled(graphIndex))
+//    	{
+//    		return "true  " + this.getAverageLoadValueString(graphIndex) + getNameString(); //$NON-NLS-1$
+//	  	}
+//		else
+//		{
+//	      	return "false " + this.getAverageLoadValueString(graphIndex) + getNameString(); //$NON-NLS-1$
+//		}
+//    }   
 }

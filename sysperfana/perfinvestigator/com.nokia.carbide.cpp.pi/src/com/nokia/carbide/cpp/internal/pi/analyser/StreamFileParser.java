@@ -52,7 +52,7 @@ public class StreamFileParser
 	
 	public byte[] getDataForTraceType(int traceType)
 	{
-		Integer type = new Integer(traceType);
+		Integer type = Integer.valueOf(traceType);
 		if (dataBlocks.containsKey(type))
 		{
 			ByteArrayOutputStream baos = 
@@ -70,7 +70,7 @@ public class StreamFileParser
 		byte[] data = getDataForTraceType(traceType);
 		if (data == null) return null;
 		File f = File.createTempFile("type_" + traceType + "_trace_file",".dat");    //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		//File f = File.createTempFile(getTypeString(new Integer(traceType)),".dat");
+		//File f = File.createTempFile(getTypeString(Integer.valueOf(traceType)),".dat");
 		f.deleteOnExit();
 		
 		FileOutputStream fos = new FileOutputStream(f);
@@ -81,7 +81,7 @@ public class StreamFileParser
 		return f;
 	}
 		
-	private void readLoop()
+	private void readLoop() throws IOException
 	{
 		while(setLengthAndMode() == true)
 		{
@@ -118,7 +118,7 @@ public class StreamFileParser
 		else return "undefined_type";
 	}*/
 	
-	public boolean setLengthAndMode()
+	public boolean setLengthAndMode() throws IOException
 	{
 		if (readOffset+4 >= streamData.length)
 		{
@@ -134,6 +134,10 @@ public class StreamFileParser
 			//System.out.println(" b1:"+b1+" b2:"+b2+" b3:"+b3);
 			currentLength = (int)(b1 | b2<<8 | b3 <<16);
 			
+			if (readOffset+currentLength >= streamData.length){
+				throw new IOException(Messages.getString("StreamFileParser.0")); //$NON-NLS-1$
+			}
+			
 			currentType = streamData[readOffset++];
 			//System.out.println("Length "+currentLength+" mode "+currentType);
 						
@@ -143,7 +147,7 @@ public class StreamFileParser
 	
 	private void copyDataBlock()
 	{
-		Integer typeInt = new Integer(currentType);
+		Integer typeInt = Integer.valueOf(currentType);
 		ByteArrayOutputStream baos = null;
 		
 		if (dataBlocks.containsKey(typeInt))

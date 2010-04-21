@@ -419,21 +419,21 @@ public class SetThresholdsDialog {
 
 				if (changedThread) {
 					NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.thresholdLoadThread", new Double(thresholdLoadThread)); //$NON-NLS-1$
-					NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.thresholdCountThread", new Integer(thresholdCountThread)); //$NON-NLS-1$
+					NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.thresholdCountThread", Integer.valueOf(thresholdCountThread)); //$NON-NLS-1$
 					PIChangeEvent.action("changeThresholdThread"); //$NON-NLS-1$
 					PIChangeEvent.action("changeSelection"); //$NON-NLS-1$
 				}
 
 				if (changedBinary) {
 					NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.thresholdLoadBinary", new Double(thresholdLoadBinary)); //$NON-NLS-1$
-					NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.thresholdCountBinary", new Integer(thresholdCountBinary)); //$NON-NLS-1$
+					NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.thresholdCountBinary", Integer.valueOf(thresholdCountBinary)); //$NON-NLS-1$
 					PIChangeEvent.action("changeThresholdBinary"); //$NON-NLS-1$
 					PIChangeEvent.action("changeSelection"); //$NON-NLS-1$
 				}
 
 				if (changedFunction) {
 					NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.thresholdLoadFunction", new Double(thresholdLoadFunction)); //$NON-NLS-1$
-					NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.thresholdCountFunction", new Integer(thresholdCountFunction)); //$NON-NLS-1$
+					NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.thresholdCountFunction", Integer.valueOf(thresholdCountFunction)); //$NON-NLS-1$
 					PIChangeEvent.action("changeThresholdFunction"); //$NON-NLS-1$
 					PIChangeEvent.action("changeSelection"); //$NON-NLS-1$
 				}

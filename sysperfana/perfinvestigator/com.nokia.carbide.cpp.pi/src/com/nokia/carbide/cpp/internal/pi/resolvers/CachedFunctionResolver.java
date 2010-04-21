@@ -26,6 +26,7 @@ import java.util.Hashtable;
 import com.nokia.carbide.cpp.internal.pi.model.Binary;
 import com.nokia.carbide.cpp.internal.pi.model.Function;
 import com.nokia.carbide.cpp.internal.pi.model.FunctionResolver;
+import com.nokia.carbide.cpp.internal.pi.model.IFunction;
 
 
 // re-implement SymbolFileParser for supporting 
@@ -141,9 +142,9 @@ public abstract class CachedFunctionResolver implements FunctionResolver {
 	  		
 	  		if (b == null) {
 		  		b = new Binary(item.name);
-		  		b.length = (int)(item.end-item.start);
-		  		b.offsetToCodeStart = 0;
-		  		b.startAddress = item.start;
+		  		b.setLength((int)(item.end-item.start));
+		  		b.setOffsetToCodeStart(0);
+		  		b.setStartAddress(item.start);
 				this.knownBinaries.put(item.name, b);
 	  		}
 	  		return b;
@@ -166,6 +167,10 @@ public abstract class CachedFunctionResolver implements FunctionResolver {
 //	  	}
 	}
 
+	public Binary findBinaryForAddress(long address, long sampleSynchTime){
+		return findBinaryForAddress(address);
+	}
+
 	public String findBinaryNameForAddress(long address) {
 	    SymbolFileDllItem foundDllItem = this.getDllItemForAddress(address);
 	    if (foundDllItem != null)
@@ -174,7 +179,7 @@ public abstract class CachedFunctionResolver implements FunctionResolver {
 	    	return Messages.getString("CachedFunctionResolver.dllForAddress")+Long.toHexString(address)+Messages.getString("CachedFunctionResolver.notFound");   //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	public Function findFunctionForAddress(long address) {
+	public IFunction findFunctionForAddress(long address) {
 	  	SymbolFileFunctionItem item = this.getFunctionItemForAddress(address);
 
 	  	if (item != null)
@@ -183,9 +188,9 @@ public abstract class CachedFunctionResolver implements FunctionResolver {
 	 		Function f = this.knownFunctions.get(search);
 
 	  		if (f == null) {
-		  		f = new Function(item.name,new Long(item.address),item.dll.name);
-		  		f.offsetFromBinaryStart = item.address-item.dll.start;
-		  		f.length = item.length;
+		  		f = new Function(item.name,Long.valueOf(item.address),item.dll.name);
+		  		f.setOffsetFromBinaryStart(item.address-item.dll.start);
+		  		f.setLength(item.length);
 		  		this.knownFunctions.put(search, f);
 	  		}
 	  		return f;
@@ -202,9 +207,9 @@ public abstract class CachedFunctionResolver implements FunctionResolver {
 	  			Function f = this.knownFunctions.get(fName);
 
 	  	  		if (f == null ) {
-	  	  			f = new Function(fName, new Long(dllItem.start), dllItem.name);
-		  			f.offsetFromBinaryStart = address-dllItem.start;
-		  			f.length = 0;
+	  	  			f = new Function(fName, Long.valueOf(dllItem.start), dllItem.name);
+		  			f.setOffsetFromBinaryStart(address-dllItem.start);
+		  			f.setLength(0);
 		  			this.knownFunctions.put(fName, f);
 	  	  		}
 
@@ -218,7 +223,7 @@ public abstract class CachedFunctionResolver implements FunctionResolver {
 //	  			Function f = this.knownFunctions.get(fName);
 //
 //	  	  		if (f == null ) {
-//	  	  			f = new Function(fName, new Long(address),
+//	  	  			f = new Function(fName, Long.valueOf(address),
 //	  	  							 "Binary at 0x" + 
 //									 Long.toHexString(address)+" not found");
 //	  	  			f.offsetFromBinaryStart = 0;
@@ -228,6 +233,9 @@ public abstract class CachedFunctionResolver implements FunctionResolver {
 //	  			return f;
 //	  		}
 	  	}
+	}
+	public IFunction findFunctionForAddress(long address, long sampleSynchTime){
+		return findFunctionForAddress(address);
 	}
 
 	public String findFunctionNameForAddress(long address) {

@@ -18,8 +18,8 @@
 package com.nokia.carbide.cpp.internal.pi.plugin.model;
 
 import com.nokia.carbide.cpp.internal.pi.analyser.ProfileVisualiser;
-import com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph;
 import com.nokia.carbide.cpp.internal.pi.visual.GraphDrawRequest;
+import com.nokia.carbide.cpp.pi.visual.IGenericTraceGraph;
 
 
 public interface IVisualizable extends ITrace
@@ -49,10 +49,7 @@ public interface IVisualizable extends ITrace
 	public int getGraphCount();
 	
 	// next graph
-	public GenericTraceGraph getTraceGraph(int graphIndex);
-	
-	// title of next graph
-	public String getGraphTitle(int graphIndex);
+	public IGenericTraceGraph getTraceGraph(int graphIndex);
 	
 	// PI editor page to contain the graph
 	public int getPageNumber(int graphIndex);

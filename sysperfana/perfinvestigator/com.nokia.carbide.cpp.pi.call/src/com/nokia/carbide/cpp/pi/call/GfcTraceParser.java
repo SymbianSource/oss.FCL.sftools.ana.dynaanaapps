@@ -196,12 +196,12 @@ public class GfcTraceParser extends Parser
 	  	  					//System.out.println("REP: pc:"+Long.toHexString(pc)+" lr:"+Long.toHexString(lr)+" sa:"+sa);
 	  	  					// sometimes the first address/thread sample had to be discarded,
 	  	  					// so 2nd call sample matches first address/thread sample
-	  	  					if (   sampleTime == gppSample.sampleSynchTime && gppSample.sampleSynchTime == samplingInterval * 2
+	  	  					if ( gppSample != null &&  sampleTime == gppSample.sampleSynchTime && gppSample.sampleSynchTime == samplingInterval * 2
 	  	  						&& this.completeGfcTrace.size() == 1) {
 	  	  						// replace the first sample with this one
 	  	  						this.completeGfcTrace.remove(0);
 	  	  					}
-	  	  					this.completeGfcTrace.add(new Long[]{new Long(sampleTime),new Long(pc), new Long(lr)});
+	  	  					this.completeGfcTrace.add(new Long[]{Long.valueOf(sampleTime),Long.valueOf(pc), Long.valueOf(lr)});
 	  					}
 	  				}
 	  				else
@@ -236,12 +236,12 @@ public class GfcTraceParser extends Parser
 	  					//System.out.println("pc:"+Long.toHexString(pc)+" lr:"+Long.toHexString(lr)+" sa:"+sa);
   	  					// sometimes the first address/thread sample had to be discarded,
   	  					// so 2nd call sample matches first address/thread sample
-  	  					if (   sampleTime == gppSample.sampleSynchTime && gppSample.sampleSynchTime == samplingInterval * 2
+  	  					if ( gppSample != null &&   sampleTime == gppSample.sampleSynchTime && gppSample.sampleSynchTime == samplingInterval * 2
   	  						&& this.completeGfcTrace.size() == 1) {
   	  						// replace the first sample with this one
   	  						this.completeGfcTrace.remove(0);
   	  					}
-	  					this.completeGfcTrace.add(new Long[]{new Long(sampleTime),new Long(pc), new Long(lr)});
+	  					this.completeGfcTrace.add(new Long[]{Long.valueOf(sampleTime),Long.valueOf(pc), Long.valueOf(lr)});
 	  					
 	  					data[0] = pc;
 	  					data[1] = lr;
@@ -336,7 +336,7 @@ public class GfcTraceParser extends Parser
 		    }
 		    previousSample = sample;
 	
-		    this.completeGfcTrace.add(new Long[]{new Long(sample),new Long(programCounter), new Long(linkRegister)});
+		    this.completeGfcTrace.add(new Long[]{Long.valueOf(sample),Long.valueOf(programCounter), Long.valueOf(linkRegister)});
 		    byteCount += 12;
 	    }
 //		setProgressBarString("Done");

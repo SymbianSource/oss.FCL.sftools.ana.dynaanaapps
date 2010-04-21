@@ -18,15 +18,13 @@
 package com.nokia.carbide.cpp.pi.memory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.Map.Entry;
-
-import org.eclipse.draw2d.IFigure;
 
 import com.nokia.carbide.cpp.internal.pi.analyser.NpiInstanceRepository;
 import com.nokia.carbide.cpp.internal.pi.model.GenericSampledTrace;
@@ -65,19 +63,21 @@ public class MemTrace extends GenericSampledTrace implements TraceWithThreads {
 	transient private Hashtable<String, TreeMap<Long, MemSample>> drawDataByMemThread = null;
 	transient private ArrayList<MemSampleByTime> drawDataByTime;
 	transient private HashSet<MemThread> noDuplicateMemThreads;
-
+	
+	transient private Hashtable<String, ProfiledLibraryEvent> drawDataByLibraryEvent = null;
+	transient private TreeMap<Long, ArrayList<MemSample>> drawLibraryEventDataByTime = null;
+	
+    transient private LibraryEventColorPalette libraryEventColorPalette = null;
 	transient private long intervalStart = -1;
 	transient private long intervalEnd = -1;
+	
+	
 
 	private int version;
 
 	public MemTrace() {
 		firstSynchTimes = new Hashtable<Integer, Integer>();
 		lastSynchTimes = new Hashtable<Integer, Integer>();
-	}
-
-	public void addSample(MemSample sample) {
-		this.samples.add(sample);
 	}
 
 	public MemSample getMemSample(int number) {
@@ -206,7 +206,12 @@ public class MemTrace extends GenericSampledTrace implements TraceWithThreads {
 				if (memSample.thread.threadId == 0xffffffffbabbeaaaL) {
 					usedMemory = memSample.heapSize;
 					freeMemory = memSample.stackSize;
-					memSample = (MemSample) e.nextElement();
+					if(e.hasMoreElements()){
+						memSample = (MemSample) e.nextElement();
+					}
+					else{
+						break;
+					}
 				}
 
 				// the 2nd sample in each time period has memory model and
@@ -214,7 +219,13 @@ public class MemTrace extends GenericSampledTrace implements TraceWithThreads {
 				if (memSample.thread.threadId == 0xffffffffbabbea20L) {
 					usedMemory = memSample.heapSize;
 					freeMemory = memSample.stackSize;
-					memSample = (MemSample) e.nextElement();
+					if(e.hasMoreElements()){
+						memSample = (MemSample) e.nextElement();
+					}
+					else{
+						break;
+					}
+					
 				}
 
 				// Create MemSampleByTime object based on sample
@@ -269,8 +280,11 @@ public class MemTrace extends GenericSampledTrace implements TraceWithThreads {
 	public void gatherEventBasedDrawData() {
 		if (drawDataByMemThread != null)
 			return; // already initialised
-
 		drawDataByMemThread = new Hashtable<String, TreeMap<Long, MemSample>>();
+		if(version >= 203){
+			drawDataByLibraryEvent = new Hashtable<String, ProfiledLibraryEvent>();
+		}
+
 		memoryModel = MemTrace.MEMORY_UNKNOWN;
 		getThreadsFromTrace();
 
@@ -295,7 +309,12 @@ public class MemTrace extends GenericSampledTrace implements TraceWithThreads {
 					usedMemory = memSample.heapSize;
 					freeMemory = memSample.stackSize;
 					addSampleToThread(memSample);
-					memSample = (MemSample) e.nextElement();
+					if(e.hasMoreElements()){
+						memSample = (MemSample) e.nextElement();
+					}
+					else{
+						break;
+					}
 
 				}
 
@@ -326,6 +345,18 @@ public class MemTrace extends GenericSampledTrace implements TraceWithThreads {
 
 	private void addSampleToThread(MemSample sample) {
 
+		if (version >= 203) {
+			String library = getLibraryNameString(sample.thread.fullName);
+			if (library != null) {
+				ProfiledLibraryEvent ple = drawDataByLibraryEvent.get(library);
+				if (ple != null) {
+					// Add initial sample to library event
+					ple.addMemSample(sample);
+					return;
+				}
+			}
+
+		}
 		// get sample array from thread
 		TreeMap<Long, MemSample> samples = drawDataByMemThread
 				.get(sample.thread.fullName);
@@ -342,7 +373,7 @@ public class MemTrace extends GenericSampledTrace implements TraceWithThreads {
 			return;
 		}
 
-		System.out.println("PI ERROR: Thread not found");
+		System.out.println("PI ERROR: Thread not found"); //$NON-NLS-1$
 
 	}
 
@@ -355,7 +386,7 @@ public class MemTrace extends GenericSampledTrace implements TraceWithThreads {
 		// data
 		for (MemThread memThread : threads) {
 			String processedThreadName = memThread.threadName;
-
+			boolean libraryEvent = false;
 			// Add Thread ID into processedThreadName
 			// looking for _T and _C suffixes and remove them for thread
 			if (processedThreadName.endsWith("_T")) //$NON-NLS-1$
@@ -367,7 +398,12 @@ public class MemTrace extends GenericSampledTrace implements TraceWithThreads {
 				processedThreadName = processedThreadName.substring(0,
 						processedThreadName.length() - 2)
 						+ " [0x" + Integer.toHexString(memThread.threadId) + "]"; //$NON-NLS-1$ //$NON-NLS-2$
-			} else {
+			} else if (processedThreadName.endsWith("_L")) { //$NON-NLS-1$
+				processedThreadName = processedThreadName.substring(0,
+						processedThreadName.length() - 2)
+						+ " [0x" + Integer.toHexString(memThread.threadId) + "]"; //$NON-NLS-1$ //$NON-NLS-2$
+				libraryEvent = true;
+			}else {
 				processedThreadName += "_" + memThread.threadId; //$NON-NLS-1$
 			}
 
@@ -385,10 +421,19 @@ public class MemTrace extends GenericSampledTrace implements TraceWithThreads {
 			memThread.maxMemoryItem.maxStackHeap = 0;
 			memThread.maxMemoryItem.maxTotal = 0;
 
-			if (drawDataByMemThread.get(memThread.fullName) == null) {
-				drawDataByMemThread.put(memThread.fullName,
-						new TreeMap<Long, MemSample>());
-				noDuplicateMemThreads.add(memThread);
+			if (libraryEvent) {
+				String name = getLibraryNameString(memThread.fullName);
+				if (drawDataByLibraryEvent.get(name) == null) {
+					ProfiledLibraryEvent ple = new ProfiledLibraryEvent(name);
+					ple.setColor(getLibraryEventColorPalette().getColor(name));
+					drawDataByLibraryEvent.put(name, ple);
+				}
+			} else {
+				if (drawDataByMemThread.get(memThread.fullName) == null) {
+					drawDataByMemThread.put(memThread.fullName,
+							new TreeMap<Long, MemSample>());
+					noDuplicateMemThreads.add(memThread);
+				}
 			}
 		}
 
@@ -397,8 +442,24 @@ public class MemTrace extends GenericSampledTrace implements TraceWithThreads {
 	public TreeMap<Long, MemSample> getDrawDataByMemThread(MemThread id) {
 		return this.drawDataByMemThread.get(id.fullName);
 	}
+	
+	public Hashtable<String, TreeMap<Long, MemSample>> getDrawDataByMemThread() {
+		return this.drawDataByMemThread;
+	}
 
 	public ArrayList<MemSampleByTime> getDrawDataByTime() {
+		if (drawDataByTime.isEmpty() && getVersion() >= 202) {
+			TreeMap<Long, MemSample> events = drawDataByMemThread
+					.get("TOTAL_MEMORY::TOTAL_MEMORY_-1162089814"); //$NON-NLS-1$
+
+			Iterator<MemSample> iterator = events.values().iterator();
+			while (iterator.hasNext()) {
+				MemSample memSample = iterator.next();
+				drawDataByTime.add(new MemSampleByTime(
+						memSample.sampleSynchTime, memSample.stackSize
+								+ memSample.heapSize, memSample.heapSize));
+			}
+		}
 		return this.drawDataByTime;
 	}
 
@@ -434,7 +495,7 @@ public class MemTrace extends GenericSampledTrace implements TraceWithThreads {
 
 		if (this.getVersion() >= 202) {
 			TreeMap<Long, MemSample> events = drawDataByMemThread
-					.get("TOTAL_MEMORY::TOTAL_MEMORY_-1162089814");
+					.get("TOTAL_MEMORY::TOTAL_MEMORY_-1162089814"); //$NON-NLS-1$
 
 			Iterator<MemSample> values = events.values().iterator();
 
@@ -625,6 +686,16 @@ public class MemTrace extends GenericSampledTrace implements TraceWithThreads {
 
 		return;
 	}
+		
+	public void setMaxMemLibraryEventDataByInterval(long startTime, long endTime) {
+		// update memory usage for each library event that are used during the time slot
+		for (Enumeration<ProfiledLibraryEvent> e = drawDataByLibraryEvent
+				.elements(); e.hasMoreElements();) {
+			ProfiledLibraryEvent ple = (ProfiledLibraryEvent) e
+					.nextElement();
+			ple.updateSelection(startTime, endTime);
+		}
+	}
 
 	public long getMemoryModel() {
 		return this.memoryModel;
@@ -651,6 +722,93 @@ public class MemTrace extends GenericSampledTrace implements TraceWithThreads {
 			return null;
 		}
 
+	}
+	
+	public Hashtable<String, ProfiledLibraryEvent> getLibraryEvents(){
+		return drawDataByLibraryEvent;
+	}
+	
+	public LibraryEventColorPalette getLibraryEventColorPalette(){
+		if(libraryEventColorPalette == null){
+			libraryEventColorPalette = new LibraryEventColorPalette();
+		}
+		return libraryEventColorPalette;
+	}
+	
+	
+	public ArrayList<MemSample> getLibraryEventDataByTime(int graphIndex, long time, long scale) {
+		if(drawLibraryEventDataByTime == null){
+			// find library events by time
+			drawLibraryEventDataByTime = new TreeMap<Long, ArrayList<MemSample>>();
+			Iterator<ProfiledLibraryEvent> iterator = drawDataByLibraryEvent.values().iterator();
+			while(iterator.hasNext()){	
+				ProfiledLibraryEvent ple = iterator.next();	
+				Iterator<MemSample> iteratorMem = ple.getMemSamples().values().iterator();
+				while(iteratorMem.hasNext()){
+					MemSample memSample = iteratorMem.next();
+					ArrayList<MemSample> memSamples = drawLibraryEventDataByTime.get(memSample.sampleSynchTime);
+					if(memSamples == null){
+						memSamples = new ArrayList<MemSample>();
+					}
+					memSamples.add(memSample);					
+					drawLibraryEventDataByTime.put(memSample.sampleSynchTime, memSamples);
+				}		
+			}
+		}		
+		
+		ArrayList<MemSample> retMemSamples = new ArrayList<MemSample>();
+		ArrayList<MemSample> bestChoice = null;
+		scale = (long)scale * 5;
+		
+		if(scale == 0){
+			bestChoice = drawLibraryEventDataByTime.get(time);
+		} else {	
+			SortedMap<Long, ArrayList<MemSample>> sortedMap = drawLibraryEventDataByTime
+					.subMap(time - scale, time + scale);
+			long min = Long.MAX_VALUE;
+			long closest = time;
+			for (Long key : sortedMap.keySet()) {
+				final long diff = Math.abs(key - time);
+				if (diff < min) {
+					Iterator<MemSample> iterator = sortedMap.get(key).iterator();
+					while(iterator.hasNext()){
+						MemSample memSample = iterator.next();
+						if(memSample.thread.isEnabled(graphIndex)){
+							min = diff;
+							closest = key;
+						}
+					}					
+				}
+			}
+			bestChoice = sortedMap.get(closest);			
+		}
+		if(bestChoice != null){
+			Iterator<MemSample> iterator = bestChoice.iterator();
+			while(iterator.hasNext()){
+				MemSample memSample = iterator.next();
+				if(memSample.thread.isEnabled(graphIndex)){
+					retMemSamples.add(memSample);
+				}
+			}
+		}
+		return retMemSamples;
+	}	
+	
+	public String getLibraryNameString(String fullName){
+		int startIndex = fullName.indexOf("::") + 2; //$NON-NLS-1$
+		int lastIndex = fullName.indexOf(" ["); //$NON-NLS-1$
+		if(startIndex != -1 && lastIndex != -1){
+			return fullName.substring(startIndex, lastIndex);
+		}
+		return null;
+	}
+	
+	public String getProcessFromLibraryNameString(String fullName){
+		int lastIndex = fullName.indexOf("::"); //$NON-NLS-1$
+		if(lastIndex != -1){
+			return fullName.substring(0, lastIndex);
+		}
+		return null;
 	}
 
 }

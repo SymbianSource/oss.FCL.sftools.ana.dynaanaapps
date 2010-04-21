@@ -92,6 +92,26 @@
        <!-- ECLIPSE NEW/IMPORT/EXPORT WIZARDS and PREF PANELS HELP  -->
        <contexts file="html/context_help/org_eclipse_ui.xml"
        		plugin="org.eclipse.ui" />
+       <contexts
+             file="html/context_help/com_nokia_carbide_pi_memory.xml"
+             plugin="com.nokia.carbide.cpp.pi.memory">
+       </contexts>
+       <contexts
+             file="html/context_help/com_nokia_carbide_pi_pec.xml"
+             plugin="com.nokia.carbide.cpp.pi.perfcounters">
+       </contexts>
+       <contexts
+             file="html/context_help/com_nokia_carbide_pi_ipc.xml"
+             plugin="com.nokia.carbide.cpp.pi.ipc">
+       </contexts>
+       <contexts
+             file="html/context_help/com_nokia_carbide_pi_irq.xml"
+             plugin="com.nokia.carbide.cpp.pi.irq">
+       </contexts>
+       <contexts
+             file="html/context_help/com_nokia_carbide_pi_power.xml"
+             plugin="com.nokia.carbide.cpp.pi.power">
+       </contexts>
 
 	</extension>
 

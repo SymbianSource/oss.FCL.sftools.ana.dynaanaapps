@@ -10,6 +10,6 @@
 <body>
 <h3>Interrupt Stack</h3>
 <p>When the ARM processor state is switched to the IRQ (or FIQ) mode, the processor registers that are in use are also changed to banked registers dedicated to that mode. Each of the processor modes has specific banked registers in the ARM architecture, facilitating rapid switching between the modes. The stack pointer register (usually register R13) has a banked register in each of the modes. The pointer within the R13 points to the Interrupt Stack, which becomes the active stack immediately after execution is resumed within the interrupt processing. The interrupt stack holds the return value to the point of execution immediately before the interrupt. Therefore it is possible to resolve the exact point of execution for statistical analysis within an interrupt, such as for example within a periodic interrupt.</p>
-<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+<div id="footer">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
 </body>
 </html>

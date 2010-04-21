@@ -43,12 +43,12 @@ public class AlphabeticValueGenerator
 				}
 			}
 
-			while (created.contains(new Long(tempOrder)))
+			while (created.contains(Long.valueOf(tempOrder)))
 			{
 				tempOrder++;
 			}
 			
-			created.add(new Long(tempOrder));
+			created.add(Long.valueOf(tempOrder));
 			
 			ai.order = tempOrder;
 		}

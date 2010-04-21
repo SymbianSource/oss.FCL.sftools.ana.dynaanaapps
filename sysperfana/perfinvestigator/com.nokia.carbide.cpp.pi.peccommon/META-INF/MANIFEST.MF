@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Carbide.c++ Performance Counters Common PI Plugin
+Bundle-SymbolicName: com.nokia.carbide.cpp.pi.peccommon;singleton:=true
+Bundle-Version: 2.3.0.qualifier
+Bundle-Activator: com.nokia.carbide.cpp.pi.peccommon.PecCommonPlugin
+Bundle-Vendor: Nokia
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ com.nokia.carbide.cpp.pi;bundle-version="2.2.0",
+ org.eclipse.draw2d,
+ com.nokia.carbide.cpp.pi.util;bundle-version="2.2.0",
+ org.eclipse.ui.ide
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy
+Export-Package: com.nokia.carbide.cpp.pi.peccommon
+Eclipse-ExtensibleAPI: true

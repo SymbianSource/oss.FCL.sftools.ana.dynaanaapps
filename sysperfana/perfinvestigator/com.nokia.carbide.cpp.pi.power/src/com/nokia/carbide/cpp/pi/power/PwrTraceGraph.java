@@ -57,10 +57,6 @@ public class PwrTraceGraph extends GenericTraceGraph implements MouseMotionListe
 	{
 	}
 
-	public void refreshDataFromTrace() 
-	{
-	}
-
 	public void mouseMoved(MouseEvent me)
 	{
 		if(!selected) return;

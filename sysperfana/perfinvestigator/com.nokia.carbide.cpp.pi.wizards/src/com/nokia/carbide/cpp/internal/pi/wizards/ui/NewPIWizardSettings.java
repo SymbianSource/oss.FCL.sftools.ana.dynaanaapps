@@ -75,10 +75,6 @@ public class NewPIWizardSettings {
 	static final String KEY_PROFILE_KEY = "keyProfile";								//$NON-NLS-1$
 	static final String SAMPLEFILENAMES_KEY = "sampleFileName";						//$NON-NLS-1$
 
-	
-//	start version 2
-	String sampleFileName;
-	String[] sampleFileNames;
 	boolean haveAppOnly = false;
 	boolean haveRomOnly = false;
 	boolean haveAppRom = false;
@@ -110,7 +106,6 @@ public class NewPIWizardSettings {
 //	end internal states not saved
 	
 	public void clear() {
-		sampleFileName = "";			//$NON-NLS-1$
 		haveAppOnly = false;
 		haveRomOnly = false;
 		haveAppRom = false;
@@ -148,9 +143,6 @@ public class NewPIWizardSettings {
 	public void saveState(IDialogSettings dialogSettings) {
 		try {
 			dialogSettings.put(IMPORTER_SETTING_VERSION, CURRENT_VERSION);
-			dialogSettings.put(SAMPLEFILENAME_KEY, sampleFileName);
-			saveFileNameToArray();
-			dialogSettings.put(SAMPLEFILENAMES_KEY, sampleFileNames);
 			dialogSettings.put(ENABLE_CUST_KEY, enableCust);
 			
 			{	// traverse all entries of app config and pkg file
@@ -221,8 +213,6 @@ public class NewPIWizardSettings {
 				return;
 			}
 			if (dialogSettings.getInt(IMPORTER_SETTING_VERSION) == CURRENT_VERSION) {
-				sampleFileName = dialogSettings.get(SAMPLEFILENAME_KEY);
-				sampleFileNames = dialogSettings.getArray(SAMPLEFILENAMES_KEY);
 //				if(!(new java.io.File(sampleFileName).exists()))
 //					sampleFileName = "";	//$NON-NLS-1$
 				enableCust = dialogSettings.getBoolean(ENABLE_CUST_KEY);
@@ -341,60 +331,5 @@ public class NewPIWizardSettings {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
-	
-	
-	
-	/**
-	 * @param sampleFileName path to save
-	 * @param array name of the array which contains correct values
-	 * @param section section which has array 
-	 */
-	protected void saveFileNameToArray() {
-			
-		// No previous values exist
-		if (sampleFileNames == null) {
-			sampleFileNames = new String[1];
-			sampleFileNames[0] = sampleFileName;
-		// Previous values exists
-		} else {
-			int valuesCount = sampleFileNames.length;
-			
-			boolean valueExisted = false;
-			// see if passed value already exist.
-			for (int i = 0; i < valuesCount; i++) {
-				if (sampleFileNames[i].compareToIgnoreCase(sampleFileName) == 0) {
-					valueExisted = true;
-					
-					// passed value exists, move it to first position
-					for (int j = i; j > 0; j--) {
-						sampleFileNames[j] = sampleFileNames[j-1];
-					}
-					sampleFileNames[0] = sampleFileName;
-					
-					break;
-				}
-			}
-			
-			// passed value did not exist, add it to first position (and move older values "down")
-			if (!valueExisted) {
-				if (valuesCount >= COMBO_MAX_ITEM_VALUES) {
-					for (int i = valuesCount-1; i > 0; i--) {
-						sampleFileNames[i] = sampleFileNames[i-1];
-					}
-					sampleFileNames[0] = sampleFileName;
-				} else {
-					String[] values = new String[valuesCount + 1];
-					values[0] = sampleFileName;
-					for (int i = 0; i < valuesCount; i++) {
-						values[i+1] = sampleFileNames[i];
-					}
-					sampleFileNames = values;
-				}
-			}
-		}
-		
-	}
-	
+	}	
 }

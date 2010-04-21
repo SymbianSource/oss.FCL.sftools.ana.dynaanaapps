@@ -33,9 +33,9 @@ public class ProfiledThread extends ProfiledGeneric implements Serializable
 
 	private int threadId; //thread's real id
  
-	public ProfiledThread()
+	public ProfiledThread(int cpuCount, int graphCount)
 	{
-		super();
+		super(cpuCount, graphCount);
 	}
   
 	public void setNameValues(char symbol,String nameString)
@@ -44,17 +44,18 @@ public class ProfiledThread extends ProfiledGeneric implements Serializable
 		setNameString(nameString);
 	}
  
-	public String toString(int graphIndex)
-	{
-		if (this.isEnabled(graphIndex))
-		{
-			return "true  " + this.getAverageLoadValueString(graphIndex) + getNameString(); //$NON-NLS-1$
-		}
-		else
-		{
-			return "false " + this.getAverageLoadValueString(graphIndex) + getNameString(); //$NON-NLS-1$
-		}
-	}
+	//unused?
+//	public String toString(int graphIndex)
+//	{
+//		if (this.isEnabled(graphIndex))
+//		{
+//			return "true  " + this.getAverageLoadValueString(graphIndex) + getNameString(); //$NON-NLS-1$
+//		}
+//		else
+//		{
+//			return "false " + this.getAverageLoadValueString(graphIndex) + getNameString(); //$NON-NLS-1$
+//		}
+//	}
   
 	public Character getName(){
 		return new Character(this.name);

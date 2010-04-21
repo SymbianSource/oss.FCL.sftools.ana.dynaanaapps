@@ -17,8 +17,15 @@
 
 package com.nokia.carbide.cpp.internal.pi.model;
 
+
+
 public class ParsedTraceData 
 {
 	public GenericTrace traceData;
+	public TraceDataContainer staticData; // TODO this was added when implementing IRQ
 	public FunctionResolver[] functionResolvers;
+	
+	public ParsedTraceData(){
+		
+	}
 }

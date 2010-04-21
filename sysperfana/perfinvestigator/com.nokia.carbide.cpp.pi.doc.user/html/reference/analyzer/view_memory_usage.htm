@@ -2,43 +2,141 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Memory Usage View</title>
-    <link href="../../../book.css" rel="stylesheet" type="text/css">
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Memory Usage View</title>
+  <link href="../../../book.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
 <h2>Memory Usage View</h2>
-<p>Use  the <strong>Memory  Usage</strong> view to display thread&#8217;s chunk usage, stack/heap usage, or both, of the profiled software running on a device. The graph portion of the Memory Usage view shows the amount of memory used along the same time interval as the thread load. A list of each thread or process appears at the bottom of the view showing the chunks, stack/heap, and total memory for each thread.</p>
-<p>Data in the Memory Usage view is layered with the stack/heap data overlaying the chunk data. Stack/heap data is represented by the color blue, while chunk data is represented by gold. The display is different depending upon the view option selected in the context menu (section A in Figure 1):</p>
+
+<p>Use the <strong>Memory Usage</strong> view to display thread’s chunk
+usage, stack/heap usage, or both, of the profiled software running on a device.
+The graph portion of the Memory Usage view shows the amount of memory used
+along the same time interval as the thread load. A list of each thread or
+process appears at the bottom of the view showing the chunks, stack/heap, and
+total memory for each thread. In addition, if library events have been
+constructed into the imported PIProfiler data file, additional information is
+displayed for those, see <a href="#Library">Library events information</a>
+below.</p>
+
+<p>Data in the Memory Usage view is layered with the stack/heap data overlaying
+the chunk data. Stack/heap data is represented by the color blue, while chunk
+data is represented by gold. The display is different depending upon the view
+option selected in the Title bar drop-down menu, show in Figure 1, or in the
+Investigator menu &gt; <a href="menu_memory_graph.htm">Memory Graph Menu
+</a>.</p>
+
+<p align="center"><img src="images/memory_graph_drop_down.png" width="156"
+height="58"></p>
+
+<p class="figure">Figure 1. Memory Usage Title bar drop-down menu</p>
+
+<p>According to the selection, the graph displays the following (Figure 2):</p>
 <ul>
-  <li>Show Chunk Usage &#8212; gold box only</li>
-  <li>Show Stack/Heap Usage &#8212; blue box only </li>
-  <li>Show Chunk and Stack/Heap Usage (Figure 1) &#8212; show gold box (chunk data) and a blue line (stack/heap data) </li>
+  <li>Show Chunk Usage — gold box only</li>
+  <li>Show Stack/Heap Usage — blue box only </li>
+  <li>Show Chunk and Stack/Heap Usage (Figure 2) — gold box (chunk data) and
+    a blue line (stack/heap data) </li>
 </ul>
-<p>When both are selected for display and the amounts are also equal, only a blue box will appear in the view. If the amounts are not equal, the chunk data is shown as a gold box and the stack/heap data is shown as a blue line. </p>
-<p class="note"><b>NOTE</b> The Memory Usage view is synchronized with the Thread Load view along the horizontal axis. </p>
-<p align="center"><img src="images/view_memory_usage.png" width="705" height="652"></p>
-<p class="figure">Figure 1. Memory Usage graph and thread list </p>
-<p>Description of table columns (section B in Figure 1):</p>
+
+<p>When both are selected for display and the amounts are also equal, only a
+blue box will appear in the view. If the amounts are not equal, the chunk data
+is shown as a gold box and the stack/heap data is shown as a blue line. </p>
+
+<p>Additionally, a black line indicating the total memory usage is available.
+The line is always displayed by default, but you can choose to hide or show the
+line by either right-clicking on the graph and selecting <strong>Show Total
+Memory Usage</strong>, or by selecting <strong>Investigator</strong> -&gt;
+<strong>Memory Graph</strong> -&gt; <strong>Show Total Memory Usage</strong> .
+</p>
+
+<p class="note"><b>NOTE</b> The Memory Usage view is synchronized with the
+Thread Load view along the horizontal axis. </p>
+
+<p align="center"><img src="images/view_memory_usage.png"></p>
+
+<p class="figure">Figure 2. Memory Usage graph and thread list </p>
+
+<p>Description of table columns (Figure 2):</p>
 <ul>
-  <li>The <b>Thread/Process</b> column name contains a wealth of data and is composed of:<ul>
-    <li>Chunks appear as: <span class="code">&lt;process&gt;::&lt;chunk name&gt; [&lt;hex start address&gt;]</span> </li>
-      <li>Threads appear as: <span class="code">&lt;process&gt;::&lt;thread name&gt;_&lt;thread ID&gt; </span></li>
-      <li> If no name is returned by the OS, the entry may appear as undetermined, e.g. &quot;<span class="code">::_</span>&quot;. </li>
-      </ul>
+  <li>The <b>Thread/Chunk</b> column name contains a wealth of data and is
+    composed of: 
+    <ul>
+      <li>Chunks appear as: <span class="code">&lt;process&gt;::&lt;chunk
+        name&gt; [&lt;hex start address&gt;]</span> </li>
+      <li>Threads appear as: <span class="code">&lt;process&gt;::&lt;thread
+        name&gt;_&lt;thread ID&gt; </span></li>
+      <li>If no name is returned by the OS, the entry may appear as
+        undetermined, e.g. "<span class="code">::_</span>". </li>
+    </ul>
   </li>
-  <li>The <b>Chunks</b> column displays the  amount of memory used by each chunk.</li>
-  <li>The <b>Stack/Heap</b> column displays the  amount  of memory used by the thread in its stack/heap.</li>
-  <li>The <b>Memory Total</b> column displays the  sum of the Chunks and Stack/Heap columns. </li>
+  <li>The <b>Chunks</b> column displays the amount of memory used by each
+  chunk.</li>
+  <li>The <b>Stack/Heap</b> column displays the amount of memory used by the
+    thread in its stack/heap.</li>
+  <li>The <b>Memory Total</b> column displays the sum of the Chunks and
+    Stack/Heap columns. </li>
 </ul>
-<p>Columns may be reordered, resized, and sorted by clicking or dragging column headers.</p>
+
+<p>Columns may be reordered, resized, and sorted by clicking or dragging column
+headers.</p>
+
+<h4><a name="Library" id="Library">Library event information</a></h4>
+
+<p>If the imported .dat file from Profiler includes library event data,
+additional information is displayed in the Memory Usage graph, and a separate
+table is included for Library Events information below the graph, see Figure 3
+below.</p>
+
+<p align="center"><img src="images/view_memory_library_events.png"></p>
+
+<p class="figure">Figure 2. Memory Usage graph with library events information
+</p>
+
+<p>In the Memory Usage graph:</p>
+<ul>
+  <li>Below the vertical axis of the graph a <img
+    src="images/event_loaded.png"> symbol is displayed for an event where a
+    library is loaded, and <img src="images/event_unloaded.png"> symbol when a
+    library is unloaded. When the mouse pointer is placed on the symbol a
+    tooltip is displayed, including: 
+    <ul>
+      <li>library name,</li>
+      <li>name of the process that loaded/unloaded the library,</li>
+      <li>load size of the library, and</li>
+      <li>count of times the library has been loaded on system level.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>The Library Events table lists all the libraries for which data is
+available. The following columns are included:</p>
+<ul>
+  <li>The <strong>Loaded Library</strong> column displays the name of the
+    library. The check boxes indicate the libraries selected for the graph. By
+    default the libraries are selected according to the selection in the Memory
+    Usage table, that is, only the libraries used by the selected threads or
+    chunks are selected for the graph, but you can also select to include other
+    libraries.</li>
+  <li>The <strong>Load Size</strong> column indicates the size of the library
+    within the selected time slot.</li>
+  <li>The <strong>Selection Event Count</strong> column indicates the number of
+    library events within the selected time slot.</li>
+</ul>
+
 <p><strong>Related references </strong></p>
 <ul>
   <li><a href="main_view.htm">Analyzer View</a></li>
-<li><a href="menu_memory_graph.htm">Memory Usage Menu </a></li>
-<li><a href="wnd_memory_usage_statistics.htm">Memory Usage Statistics</a> </li>
+  <li><a href="menu_memory_graph.htm">Memory Graph Menu </a></li>
+  <li><a href="wnd_memory_usage_statistics.htm">Memory Usage Statistics</a>
+  </li>
 </ul>
-<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. <br>
+License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
 </body>
 </html>

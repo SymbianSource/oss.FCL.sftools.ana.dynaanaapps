@@ -22,21 +22,44 @@ import java.util.Vector;
 
 public abstract class GenericSampledTrace extends GenericTrace
 {
-	private static final long serialVersionUID = -5030416972125713453L;
+	private static final long serialVersionUID = 5248402326692863890L;
+	private long lastSampleTime;
 	
-	public Vector samples;
+	public Vector<GenericSample> samples;
 	
 	public GenericSampledTrace()
 	{
-	  this.samples = new Vector();
+	  this.samples = new Vector<GenericSample>();
 	}
 	
 	public void addSample(GenericSample sample)
 	{
 	  this.samples.add(sample);
+	  if (sample.sampleSynchTime > lastSampleTime){
+		  lastSampleTime = sample.sampleSynchTime;
+	  }
 	}
 	
-	public Enumeration getSamples()
+	/**
+	 * Returns the highest sampleSyncTime found in the set of samples.
+	 * 
+	 * @return last sample time
+	 */
+	public long getLastSampleTime(){
+		if (lastSampleTime == 0 && samples.size()>0){
+			//someone has added samples without going through the addSample() API in this class
+			//really, this.samples should be private
+			//let's try to recalculate lastSampleTime
+			for (GenericSample s : samples) {
+				  if (s.sampleSynchTime > lastSampleTime){
+					  lastSampleTime = s.sampleSynchTime;
+				  }
+			}
+		}
+		return lastSampleTime;
+	}
+	
+	public Enumeration<GenericSample> getSamples()
 	{
 	  return samples.elements();
 	}
@@ -48,7 +71,7 @@ public abstract class GenericSampledTrace extends GenericTrace
 	
 	public Vector<GenericSample> getSamplesInsideTimePeriod(long start, long end)
 	{
-		Enumeration sEnum = samples.elements();
+		Enumeration<GenericSample> sEnum = samples.elements();
 		Vector<GenericSample> okSamples = new Vector<GenericSample>();
 		
 		while(sEnum.hasMoreElements())
@@ -195,18 +218,20 @@ public abstract class GenericSampledTrace extends GenericTrace
 			return 0;
 	}
 	
+	/**
+	 * Returns the highest sample time in the trace. Note, on SMP systems,
+	 * this may not be the time of the last sample.
+	 * @return
+	 */
 	public int getLastSampleNumber()
 	{
-		if (this.samples.size() > 0)
-			return (int)((GenericSample)this.samples.lastElement()).sampleSynchTime;
-		else
-			return 0;
+		return (int)getLastSampleTime();
 	}
 	
 	public String toString()
 	{
-		Enumeration sEnum = this.getSamples();
-	  	Vector strings = new Vector();
+		Enumeration<GenericSample> sEnum = this.getSamples();
+	  	Vector<String> strings = new Vector<String>();
 	  	int totalLength = 0;
 	  	while(sEnum.hasMoreElements())
 	  	{	
@@ -218,11 +243,11 @@ public abstract class GenericSampledTrace extends GenericTrace
 	  	
 	  	System.out.println(Messages.getString("GenericSampledTrace.totalLength") + totalLength); //$NON-NLS-1$
 	  	byte[] bytes = new byte[totalLength];
-	  	sEnum = strings.elements();
+	  	Enumeration<String> sEnumString = strings.elements();
 	  	int index = 0;
-	  	while(sEnum.hasMoreElements())
+	  	while(sEnumString.hasMoreElements())
 	  	{
-	  		String s = (String)sEnum.nextElement();
+	  		String s = (String)sEnumString.nextElement();
 	  		byte[] sB = s.getBytes();
 	  		for (int i = index; i < index + sB.length; i++)
 	  		{

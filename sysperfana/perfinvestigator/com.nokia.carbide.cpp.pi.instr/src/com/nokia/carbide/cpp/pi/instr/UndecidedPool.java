@@ -67,17 +67,17 @@ public class UndecidedPool
 		{
 			Binary possibleBinary = brr.possibleBinaries[i];
 			UndecidedLocation ul = 
-				(UndecidedLocation)undecidedLocations.get(possibleBinary.binaryName);
+				(UndecidedLocation)undecidedLocations.get(possibleBinary.getBinaryName());
 			
 			if (ul != null)
 			{
-				ul.addSample(sample,possibleBinary.startAddress);
+				ul.addSample(sample,possibleBinary.getStartAddress());
 			}
 			else
 			{
 				ul = new UndecidedLocation(possibleBinary); 
-				ul.addSample(sample,possibleBinary.startAddress);
-				this.undecidedLocations.put(possibleBinary.binaryName,ul);
+				ul.addSample(sample,possibleBinary.getStartAddress());
+				this.undecidedLocations.put(possibleBinary.getBinaryName(),ul);
 			}
 			
 			// the value of decisionBoundary has to be reduced in the future

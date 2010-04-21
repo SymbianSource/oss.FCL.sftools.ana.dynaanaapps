@@ -28,12 +28,20 @@ import java.awt.event.MouseEvent;
 import java.text.DecimalFormat;
 import java.util.Vector;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionManager;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.SubMenuManager;
+import org.eclipse.jface.dialogs.IPageChangedListener;
+import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -44,6 +52,8 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -53,6 +63,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -60,6 +71,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.ide.IIDEActionConstants;
@@ -137,6 +150,15 @@ public class CallVisualiser extends GenericTable
 	// trace associated with this display
 	private GfcTrace myTrace;
 	
+	/** the editor page this is sitting on */
+	private Composite curPage;
+	protected boolean isPageActive;
+	protected boolean needsRefresh;
+	
+	//start and end of the timeframe at the last selection event
+	private int curStart;
+	private int curEnd;
+	
 	// lists of functions, function callers, and function callees
 	private GfcFunctionItem[]  functionArray;
 	private CallerCalleeItem[] callerList;
@@ -150,6 +172,7 @@ public class CallVisualiser extends GenericTable
 	protected Action functionSaveFunctionAction;
 	
 	protected static int SAMPLES_AT_ONE_TIME = 1000;
+	private Job setTimeframeJob = null;
 	
 	// class to pass sample data to the save wizard
     public class SaveSampleString implements ISaveSamples {
@@ -206,23 +229,23 @@ public class CallVisualiser extends GenericTable
 			returnString +=   sample.sampleSynchTime + ",0x" //$NON-NLS-1$
 							+ Long.toHexString(sample.linkRegister)
 							+ ",\"" //$NON-NLS-1$
-							+ (sample.callerFunctionItt != null
-								? sample.callerFunctionItt.functionName
-								: sample.callerFunctionSym.functionName)
+							+ (sample.getCallerFunctionItt() != null
+								? sample.getCallerFunctionItt().getFunctionName()
+								: sample.getCallerFunctionSym().getFunctionName())
 							+ "\"," //$NON-NLS-1$
-							+ (sample.callerFunctionItt != null
-								? sample.callerFunctionItt.functionBinary.binaryName
-								: sample.callerFunctionSym.functionBinary.binaryName)
+							+ (sample.getCallerFunctionItt() != null
+								? sample.getCallerFunctionItt().getFunctionBinary().getBinaryName()
+								: sample.getCallerFunctionSym().getFunctionBinary().getBinaryName())
 							+ ",0x" //$NON-NLS-1$
 							+ Long.toHexString(sample.programCounter)
 							+ ",\"" //$NON-NLS-1$
-							+ (sample.currentFunctionItt != null
-								? sample.currentFunctionItt.functionName
-								: sample.currentFunctionSym.functionName)
+							+ (sample.getCurrentFunctionItt() != null
+								? sample.getCurrentFunctionItt().getFunctionName()
+								: sample.getCurrentFunctionSym().getFunctionName())
 							+ "\"," //$NON-NLS-1$
-							+ (sample.currentFunctionItt != null
-								? sample.currentFunctionItt.functionBinary.binaryName
-								: sample.currentFunctionSym.functionBinary.binaryName)
+							+ (sample.getCurrentFunctionItt() != null
+								? sample.getCurrentFunctionItt().getFunctionBinary().getBinaryName()
+								: sample.getCurrentFunctionSym().getFunctionBinary().getBinaryName())
 							+ "\n"; //$NON-NLS-1$
 		}
 
@@ -246,19 +269,26 @@ public class CallVisualiser extends GenericTable
 		return saveSamplesItem;
 	}
 
-	public CallVisualiser(PIPageEditor pageEditor, int pageIndex, SashForm parent, GfcTrace trace)
+	public CallVisualiser(PIPageEditor pageEditor, int pageIndex, SashForm parent, GfcTrace trace, Composite curPage)
 	{
 		this.pageEditor = pageEditor;
 		this.pageIndex  = pageIndex;
 		this.parent     = parent;
 		this.myTrace    = trace;
+		this.curPage = curPage;
+		isPageActive = true;
+		needsRefresh = false;
 		
 		// let the trace know about the CallVisualiser so that unit tests can find it
 		trace.setCallVisualiser(this);
 
 		// create the 3 table viewers: caller functions, selected function, callee functions
 		createTableViewers(parent);
+		
+		createSetTimeframeJob();
+		createPageListeners();
 	}
+
 
 	public void createTableViewers(SashForm parent)
 	{
@@ -362,7 +392,7 @@ public class CallVisualiser extends GenericTable
 		column = new TableColumn(table, SWT.RIGHT);
 		column.setText(COLUMN_HEAD_IS_CALLED);
 		column.setWidth(COLUMN_WIDTH_IS_CALLED);
-		column.setData(new Integer(COLUMN_ID_IS_CALLED));
+		column.setData(Integer.valueOf(COLUMN_ID_IS_CALLED));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new CheckboxColumnSelectionHandler());
@@ -371,7 +401,7 @@ public class CallVisualiser extends GenericTable
 		column = new TableColumn(table, SWT.RIGHT);
 		column.setText(COLUMN_HEAD_IS_CALLER);
 		column.setWidth(COLUMN_WIDTH_IS_CALLER);
-		column.setData(new Integer(COLUMN_ID_IS_CALLER));
+		column.setData(Integer.valueOf(COLUMN_ID_IS_CALLER));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new CheckboxColumnSelectionHandler());
@@ -380,7 +410,7 @@ public class CallVisualiser extends GenericTable
 		column = new TableColumn(table, SWT.LEFT);
 		column.setText(COLUMN_HEAD_FUNCTION);
 		column.setWidth(COLUMN_WIDTH_FUNCTION_NAME);
-		column.setData(new Integer(COLUMN_ID_FUNCTION));
+		column.setData(Integer.valueOf(COLUMN_ID_FUNCTION));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new CheckboxColumnSelectionHandler());
@@ -389,7 +419,7 @@ public class CallVisualiser extends GenericTable
 		column = new TableColumn(table, SWT.CENTER);
 		column.setText(COLUMN_HEAD_START_ADDR);
 		column.setWidth(COLUMN_WIDTH_START_ADDRESS);
-		column.setData(new Integer(COLUMN_ID_START_ADDR));
+		column.setData(Integer.valueOf(COLUMN_ID_START_ADDR));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new CheckboxColumnSelectionHandler());
@@ -398,7 +428,7 @@ public class CallVisualiser extends GenericTable
 		column = new TableColumn(table, SWT.LEFT);
 		column.setText(COLUMN_HEAD_IN_BINARY);
 		column.setWidth(COLUMN_WIDTH_IN_BINARY);
-		column.setData(new Integer(COLUMN_ID_IN_BINARY));
+		column.setData(Integer.valueOf(COLUMN_ID_IN_BINARY));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new CheckboxColumnSelectionHandler());
@@ -407,7 +437,7 @@ public class CallVisualiser extends GenericTable
 		column = new TableColumn(table, SWT.LEFT);
 		column.setText(COLUMN_HEAD_IN_BINARY_PATH);
 		column.setWidth(COLUMN_WIDTH_IN_BINARY_PATH);
-		column.setData(new Integer(COLUMN_ID_IN_BINARY_PATH));
+		column.setData(Integer.valueOf(COLUMN_ID_IN_BINARY_PATH));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new CheckboxColumnSelectionHandler());
@@ -416,7 +446,7 @@ public class CallVisualiser extends GenericTable
 		column = new TableColumn(table, SWT.CENTER);
 		column.setText(COLUMN_HEAD_IS_CALLED_COUNT);
 		column.setWidth(COLUMN_WIDTH_IS_CALLED_COUNT);
-		column.setData(new Integer(COLUMN_ID_IS_CALLED_COUNT));
+		column.setData(Integer.valueOf(COLUMN_ID_IS_CALLED_COUNT));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new CheckboxColumnSelectionHandler());
@@ -428,7 +458,7 @@ public class CallVisualiser extends GenericTable
 		column = new TableColumn(table, SWT.CENTER);
 		column.setText(COLUMN_HEAD_IS_CALLER_COUNT);
 		column.setWidth(COLUMN_WIDTH_IS_CALLER_COUNT);
-		column.setData(new Integer(COLUMN_ID_IS_CALLER_COUNT));
+		column.setData(Integer.valueOf(COLUMN_ID_IS_CALLER_COUNT));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new CheckboxColumnSelectionHandler());
@@ -570,7 +600,7 @@ public class CallVisualiser extends GenericTable
 		column = new TableColumn(table, SWT.RIGHT);
 		column.setText(COLUMN_HEAD_CALLER_PERCENT);
 		column.setWidth(COLUMN_WIDTH_CALLER_PERCENT);
-		column.setData(new Integer(COLUMN_ID_CALLER_PERCENT));
+		column.setData(Integer.valueOf(COLUMN_ID_CALLER_PERCENT));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new CalledByColumnSelectionHandler());
@@ -579,7 +609,7 @@ public class CallVisualiser extends GenericTable
 		column = new TableColumn(table, SWT.CENTER);
 		column.setText(COLUMN_HEAD_IS_CALLER_COUNT2);
 		column.setWidth(COLUMN_WIDTH_IS_CALLER_COUNT2);
-		column.setData(new Integer(COLUMN_ID_IS_CALLER_COUNT));
+		column.setData(Integer.valueOf(COLUMN_ID_IS_CALLER_COUNT));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new CalledByColumnSelectionHandler());
@@ -588,7 +618,7 @@ public class CallVisualiser extends GenericTable
 		column = new TableColumn(table, SWT.LEFT);
 		column.setText(COLUMN_HEAD_FUNCTION);
 		column.setWidth(COLUMN_WIDTH_FUNCTION_NAME);
-		column.setData(new Integer(COLUMN_ID_FUNCTION));
+		column.setData(Integer.valueOf(COLUMN_ID_FUNCTION));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new CalledByColumnSelectionHandler());
@@ -597,7 +627,7 @@ public class CallVisualiser extends GenericTable
 		column = new TableColumn(table, SWT.CENTER);
 		column.setText(COLUMN_HEAD_START_ADDR);
 		column.setWidth(COLUMN_WIDTH_START_ADDRESS);
-		column.setData(new Integer(COLUMN_ID_START_ADDR));
+		column.setData(Integer.valueOf(COLUMN_ID_START_ADDR));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new CalledByColumnSelectionHandler());
@@ -606,7 +636,7 @@ public class CallVisualiser extends GenericTable
 		column = new TableColumn(table, SWT.LEFT);
 		column.setText(COLUMN_HEAD_IN_BINARY);
 		column.setWidth(COLUMN_WIDTH_IN_BINARY);
-		column.setData(new Integer(COLUMN_ID_IN_BINARY));
+		column.setData(Integer.valueOf(COLUMN_ID_IN_BINARY));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new CalledByColumnSelectionHandler());
@@ -615,7 +645,7 @@ public class CallVisualiser extends GenericTable
 		column = new TableColumn(table, SWT.LEFT);
 		column.setText(COLUMN_HEAD_IN_BINARY_PATH);
 		column.setWidth(COLUMN_WIDTH_IN_BINARY_PATH);
-		column.setData(new Integer(COLUMN_ID_IN_BINARY_PATH));
+		column.setData(Integer.valueOf(COLUMN_ID_IN_BINARY_PATH));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new CalledByColumnSelectionHandler());
@@ -624,7 +654,7 @@ public class CallVisualiser extends GenericTable
 		column = new TableColumn(table, SWT.RIGHT);
 		column.setText(COLUMN_HEAD_IS_CALLER);
 		column.setWidth(COLUMN_WIDTH_IS_CALLER);
-		column.setData(new Integer(COLUMN_ID_IS_CALLER));
+		column.setData(Integer.valueOf(COLUMN_ID_IS_CALLER));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new CalledByColumnSelectionHandler());
@@ -768,7 +798,7 @@ public class CallVisualiser extends GenericTable
 		column = new TableColumn(table, SWT.RIGHT);
 		column.setText(COLUMN_HEAD_CALLEE_PERCENT);
 		column.setWidth(COLUMN_WIDTH_CALLEE_PERCENT);
-		column.setData(new Integer(COLUMN_ID_CALLEE_PERCENT));
+		column.setData(Integer.valueOf(COLUMN_ID_CALLEE_PERCENT));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new CalledColumnSelectionHandler());
@@ -777,7 +807,7 @@ public class CallVisualiser extends GenericTable
 		column = new TableColumn(table, SWT.CENTER);
 		column.setText(COLUMN_HEAD_IS_CALLED_COUNT2);
 		column.setWidth(COLUMN_WIDTH_IS_CALLED_COUNT2);
-		column.setData(new Integer(COLUMN_ID_IS_CALLED_COUNT));
+		column.setData(Integer.valueOf(COLUMN_ID_IS_CALLED_COUNT));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new CalledColumnSelectionHandler());
@@ -786,7 +816,7 @@ public class CallVisualiser extends GenericTable
 		column = new TableColumn(table, SWT.LEFT);
 		column.setText(COLUMN_HEAD_FUNCTION);
 		column.setWidth(COLUMN_WIDTH_FUNCTION_NAME);
-		column.setData(new Integer(COLUMN_ID_FUNCTION));
+		column.setData(Integer.valueOf(COLUMN_ID_FUNCTION));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new CalledColumnSelectionHandler());
@@ -795,8 +825,8 @@ public class CallVisualiser extends GenericTable
 		column = new TableColumn(table, SWT.CENTER);
 		column.setText(COLUMN_HEAD_START_ADDR);
 		column.setWidth(COLUMN_WIDTH_START_ADDRESS);
-//		column.setData(new Integer(COLUMN_ID_START_ADDR3));
-		column.setData(new Integer(COLUMN_ID_START_ADDR));
+//		column.setData(Integer.valueOf(COLUMN_ID_START_ADDR3));
+		column.setData(Integer.valueOf(COLUMN_ID_START_ADDR));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new CalledColumnSelectionHandler());
@@ -805,8 +835,8 @@ public class CallVisualiser extends GenericTable
 		column = new TableColumn(table, SWT.LEFT);
 		column.setText(COLUMN_HEAD_IN_BINARY);
 		column.setWidth(COLUMN_WIDTH_IN_BINARY);
-//		column.setData(new Integer(COLUMN_ID_IN_BINARY3));
-		column.setData(new Integer(COLUMN_ID_IN_BINARY));
+//		column.setData(Integer.valueOf(COLUMN_ID_IN_BINARY3));
+		column.setData(Integer.valueOf(COLUMN_ID_IN_BINARY));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new CalledColumnSelectionHandler());
@@ -815,8 +845,8 @@ public class CallVisualiser extends GenericTable
 		column = new TableColumn(table, SWT.LEFT);
 		column.setText(COLUMN_HEAD_IN_BINARY_PATH);
 		column.setWidth(COLUMN_WIDTH_IN_BINARY_PATH);
-//		column.setData(new Integer(COLUMN_ID_IN_BINARY_PATH3));
-		column.setData(new Integer(COLUMN_ID_IN_BINARY_PATH));
+//		column.setData(Integer.valueOf(COLUMN_ID_IN_BINARY_PATH3));
+		column.setData(Integer.valueOf(COLUMN_ID_IN_BINARY_PATH));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new CalledColumnSelectionHandler());
@@ -825,8 +855,8 @@ public class CallVisualiser extends GenericTable
 		column = new TableColumn(table, SWT.RIGHT);
 		column.setText(COLUMN_HEAD_IS_CALLED);
 		column.setWidth(COLUMN_WIDTH_IS_CALLED);
-//		column.setData(new Integer(COLUMN_ID_IS_CALLED3));
-		column.setData(new Integer(COLUMN_ID_IS_CALLED));
+//		column.setData(Integer.valueOf(COLUMN_ID_IS_CALLED3));
+		column.setData(Integer.valueOf(COLUMN_ID_IS_CALLED));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new CalledColumnSelectionHandler());
@@ -1414,27 +1444,14 @@ public class CallVisualiser extends GenericTable
 		if (this.myTrace == null)
 			return;
 		
-	    this.myTrace.parseEntries(start, end);
-	    this.functionArray = myTrace.getEntriesSorted(GfcTrace.SORT_BY_TOTAL_LOAD);
-	    this.currentFunctionTableViewer.setInput(this.functionArray);
-		
-	    updateCallerCalleeTables(null);
-	    
-	    Table table = this.currentFunctionTableViewer.getTable();
-	    
-	    if (table.getItemCount() == 0)
-	    	return;
-	    
-	    if (table.getSortColumn() == null) {
-	    	table.setSortColumn(currentFunctionDefaultColumn);
-	    	table.setSortDirection(SWT.UP);
-	    } else {
-	    	// use the user's preferred sort column, if any
-	    	boolean sortAscending = !((SharedSorter) currentFunctionTableViewer.getSorter()).getSortAscending();
-			((SharedSorter) currentFunctionTableViewer.getSorter()).setSortAscending(sortAscending);
-	    }
-	    
-	    sortAndRefresh(this.currentFunctionTableViewer, table.getSortColumn());
+		this.curStart = start;
+		this.curEnd = end;
+		needsRefresh = true;
+
+		if (isPageActive){
+			setTimeframeJob.cancel();
+			setTimeframeJob.schedule();
+		}
 	}
 
 	private static class CallerCalleeItem {
@@ -1997,6 +2014,137 @@ public class CallVisualiser extends GenericTable
 		
 		return copyString;
 	}
+
+	private void createSetTimeframeJob() {
+		//this functionality used to be in the setStartEnd() method
+		//but now the long-running calculations are in a background job
+		//and the short-running refresh of table viewers is done in the UI thread
+		
+		setTimeframeJob = new Job("Updating function hierarchy..."){
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				//run the time consuming calculations in the background
+				if (myTrace == null){
+					return Status.CANCEL_STATUS;
+				}				
+				
+				needsRefresh = false;
+			    myTrace.parseEntries(curStart, curEnd);			    
+			    functionArray = myTrace.getEntriesSorted(GfcTrace.SORT_BY_TOTAL_LOAD);
+			    
+			    return Status.OK_STATUS;
+			}
+		};
+		
+		setTimeframeJob.addJobChangeListener(new JobChangeAdapter() {
+			public void done(IJobChangeEvent event) {
+				if (event.getResult().isOK()) {
+					Display.getDefault().syncExec( new Runnable() {
+						public void run () {
+							
+							if (!currentFunctionTableViewer.getControl().isDisposed()){
+								
+								//updating the table viewers has to be done in the UI thread (this operation doesn't take long)
+							    currentFunctionTableViewer.setInput(functionArray);
+								
+							    updateCallerCalleeTables(null);
+							    
+							    Table table = currentFunctionTableViewer.getTable();
+							    
+							    if (table.getItemCount() == 0)
+							    	return;
+							    
+							    if (table.getSortColumn() == null) {
+							    	table.setSortColumn(currentFunctionDefaultColumn);
+							    	table.setSortDirection(SWT.UP);
+							    } else {
+							    	// use the user's preferred sort column, if any
+							    	boolean sortAscending = !((SharedSorter) currentFunctionTableViewer.getSorter()).getSortAscending();
+									((SharedSorter) currentFunctionTableViewer.getSorter()).setSortAscending(sortAscending);
+							    }
+							    
+							    sortAndRefresh(currentFunctionTableViewer, table.getSortColumn());
+								
+							}
+						}
+					});
+
+				} else {
+					//unsuccessful operation: we still need to refresh
+					needsRefresh = true;
+				}
+			}
+		});
+		
+		setTimeframeJob.setUser(true); //show a progress dialog to the user
+		
+		currentFunctionTableViewer.getControl().addDisposeListener(new DisposeListener(){
+			public void widgetDisposed(DisposeEvent e) {
+				setTimeframeJob.cancel();
+			}
+		});
+	}
+    
+    private void createPageListeners() {
+    	final IPageChangedListener pageChangeListener = new IPageChangedListener(){
+
+			/* (non-Javadoc)
+			 * @see org.eclipse.jface.dialogs.IPageChangedListener#pageChanged(org.eclipse.jface.dialogs.PageChangedEvent)
+			 */
+			public void pageChanged(PageChangedEvent event) {
+				isPageActive = (event.getSelectedPage() == CallVisualiser.this.curPage);//compare on reference
+				if (isPageActive && needsRefresh){ 
+					// if this ProfileVisualiser is the page being activated, 
+					// check if the time frame selection needs updating
+					setTimeframeJob.cancel();
+					setTimeframeJob.schedule();
+				}
+				
+			}
+			
+		};
+    	final IPartListener partListener = new IPartListener(){
+
+			public void partActivated(IWorkbenchPart part) {
+				if (part instanceof PIPageEditor){
+					PIPageEditor editor = (PIPageEditor) part;
+					isPageActive = (editor.getActivePage() == pageIndex);
+					if (isPageActive && needsRefresh){ 
+						setTimeframeJob.cancel();
+						setTimeframeJob.schedule();
+					}
+				}
+			}
+
+			public void partBroughtToTop(IWorkbenchPart part) {
+				// nothing to do
+			}
+
+			public void partClosed(IWorkbenchPart part) {
+				if (part instanceof PIPageEditor){
+					//remove listeners
+					PIPageEditor editor = (PIPageEditor) part;
+					editor.removePageChangedListener(pageChangeListener);
+					editor.getSite().getPage().removePartListener(this);
+				}
+			}
+
+			public void partDeactivated(IWorkbenchPart part) {
+				// nothing to do
+			}
+
+			public void partOpened(IWorkbenchPart part) {
+				// nothing to do
+			}
+    		
+    	};
+    	
+    	
+    	
+		PIPageEditor.currentPageEditor().addPageChangedListener(pageChangeListener);
+		PIPageEditor.currentPageEditor().getSite().getPage().addPartListener(partListener);
+    	
+	}
 	
     // added to give JUnit tests access
 	public TableViewer getCallerViewer() {
@@ -2017,4 +2165,5 @@ public class CallVisualiser extends GenericTable
 	public void setCurrentMenuTable(Table currentMenuTable) {
 		this.currentMenuTable = currentMenuTable;
 	}
+
 }

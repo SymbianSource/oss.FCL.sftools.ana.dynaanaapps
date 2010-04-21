@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<!-- Define help for Debug Perspective default views -->
+<!-- plugin="com.nokia.carbide.cpp.pi.address" -->
+
+<contexts>
+
+	<!-- THREAD TAB -->
+	<context id="ipcPageContext"  >
+		<description>Use the Interconnect Performance Counters view to visualise profiling data from interconnect performance counters.</description>
+		<topic label="Interconnect Performance Counters View"    					href="html/reference/analyzer/view_IPC.htm" />
+  <topic href="html/reference/analyzer/main_view.htm" label="Analyzer View"/>
+		<topic label="Using the Analyzer"  				href="html/reference/analyzer/an_use_case_features.htm" />
+		<topic label="Setting Time Interval"  			href="html/tasks/analyser/time_interval.htm" />
+	</context>
+
+	<!-- BINARIES TAB -->
+
+	<!-- FUNCTIONS TAB -->
+
+</contexts>

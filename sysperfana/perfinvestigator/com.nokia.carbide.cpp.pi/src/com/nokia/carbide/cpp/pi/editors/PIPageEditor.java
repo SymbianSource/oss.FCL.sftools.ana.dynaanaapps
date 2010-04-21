@@ -109,6 +109,7 @@ public class PIPageEditor extends MultiPageEditorPart implements IResourceChange
 	public static final int FUNCTIONS_PAGE = 2;
 	public static final int NEXT_AVAILABLE_PAGE = -1;
 	
+	public static Font helvetica_7;
 	public static Font helvetica_8;
 	public static Font helvetica_9;
 	public static Font helvetica_10;
@@ -176,6 +177,7 @@ public class PIPageEditor extends MultiPageEditorPart implements IResourceChange
 	
 	protected static void createFonts(Display display) {
 		if (helvetica_8 == null) {
+			helvetica_7  = new Font(display, "Helvetica",  7, SWT.NORMAL); //$NON-NLS-1$
 			helvetica_8  = new Font(display, "Helvetica",  8, SWT.NORMAL); //$NON-NLS-1$
 			helvetica_9  = new Font(display, "Helvetica",  9, SWT.NORMAL); //$NON-NLS-1$
 			helvetica_10 = new Font(display, "Helvetica", 10, SWT.NORMAL); //$NON-NLS-1$
@@ -328,9 +330,9 @@ public class PIPageEditor extends MultiPageEditorPart implements IResourceChange
 	  		setPageText(index, myPv.getPageName());
 	  		
 	  		// set the composite page's data to its page number
-	  		page.setData("pageIndex", new Integer(index)); //$NON-NLS-1$
+	  		page.setData("pageIndex", Integer.valueOf(index)); //$NON-NLS-1$
 	  		page.setData("pageEditor", this); //$NON-NLS-1$
-	  		page.setData("pageUID", new Integer(uid)); //$NON-NLS-1$
+	  		page.setData("pageUID", Integer.valueOf(uid)); //$NON-NLS-1$
 
 	  		page.addFocusListener(new FocusAdapter() {
 
@@ -690,8 +692,20 @@ public class PIPageEditor extends MultiPageEditorPart implements IResourceChange
 				currentPageEditor.setActiveActions(true);
 			}
 
+			/* (non-Javadoc)
+			 * @see org.eclipse.ui.IPartListener#partActivated(org.eclipse.ui.IWorkbenchPart)
+			 */
 			public void partActivated(IWorkbenchPart part) {
 				setMenus(part);
+				if (part instanceof PIPageEditor){
+					PIPageEditor editor = (PIPageEditor) part;
+					if (PIPageEditor.this.getActivePage() >= 0){
+						//update status line with time interval
+						ProfileVisualiser profVis = NpiInstanceRepository.getInstance().activeUidGetProfilePages().get(editor.getActivePage());
+						profVis.updateStatusBarTimeInterval(editor.getStartTime(),editor.getEndTime());		
+						profVis.initialiseGraphs();
+					}
+				}				
 			}
 
 			public void partBroughtToTop(IWorkbenchPart part) {
@@ -705,6 +719,14 @@ public class PIPageEditor extends MultiPageEditorPart implements IResourceChange
 			}
 
 			public void partOpened(IWorkbenchPart part) {
+				//notify plugins to execute any actions to be done on open
+				if (part instanceof PIPageEditor && PIPageEditor.this == part){
+					for (AbstractPiPlugin plugin : NpiInstanceRepository.getInstance().getPlugins(uid)) {
+						if (plugin instanceof IFinalizeTrace) {
+							((IFinalizeTrace)plugin).runOnPartOpened();
+						}
+					}
+				}
 			}
 		});
 

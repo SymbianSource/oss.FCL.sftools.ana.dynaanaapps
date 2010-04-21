@@ -19,11 +19,24 @@ package com.nokia.carbide.cpp.internal.pi.utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Set;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.PlatformUI;
 
+import com.nokia.carbide.cpp.internal.pi.analyser.StreamFileParser;
+import com.nokia.carbide.cpp.internal.pi.manager.PluginRegisterer;
+import com.nokia.carbide.cpp.internal.pi.manager.PluginRegistry;
+import com.nokia.carbide.cpp.internal.pi.plugin.model.AbstractPiPlugin;
+import com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace;
+import com.nokia.carbide.cpp.internal.pi.plugin.model.ITraceSMP;
 import com.nokia.carbide.cpp.pi.util.GeneralMessages;
 
 public abstract class PIUtilities
@@ -203,4 +216,71 @@ public abstract class PIUtilities
     	}
     	return true;
     }
+    
+    /**
+     * Returns a set of plugins for trace IDs present in the trace file of the given path. 
+     * Plugins which create editor pages are first in the list. 
+     * @param absTraceFilePath path of the trace file to use
+     * @return list of ITrace plugins for the given trace file
+     * @throws IOException in case of problems accessing the trace file
+     */
+    public static List<ITrace> getPluginsForTraceFile (String absTraceFilePath) throws IOException{
+    	
+    	File traceFile = new File(absTraceFilePath);
+    	StreamFileParser sfp = new StreamFileParser(traceFile);
+    	
+    	Set<Integer> traceTypesInFile = sfp.allTraceType();
+    	sfp = null; //dispose parser structures
+    	
+    	List<ITrace> ret = new ArrayList<ITrace>();
+    	PluginRegisterer.registerAllPlugins();
+		Enumeration<AbstractPiPlugin> e = PluginRegistry.getInstance().getRegistryEntries();
+		while(e.hasMoreElements()) {
+			AbstractPiPlugin plugin = e.nextElement();
+			if (plugin instanceof ITrace) {
+				ITrace tracePlugin = (ITrace) plugin;
+				
+				if (traceTypesInFile.contains(tracePlugin.getTraceId()) || (plugin instanceof ITraceSMP && containsTraceId(traceTypesInFile, ((ITraceSMP)plugin).getTraceIdsSMP()))) {
+						ret.add(tracePlugin);
+				}
+			}
+		}
+		
+		// sort by trace id: plugins that create editor pages have to be first
+		// this is a design limitation of PI
+    	ret = sortPlugins(ret);
+		return ret;
+    }
+    
+    /**
+     * Sorts the plugins by trace ids
+     * @param plugins the list of plugins to sort
+     * @return the sorted list
+     */
+    public static List<ITrace> sortPlugins(List<ITrace> plugins){
+		Collections.sort(plugins, new Comparator<ITrace>(){
+			public int compare(ITrace arg0, ITrace arg1) {
+				return arg0.getTraceId() - arg1.getTraceId();
+			}
+		});
+    	return plugins;
+    }
+
+    /**
+     * Indicates whether the given set of traces IDs contains any of the trace IDs in traceIdsSMP.
+     * @param traceTypesInFile Trace IDs present in the trace file
+     * @param traceIdsSMP trace IDs to check against (typically SMP trace IDs for one plugin)
+     * @return true if any matching trace IDs are found, false otherwise
+     */
+	private static boolean containsTraceId(Set<Integer> traceTypesInFile,
+			int[] traceIdsSMP) {
+		
+		for (int traceID : traceIdsSMP) {
+			if (traceTypesInFile.contains(Integer.valueOf(traceID))){
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }

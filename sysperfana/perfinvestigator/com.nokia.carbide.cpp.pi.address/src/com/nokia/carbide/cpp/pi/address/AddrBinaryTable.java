@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Vector;
 
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
@@ -58,12 +57,11 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.nokia.carbide.cpp.internal.pi.address.GppModelAdapter;
 import com.nokia.carbide.cpp.internal.pi.analyser.NpiInstanceRepository;
 import com.nokia.carbide.cpp.internal.pi.analyser.ProfileVisualiser;
 import com.nokia.carbide.cpp.internal.pi.model.ProfiledBinary;
-import com.nokia.carbide.cpp.internal.pi.model.ProfiledFunction;
 import com.nokia.carbide.cpp.internal.pi.model.ProfiledGeneric;
-import com.nokia.carbide.cpp.internal.pi.model.ProfiledThread;
 import com.nokia.carbide.cpp.internal.pi.model.ProfiledThreshold;
 import com.nokia.carbide.cpp.internal.pi.visual.Defines;
 import com.nokia.carbide.cpp.internal.pi.visual.PIEvent;
@@ -78,10 +76,9 @@ public class AddrBinaryTable extends GenericAddrTable
 	// without affecting the original
 	Vector<ProfiledGeneric> profiledBinaries = new Vector<ProfiledGeneric>();
 
-	public AddrBinaryTable(GppTraceGraph myGraph, Composite parent)
+	public AddrBinaryTable(GppTraceGraph myGraph, Composite parent, GppModelAdapter adapter)
 	{
-		this.myGraph = myGraph;
-		this.parent  = parent;
+		super(myGraph, parent, adapter);
 	}
 
 	public void createTableViewer(int drawMode)
@@ -161,7 +158,7 @@ public class AddrBinaryTable extends GenericAddrTable
 		column = new TableColumn(table, SWT.CENTER);
 		column.setText(COLUMN_HEAD_SHOW);
 		column.setWidth(COLUMN_WIDTH_SHOW);
-		column.setData(new Integer(COLUMN_ID_SHOW));
+		column.setData(Integer.valueOf(COLUMN_ID_SHOW));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new ColumnSelectionHandler());
@@ -170,7 +167,7 @@ public class AddrBinaryTable extends GenericAddrTable
 		column = new TableColumn(table, SWT.RIGHT);
 		column.setText(COLUMN_HEAD_PERCENT_LOAD);
 		column.setWidth(COLUMN_WIDTH_PERCENT_LOAD);
-		column.setData(new Integer(COLUMN_ID_PERCENT_LOAD));
+		column.setData(Integer.valueOf(COLUMN_ID_PERCENT_LOAD));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new ColumnSelectionHandler());
@@ -179,7 +176,7 @@ public class AddrBinaryTable extends GenericAddrTable
 		column = new TableColumn(table, SWT.LEFT);
 		column.setText(COLUMN_HEAD_BINARY);
 		column.setWidth(COLUMN_WIDTH_BINARY_NAME);
-		column.setData(new Integer(COLUMN_ID_BINARY));
+		column.setData(Integer.valueOf(COLUMN_ID_BINARY));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new ColumnSelectionHandler());
@@ -188,7 +185,7 @@ public class AddrBinaryTable extends GenericAddrTable
 		column = new TableColumn(table, SWT.LEFT);
 		column.setText(COLUMN_HEAD_PATH);
 		column.setWidth(COLUMN_WIDTH_PATH);
-		column.setData(new Integer(COLUMN_ID_PATH));
+		column.setData(Integer.valueOf(COLUMN_ID_PATH));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new ColumnSelectionHandler());
@@ -197,7 +194,7 @@ public class AddrBinaryTable extends GenericAddrTable
 		column = new TableColumn(table, SWT.CENTER);
 		column.setText(COLUMN_HEAD_SAMPLE_COUNT);
 		column.setWidth(COLUMN_WIDTH_SAMPLE_COUNT);
-		column.setData(new Integer(COLUMN_ID_SAMPLE_COUNT));
+		column.setData(Integer.valueOf(COLUMN_ID_SAMPLE_COUNT));
 		column.setMoveable(true);
 		column.setResizable(true);
 		column.addSelectionListener(new ColumnSelectionHandler());
@@ -337,6 +334,9 @@ public class AddrBinaryTable extends GenericAddrTable
 			super();
 		}
 
+		/* (non-Javadoc)
+		 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object, int)
+		 */
 		public String getColumnText(Object element, int columnIndex) {
 
 			int columnId = ((Integer) table.getColumn(columnIndex).getData()).intValue();
@@ -371,7 +371,7 @@ public class AddrBinaryTable extends GenericAddrTable
 					case COLUMN_ID_BINARY:
 					{
 						DecimalFormat timeFormat = new DecimalFormat(Messages.getString("AddrBinaryTable.decimalFormat")); //$NON-NLS-1$
-						int count = pThreshold.getItemCount(myGraph.getGraphIndex());
+						int count = pThreshold.getItemCount();
 
 						return count + (count > 1 ? Messages.getString("AddrBinaryTable.threshold1") : Messages.getString("AddrBinaryTable.threshold2"))   //$NON-NLS-1$ //$NON-NLS-2$
 								+ timeFormat.format((Double)NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.address.thresholdLoadBinary") * 100.0) + Messages.getString("AddrBinaryTable.threshold3") //$NON-NLS-1$ //$NON-NLS-2$ 
@@ -444,6 +444,7 @@ public class AddrBinaryTable extends GenericAddrTable
 		}
 	}
 
+	@Override
 	public void action(String actionString)
 	{
 		int graphIndex = this.myGraph.getGraphIndex();
@@ -572,9 +573,9 @@ public class AddrBinaryTable extends GenericAddrTable
 			this.tableItemData.clear();
 			this.profiledBinaries.clear();
 			this.myGraph.getSortedBinaries().clear();
-			if (threshold.getItems(graphIndex) != null)
-				threshold.getItems(graphIndex).clear();
-			threshold.initAll();
+			if (threshold.getItems() != null)
+				threshold.getItems().clear();
+			adapter.init(threshold, graphIndex);
 
 			// if this appears, it needs to be the first item, so that it is drawn at the bottom
 			myGraph.getSortedBinaries().add(threshold);
@@ -582,9 +583,9 @@ public class AddrBinaryTable extends GenericAddrTable
 			int binaryThreshold = (Integer) NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.address.thresholdCountBinary");	//$NON-NLS-1$
 			for (int i = 0; i < this.myGraph.getGppTrace().getSortedBinaries().size(); i++) {
 				ProfiledGeneric nextElement = (ProfiledGeneric)this.myGraph.getGppTrace().getSortedBinaries().get(i);
-				if (nextElement.getTotalSampleCount() < binaryThreshold) {
+				if (adapter.getTotalSampleCount(nextElement) < binaryThreshold) {
 					nextElement.setEnabled(graphIndex, enabled);
-					threshold.addItem(graphIndex, nextElement, 0);
+					adapter.addItem(threshold, graphIndex, nextElement, 0);
 				} else {
 					tableItemData.add(nextElement);
 					profiledBinaries.add(nextElement);
@@ -592,7 +593,7 @@ public class AddrBinaryTable extends GenericAddrTable
 				}
 			}
 
-			if (threshold.getItemCount(graphIndex) != 0) {
+			if (threshold.getItemCount() != 0) {
 				tableItemData.add(threshold);
 				profiledBinaries.add(threshold);
 			} else {
@@ -665,9 +666,8 @@ public class AddrBinaryTable extends GenericAddrTable
    				if (item instanceof ProfiledThreshold)
    				{
    					ProfiledThreshold pThreshold = (ProfiledThreshold)item;
-   					ArrayList<ProfiledGeneric> items = pThreshold.getItems(graphIndex);
-   					for (int j = 0; j < items.size(); j++)
-   						items.get(j).setEnabled(graphIndex, addIt);
+   					for (ProfiledGeneric p : pThreshold.getItems())
+   						p.setEnabled(graphIndex, addIt);
    				}
 			}
 		}
@@ -718,9 +718,8 @@ public class AddrBinaryTable extends GenericAddrTable
    				if (item instanceof ProfiledThreshold)
    				{
    					ProfiledThreshold pThreshold = (ProfiledThreshold)item;
-   					ArrayList<ProfiledGeneric> items = pThreshold.getItems(graphIndex);
-   					for (int j = 0; j < items.size(); j++)
-   						items.get(j).setEnabled(graphIndex, addIt);
+   					for (ProfiledGeneric p : pThreshold.getItems())
+   						p.setEnabled(graphIndex, addIt);
    				}
 			}
 		}
@@ -764,10 +763,16 @@ public class AddrBinaryTable extends GenericAddrTable
 						PIPageEditor.currentPageEditor().setDirty();
 						pGeneric.setColor(color);
 					} else {
-						// for the threshold item, we must change every graph's binary threshold item
-						gppTrace.getGppGraph(PIPageEditor.THREADS_PAGE,   uid).getThresholdBinary().setColor(color);
-						gppTrace.getGppGraph(PIPageEditor.BINARIES_PAGE,  uid).getThresholdBinary().setColor(color);
-						gppTrace.getGppGraph(PIPageEditor.FUNCTIONS_PAGE, uid).getThresholdBinary().setColor(color);
+						// for the threshold item, we must change every graph's thread threshold item
+						// CH: refactor! This could be done via an observer pattern. This class should not have knowledge of all other graphs  
+						gppTrace.getGppGraph(PIPageEditor.THREADS_PAGE,   uid).getThresholdThread().setColor(color);
+						gppTrace.getGppGraph(PIPageEditor.BINARIES_PAGE,  uid).getThresholdThread().setColor(color);
+						gppTrace.getGppGraph(PIPageEditor.FUNCTIONS_PAGE, uid).getThresholdThread().setColor(color);
+//						if (gppTrace.getCPUCount() > 1){ //SMP CH: comment this out once we have SMP graphs on the binaries page
+//							for (int cpu = 0; cpu < gppTrace.getCPUCount(); cpu++) {
+//								gppTrace.getGppGraph(7 + cpu, uid).getThresholdThread().setColor(color);															
+//							}
+//						}
 					}
 				}
 
@@ -785,7 +790,7 @@ public class AddrBinaryTable extends GenericAddrTable
 		
 		// if any other tabs are displaying this type of graph, they need to be scheduled for redrawing
 		for (int i = 0; i < 3; i++) {
-			GppTraceGraph graph = gppTrace.getGppGraph(i, uid);
+			IGppTraceGraph graph = gppTrace.getGppGraph(i, uid);
 
 			if (graph == this.myGraph)
 				continue;
@@ -820,11 +825,6 @@ public class AddrBinaryTable extends GenericAddrTable
 		}
 
 		setIsDrilldown(false);
-
-		// set the page's graph title
-		ProfileVisualiser pV =  NpiInstanceRepository.getInstance().getProfilePage(this.myGraph.getUid(), this.myGraph.getGraphIndex());
-		pV.getTitle().setText(Messages.getString("AddrBinaryTable.binaryLoad"));  //$NON-NLS-1$
-		pV.getTitle2().setText(""); //$NON-NLS-1$
 
 		// get rid of any existing tables and sashes
 		if (this.myGraph.getLeftSash() != null) {
@@ -878,10 +878,6 @@ public class AddrBinaryTable extends GenericAddrTable
 		setIsDrilldown(true);
 
 		if (drawMode == Defines.BINARIES) {
-			// set the page's graph title
-			ProfileVisualiser pV =  NpiInstanceRepository.getInstance().getProfilePage(this.myGraph.getUid(), this.myGraph.getGraphIndex());
-			pV.getTitle().setText(Messages.getString("AddrBinaryTable.threadLoad"));  //$NON-NLS-1$
-			pV.getTitle2().setText(Messages.getString("AddrBinaryTable.binaryTo"));  //$NON-NLS-1$
 
 			// set the draw mode before populating table viewers, since the
 			// color column depends on the draw mode
@@ -894,14 +890,20 @@ public class AddrBinaryTable extends GenericAddrTable
 
 			// create a reduced set of thread entries based on enabled binary entries
 			GppTrace gppTrace = (GppTrace) this.myGraph.getTrace();
-			Vector<ProfiledGeneric> threads = gppTrace.setBinaryThread(graphIndex);
-			this.myGraph.setProfiledThreads(threads);
+			gppTrace.setBinaryThread(graphIndex, adapter, this.myGraph.getProfiledThreads());
 
 			// put check marks on all rows, and sort by sample count
 			threadTable.quickSort(COLUMN_ID_SAMPLE_COUNT, this.myGraph.getProfiledThreads());
 			threadTable.updateProfiledAndItemData(true);
 			threadTable.getTableViewer().setAllChecked(true);
 			threadTable.getTableViewer().refresh();
+
+			// put check marks on all enabled binary rows
+			for (int i = 0; i < this.table.getItemCount(); i++) {
+				ProfiledGeneric pBinary = (ProfiledGeneric) this.table.getItem(i).getData();
+				if (pBinary.isEnabled(graphIndex))
+					this.table.getItem(i).setChecked(true);
+			}
 			
 			// remove colors where appropriate
 			removeColor(Defines.BINARIES_THREADS);
@@ -947,10 +949,6 @@ public class AddrBinaryTable extends GenericAddrTable
 			this.myGraph.repaint();
 
 		} else if (drawMode == Defines.BINARIES_THREADS_FUNCTIONS) {
-			// set the page's graph title
-			ProfileVisualiser pV =  NpiInstanceRepository.getInstance().getProfilePage(this.myGraph.getUid(), this.myGraph.getGraphIndex());
-			pV.getTitle().setText(Messages.getString("AddrBinaryTable.threadLoad"));  //$NON-NLS-1$
-			pV.getTitle2().setText(Messages.getString("AddrBinaryTable.binaryTo"));  //$NON-NLS-1$
 
 			// get rid of the function table and its sash
 			if (this.myGraph.getRightSash() != null) {
@@ -1005,11 +1003,6 @@ public class AddrBinaryTable extends GenericAddrTable
 
 		setIsDrilldown(true);
 
-		// set the page's graph title
-		ProfileVisualiser pV =  NpiInstanceRepository.getInstance().getProfilePage(this.myGraph.getUid(), this.myGraph.getGraphIndex());
-		pV.getTitle().setText(Messages.getString("AddrBinaryTable.functionLoad"));  //$NON-NLS-1$
-		pV.getTitle2().setText(Messages.getString("AddrBinaryTable.binaryToThreadTo"));  //$NON-NLS-1$
-
 		// set the draw mode before populating table viewers, since the
 		// color column depends on the draw mode
 		this.myGraph.setDrawMode(Defines.BINARIES_THREADS_FUNCTIONS);
@@ -1021,8 +1014,7 @@ public class AddrBinaryTable extends GenericAddrTable
 
 		// create a reduced set of function entries based on enabled thread and binary entries
 		GppTrace gppTrace = (GppTrace) this.myGraph.getTrace();
-		Vector<ProfiledGeneric> functions = gppTrace.setBinaryThreadFunction(graphIndex);
-		this.myGraph.setProfiledFunctions(functions);
+		gppTrace.setBinaryThreadFunction(graphIndex, adapter, this.myGraph.getProfiledFunctions());
 
 		// put check marks on all rows, and sort by sample count
 		functionTable.quickSort(COLUMN_ID_SAMPLE_COUNT, this.myGraph.getProfiledFunctions());
@@ -1095,10 +1087,6 @@ public class AddrBinaryTable extends GenericAddrTable
 		setIsDrilldown(true);
 
 		if (drawMode == Defines.BINARIES) {
-			// set the page's graph title
-			ProfileVisualiser pV =  NpiInstanceRepository.getInstance().getProfilePage(this.myGraph.getUid(), this.myGraph.getGraphIndex());
-			pV.getTitle().setText(Messages.getString("AddrBinaryTable.functionLoad"));  //$NON-NLS-1$
-			pV.getTitle2().setText(Messages.getString("AddrBinaryTable.binaryTo"));  //$NON-NLS-1$
 
 			// set the draw mode
 			this.myGraph.setDrawMode(Defines.BINARIES_FUNCTIONS);
@@ -1110,8 +1098,8 @@ public class AddrBinaryTable extends GenericAddrTable
 
 			// create a reduced set of function entries based on enabled binary entries
 			GppTrace gppTrace = (GppTrace) this.myGraph.getTrace();
-			Vector<ProfiledGeneric> functions = gppTrace.setBinaryFunction(graphIndex);
-			this.myGraph.setProfiledFunctions(functions);
+			Vector<ProfiledGeneric> functions = this.myGraph.getProfiledFunctions();
+			gppTrace.setBinaryFunction(graphIndex, adapter, functions);
 
 			// put check marks on all rows, and sort by sample count
 			functionTable.quickSort(COLUMN_ID_SAMPLE_COUNT, this.myGraph.getProfiledFunctions());
@@ -1163,10 +1151,6 @@ public class AddrBinaryTable extends GenericAddrTable
 			this.myGraph.repaint();
 
 		} else if (drawMode == Defines.BINARIES_FUNCTIONS_THREADS) {
-			// set the page's graph title
-			ProfileVisualiser pV =  NpiInstanceRepository.getInstance().getProfilePage(this.myGraph.getUid(), this.myGraph.getGraphIndex());
-			pV.getTitle().setText(Messages.getString("AddrBinaryTable.functionLoad"));  //$NON-NLS-1$
-			pV.getTitle2().setText(Messages.getString("AddrBinaryTable.binaryTo"));  //$NON-NLS-1$
 
 			// get rid of the threads table and its sash
 			if (this.myGraph.getRightSash() != null) {
@@ -1222,11 +1206,6 @@ public class AddrBinaryTable extends GenericAddrTable
 
 		setIsDrilldown(true);
 
-		// set the page's graph title
-		ProfileVisualiser pV =  NpiInstanceRepository.getInstance().getProfilePage(this.myGraph.getUid(), this.myGraph.getGraphIndex());
-		pV.getTitle().setText(Messages.getString("AddrBinaryTable.threadLoad"));  //$NON-NLS-1$
-		pV.getTitle2().setText(Messages.getString("AddrBinaryTable.binaryToFunctionTo"));  //$NON-NLS-1$
-
 		// set the draw mode
 		this.myGraph.setDrawMode(Defines.BINARIES_FUNCTIONS_THREADS);
 
@@ -1237,8 +1216,7 @@ public class AddrBinaryTable extends GenericAddrTable
 
 		// create a reduced set of thread entries based on enabled binary and function entries
 		GppTrace gppTrace = (GppTrace) this.myGraph.getTrace();
-		Vector<ProfiledGeneric> threads = gppTrace.setBinaryFunctionThread(graphIndex);
-		this.myGraph.setProfiledThreads(threads);
+		gppTrace.setBinaryFunctionThread(graphIndex, adapter, this.myGraph.getProfiledThreads());
 
 		// put check marks on all rows, and sort by sample count
 		threadTable.quickSort(COLUMN_ID_SAMPLE_COUNT, this.myGraph.getProfiledThreads());
@@ -1297,14 +1275,15 @@ public class AddrBinaryTable extends GenericAddrTable
 		this.myGraph.repaint();
 	}
 
-	protected Menu getTableMenu(Decorations parent, int graphIndex, int drawMode) {
+	@Override
+	protected Menu getTableMenu(Decorations aParent, int graphIndex, int drawMode) {
 		// get rid of last Menu created so we don't have double menu
 		// on click
 		if (contextMenu != null) {
 			contextMenu.dispose();
 		}
 
-		contextMenu = new Menu(parent, SWT.POP_UP);
+		contextMenu = new Menu(aParent, SWT.POP_UP);
 
 		// Use drawMode to determine the drill down items and
 		// whether to show a color column
@@ -1446,7 +1425,7 @@ public class AddrBinaryTable extends GenericAddrTable
 					Vector<ProfiledGeneric> pGeneric = this.myGraph.getProfiledBinaries();
 					int sampleCount = 0;
 					for (int i = 0; i < pGeneric.size(); i++)
-						if (pGeneric.elementAt(i).getTotalSampleCount() < thresholdCount)
+						if (adapter.getTotalSampleCount(pGeneric.elementAt(i)) < thresholdCount)
 							sampleCount += pGeneric.elementAt(i).getSampleCount(graphIndex);
 					this.myGraph.getThresholdBinary().setSampleCount(graphIndex, sampleCount);
 				}
@@ -1472,87 +1451,12 @@ public class AddrBinaryTable extends GenericAddrTable
 				return;
 
 			GppTrace trace = (GppTrace)(this.myGraph.getTrace());
-			Vector<ProfiledGeneric> traceBinaries  = trace.getIndexedBinaries();
-
-			int startSampleIndex = trace.getStartSampleIndex();
-			int endSampleIndex   = trace.getEndSampleIndex();
-			double percentPerSample;
-			if (startSampleIndex == endSampleIndex)
-				percentPerSample = 0.0;
-			else
-				percentPerSample = 100.0 / ((double)(endSampleIndex - startSampleIndex));
-
 			PIEvent be3 = new PIEvent(be.getValueObject(), PIEvent.SELECTION_AREA_CHANGED3);
-			
+
 			switch (drawMode) {
 				case Defines.BINARIES_THREADS:
 				{
-					// get new thread counts and loads
-					Vector<ProfiledGeneric> traceThreads  = trace.getIndexedThreads();
-					Vector<ProfiledGeneric> graphThreads  = this.myGraph.getProfiledThreads();
-					Hashtable<String,String> foundThreads = new Hashtable<String,String>();
-
-					// previous threads are not necessarily graphed this time
-					Enumeration<ProfiledGeneric> enu = graphThreads.elements();
-					while (enu.hasMoreElements()) {
-						ProfiledThread pThread = (ProfiledThread) enu.nextElement();
-						pThread.setEnabled(graphIndex, false);
-					}
-					graphThreads.clear();
-
-					ProfiledThreshold thresholdThread = this.myGraph.getThresholdThread();
-
-					if (thresholdThread.isEnabled(graphIndex)) {
-						ArrayList<ProfiledGeneric> items = thresholdThread.getItems(graphIndex);
-						// disable all items below the threshold
-						for (int i = 0; i < items.size(); i++) {
-							items.get(i).setEnabled(graphIndex, false);
-						}
-					}
-
-					GppSample[] sortedSamples = trace.getSortedGppSamples();
-
-					// set up in case we find threads below the threshold
-					boolean lowThread;
-					thresholdThread.init(graphIndex);
-
-					int threadThreshold = (Integer) NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.address.thresholdCountThread"); //$NON-NLS-1$
-					for (int i = startSampleIndex; i < endSampleIndex; i++) {
-						GppSample sample = sortedSamples[i];
-
-						ProfiledBinary pBinary = (ProfiledBinary) traceBinaries.elementAt(sample.binaryIndex);
-						if (pBinary.isEnabled(graphIndex)) {
-							// thread list is based on binaries
-							ProfiledThread pThread = (ProfiledThread) traceThreads.elementAt(sample.threadIndex);
-							String threadName = pThread.getNameString();
-
-							lowThread = pThread.getTotalSampleCount() < threadThreshold; 
-
-							if (!foundThreads.containsKey(threadName)) {
-								foundThreads.put(threadName, threadName);
-								if (lowThread) {
-									thresholdThread.addItem(graphIndex, pThread, 1);
-								} else {
-									pThread.setEnabled(graphIndex, true);
-									pThread.setSampleCount(graphIndex, 1);
-									graphThreads.add(pThread);
-								}
-							} else {
-								if (lowThread)
-									thresholdThread.incSampleCount(graphIndex);
-								else
-									pThread.incSampleCount(graphIndex);
-							}
-						}
-					}
-
-					// set the % load
-					for (int i = 0; i < graphThreads.size(); i++) {
-						ProfiledThread pThread = (ProfiledThread) graphThreads.elementAt(i);
-						pThread.setLoadAndString(graphIndex, (float)(pThread.getSampleCount(graphIndex)*percentPerSample));
-					}
-					thresholdThread.setLoadAndString(graphIndex,
-							(float)(thresholdThread.getSampleCount(graphIndex)*percentPerSample));
+					trace.setBinaryThread(graphIndex, adapter, this.myGraph.getProfiledThreads());
 
 					// update the table items and redraw the table
 					this.myGraph.getThreadTable().piEventReceived(be3);
@@ -1560,126 +1464,10 @@ public class AddrBinaryTable extends GenericAddrTable
 				}
 				case Defines.BINARIES_THREADS_FUNCTIONS:
 				{
-					// get new counts and loads
-					Vector<ProfiledGeneric> traceThreads    = trace.getIndexedThreads();
-					Vector<ProfiledGeneric> traceFunctions  = trace.getIndexedFunctions();
-					Vector<ProfiledGeneric> graphThreads    = this.myGraph.getProfiledThreads();
-					Vector<ProfiledGeneric> graphFunctions  = this.myGraph.getProfiledFunctions();
-					Hashtable<String,String> foundThreads   = new Hashtable<String,String>();
-					Hashtable<String,String> foundFunctions = new Hashtable<String,String>();
-
-					// previous functions are not necessarily graphed this time
-					Enumeration<ProfiledGeneric> enuFunctions = graphFunctions.elements();
-					while (enuFunctions.hasMoreElements()) {
-						ProfiledFunction pFunction = (ProfiledFunction) enuFunctions.nextElement();
-						pFunction.setEnabled(graphIndex, false);
-					}
-					graphFunctions.clear();
-
-					ProfiledThreshold thresholdFunction = this.myGraph.getThresholdFunction();
-
-					if (thresholdFunction.isEnabled(graphIndex)) {
-						ArrayList<ProfiledGeneric> items = thresholdFunction.getItems(graphIndex);
-						// disable all items below the threshold
-						for (int i = 0; i < items.size(); i++) {
-							items.get(i).setEnabled(graphIndex, false);
-						}
-					}
-
-					// previous threads are not necessarily graphed this time
-					Enumeration<ProfiledGeneric> enuThreads = graphThreads.elements();
-					while (enuThreads.hasMoreElements()) {
-						ProfiledThread pThread = (ProfiledThread) enuThreads.nextElement();
-						pThread.setEnabled(graphIndex, false);
-					}
-					graphThreads.clear();
-
-					ProfiledThreshold thresholdThread = this.myGraph.getThresholdThread();
-
-					if (thresholdThread.isEnabled(graphIndex)) {
-						ArrayList<ProfiledGeneric> items = thresholdThread.getItems(graphIndex);
-						// disable all items below the threshold
-						for (int i = 0; i < items.size(); i++) {
-							items.get(i).setEnabled(graphIndex, false);
-						}
-					}
-
-					GppSample[] sortedSamples = trace.getSortedGppSamples();
-
-					// set up in case we find threads below the threshold
-					boolean lowThread;
-					thresholdThread.init(graphIndex);
-
-					// set up in case we find threads below the threshold
-					boolean lowFunction;
-					thresholdFunction.init(graphIndex);
-
-					int threadThreshold = (Integer) NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.address.thresholdCountThread"); //$NON-NLS-1$
-					for (int i = startSampleIndex; i < endSampleIndex; i++) {
-						GppSample sample = sortedSamples[i];
-
-						ProfiledBinary pBinary = (ProfiledBinary) traceBinaries.elementAt(sample.binaryIndex);
-						if (pBinary.isEnabled(graphIndex)) {
-							// thread list is based on binaries
-							ProfiledThread pThread = (ProfiledThread) traceThreads.elementAt(sample.threadIndex);
-							String threadName = pThread.getNameString();
-
-							lowThread = pThread.getTotalSampleCount() < threadThreshold;
-
-							if (!foundThreads.containsKey(threadName)) {
-								foundThreads.put(threadName, threadName);
-								if (lowThread) {
-									thresholdThread.addItem(graphIndex, pThread, 1);
-								} else {
-									pThread.setEnabled(graphIndex, true);
-									pThread.setSampleCount(graphIndex, 1);
-									graphThreads.add(pThread);
-								}
-							} else {
-								if (lowThread)
-									thresholdThread.incSampleCount(graphIndex);
-								else
-									pThread.incSampleCount(graphIndex);
-							}
-
-							// function list is based on binaries and threads
-							ProfiledFunction pFunction = (ProfiledFunction) traceFunctions.elementAt(sample.functionIndex);
-							String functionName = pFunction.getNameString();
-
-							lowFunction = pFunction.getTotalSampleCount() < (Integer)NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.address.thresholdCountFunction"); //$NON-NLS-1$
-
-							if (!foundFunctions.containsKey(functionName)) {
-								foundFunctions.put(functionName, functionName);
-								if (lowFunction) {
-									thresholdFunction.addItem(graphIndex, pFunction, 1);
-								} else {
-									pFunction.setEnabled(graphIndex, true);
-									pFunction.setSampleCount(graphIndex, 1);
-									graphFunctions.add(pFunction);
-								}
-							} else {
-								if (lowFunction)
-									thresholdFunction.incSampleCount(graphIndex);
-								else
-									pFunction.incSampleCount(graphIndex);
-							}
-						}
-					}
-
-					// set the % load
-					for (int i = 0; i < graphThreads.size(); i++) {
-						ProfiledThread pThread = (ProfiledThread) graphThreads.elementAt(i);
-						pThread.setLoadAndString(graphIndex, (float)(pThread.getSampleCount(graphIndex)*percentPerSample));
-					}
-					thresholdThread.setLoadAndString(graphIndex,
-							(float)(thresholdThread.getSampleCount(graphIndex)*percentPerSample));
-
-					for (int i = 0; i < graphFunctions.size(); i++) {
-						ProfiledFunction pFunction = (ProfiledFunction) graphFunctions.elementAt(i);
-						pFunction.setLoadAndString(graphIndex, (float)(pFunction.getSampleCount(graphIndex)*percentPerSample));
-					}
-					thresholdFunction.setLoadAndString(graphIndex,
-							(float)(thresholdFunction.getSampleCount(graphIndex)*percentPerSample));
+					// previous threads are not necessarily graphed this time - reset
+					trace.setBinaryThread(graphIndex, adapter, this.myGraph.getProfiledThreads());
+					// previous functions are not necessarily graphed this time - reset
+					trace.setBinaryThreadFunction(graphIndex, adapter, this.myGraph.getProfiledFunctions());
 
 					// update the table items and redraw the table
 					this.myGraph.getThreadTable().piEventReceived(be3);
@@ -1688,72 +1476,7 @@ public class AddrBinaryTable extends GenericAddrTable
 				}
 				case Defines.BINARIES_FUNCTIONS:
 				{
-					// get new function counts and loads
-					Vector<ProfiledGeneric> traceFunctions  = trace.getIndexedFunctions();
-					Vector<ProfiledGeneric> graphFunctions  = this.myGraph.getProfiledFunctions();
-					Hashtable<String,String> foundFunctions = new Hashtable<String,String>();
-
-					// previous functions are not necessarily graphed this time
-					Enumeration<ProfiledGeneric> enu = graphFunctions.elements();
-					while (enu.hasMoreElements()) {
-						ProfiledFunction pFunction = (ProfiledFunction) enu.nextElement();
-						pFunction.setEnabled(graphIndex, false);
-					}
-					graphFunctions.clear();
-
-					ProfiledThreshold thresholdFunction = this.myGraph.getThresholdFunction();
-
-					if (thresholdFunction.isEnabled(graphIndex)) {
-						ArrayList<ProfiledGeneric> items = thresholdFunction.getItems(graphIndex);
-						// disable all items below the threshold
-						for (int i = 0; i < items.size(); i++) {
-							items.get(i).setEnabled(graphIndex, false);
-						}
-					}
-
-					GppSample[] sortedSamples = trace.getSortedGppSamples();
-
-					// set up in case we find functions below the threshold
-					boolean lowFunction;
-					thresholdFunction.init(graphIndex);
-
-					int functionThreshold = (Integer) NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.address.thresholdCountFunction"); //$NON-NLS-1$
-					for (int i = startSampleIndex; i < endSampleIndex; i++) {
-						GppSample sample = sortedSamples[i];
-
-						ProfiledBinary pBinary = (ProfiledBinary) traceBinaries.elementAt(sample.binaryIndex);
-						if (pBinary.isEnabled(graphIndex)) {
-							// function list is based on binaries
-							ProfiledFunction pFunction = (ProfiledFunction) traceFunctions.elementAt(sample.functionIndex);
-							String functionName = pFunction.getNameString();
-
-							lowFunction = pFunction.getTotalSampleCount() < functionThreshold;
-
-							if (!foundFunctions.containsKey(functionName)) {
-								foundFunctions.put(functionName, functionName);
-								if (lowFunction) {
-									thresholdFunction.addItem(graphIndex, pFunction, 1);
-								} else {
-									pFunction.setEnabled(graphIndex, true);
-									pFunction.setSampleCount(graphIndex, 1);
-									graphFunctions.add(pFunction);
-								}
-							} else {
-								if (lowFunction)
-									thresholdFunction.incSampleCount(graphIndex);
-								else
-									pFunction.incSampleCount(graphIndex);
-							}
-						}
-					}
-
-					// set the % load
-					for (int i = 0; i < graphFunctions.size(); i++) {
-						ProfiledFunction pFunction = (ProfiledFunction) graphFunctions.elementAt(i);
-						pFunction.setLoadAndString(graphIndex, (float)(pFunction.getSampleCount(graphIndex)*percentPerSample));
-					}
-					thresholdFunction.setLoadAndString(graphIndex,
-							(float)(thresholdFunction.getSampleCount(graphIndex)*percentPerSample));
+					trace.setBinaryFunction(graphIndex, adapter, this.myGraph.getProfiledFunctions());
 
 					// update the table items and redraw the table
 					this.myGraph.getFunctionTable().piEventReceived(be3);
@@ -1761,126 +1484,10 @@ public class AddrBinaryTable extends GenericAddrTable
 				}
 				case Defines.BINARIES_FUNCTIONS_THREADS:
 				{
-					// get new function and thread counts and loads
-					Vector<ProfiledGeneric> traceThreads    = trace.getIndexedThreads();
-					Vector<ProfiledGeneric> traceFunctions  = trace.getIndexedFunctions();
-					Vector<ProfiledGeneric> graphThreads    = this.myGraph.getProfiledThreads();
-					Vector<ProfiledGeneric> graphFunctions  = this.myGraph.getProfiledFunctions();
-					Hashtable<String,String> foundThreads   = new Hashtable<String,String>();
-					Hashtable<String,String> foundFunctions = new Hashtable<String,String>();
-
-					// previous threads are not necessarily graphed this time
-					Enumeration<ProfiledGeneric> enuThreads = graphThreads.elements();
-					while (enuThreads.hasMoreElements()) {
-						ProfiledThread pThread = (ProfiledThread) enuThreads.nextElement();
-						pThread.setEnabled(graphIndex, false);
-					}
-					graphThreads.clear();
-
-					ProfiledThreshold thresholdThread = this.myGraph.getThresholdThread();
-
-					if (thresholdThread.isEnabled(graphIndex)) {
-						ArrayList<ProfiledGeneric> items = thresholdThread.getItems(graphIndex);
-						// disable all items below the threshold
-						for (int i = 0; i < items.size(); i++) {
-							items.get(i).setEnabled(graphIndex, false);
-						}
-					}
-
-					// previous functions are not necessarily graphed this time
-					Enumeration<ProfiledGeneric> enuFunctions = graphFunctions.elements();
-					while (enuFunctions.hasMoreElements()) {
-						ProfiledFunction pFunction = (ProfiledFunction) enuFunctions.nextElement();
-						pFunction.setEnabled(graphIndex, false);
-					}
-					graphFunctions.clear();
-
-					ProfiledThreshold thresholdFunction = this.myGraph.getThresholdFunction();
-
-					if (thresholdFunction.isEnabled(graphIndex)) {
-						ArrayList<ProfiledGeneric> items = thresholdFunction.getItems(graphIndex);
-						// disable all items below the threshold
-						for (int i = 0; i < items.size(); i++) {
-							items.get(i).setEnabled(graphIndex, false);
-						}
-					}
-
-					GppSample[] sortedSamples = trace.getSortedGppSamples();
-
-					// set up in case we find threads below the threshold
-					boolean lowThread;
-					thresholdThread.init(graphIndex);
-
-					// set up in case we find functions below the threshold
-					boolean lowFunction;
-					thresholdFunction.init(graphIndex);
-
-					int functionThreshold = (Integer) NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.address.thresholdCountFunction"); //$NON-NLS-1$
-					for (int i = startSampleIndex; i < endSampleIndex; i++) {
-						GppSample sample = sortedSamples[i];
-
-						ProfiledBinary pBinary = (ProfiledBinary) traceBinaries.elementAt(sample.binaryIndex);
-						if (pBinary.isEnabled(graphIndex)) {
-							// function list is based on binaries
-							ProfiledFunction pFunction = (ProfiledFunction) traceFunctions.elementAt(sample.functionIndex);
-							String functionName = pFunction.getNameString();
-
-							lowFunction = pFunction.getTotalSampleCount() < functionThreshold;
-
-							if (!foundFunctions.containsKey(functionName)) {
-								foundFunctions.put(functionName, functionName);
-								if (lowFunction) {
-									thresholdFunction.addItem(graphIndex, pFunction, 1);
-								} else {
-									pFunction.setEnabled(graphIndex, true);
-									pFunction.setSampleCount(graphIndex, 1);
-									graphFunctions.add(pFunction);
-								}
-							} else {
-								if (lowFunction)
-									thresholdFunction.incSampleCount(graphIndex);
-								else
-									pFunction.incSampleCount(graphIndex);
-							}
-
-							// thread list is based on binaries and functions
-							ProfiledThread pThread = (ProfiledThread) traceThreads.elementAt(sample.threadIndex);
-							String threadName = pThread.getNameString();
-
-							lowThread = pThread.getTotalSampleCount() < (Integer)NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.address.thresholdCountThread"); //$NON-NLS-1$
-
-							if (!foundThreads.containsKey(threadName)) {
-								foundThreads.put(threadName, threadName);
-								if (lowThread) {
-									thresholdThread.addItem(graphIndex, pThread, 1);
-								} else {
-									pThread.setEnabled(graphIndex, true);
-									pThread.setSampleCount(graphIndex, 1);
-									graphThreads.add(pThread);
-								}
-							} else {
-								if (lowThread)
-									thresholdThread.incSampleCount(graphIndex);
-								else
-									pThread.incSampleCount(graphIndex);
-							}
-						}
-					}
-
-					// set the % load
-					for (int i = 0; i < graphThreads.size(); i++) {
-						ProfiledThread pThread = (ProfiledThread) graphThreads.elementAt(i);
-						pThread.setLoadAndString(graphIndex, (float)(pThread.getSampleCount(graphIndex)*percentPerSample));
-					}
-					thresholdThread.setLoadAndString(graphIndex,
-							(float)(thresholdThread.getSampleCount(graphIndex)*percentPerSample));
-
-					for (int i = 0; i < graphFunctions.size(); i++) {
-						ProfiledFunction pFunction = (ProfiledFunction) graphFunctions.elementAt(i);
-						pFunction.setLoadAndString(graphIndex, (float)(pFunction.getSampleCount(graphIndex)*percentPerSample));
-					}
-					thresholdFunction.setLoadAndString(graphIndex,
-							(float)(thresholdFunction.getSampleCount(graphIndex)*percentPerSample));
+					// previous functions are not necessarily graphed this time - reset
+					trace.setBinaryFunction(graphIndex, adapter, this.myGraph.getProfiledFunctions());
+					// previous threads are not necessarily graphed this time - reset
+					trace.setBinaryFunctionThread(graphIndex, adapter, this.myGraph.getProfiledThreads());
 
 					// update the table items and redraw the table
 					this.myGraph.getThreadTable().piEventReceived(be3);
@@ -1903,86 +1510,10 @@ public class AddrBinaryTable extends GenericAddrTable
 
 			// we don't need to redraw the binary table, since it has not changed
 
-			GppTrace trace = (GppTrace)(this.myGraph.getTrace());
-			Vector<ProfiledGeneric> traceThreads = trace.getIndexedThreads();
-
-			int graphIndex = this.myGraph.getGraphIndex();
-			int startSampleIndex = trace.getStartSampleIndex();
-			int endSampleIndex   = trace.getEndSampleIndex();
-			double percentPerSample;
-			if (startSampleIndex == endSampleIndex)
-				percentPerSample = 0.0;
-			else
-				percentPerSample = 100.0 / ((double)(endSampleIndex - startSampleIndex));
-
 			PIEvent be3 = new PIEvent(be.getValueObject(), PIEvent.SELECTION_AREA_CHANGED3);
-
-			// get new function counts and loads
-			Vector<ProfiledGeneric> traceFunctions  = trace.getIndexedFunctions();
-			Vector<ProfiledGeneric> graphFunctions  = this.myGraph.getProfiledFunctions();
-			Hashtable<String,String> foundFunctions = new Hashtable<String,String>();
-
-			// previous functions are not necessarily graphed this time
-			Enumeration<ProfiledGeneric> enu = graphFunctions.elements();
-			while (enu.hasMoreElements()) {
-				ProfiledFunction pFunction = (ProfiledFunction) enu.nextElement();
-				pFunction.setEnabled(graphIndex, false);
-			}
-			graphFunctions.clear();
-
-			ProfiledThreshold thresholdFunction = this.myGraph.getThresholdFunction();
-
-			if (thresholdFunction.isEnabled(graphIndex)) {
-				ArrayList<ProfiledGeneric> items = thresholdFunction.getItems(graphIndex);
-				// disable all items below the threshold
-				for (int i = 0; i < items.size(); i++) {
-					items.get(i).setEnabled(graphIndex, false);
-				}
-			}
-
-			GppSample[] sortedSamples = trace.getSortedGppSamples();
-
-			// set up in case we find functions below the threshold
-			boolean lowFunction;
-			thresholdFunction.init(graphIndex);
-
-			int functionThreshold = (Integer) NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.address.thresholdCountFunction"); //$NON-NLS-1$
-			for (int i = startSampleIndex; i < endSampleIndex; i++) {
-				GppSample sample = sortedSamples[i];
-
-				ProfiledThread pThread = (ProfiledThread) traceThreads.elementAt(sample.threadIndex);
-				if (pThread.isEnabled(graphIndex)) {
-					// function list is based on threads
-					ProfiledFunction pFunction = (ProfiledFunction) traceFunctions.elementAt(sample.functionIndex);
-					String functionName = pFunction.getNameString();
-
-					lowFunction = pFunction.getTotalSampleCount() < functionThreshold;
-
-					if (!foundFunctions.containsKey(functionName)) {
-						foundFunctions.put(functionName, functionName);
-						if (lowFunction) {
-							thresholdFunction.addItem(graphIndex, pFunction, 1);
-						} else {
-							pFunction.setEnabled(graphIndex, true);
-							pFunction.setSampleCount(graphIndex, 1);
-							graphFunctions.add(pFunction);
-						}
-					} else {
-						if (lowFunction)
-							thresholdFunction.incSampleCount(graphIndex);
-						else
-							pFunction.incSampleCount(graphIndex);
-					}
-				}
-			}
-
-			// set the % load
-			for (int i = 0; i < graphFunctions.size(); i++) {
-				ProfiledFunction pFunction = (ProfiledFunction) graphFunctions.elementAt(i);
-				pFunction.setLoadAndString(graphIndex, (float)(pFunction.getSampleCount(graphIndex)*percentPerSample));
-			}
-			thresholdFunction.setLoadAndString(graphIndex,
-											(float)(thresholdFunction.getSampleCount(graphIndex)*percentPerSample));
+			GppTrace trace = (GppTrace)(this.myGraph.getTrace());
+			int graphIndex = this.myGraph.getGraphIndex();
+			trace.setBinaryThreadFunction(graphIndex, adapter, this.myGraph.getProfiledFunctions());
 			
 			// update the table items and redraw the table
 			this.myGraph.getFunctionTable().piEventReceived(be3);
@@ -1997,86 +1528,10 @@ public class AddrBinaryTable extends GenericAddrTable
 
 			// we don't need to redraw the binary table, since it has not changed
 
-			GppTrace trace = (GppTrace)(this.myGraph.getTrace());
-			Vector<ProfiledGeneric> traceFunctions = trace.getIndexedFunctions();
-
-			int graphIndex = this.myGraph.getGraphIndex();
-			int startSampleIndex = trace.getStartSampleIndex();
-			int endSampleIndex   = trace.getEndSampleIndex();
-			double percentPerSample;
-			if (startSampleIndex == endSampleIndex)
-				percentPerSample = 0.0;
-			else
-				percentPerSample = 100.0 / ((double)(endSampleIndex - startSampleIndex));
-
 			PIEvent be3 = new PIEvent(be.getValueObject(), PIEvent.SELECTION_AREA_CHANGED3);
-
-			// get new thread counts and loads
-			Vector<ProfiledGeneric> traceThreads  = trace.getIndexedThreads();
-			Vector<ProfiledGeneric> graphThreads  = this.myGraph.getProfiledThreads();
-			Hashtable<String,String> foundThreads = new Hashtable<String,String>();
-
-			// previous threads are not necessarily graphed this time
-			Enumeration<ProfiledGeneric> enu = graphThreads.elements();
-			while (enu.hasMoreElements()) {
-				ProfiledThread pThread = (ProfiledThread) enu.nextElement();
-				pThread.setEnabled(graphIndex, false);
-			}
-			graphThreads.clear();
-
-			ProfiledThreshold thresholdThread = this.myGraph.getThresholdThread();
-
-			if (thresholdThread.isEnabled(graphIndex)) {
-				ArrayList<ProfiledGeneric> items = thresholdThread.getItems(graphIndex);
-				// disable all items below the threshold
-				for (int i = 0; i < items.size(); i++) {
-					items.get(i).setEnabled(graphIndex, false);
-				}
-			}
-
-			GppSample[] sortedSamples = trace.getSortedGppSamples();
-
-			// set up in case we find threads below the threshold
-			boolean lowThread;
-			thresholdThread.init(graphIndex);
-
-			int threadThreshold = (Integer) NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.address.thresholdCountThread"); //$NON-NLS-1$
-			for (int i = startSampleIndex; i < endSampleIndex; i++) {
-				GppSample sample = sortedSamples[i];
-
-				ProfiledFunction pFunction = (ProfiledFunction) traceFunctions.elementAt(sample.functionIndex);
-				if (pFunction.isEnabled(graphIndex)) {
-					// thread list is based on functions
-					ProfiledThread pThread = (ProfiledThread) traceThreads.elementAt(sample.threadIndex);
-					String threadName = pThread.getNameString();
-
-					lowThread = pThread.getTotalSampleCount() < threadThreshold;
-
-					if (!foundThreads.containsKey(threadName)) {
-						foundThreads.put(threadName, threadName);
-						if (lowThread) {
-							thresholdThread.addItem(graphIndex, pThread, 1);
-						} else {
-							pThread.setEnabled(graphIndex, true);
-							pThread.setSampleCount(graphIndex, 1);
-							graphThreads.add(pThread);
-						}
-					} else {
-						if (lowThread)
-							thresholdThread.incSampleCount(graphIndex);
-						else
-							pThread.incSampleCount(graphIndex);
-					}
-				}
-			}
-
-			// set the % load
-			for (int i = 0; i < graphThreads.size(); i++) {
-				ProfiledThread pThread = (ProfiledThread) graphThreads.elementAt(i);
-				pThread.setLoadAndString(graphIndex, (float)(pThread.getSampleCount(graphIndex)*percentPerSample));
-			}
-			thresholdThread.setLoadAndString(graphIndex,
-					(float)(thresholdThread.getSampleCount(graphIndex)*percentPerSample));
+			GppTrace trace = (GppTrace)(this.myGraph.getTrace());
+			int graphIndex = this.myGraph.getGraphIndex();
+			trace.setFunctionBinaryThread(graphIndex, adapter, this.myGraph.getProfiledThreads());
 
 			// update the table items and redraw the table
 			this.myGraph.getThreadTable().piEventReceived(be3);
@@ -2165,6 +1620,7 @@ public class AddrBinaryTable extends GenericAddrTable
 
 	private class ColumnSelectionHandler extends SelectionAdapter
 	{
+		@Override
 		public void widgetSelected(SelectionEvent e)
         {
         	// wait for the previous sort to finish
@@ -2175,6 +1631,15 @@ public class AddrBinaryTable extends GenericAddrTable
         }
 	}
 
+	/**
+	 * Adds ProfiledGenerics and threshold items to the table data
+	 * (this.tableItemData and this.profiledThreads). Sorts the ProfiledGenerics
+	 * according to load; and sets the graph's sorted list accordingly. Refreshes
+	 * the TableViewer if parameter setInput is true.
+	 * 
+	 * @param setInput
+	 *            if true, reset the TableViewer
+	 */
 	public void updateProfiledAndItemData(boolean setInput)
 	{
 		tableItemData.clear();
@@ -2189,7 +1654,7 @@ public class AddrBinaryTable extends GenericAddrTable
 			profiledBinaries.add(nextElement);
 		}
 
-		if (myGraph.getThresholdBinary().getItemCount(myGraph.getGraphIndex()) != 0) {
+		if (myGraph.getThresholdBinary().getItemCount() != 0) {
 			tableItemData.add(myGraph.getThresholdBinary());
 			profiledBinaries.add(myGraph.getThresholdBinary());
 		}
@@ -2201,17 +1666,16 @@ public class AddrBinaryTable extends GenericAddrTable
 			public int compare(Object arg0, Object arg1)
 			{
 				if (arg0 instanceof ProfiledGeneric && arg1 instanceof ProfiledGeneric)
-					return ((ProfiledGeneric)arg0).getTotalSampleCount() -
-							((ProfiledGeneric)arg1).getTotalSampleCount();
-				else
-					return 0;
+					return (adapter.getTotalSampleCount((ProfiledGeneric)arg0)) -
+							(adapter.getTotalSampleCount((ProfiledGeneric)arg1));
+				return 0;
 			}
 		});
 
 		// now create the sorted list used to draw the graph
 		myGraph.getSortedBinaries().clear();
 
-		if (myGraph.getThresholdBinary().getItemCount(myGraph.getGraphIndex()) != 0)
+		if (myGraph.getThresholdBinary().getItemCount() != 0)
 			myGraph.getSortedBinaries().add(myGraph.getThresholdBinary());
 
 		for (int i = 0; i < sorted.length; i++)

@@ -37,7 +37,7 @@ public class TraceAdditionalInfo implements Serializable {
 	private HashMap<Integer, Vector<Object>> additional_info = new HashMap<Integer, Vector<Object>>();
 	
 	public void addAdditionalInfo(int traceId, Vector<Object> additionalInfo) {
-		additional_info.put(new Integer(traceId), additionalInfo);
+		additional_info.put(Integer.valueOf(traceId), additionalInfo);
 	}
 	
 	public Set<Entry<Integer, Vector<Object>>> getAdditionalInfoSet() {

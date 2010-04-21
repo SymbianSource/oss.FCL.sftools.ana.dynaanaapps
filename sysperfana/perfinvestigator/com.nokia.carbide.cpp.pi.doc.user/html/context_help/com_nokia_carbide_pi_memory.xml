@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<!-- Define help for Debug Perspective default views -->
+<!-- plugin="com.nokia.carbide.cpp.pi.address" -->
+
+<contexts>
+
+	<!-- THREAD TAB -->
+	<context id="memoryPageContext"  >
+		<description>Use the Memory view to display the memory usage.</description>
+  <topic href="html/reference/analyzer/view_memory_usage.htm" label="Memory Usage View"/>
+		<topic label="Memory Graph Menu"    					href="html/reference/analyzer/menu_memory_graph.htm" />
+  <topic href="html/reference/analyzer/wnd_memory_usage_statistics.htm" label="Memory Usage Statistics"/>
+		<topic label="Analyzer view" 					href="html/reference/analyzer/main_view.htm" />
+		<topic label="Using the Analyzer"  				href="html/reference/analyzer/an_use_case_features.htm" />
+		<topic label="Setting Time Interval"  			href="html/tasks/analyser/time_interval.htm" />
+	</context>
+
+	<!-- BINARIES TAB -->
+
+	<!-- FUNCTIONS TAB -->
+
+</contexts>

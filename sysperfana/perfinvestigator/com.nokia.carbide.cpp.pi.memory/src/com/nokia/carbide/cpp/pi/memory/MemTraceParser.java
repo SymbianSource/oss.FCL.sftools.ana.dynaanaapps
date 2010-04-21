@@ -251,10 +251,10 @@ public class MemTraceParser extends Parser
 				   		threadName = rawName;
 				   	}
 								    	
-					memTrace.addFirstSynchTime(new Integer((int)threadId),new Integer((int)sample));
-				   	memSamples.add(new MemThread(new Integer((int)threadId), threadName, processName));
-				   	priTrace.addFirstSynchTime(new Integer((int)threadId), new Integer(sampleTime));
-				   	priSamples.add(new PriThread(new Integer((int)threadId), threadName, processName));
+					memTrace.addFirstSynchTime(Integer.valueOf((int)threadId),Integer.valueOf((int)sample));
+				   	memSamples.add(new MemThread(Integer.valueOf((int)threadId), threadName, processName));
+				   	priTrace.addFirstSynchTime(Integer.valueOf((int)threadId), Integer.valueOf(sampleTime));
+				   	priSamples.add(new PriThread(Integer.valueOf((int)threadId), threadName, processName));
 
 				   	// read the next length
 					length = dis.readUnsignedByte(); readCount++;
@@ -386,8 +386,8 @@ public class MemTraceParser extends Parser
 				   		threadName = rawName;
 				   	}
 								    	
-					memTrace.addFirstSynchTime(new Integer((int)threadId), new Integer((int)sample));
-				   	memSamples.add(new MemThread(new Integer((int)threadId), threadName, processName));
+					memTrace.addFirstSynchTime(Integer.valueOf((int)threadId), Integer.valueOf((int)sample));
+				   	memSamples.add(new MemThread(Integer.valueOf((int)threadId), threadName, processName));
 
 					length = dis.readUnsignedByte(); readCount++;
 				}
@@ -528,8 +528,8 @@ public class MemTraceParser extends Parser
 						processName = processName.substring(2);
 						threadName += "_C"; //$NON-NLS-1$
 					}
-					memTrace.addFirstSynchTime(new Integer((int)threadId),new Integer((int)sample));
-				   	memSamples.add(new MemThread(new Integer((int)threadId), threadName, processName));
+					memTrace.addFirstSynchTime(Integer.valueOf((int)threadId),Integer.valueOf((int)sample));
+				   	memSamples.add(new MemThread(Integer.valueOf((int)threadId), threadName, processName));
 
 					length = dis.readUnsignedByte();readCount++;
 				}
@@ -659,9 +659,14 @@ public class MemTraceParser extends Parser
 						processName = processName.substring(2);
 						threadName += "_C";
 					}
-					
-					memTrace.addFirstSynchTime(new Integer((int)threadId),new Integer((int)sample));
-					thread = new MemThread(new Integer((int)threadId), threadName, processName);
+					else if (processName.startsWith("L_")) //$NON-NLS-1$
+					{
+						processName = processName.substring(2);
+						threadName += "_L"; //$NON-NLS-1$
+				
+					}
+					memTrace.addFirstSynchTime(Integer.valueOf((int)threadId),Integer.valueOf((int)sample));
+					thread = new MemThread(Integer.valueOf((int)threadId), threadName, processName);
 					memSamples.add(thread);
 			   		createdThread = processName+"::"+threadName;
 			   		if(debug)System.out.println("Name sample: "+sample+", created thread: "+createdThread+", vector size: "+memSamples.size());
@@ -759,7 +764,7 @@ public class MemTraceParser extends Parser
 	@SuppressWarnings("unchecked")
 	private void addRawV157MemSamples(Vector rawV157MemSamples) {
 
-		Hashtable startedThreads;	// store the id/name of the thread for recognizing the right chunk (same chunk id may be reused)
+		Hashtable<Integer, String> startedThreads;	// store the id/name of the thread for recognizing the right chunk (same chunk id may be reused)
 
 		String tempThreadName = "";
 		String str = "";
@@ -803,7 +808,12 @@ public class MemTraceParser extends Parser
 			    		// find corresponding thread ID among the MemThreads
 			    		if (mt.threadId.intValue() == threadId ) {
 			    			// create a new sample to memory trace
-			    			sample = new MemSample(mt, heapSize, stackSize, sampleTime, MemTraceParser.SAMPLE_CODE_INITIAL_CHUNK);
+			    			if(mt.threadName.endsWith("_L")){
+			    				sample = new MemSample(mt, (int)element[1], (int)element[2], heapSize, sampleTime, MemTraceParser.SAMPLE_CODE_INITIAL_CHUNK);
+			    			}else{
+			    				sample = new MemSample(mt, heapSize, stackSize, sampleTime, MemTraceParser.SAMPLE_CODE_INITIAL_CHUNK);
+			    			}			    	
+			    		
 			    			tempThreadName = mt.processName+"::"+mt.threadName;
 			    			
 			    			// add the thread into started hash table
@@ -823,7 +833,11 @@ public class MemTraceParser extends Parser
 			    		// find corresponding thread ID among the MemThreads
 			    		if (mt.threadId.intValue() == threadId && sum(tempThreadName) == nameHash) {
 			    			// create a new sample to memory trace
-			    			sample = new MemSample(mt, heapSize, stackSize, sampleTime, MemTraceParser.SAMPLE_CODE_NEW_CHUNK);
+			    			if(mt.threadName.endsWith("_L")){
+			    				sample = new MemSample(mt, (int)element[1], (int)element[2], heapSize, sampleTime, MemTraceParser.SAMPLE_CODE_NEW_CHUNK);
+			    			}else{
+			    				sample = new MemSample(mt, heapSize, stackSize, sampleTime, MemTraceParser.SAMPLE_CODE_NEW_CHUNK);
+			    			}
 			    			
 			    			// add the thread into started hash table
 			    			startedThreads.put((int)threadId, (String)tempThreadName);
@@ -847,7 +861,11 @@ public class MemTraceParser extends Parser
 			    		if (mt.threadId.intValue() == threadId ) {
 			    			if((str).equalsIgnoreCase(tempThreadName)) {
 				    			// create a new sample to memory trace
-				    			sample = new MemSample(mt, heapSize, stackSize, sampleTime, MemTraceParser.SAMPLE_CODE_UPDATE_CHUNK);
+			    				if(mt.threadName.endsWith("_L")){
+				    				sample = new MemSample(mt, (int)element[1], (int)element[2], heapSize, sampleTime, MemTraceParser.SAMPLE_CODE_UPDATE_CHUNK);
+				    			}else{
+				    				sample = new MemSample(mt, heapSize, stackSize, sampleTime, MemTraceParser.SAMPLE_CODE_UPDATE_CHUNK);
+				    			}			    			
 				    			
 				    			// add sample to main trace data structure
 			    				memTrace.addSample(sample);
@@ -864,9 +882,22 @@ public class MemTraceParser extends Parser
 			    		
 			    		// find corresponding thread ID among the MemThreads
 			    		if (mt.threadId.intValue() == threadId) {
-			    			if(((String)startedThreads.get(threadId)).equalsIgnoreCase(tempThreadName)) {
+			    			String thread = startedThreads.get(threadId);
+			    			if(thread == null){
+			    				if(mt.threadName.endsWith("_L")){
+				    				sample = new MemSample(mt, (int)element[1], (int)element[2], heapSize, sampleTime, MemTraceParser.SAMPLE_CODE_DELETE_CHUNK);
+				    				// add sample to main trace data structure
+				    				memTrace.addSample(sample);
+				    				break;
+			    				}			    			
+			    			}			    			
+			    			else if(thread.equalsIgnoreCase(tempThreadName)) {
 				    			// create a new sample to memory trace
-				    			sample = new MemSample(mt, heapSize, stackSize, sampleTime, MemTraceParser.SAMPLE_CODE_DELETE_CHUNK);
+			    				if(mt.threadName.endsWith("_L")){
+				    				sample = new MemSample(mt, (int)element[1], (int)element[2], heapSize, sampleTime, MemTraceParser.SAMPLE_CODE_DELETE_CHUNK);
+				    			}else{
+				    				sample = new MemSample(mt, heapSize, stackSize, sampleTime, MemTraceParser.SAMPLE_CODE_DELETE_CHUNK);
+				    			}
 				    			
 					    		// remove from the started threads hash table
 					    		if(startedThreads.remove(threadId) == null) {
@@ -885,7 +916,7 @@ public class MemTraceParser extends Parser
 	    	}
 	    	
 	    	// add end mark for the thread
-    		memTrace.addLastSynchTime(new Integer(threadId), new Integer(sampleTime));
+    		memTrace.addLastSynchTime(Integer.valueOf(threadId), Integer.valueOf(sampleTime));
 
 	    }
 	    if (debug) System.out.println("Done parsing, size: "+memTrace.samples.size());
@@ -917,7 +948,7 @@ public class MemTraceParser extends Parser
 	    		}
 	    	}
 	    	
-	    	memTrace.addLastSynchTime(new Integer(threadId), new Integer(sampleTime));
+	    	memTrace.addLastSynchTime(Integer.valueOf(threadId), Integer.valueOf(sampleTime));
 	    }
 	    if (debug) System.out.println(Messages.getString("MemTraceParser.parsingDone")); //$NON-NLS-1$
 	}
@@ -1008,7 +1039,7 @@ public class MemTraceParser extends Parser
 	    		}
 	    	}
 	    	
-	    	memTrace.addLastSynchTime(new Integer(threadId), new Integer(sampleTime));
+	    	memTrace.addLastSynchTime(Integer.valueOf(threadId), Integer.valueOf(sampleTime));
 	    }
 
 	    if (debug) System.out.println(Messages.getString("MemTraceParser.sizeOfParse")+memTrace.samples.size()/*+" largest "+largest*/); //$NON-NLS-1$
@@ -1060,8 +1091,8 @@ public class MemTraceParser extends Parser
 	    			break;
 	    		}
 	    	}
-	    	memTrace.addLastSynchTime(new Integer(threadId), new Integer(sampleTime));
-	    	priTrace.addLastSynchTime(new Integer(threadId), new Integer(sampleTime));
+	    	memTrace.addLastSynchTime(Integer.valueOf(threadId), Integer.valueOf(sampleTime));
+	    	priTrace.addLastSynchTime(Integer.valueOf(threadId), Integer.valueOf(sampleTime));
 	    }
 	    if (debug) System.out.println(Messages.getString("MemTraceParser.parsingDone")); //$NON-NLS-1$
 	}
@@ -1147,8 +1178,8 @@ public class MemTraceParser extends Parser
 				   		threadName = rawName;
 				   	}
 
-				   	priTrace.addFirstSynchTime(new Integer((int)threadId), new Integer(sampleTime));
-				   	priSamples.add(new PriThread(new Integer((int)threadId), threadName, processName));
+				   	priTrace.addFirstSynchTime(Integer.valueOf((int)threadId), Integer.valueOf(sampleTime));
+				   	priSamples.add(new PriThread(Integer.valueOf((int)threadId), threadName, processName));
 
 				   	// read the next length
 					length = dis.readUnsignedByte(); readCount++;
@@ -1232,7 +1263,7 @@ public class MemTraceParser extends Parser
 	    		}
 	    	}
 
-	    	priTrace.addLastSynchTime(new Integer(threadId), new Integer(sampleTime));
+	    	priTrace.addLastSynchTime(Integer.valueOf(threadId), Integer.valueOf(sampleTime));
 	    }
 	    if (debug) System.out.println(Messages.getString("MemTraceParser.parsingDone")); //$NON-NLS-1$
 	}
@@ -1397,6 +1428,11 @@ public class MemTraceParser extends Parser
 		    		parseVersion157Trace(traceArray,s);
 		    		return;
 		    	} 
+	    		else if(s.startsWith("Bappea_V2.03")) 
+	    		{
+		    		parseVersion157Trace(traceArray,s);
+		    		return;
+		    	} 
 
 	    		String version = s.substring(8, 12);
 	    		String traceType = s.substring(13, s.length());
@@ -1471,10 +1507,10 @@ public class MemTraceParser extends Parser
 	    	processName = unparsedName.substring(0, index - 1);
 	    	threadName = unparsedName.substring(index + 1,  j);
 
-	    	memTrace.addFirstSynchTime(new Integer(threadId), new Integer(sampleTime));
-	    	memSamples.add(new MemThread(new Integer(threadId), threadName, processName));
-	    	priTrace.addFirstSynchTime(new Integer(threadId), new Integer(sampleTime));
-	    	priSamples.add(new PriThread(new Integer(threadId), threadName, processName));
+	    	memTrace.addFirstSynchTime(Integer.valueOf(threadId), Integer.valueOf(sampleTime));
+	    	memSamples.add(new MemThread(Integer.valueOf(threadId), threadName, processName));
+	    	priTrace.addFirstSynchTime(Integer.valueOf(threadId), Integer.valueOf(sampleTime));
+	    	priSamples.add(new PriThread(Integer.valueOf(threadId), threadName, processName));
 
 	    	i += buffer.length + 8;
 	    }
@@ -1534,8 +1570,8 @@ public class MemTraceParser extends Parser
 	    			break;
 	    		}
 	    	}
-	    	memTrace.addLastSynchTime(new Integer(threadId), new Integer(sampleTime));
-	    	priTrace.addLastSynchTime(new Integer(threadId), new Integer(sampleTime));
+	    	memTrace.addLastSynchTime(Integer.valueOf(threadId), Integer.valueOf(sampleTime));
+	    	priTrace.addLastSynchTime(Integer.valueOf(threadId), Integer.valueOf(sampleTime));
 	    	k += 16;
 	    }
 	    if (debug) System.out.println(Messages.getString("MemTraceParser.parsingDone")); //$NON-NLS-1$

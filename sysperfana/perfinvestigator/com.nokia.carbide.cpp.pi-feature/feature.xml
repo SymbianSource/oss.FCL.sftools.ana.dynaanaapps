@@ -2,7 +2,7 @@
 <feature
       id="com.nokia.carbide.cpp.pi"
       label="%featureName"
-      version="2.1.0.qualifier"
+      version="2.3.0.qualifier"
       provider-name="Nokia"
       plugin="com.nokia.carbide.cpp"
       image="Carbide_Image.png">
@@ -323,7 +323,34 @@ three (3) years from the date of the distribution of this product by Nokia.
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.draw2d"/>
+      <import plugin="com.nokia.carbide.cpp.featureTracker"/>
+      <import plugin="com.nokia.carbide.cpp.sdk.core"/>
+      <import plugin="org.eclipse.emf.common" version="2.4.0" match="greaterOrEqual"/>
+      <import plugin="com.nokia.carbide.cpp.ui"/>
+      <import plugin="org.eclipse.ui.ide" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.editors" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.emf.ecore" version="2.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor"/>
       <import plugin="org.eclipse.swt"/>
+      <import plugin="org.eclipse.cdt.core"/>
+      <import plugin="org.eclipse.cdt.ui"/>
+      <import plugin="com.nokia.carbide.cpp"/>
+      <import plugin="com.nokia.carbide.cdt.builder"/>
+      <import plugin="com.nokia.carbide.cpp.support"/>
+      <import plugin="com.nokia.cpp.utils.core"/>
+      <import plugin="org.eclipse.emf.ecore" version="2.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.emf.ecore.xmi" version="2.4.0" match="greaterOrEqual"/>
+      <import plugin="com.nokia.carbide.cpp.sdk.core" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.managedbuilder.core"/>
+      <import plugin="com.nokia.carbide.cpp.epoc.engine"/>
+      <import plugin="com.nokia.carbide.cpp.sdk.ui"/>
+      <import plugin="com.nokia.carbide.cpp.pi" version="2.2.0" match="greaterOrEqual"/>
+      <import plugin="com.nokia.carbide.cpp.pi.util" version="2.2.0" match="greaterOrEqual"/>
+      <import plugin="com.nokia.carbide.cpp.pi.peccommon" version="2.2.0" match="greaterOrEqual"/>
+      <import plugin="com.nokia.carbide.cpp.pi.address" version="1.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.ide" version="3.5.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
@@ -426,6 +453,34 @@ three (3) years from the date of the distribution of this product by Nokia.
 
    <plugin
          id="com.nokia.carbide.cpp.pi.doc.user"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.nokia.carbide.cpp.pi.perfcounters"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.nokia.carbide.cpp.pi.irq"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.nokia.carbide.cpp.pi.ipc"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.nokia.carbide.cpp.pi.peccommon"
          download-size="0"
          install-size="0"
          version="0.0.0"

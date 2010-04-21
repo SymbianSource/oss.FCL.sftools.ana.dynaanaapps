@@ -22,6 +22,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 
+import org.eclipse.jface.dialogs.IPageChangedListener;
+import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -31,8 +33,10 @@ import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Sash;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorActionBarContributor;
+import org.eclipse.ui.part.EditorActionBarContributor;
 
 import com.nokia.carbide.cpp.internal.pi.utils.PIUtilities;
 import com.nokia.carbide.cpp.internal.pi.visual.PICompositePanel;
@@ -52,17 +56,10 @@ public class ProfileVisualiser {
 	// page for this visualiser
 	private Composite page;
 	
-	// title
-	private Label title;
-	
-	// secondary title
-	private Label title2;
-	
-	// current time selection string
-	private Label timeInterval;
-	private static final String noInterval = Messages.getString("ProfileVisualiser.noInterval"); //$NON-NLS-1$
+	/** String constant for empty time interval */
+	private static final String NO_INTERVAL = Messages.getString("ProfileVisualiser.noInterval"); //$NON-NLS-1$
 
-	public static final DecimalFormat timeFormat = new DecimalFormat(Messages.getString("ProfileVisualiser.decimalFormat")); //$NON-NLS-1$
+	public static final DecimalFormat TIME_FORMAT = new DecimalFormat(Messages.getString("ProfileVisualiser.decimalFormat")); //$NON-NLS-1$
 
 	// composite at the top of the page
 	private PICompositePanel topComposite;
@@ -86,7 +83,6 @@ public class ProfileVisualiser {
 		this.thisVisualiser = this;
 		this.pageName = pageName;
 		this.page = new Composite(parent, SWT.NONE);
-
 		initialize(topology, page);
 	}
 
@@ -103,25 +99,13 @@ public class ProfileVisualiser {
 		}
 		
 		this.parserRepository = new ParserRepository();
-		
-		
-		// add the title bar at the top
-		Composite titleBar = addTitleBar(newPage);
-		
+				
 		// all graphs and tables go into a composite below the title
 		Composite holder = new Composite(newPage, SWT.NONE);
 		
-    	// FormData for the title bar
-		formData = new FormData();
-		formData.top    = new FormAttachment(0);
-		formData.left   = new FormAttachment(0);
-		formData.right  = new FormAttachment(100);
-		titleBar.setLayoutData(formData);
-		titleBar.setLayout(new FormLayout());
-		
 		// FormData for the overall holder composite
 		formData = new FormData();
-		formData.top    = new FormAttachment(titleBar);
+		formData.top    = new FormAttachment(0);
 		formData.bottom = new FormAttachment(100);
 		formData.left   = new FormAttachment(0);
 		formData.right  = new FormAttachment(100);
@@ -131,45 +115,39 @@ public class ProfileVisualiser {
 		newPage.setLayout(new FormLayout());
 		
 		setGraphsAndTablesHolder(holder, topology, formData);
+		
+		//add a listener to editor tab changes, so the action buttons 
+		//on the graphs get updated correctly
+		PIPageEditor.currentPageEditor().addPageChangedListener(new IPageChangedListener(){
+
+			/* (non-Javadoc)
+			 * @see org.eclipse.jface.dialogs.IPageChangedListener#pageChanged(org.eclipse.jface.dialogs.PageChangedEvent)
+			 */
+			public void pageChanged(PageChangedEvent event) {
+				if (event.getSelectedPage() == page){ //compare on reference
+					//if this ProfileVisualiser is the page being activated, 
+					//make sure the state of all action buttons is updated 
+					ProfileVisualiser.this.initialiseGraphs();					
+				}
+				
+			}
+			
+		});
 	}
 
-	private Composite addTitleBar(Composite newPage)
-	{
-		// titleBar (Composite)
-		//		title2 (Label)  title (Label) timeInterval (Label)
+	/**
+	 * Updates the enabled state of all graph actions (min, max etc.)
+	 */
+	public void updateGraphActionState(){
+		this.topComposite.updateGraphActionState();					
+	}
 
-		FormData formData;
-		Composite titleBar = new Composite(newPage, SWT.NONE);
-		
-		title2 = new Label(titleBar, SWT.LEFT);
-		title2.setBackground(newPage.getDisplay().getSystemColor(SWT.COLOR_YELLOW));
-		title2.setFont(PIPageEditor.helvetica_9);
-		
-		title = new Label(titleBar, SWT.CENTER);
-		title.setBackground(newPage.getDisplay().getSystemColor(SWT.COLOR_YELLOW));
-		title.setFont(PIPageEditor.helvetica_9);
-
-		timeInterval = new Label(titleBar, SWT.RIGHT);
-		timeInterval.setBackground(newPage.getDisplay().getSystemColor(SWT.COLOR_YELLOW));
-		timeInterval.setText(noInterval);
-		timeInterval.setFont(PIPageEditor.helvetica_9);
-
-		formData = new FormData();
-		formData.left   = new FormAttachment(0);
-		formData.right  = new FormAttachment(30);
-		title2.setLayoutData(formData);
-		
-		formData = new FormData();
-		formData.left   = new FormAttachment(30);
-		formData.right  = new FormAttachment(70);
-		title.setLayoutData(formData);
-		
-		formData = new FormData();
-		formData.left   = new FormAttachment(70);
-		formData.right  = new FormAttachment(100);
-		timeInterval.setLayoutData(formData);
-
-		return titleBar;
+	/**
+	 * Updates the enabled state of all graph actions (min, max etc.)
+	 */
+	public void initialiseGraphs(){
+		this.topComposite.initialiseGraphs();
+		this.topComposite.updateGraphActionState();					
 	}
 
 	private void setGraphsAndTablesHolder(Composite holder, int topology, FormData formData)
@@ -239,6 +217,17 @@ public class ProfileVisualiser {
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
 				PIPageEditor.currentPageEditor().setLocalTime(start, end);
+				
+		        final IEditorActionBarContributor contributor = PIPageEditor.currentPageEditor().getEditorSite().getActionBarContributor();
+
+		        if ((contributor instanceof EditorActionBarContributor)) {
+			        final IActionBars actionBars = ((EditorActionBarContributor) contributor).getActionBars();
+
+			        if (actionBars != null) {
+			        	actionBars.getStatusLineManager().setMessage("Hello");
+			        }
+		        }
+
 			}
 		});
 	}
@@ -364,11 +353,11 @@ public class ProfileVisualiser {
 
             if (startTime == -1 || endTime == -1)
             {
-                this.timeInterval.setText(noInterval);
+                updateStatusBarTimeInterval(-1, -1);
             }
             else
             {
-            	this.timeInterval.setText(ProfileVisualiser.getTimeInterval(startTime, endTime));
+            	updateStatusBarTimeInterval(startTime, endTime);
             }
             // now the data are updated, let the zoomCommand of the panel 
             // handle the selection centering and refresh
@@ -447,26 +436,43 @@ public class ProfileVisualiser {
 		return this.topComposite;
 	}
 	
-	public Label getTitle()
-	{
-		return this.title;
-	}
-	
-	public Label getTitle2()
-	{
-		return this.title2;
-	}
-	
-	public Label getTimeString()
-	{
-		return this.timeInterval;
-	}
-	
 	public static String getTimeInterval(double startTime, double endTime)
 	{
-		return Messages.getString("ProfileVisualiser.interval1") + timeFormat.format(startTime) //$NON-NLS-1$
-		     + Messages.getString("ProfileVisualiser.interval2") + timeFormat.format(endTime) //$NON-NLS-1$
-		     + Messages.getString("ProfileVisualiser.interval3") + timeFormat.format(endTime - startTime) //$NON-NLS-1$
+		return Messages.getString("ProfileVisualiser.interval1") + TIME_FORMAT.format(startTime) //$NON-NLS-1$
+		     + Messages.getString("ProfileVisualiser.interval2") + TIME_FORMAT.format(endTime) //$NON-NLS-1$
+		     + Messages.getString("ProfileVisualiser.interval3") + TIME_FORMAT.format(endTime - startTime) //$NON-NLS-1$
 		     + Messages.getString("ProfileVisualiser.interval4"); //$NON-NLS-1$
 	}
+	
+	/**
+	 * Updates the workbench's status bar with the given time frame
+	 * @param startTime the start time to use
+	 * @param endTime the end time to use
+	 */
+	public void updateStatusBarTimeInterval(final double startTime,
+			final double endTime) {
+
+		Display.getDefault().syncExec(new Runnable() {
+			public void run() {
+
+				final IEditorActionBarContributor contributor = PIPageEditor
+						.currentPageEditor().getEditorSite()
+						.getActionBarContributor();
+
+				if ((contributor instanceof EditorActionBarContributor)) {
+					final IActionBars actionBars = ((EditorActionBarContributor) contributor)
+							.getActionBars();
+
+					if (actionBars != null) {
+						actionBars.getStatusLineManager()
+								.setMessage(
+										(startTime == -1 || endTime == -1) ? NO_INTERVAL
+												: getTimeInterval(startTime, endTime));
+					}
+				}
+
+			}
+		});
+	}
+	
 }

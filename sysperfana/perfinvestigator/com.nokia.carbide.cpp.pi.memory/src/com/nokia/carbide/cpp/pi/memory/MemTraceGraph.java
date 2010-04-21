@@ -21,12 +21,13 @@ import java.awt.Dimension;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.text.DecimalFormat;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.FigureCanvas;
@@ -34,8 +35,11 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.Panel;
+import org.eclipse.draw2d.geometry.PointList;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -43,28 +47,36 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Sash;
+import org.eclipse.ui.PlatformUI;
 
 import com.nokia.carbide.cpp.internal.pi.analyser.NpiInstanceRepository;
 import com.nokia.carbide.cpp.internal.pi.memory.actions.MemoryStatisticsDialog;
 import com.nokia.carbide.cpp.internal.pi.model.GenericSampledTrace;
 import com.nokia.carbide.cpp.internal.pi.plugin.model.IContextMenu;
+import com.nokia.carbide.cpp.internal.pi.plugin.model.ITitleBarMenu;
 import com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph;
 import com.nokia.carbide.cpp.internal.pi.visual.GraphComposite;
 import com.nokia.carbide.cpp.internal.pi.visual.PIEvent;
 import com.nokia.carbide.cpp.internal.pi.visual.PIEventListener;
 import com.nokia.carbide.cpp.pi.editors.PIPageEditor;
+import com.nokia.carbide.cpp.pi.memory.ProfiledLibraryEvent.GraphSamplePoint;
 import com.nokia.carbide.cpp.pi.util.ColorPalette;
+import com.nokia.carbide.cpp.pi.visual.IGenericTraceGraph;
 
 public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
-		PIEventListener, MouseMotionListener, IContextMenu {
+		PIEventListener, MouseMotionListener, IContextMenu, ITitleBarMenu {
 	private enum UsageType {
 		CHUNKS, HEAPSTACK, CHUNKS_HEAPSTACK
 	};
@@ -72,6 +84,7 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 	private boolean dynamicMemoryVisualisation = false;
 
 	private MemThreadTable memThreadTable;
+	private MemLibraryEventTable memLibraryEventTable;
 	private CheckboxTableViewer memoryTableViewer;
 
 	Hashtable<Integer, Integer> threadList;
@@ -115,14 +128,18 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 	private DecimalFormat memMBFloatFormat = new DecimalFormat(Messages
 			.getString("MemTraceGraph.MBformat")); //$NON-NLS-1$
 
-	private static int xLegendHeight = 20;
+	private static int xLegendHeight = 50;
 
 	private boolean firstTimeDrawThreadList = true;
+
+	private Composite holder;
+	private boolean isLibraryEventTrace = false;
+	
+	private final boolean[] lockMouseToolTipResolver ={false}; 
+	private boolean showMemoryUsageLine = true;
 	
 	public MemTraceGraph(int graphIndex, MemTrace memTrace, int uid) {
 		super((GenericSampledTrace) memTrace);
-
-		// 
 
 		if (memTrace != null) {
 
@@ -145,29 +162,72 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 			return;
 		}
 
+		if(memTrace.getVersion() >= 203){
+			isLibraryEventTrace = true;
+		}
+		
 		samplingTime = calcSamplingTime();
 		memTrace.gatherDrawData();
 
+		
 		// create the label and a tableviewer
-		Composite holder = new Composite(NpiInstanceRepository.getInstance()
+		holder = new Composite(NpiInstanceRepository.getInstance()
 				.getProfilePage(uid, graphIndex).getBottomComposite(), SWT.NONE);
-
-		GridLayout gl = new GridLayout();
-		gl.marginHeight = 0;
-		gl.marginWidth = 0;
-		gl.marginLeft = 0;
-		gl.marginRight = 0;
-		holder.setLayout(gl);
-
-		Label label = new Label(holder, SWT.CENTER);
-		label
-				.setBackground(holder.getDisplay().getSystemColor(
-						SWT.COLOR_WHITE));
-		label.setFont(PIPageEditor.helvetica_8);
-		label.setText(Messages.getString("MemTraceGraph.graphTitle")); //$NON-NLS-1$
-		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		this.memThreadTable = new MemThreadTable(this, holder);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(holder, MemoryPlugin.HELP_CONTEXT_ID_MAIN_PAGE);
+		
+		if(isLibraryEventTrace){	
+			FormLayout formLayout = new FormLayout();
+			formLayout.marginHeight = 0;
+			formLayout.marginWidth = 0;
+			formLayout.marginLeft = 0;
+			formLayout.marginRight = 0;
+			holder.setLayout(formLayout);
+			holder.setLayoutData(new GridData(GridData.FILL_BOTH));
+			
+		    final Sash sash = new Sash(holder, SWT.VERTICAL);
+		    final FormData data = new FormData();
+		    data.top = new FormAttachment(0);
+		    data.bottom = new FormAttachment(100); 
+		    data.left = new FormAttachment(50); 
+		    sash.setLayoutData(data);
+		
+		    // Memory usage table
+		    FormData leftData = new FormData();
+		    leftData.top = new FormAttachment(0);
+		    leftData.bottom = new FormAttachment(100);
+		    leftData.left = new FormAttachment(0);
+		    leftData.right = new FormAttachment(sash);		    
+		    SashForm sfLeft = new SashForm(holder, SWT.NONE);
+		    sfLeft.setLayout(formLayout);
+		    sfLeft.setLayoutData(leftData);		 
+		    this.memThreadTable = new MemThreadTable(this, sfLeft);
+			    
+		    
+		    // Library event table
+		    FormData rightData = new FormData();
+		    rightData.top = new FormAttachment(0, 0);
+		    rightData.bottom = new FormAttachment(100, 0);
+		    rightData.left = new FormAttachment(sash, 0);
+		    rightData.right = new FormAttachment(100, 0);
+		    
+		    SashForm sfRight = new SashForm(holder, SWT.NONE);
+		    sfRight.setLayout(formLayout);
+		    sfRight.setLayoutData(rightData);		 
+		    this.memLibraryEventTable = new MemLibraryEventTable(this, sfRight);
+			
+		    // allow to drag the sash
+		    sash.addListener(SWT.Selection, new Listener() {
+				public void handleEvent(Event event) {
+					if (event.detail != SWT.DRAG) {
+						data.left = new FormAttachment(0, event.x);
+						sash.getParent().layout();					
+					}
+				}
+			});
+		}else{				
+			holder.setLayout(new FillLayout());
+			this.memThreadTable = new MemThreadTable(this, holder);
+		}
 		this.memoryTableViewer = this.memThreadTable.getTableViewer();
 
 		this.readyToDraw = true;
@@ -191,7 +251,13 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 		{
 			dynamicMemoryVisualisation = false;
 			makeThreadDrawLists();
-		} else {
+		}  else if (actionString.equals("memory_usage_line_on")) //$NON-NLS-1$
+		{
+			showMemoryUsageLine = true;
+		}  else if (actionString.equals("memory_usage_line_off")) //$NON-NLS-1$
+		{
+			showMemoryUsageLine = false;
+		}else {
 			return;
 		}
 
@@ -216,6 +282,11 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 
 			memTrace.setMaxMemDataByInterval((int) (startTime * 1000),
 					(int) (endTime * 1000));
+		
+			if(isLibraryEventTrace){
+				memTrace.setMaxMemLibraryEventDataByInterval((int) (startTime * 1000),
+					(int) (endTime * 1000));
+			}
 
 			// send this message to the 2 other graphs
 			PIEvent be2 = new PIEvent(be.getValueObject(),
@@ -237,6 +308,9 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 			this.setSelectionStart(values[0]);
 			this.setSelectionEnd(values[1]);
 			this.memThreadTable.piEventReceived(be);
+			if(this.memLibraryEventTable != null){
+				this.memLibraryEventTable.piEventReceived(be);
+			}		
 			this.repaint();
 			break;
 
@@ -245,6 +319,9 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 			this.repaint();
 			if (this.leftFigureCanvas != null)
 				this.leftFigureCanvas.redraw();
+			if(memLibraryEventTable != null){				
+				memLibraryEventTable.updateSelection(memThreadTable.getTableViewer().getCheckedElements());	
+			}
 			break;
 
 		case PIEvent.SCALE_CHANGED:
@@ -255,7 +332,7 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 
 		case PIEvent.SCROLLED:
 			Event event = ((Event) be.getValueObject());
-			this.parentComponent.setScrolledOrigin(event.x, event.y);
+			this.parentComponent.setScrolledOrigin(event.x, event.y, (FigureCanvas)event.data);
 			this.repaint();
 			break;
 
@@ -278,9 +355,62 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 		this.makeThreadDrawLists();
 		this.paintThreads(graphics);
 		this.drawDottedLineBackground(graphics, MemTraceGraph.xLegendHeight);
-
+		
+		if(showMemoryUsageLine){
+			paintMemoryUsageLine(graphics);
+		}		
+		if(isLibraryEventTrace){
+			paintLibraryEvents(graphics);
+		}
+		
 		// draw the same selection as the Address/Thread trace
 		this.drawSelectionSection(graphics, MemTraceGraph.xLegendHeight);
+		
+	}
+	
+	private void paintLibraryEvents(Graphics graphics){
+		Enumeration<ProfiledLibraryEvent> enume = memTrace.getLibraryEvents().elements();	
+		while(enume.hasMoreElements()){
+			ProfiledLibraryEvent ple = enume.nextElement();	
+			if(!ple.isEnabled(graphIndex)){
+				continue;
+			}
+			List<GraphSamplePoint> pointList = ple.getGraphSamplePoints();
+			Iterator<GraphSamplePoint> iterator = pointList.iterator();
+			while (iterator.hasNext()) {
+				GraphSamplePoint samplePoint = iterator.next();
+				graphics.setBackgroundColor(ple.getColor());
+				graphics.setForegroundColor(ple.getColor());
+				drawThreadMarks((int) samplePoint.firstSamplePoint,
+						(int) samplePoint.lastSamplePoint,
+						this.getVisualSize().height, graphics);
+			}
+		}
+	}
+	
+	private void paintMemoryUsageLine(Graphics graphics){
+		Color black = ColorPalette.getColor(new RGB(0, 0, 0));
+		graphics.setBackgroundColor(black);
+		graphics.setForegroundColor(black);
+		PointList pl = new PointList();
+		Iterator<MemSampleByTime> iterator = memTrace.getDrawDataByTime().iterator();
+		while(iterator.hasNext()){
+			MemSampleByTime msbt = iterator.next();	
+			// calculate new x coord's value and round it to integer
+			int xCoord = (int) ((msbt.getTime()/getScale()) + 0.5);
+			int maxBytes;
+			if (dynamicMemoryVisualisation)
+				maxBytes = maxChunks;
+			else
+				maxBytes = memTrace.getTraceMaxChunks();
+			int yMultiplier = prettyMaxBytes(maxBytes) / height;
+			// calculate new y-coord's value and round it to integer
+			int yCoord = (int) (((double) height - (double) msbt.getUsedMemory()
+					/ yMultiplier) + 0.5);				
+			pl.addPoint(xCoord,yCoord);
+		}
+		graphics.setLineWidth(2);
+		graphics.drawPolyline(pl);		
 	}
 
 	private void paintSampledChunks(Graphics graphics) {
@@ -587,8 +717,7 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 		// get first event and key from map.
 		Iterator<Long> keys = map.keySet().iterator();
 		Iterator<Integer> values = map.values().iterator();
-		
-	
+
 		int previousXCoord = 0;
 		int countOfSameXCoords = 1;
 
@@ -604,7 +733,8 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 			xCoord = (int) (((double) keys.next() / xMultiplier) + 0.5);
 
 			// calculate new y-coord's value and round it to integer
-			yCoord = (int) (((double) height - (double) values.next() / yMultiplier) + 0.5);
+			yCoord = (int) (((double) height - (double) values.next()
+					/ yMultiplier) + 0.5);
 
 			if (xCoord == previousXCoord && index > 3) {
 				// if more than one sample at one point in the screen, count
@@ -721,13 +851,13 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 			}
 
 			// create empty sample
-			MemSample previousSample = new MemSample(new MemThread(0, "", ""),
+			MemSample previousSample = new MemSample(new MemThread(0, "", ""), //$NON-NLS-1$ //$NON-NLS-2$
 					0, 0, 0);
 
 			Iterator<MemSample> values = memSamples.values().iterator();
 
 			while (values.hasNext()) {
-				MemSample memSample = values.next(); 
+				MemSample memSample = values.next();
 				// go thru samples from single threas
 				// save changes after last received sample into TreeMaps
 				addEventToTreeMap(this.eventStackListY,
@@ -757,9 +887,10 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 			this.memTrace.setTraceMaxChunks(maxChunks);
 			this.memTrace.setTraceMaxStackHeap(maxStack);
 			this.memTrace.setTraceMaxTotal(maxStackHeap);
-			
-			//repaint left legend if this is first time that tread lists are made
-			if(firstTimeDrawThreadList){
+
+			// repaint left legend if this is first time that tread lists are
+			// made
+			if (firstTimeDrawThreadList) {
 				this.parentComponent.paintLeftLegend();
 				firstTimeDrawThreadList = false;
 			}
@@ -781,10 +912,10 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 		Iterator<Long> keys = map.keySet().iterator();
 
 		while (values.hasNext()) {
-			
+
 			int memValue = values.next();
 			long memKey = keys.next();
-			
+
 			// go thru array and count actual state of
 			// memory in each event
 			int value = previousValue + memValue;
@@ -902,13 +1033,14 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 							+ memSample.stackSize;
 					counter++;
 				}
-				
+
 			}
 
 			// tempListX[0] = (int)
 			// (((MemSample)memSamples.firstEntry().getValue()).sampleSynchTime
 			// / getScale());
-			MemSample firstMemSample = (MemSample)memSamples.get(memSamples.firstKey());
+			MemSample firstMemSample = (MemSample) memSamples.get(memSamples
+					.firstKey());
 			tempListX[0] = (int) ((firstMemSample.sampleSynchTime / getScale()));
 			tempListX[tempListX.length - 1] = tempListX[tempListX.length - 2];
 
@@ -1036,6 +1168,7 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 	 */
 	public void addContextMenuItems(Menu menu,
 			org.eclipse.swt.events.MouseEvent me) {
+
 		new MenuItem(menu, SWT.SEPARATOR);
 
 		MenuItem memoryStatsItem = new MenuItem(menu, SWT.PUSH);
@@ -1046,93 +1179,7 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 			}
 		});
 
-		new MenuItem(menu, SWT.SEPARATOR);
-
-		boolean showChunk = true;
-		boolean showHeapStack = true;
-
 		Object obj;
-		// if there is a showChunk value associated with the current Analyser
-		// tab, then use it
-		obj = NpiInstanceRepository.getInstance().activeUidGetPersistState(
-				"com.nokia.carbide.cpp.pi.memory.showChunk"); //$NON-NLS-1$
-		if ((obj != null) && (obj instanceof Boolean))
-			// retrieve the current value
-			showChunk = (Boolean) obj;
-		else
-			// set the initial value
-			NpiInstanceRepository.getInstance().activeUidSetPersistState(
-					"com.nokia.carbide.cpp.pi.memory.showChunk", showChunk); //$NON-NLS-1$
-
-		// if there is a showHeapStack value associated with the current
-		// Analyser tab, then use it
-		obj = NpiInstanceRepository.getInstance().activeUidGetPersistState(
-				"com.nokia.carbide.cpp.pi.memory.showHeapStack"); //$NON-NLS-1$
-		if ((obj != null) && (obj instanceof Boolean))
-			// retrieve the current value
-			showHeapStack = (Boolean) obj;
-		else
-			// set the initial value
-			NpiInstanceRepository
-					.getInstance()
-					.activeUidSetPersistState(
-							"com.nokia.carbide.cpp.pi.memory.showHeapStack", showHeapStack); //$NON-NLS-1$
-
-		MenuItem showChunkItem = new MenuItem(menu, SWT.RADIO);
-		showChunkItem.setText(Messages.getString("MemoryPlugin.showChunks")); //$NON-NLS-1$
-		showChunkItem.setSelection(showChunk && !showHeapStack);
-		showChunkItem.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				NpiInstanceRepository.getInstance().activeUidSetPersistState(
-						"com.nokia.carbide.cpp.pi.memory.showChunk", true); //$NON-NLS-1$
-				NpiInstanceRepository.getInstance().activeUidSetPersistState(
-						"com.nokia.carbide.cpp.pi.memory.showHeapStack", false); //$NON-NLS-1$
-
-				for (int i = 0; i < 3; i++) {
-					MemTraceGraph graph = (MemTraceGraph) memTrace
-							.getTraceGraph(i);
-					graph.action("chunk_on"); //$NON-NLS-1$
-				}
-			}
-		});
-
-		MenuItem showHeapItem = new MenuItem(menu, SWT.RADIO);
-		showHeapItem.setText(Messages.getString("MemoryPlugin.showHeapStack")); //$NON-NLS-1$
-		showHeapItem.setSelection(showHeapStack && !showChunk);
-		showHeapItem.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				NpiInstanceRepository.getInstance().activeUidSetPersistState(
-						"com.nokia.carbide.cpp.pi.memory.showChunk", false); //$NON-NLS-1$
-				NpiInstanceRepository.getInstance().activeUidSetPersistState(
-						"com.nokia.carbide.cpp.pi.memory.showHeapStack", true); //$NON-NLS-1$
-
-				for (int i = 0; i < 3; i++) {
-					MemTraceGraph graph = (MemTraceGraph) memTrace
-							.getTraceGraph(i);
-					graph.action("heapstack_on"); //$NON-NLS-1$
-				}
-			}
-		});
-
-		MenuItem showBothItem = new MenuItem(menu, SWT.RADIO);
-		showBothItem.setText(Messages.getString("MemoryPlugin.showAll")); //$NON-NLS-1$
-		showBothItem.setSelection(showChunk && showHeapStack);
-		showBothItem.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				NpiInstanceRepository.getInstance().activeUidSetPersistState(
-						"com.nokia.carbide.cpp.pi.memory.showChunk", true); //$NON-NLS-1$
-				NpiInstanceRepository.getInstance().activeUidSetPersistState(
-						"com.nokia.carbide.cpp.pi.memory.showHeapStack", true); //$NON-NLS-1$
-
-				for (int i = 0; i < 3; i++) {
-					MemTraceGraph graph = (MemTraceGraph) memTrace
-							.getTraceGraph(i);
-					graph.action("chunk_heapstack_on"); //$NON-NLS-1$
-				}
-			}
-		});
-
-		new MenuItem(menu, SWT.SEPARATOR);
 
 		boolean rescale = false;
 
@@ -1170,9 +1217,36 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 					MemTraceGraph graph = (MemTraceGraph) memTrace
 							.getTraceGraph(i);
 					graph.action(action);
-				}
+				}		
+				MemoryPlugin.getDefault().updateMenuItems();
 			}
 		});
+		
+		// if there is a show memory usage value associated with the current Analyser tab, then use it		
+		obj = NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.memory.showMemoryUsage");	//$NON-NLS-1$
+		if ((obj != null) && (obj instanceof Boolean))
+			// retrieve the current value
+			showMemoryUsageLine = (Boolean)obj;
+		else
+			// set the initial value
+			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.memory.showMemoryUsage", showMemoryUsageLine);	//$NON-NLS-1$
+		
+		new MenuItem(menu, SWT.SEPARATOR);		
+		MenuItem memoryUsageLine = new MenuItem(menu, SWT.CHECK);
+		memoryUsageLine.setText(Messages.getString("MemTraceGraph.showTotalMemoryUsage")); //$NON-NLS-1$
+		memoryUsageLine.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				showMemoryUsageLine = !showMemoryUsageLine;
+				NpiInstanceRepository
+				.getInstance()
+				.activeUidSetPersistState(
+						"com.nokia.carbide.cpp.pi.memory.showMemoryUsage", showMemoryUsageLine); //$NON-NLS-1$
+				repaint();			
+				MemoryPlugin.getDefault().updateMenuItems();
+			}
+		});
+		memoryUsageLine.setSelection(showMemoryUsageLine);
+		
 	}
 
 	public void paintLeftLegend(FigureCanvas figureCanvas, GC gc) {
@@ -1255,11 +1329,11 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 
 			Point extent = gc.stringExtent(legend);
 
-			gc.drawLine(GenericTraceGraph.yLegendWidth - 3, (int) y + 1,
-					GenericTraceGraph.yLegendWidth, (int) y + 1);
+			gc.drawLine(IGenericTraceGraph.Y_LEGEND_WIDTH - 3, (int) y + 1,
+					IGenericTraceGraph.Y_LEGEND_WIDTH, (int) y + 1);
 
 			if (y >= previousBottom) {
-				gc.drawString(legend, GenericTraceGraph.yLegendWidth - extent.x
+				gc.drawString(legend, IGenericTraceGraph.Y_LEGEND_WIDTH - extent.x
 						- 4, (int) y);
 				previousBottom = (int) y + extent.y;
 			}
@@ -1322,16 +1396,11 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 		double x = me.x * this.getScale();
 		double y = me.y;
 
-		if (y > this.getVisualSizeY() - MemTraceGraph.xLegendHeight) {
-			this.setToolTipText(null);
-			return;
-		}
-
 		// mouse event may return out of range X, that may
 		// crash when we use it to index data array
 		x = x >= 0 ? x : 0;
 		if (me.x >= this.getVisualSize().width
-				+ this.parentComponent.getScrolledOrigin().x) {
+				+ this.parentComponent.getScrolledOrigin(this).x) {
 			x = (this.getVisualSize().width - 1) * this.getScale();
 		}
 
@@ -1339,17 +1408,48 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 			this.setToolTipText(null);
 			return;
 		}
+	
+		if (y > this.getVisualSizeY() - MemTraceGraph.xLegendHeight) {
+			if (isLibraryEventTrace) {
+				final long xPoint = (long) (x + 0.5);
+				if (!lockMouseToolTipResolver[0]) {
+					// Resolve tool tip text in thread
+					new Thread() {
+						@Override
+						public void run() {
+							lockMouseToolTipResolver[0] = true;
+							try {
+								final ArrayList<MemSample> list = memTrace
+										.getLibraryEventDataByTime(graphIndex,
+												xPoint, (long) getScale());
+								Display.getDefault().syncExec(new Runnable() {
+									public void run() {
+										if (list.isEmpty()) {
+											setToolTipText(null);
+										} else {
+											final MemSample ms = list.get(list
+													.size() - 1);										
+											setToolTipText(getLibraryEventToolTipText(ms));											
+										}
+									}
+								});
 
+							} finally {
+								lockMouseToolTipResolver[0] = false;
+							}
+						}
+					}.start();
+				}			
+			} else {
+				this.setToolTipText(null);
+			}
+			return;
+		}
+	
 		long chunkSize = 0;
 		long stackHeapSize = 0;
-		// long totalSize = 0;
-		Entry<Long, Integer> entry;
 		if (memTrace.getVersion() >= 202) {
 			if (eventStackListY != null) {
-				/*
-				 * TODO entry = eventStackListY.floorEntry((long)x); if(entry !=
-				 * null){ stackHeapSize = entry.getValue(); }
-				 */
 				Integer value = (Integer) MemTrace.getFloorEntryFromMap(
 						(long) x, eventStackListY);
 				if (value != null) {
@@ -1357,19 +1457,13 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 				}
 			}
 			if (eventChunkListY != null) {
-				/*
-				 * TODO entry = eventChunkListY.floorEntry((long)x); if(entry !=
-				 * null){ chunkSize = entry.getValue(); }
-				 */
 				Integer value = (Integer) MemTrace.getFloorEntryFromMap(
 						(long) x, eventChunkListY);
 				if (value != null) {
 					chunkSize = value;
 				}
 
-			}/*
-			 * if(stackHeapSize == null){ this.setToolTipText(null); return; }
-			 */
+			}
 		} else {
 			ArrayList<MemSample> samples = memTrace
 					.getMemSampleDataByTime((long) x);
@@ -1410,6 +1504,26 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 		} else
 			return;
 
+	}
+	
+	private String getLibraryEventToolTipText(MemSample memSample) {
+		String libraryName = getMemTrace().getLibraryNameString(
+				memSample.thread.fullName);
+		String process = getMemTrace().getProcessFromLibraryNameString(
+				memSample.thread.fullName);
+		if (memSample.stackSize != 0) {
+			return MessageFormat.format(Messages
+					.getString("MemTraceGraph.mouseToolTipLoaded"),
+					libraryName, process, memKBFormat
+							.format(((memSample.heapSize) + 512) / 1024),
+					memSample.sampleNum);
+		} else {
+			return MessageFormat.format(Messages
+					.getString("MemTraceGraph.mouseToolTipUnloaded"),
+					libraryName, process, memKBFormat
+							.format(((memSample.heapSize) + 512) / 1024),
+					memSample.sampleNum);
+		}
 	}
 
 	public void setCurrentThreads(Hashtable<Integer, Integer> threadList) {
@@ -1486,4 +1600,185 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 		return bytes;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @seecom.nokia.carbide.cpp.internal.pi.plugin.model.ITitleBarMenu#
+	 * addTitleBarMenuItems()
+	 */
+	public Action[] addTitleBarMenuItems() {
+
+		// Create actions for Title Bar's drop-down list 
+		
+		ArrayList<Action> actionArrayList = new ArrayList<Action>();
+
+		// Action for showing only chunks
+		Action actionShowChunk = new Action() {
+			public void run() {
+				NpiInstanceRepository.getInstance().activeUidSetPersistState(
+						"com.nokia.carbide.cpp.pi.memory.showChunk", true); //$NON-NLS-1$
+				NpiInstanceRepository.getInstance().activeUidSetPersistState(
+						"com.nokia.carbide.cpp.pi.memory.showHeapStack", false); //$NON-NLS-1$
+
+				for (int i = 0; i < 3; i++) {
+					MemTraceGraph graph = (MemTraceGraph) memTrace
+							.getTraceGraph(i);
+					graph.action("chunk_on"); //$NON-NLS-1$
+				}
+			}
+		};
+		actionShowChunk.setText(Messages.getString("MemoryPlugin.showChunks")); //$NON-NLS-1$
+
+		// Action for showing only heap/stack
+		Action actionShowHeap = new Action() {
+			public void run() {
+				NpiInstanceRepository.getInstance().activeUidSetPersistState(
+						"com.nokia.carbide.cpp.pi.memory.showChunk", false); //$NON-NLS-1$
+				NpiInstanceRepository.getInstance().activeUidSetPersistState(
+						"com.nokia.carbide.cpp.pi.memory.showHeapStack", true); //$NON-NLS-1$
+
+				for (int i = 0; i < 3; i++) {
+					MemTraceGraph graph = (MemTraceGraph) memTrace
+							.getTraceGraph(i);
+					graph.action("heapstack_on"); //$NON-NLS-1$
+				}
+			}
+		};
+		actionShowHeap
+				.setText(Messages.getString("MemoryPlugin.showHeapStack")); //$NON-NLS-1$
+
+		// Action for showing both heap/stack and chunks
+		Action actionShowBothItem = new Action() {
+			public void run() {
+				NpiInstanceRepository.getInstance().activeUidSetPersistState(
+						"com.nokia.carbide.cpp.pi.memory.showChunk", true); //$NON-NLS-1$
+				NpiInstanceRepository.getInstance().activeUidSetPersistState(
+						"com.nokia.carbide.cpp.pi.memory.showHeapStack", true); //$NON-NLS-1$
+
+				for (int i = 0; i < 3; i++) {
+					MemTraceGraph graph = (MemTraceGraph) memTrace
+							.getTraceGraph(i);
+					graph.action("chunk_heapstack_on"); //$NON-NLS-1$
+				}
+			}
+		};
+		actionShowBothItem.setText(Messages.getString("MemoryPlugin.showAll")); //$NON-NLS-1$
+
+		actionArrayList.add(actionShowChunk);
+		actionArrayList.add(actionShowHeap);
+		actionArrayList.add(actionShowBothItem);
+
+		// check which drawing mode is selected and set its action's state to
+		// checked
+		boolean showChunk = isShowChunkEnabled();
+		boolean showHeapStack = isShowHeapStackEnabled();
+
+		if (showChunk && !showHeapStack) {
+			actionShowChunk.setChecked(true);
+		} else if (showHeapStack && !showChunk) {
+			actionShowHeap.setChecked(true);
+		} else {
+			actionShowBothItem.setChecked(true);
+		}
+
+		return actionArrayList.toArray(new Action[actionArrayList.size()]);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITitleBarMenu#getContextHelpId()
+	 */
+	public String getContextHelpId() {
+		return MemoryPlugin.HELP_CONTEXT_ID_MAIN_PAGE;
+	}
+
+	/**
+	 * Function for checking if chunk view is enabled
+	 * 
+	 * @return boolean value that is true when chunk view is enabled
+	 */
+
+	private boolean isShowChunkEnabled() {
+		// if there is a showChunk value associated with the current Analyser
+		// tab, then use it
+		Object obj = NpiInstanceRepository.getInstance()
+				.activeUidGetPersistState(
+						"com.nokia.carbide.cpp.pi.memory.showChunk"); //$NON-NLS-1$
+		if ((obj != null) && (obj instanceof Boolean))
+			// retrieve the current value
+			return true;
+		else
+			// set the initial value
+			NpiInstanceRepository.getInstance().activeUidSetPersistState(
+					"com.nokia.carbide.cpp.pi.memory.showChunk", true); //$NON-NLS-1$
+		return false;
+	}
+
+	/**
+	 * Function for checking if stack/heap view is enabled
+	 * 
+	 * @return boolean value that is true when stack/heap view is enabled
+	 */
+	private boolean isShowHeapStackEnabled() {
+		// if there is a showHeapStack value associated with the current
+		// Analyser tab, then use it
+		Object obj = NpiInstanceRepository.getInstance()
+				.activeUidGetPersistState(
+						"com.nokia.carbide.cpp.pi.memory.showHeapStack"); //$NON-NLS-1$
+		if ((obj != null) && (obj instanceof Boolean))
+			// retrieve the current value
+			return true;
+		else
+			// set the initial value
+			NpiInstanceRepository.getInstance().activeUidSetPersistState(
+					"com.nokia.carbide.cpp.pi.memory.showHeapStack", true); //$NON-NLS-1$
+		return false;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph#setLegendTableVisible(boolean)
+	 */
+	public void graphVisibilityChanged(boolean value){
+		if(holder != null){
+			holder.setVisible(value);
+			holder.getParent().layout();
+		}
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph#setLegendTableMaximized(boolean)
+	 */
+	public void graphMaximized(boolean value){
+		if(holder != null){
+			if(holder.getParent().getClass() == SashForm.class){
+				SashForm sashForm = (SashForm)holder.getParent();
+				if(value){
+					sashForm.setMaximizedControl(holder);
+				}
+				else{
+					sashForm.setMaximizedControl(null);
+
+				}
+			}
+			
+		}
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph#isGraphMinimizedWhenOpened()
+	 */
+	public boolean isGraphMinimizedWhenOpened(){
+		// Memory Graph is shown when view is opened
+		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.pi.visual.IGenericTraceGraph#getTitle()
+	 */
+	@Override
+	public String getTitle() {
+		return Messages.getString("MemoryPlugin.pluginTitle"); //$NON-NLS-1$
+	}	
 }

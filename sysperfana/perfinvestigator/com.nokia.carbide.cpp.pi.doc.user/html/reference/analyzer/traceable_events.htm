@@ -1,0 +1,313 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Traceable Event Types</title>
+  <link href="../../../book.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+<!--
+ .style1 {
+font-family: Georgia, "Times New Roman", Times, serif;
+font-weight: bold;
+}
+-->
+
+  </style>
+</head>
+
+<body>
+<h2>Traceable Event Types </h2>
+
+<p>The table below lists the event types that can be traced. The performance
+counters for these traces can then be viewed with the PIAnalyzer Performance
+Counters view.</p>
+
+<h5>Table 1. Traceable event types</h5>
+
+<table width="80%" border="0" cellpadding="2" cellspacing="0">
+  <tbody>
+    <tr>
+      <th width="10%" scope="col">Value</th>
+      <th width="25%" scope="col">Trace name</th>
+      <th width="65%" scope="col">Description</th>
+    </tr>
+    <tr>
+      <td>0 
+
+        <p>(0x00)</p>
+      </td>
+      <td>Instruction cache miss to cachable location</td>
+      <td>Instruction cache miss to a cachable location requires fetch from
+        external memory.</td>
+    </tr>
+    <tr>
+      <td>1 
+
+        <p>(0x01) </p>
+      </td>
+      <td>Stall because instruction buffer cannot deliver</td>
+      <td>Stall because the instruction buffer cannot deliver an instruction.
+        This could indicate an Instruction Cache miss or an Instruction
+        MicroTLB miss. 
+
+        <p>This event occurs in every cycle in which the condition is
+        present.</p>
+      </td>
+    </tr>
+    <tr>
+      <td>2 
+
+        <p>(0x02) </p>
+      </td>
+      <td>Stall due to data dependency</td>
+      <td>Stall because of a data dependency. 
+
+        <p>This event occurs in every cycle in which the condition is
+        present.</p>
+      </td>
+    </tr>
+    <tr>
+      <td>3 
+
+        <p>(0x03) </p>
+      </td>
+      <td>Instruction MicroTLB miss</td>
+      <td>Instruction MicroTLB miss.</td>
+    </tr>
+    <tr>
+      <td>4 
+
+        <p>(0x04) </p>
+      </td>
+      <td>Data MicroTLB miss</td>
+      <td>Data MicroTLB miss.</td>
+    </tr>
+    <tr>
+      <td>5 
+
+        <p>(0x05)</p>
+      </td>
+      <td>Branch instruction executed</td>
+      <td>Branch instruction executed, branch might or might not have changed
+        program flow.</td>
+    </tr>
+    <tr>
+      <td>6 
+
+        <p>(0x06) </p>
+      </td>
+      <td>Branch mispredicted</td>
+      <td>Branch mispredicted.</td>
+    </tr>
+    <tr>
+      <td>7 
+
+        <p>(0x07) </p>
+      </td>
+      <td>Instruction executed</td>
+      <td>Instruction executed. If EVENTBUS bit [9] is HIGH, two instructions
+        were executed in this clock cycle and the count is increments by two.
+
+        <p>When performance counters for this trace are selected for the
+        PIAnalyzer Performance Counters view, the MIPS graph can also be
+        viewed.</p>
+      </td>
+    </tr>
+    <tr>
+      <td>9 
+
+        <p>(0x09) </p>
+      </td>
+      <td>Data cache access (cachable only)</td>
+      <td>Data cache access, not including Cache operations. 
+
+        <p>This event occurs for each nonsequential access to a cache line, for
+        cachable locations.</p>
+      </td>
+    </tr>
+    <tr>
+      <td>A 
+
+        <p>(0x0A) </p>
+      </td>
+      <td>Data cache access</td>
+      <td>Data cache access, not including Cache Operations. 
+
+        <p>This event occurs for each nonsequential access to a cache line,
+        regardless of whether or not the location is cachable.</p>
+      </td>
+    </tr>
+    <tr>
+      <td>B 
+
+        <p>(0x0B) </p>
+      </td>
+      <td>Data cache miss</td>
+      <td>Data cache miss, not including Cache Operations.</td>
+    </tr>
+    <tr>
+      <td>C 
+
+        <p>(0x0C) </p>
+      </td>
+      <td>Data cache write-back</td>
+      <td>Data cache write-back. 
+
+        <p>This event occurs once for each half line of four words that are
+        written back from the cache.</p>
+      </td>
+    </tr>
+    <tr>
+      <td>D 
+
+        <p>(0x0D) </p>
+      </td>
+      <td><p>Software changed the PC</p>
+      </td>
+      <td>Software changed the PC. 
+
+        <p>This event occurs any time the PC is changed by software and there
+        is not a mode change. For example, a MOV instruction with PC as the
+        destination triggers this event.</p>
+
+        <p>Executing a SWI from User mode does not trigger this event, because
+        it incurs a mode change. If EVENTBUS bit [15] is HIGH, two software PC
+        changes occurred in this clock cycle and the count is increments by
+        two.</p>
+      </td>
+    </tr>
+    <tr>
+      <td>F 
+
+        <p>(0x0F) </p>
+      </td>
+      <td>Main TLB miss</td>
+      <td>Main TLB miss.</td>
+    </tr>
+    <tr>
+      <td>10 
+
+        <p>(0x10) </p>
+      </td>
+      <td><p>External memory request</p>
+      </td>
+      <td>Explicit external data accesses (Data Cache linefills, Noncachable,
+        Write-Through).</td>
+    </tr>
+    <tr>
+      <td>11 
+
+        <p>(0x11) </p>
+      </td>
+      <td>Stall due to Load store Unit queue being full</td>
+      <td>Stall because the Load Store Unit request queue is full. 
+
+        <p>This event occurs in each clock cycle in which the condition is
+        met.</p>
+
+        <p>A high incidence of this event often indicates that the BCU is
+        waiting for transactions to complete on the external bus.</p>
+      </td>
+    </tr>
+    <tr>
+      <td>12 
+
+        <p>(0x12) </p>
+      </td>
+      <td>Forced write buffer drain</td>
+      <td>The number of times the Write Buffer was drained because of a Data
+        Synchronization Barrier command or Strongly Ordered operation.</td>
+    </tr>
+    <tr>
+      <td>20 
+
+        <p>(0x20) </p>
+      </td>
+      <td>ETMEXTOUT[0] asserted</td>
+      <td>ETMEXTOUT[0] signal was asserted for a cycle.</td>
+    </tr>
+    <tr>
+      <td>21 
+
+        <p>(0x21)</p>
+      </td>
+      <td>ETMEXTOUT[1] asserted</td>
+      <td>ETMEXTOUT[1] signal was asserted for a cycle.</td>
+    </tr>
+    <tr>
+      <td>22 
+
+        <p>(0x22)</p>
+      </td>
+      <td>ETMEXTOUT asserted</td>
+      <td>If both ETMEXTOUT[0] and ETMEXTOUT[1] signals are asserted then the
+        count is incremented by two.</td>
+    </tr>
+    <tr>
+      <td>23 
+
+        <p>(0x23)</p>
+      </td>
+      <td>Procedure call instruction executed</td>
+      <td>Procedure call instruction executed. The procedure return address was
+        pushed on to the return stack.</td>
+    </tr>
+    <tr>
+      <td>24 
+
+        <p>(0x24)</p>
+      </td>
+      <td>Procedure return instruction executed</td>
+      <td>Procedure return instruction executed. The procedure return address
+        was popped off the return stack.</td>
+    </tr>
+    <tr>
+      <td>25 
+
+        <p>(0x25)</p>
+      </td>
+      <td>Procedure return instruction executed and return address
+      predicted</td>
+      <td>Procedure return instruction executed and return address predicted.
+        The procedure return address was popped off the return stack and the
+        core branched to this address.</td>
+    </tr>
+    <tr>
+      <td>26 
+
+        <p>(0x26)</p>
+      </td>
+      <td>Procedure return instruction executed and return address predicted
+        incorrectly</td>
+      <td>Procedure return instruction executed and return address predicted
+        incorrectly. The procedure return address was restored to the return
+        stack following the prediction being identified as incorrect.</td>
+    </tr>
+    <tr>
+      <td>FF 
+
+        <p>(0xFF) </p>
+      </td>
+      <td>Cycles</td>
+      <td>An increment each cycle.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5>Related references</h5>
+<ul>
+  <li><a
+    href="../../reference/analyzer/view_performance_counters.htm">Performance
+    Counters View</a></li>
+  <li><a href="../../reference/profiler/Prof_counter_settings.htm">PIProfiler
+    Performance Counter Settings</a></li>
+</ul>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. <br>
+License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

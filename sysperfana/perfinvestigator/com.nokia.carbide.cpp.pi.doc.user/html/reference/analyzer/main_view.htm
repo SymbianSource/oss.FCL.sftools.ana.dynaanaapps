@@ -2,30 +2,65 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Analyzer View</title>
-    <link href="../../../book.css" rel="stylesheet" type="text/css">
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Analyzer View</title>
+  <link href="../../../book.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
 <h2>Analyzer View</h2>
-<p>The main analysis view is visible after trace data taken by the profiler has been imported into Carbide.c++ and opened with the Analyzer. The thread load data in the main analysis view is built from the address/thread trace. Other trace data is also shown in the main analysis view, such as dynamic binary support trace and function call trace. Figure 1 is an example view of imported profiler data that has been opened with the analyzer, including memory and power usage information, with a time interval of 9.1 to 13 seconds selected.</p>
-<p align="center"><img src="images/analyzer_mainview.png" width="705" height="659"> </p>
-<p align="center" class="figure">Figure 1. Analyzer main view showing Thread, Memory, and Power graphs</p>
-<p>The address/thread trace graph is the most generic and perhaps most informative visual of the sampled data.
-  The different colors represent different items. You can select Thread load, Binary load, or Function load as shown in Figure 2. Time is represented on the horizontal axis of the graph and share of CPU use is represented on the vertical axis.</p>
-<p align="center"><img src="images/analz_loads_tabs.png" width="423" height="84"></p>
-<p align="center" class="figure">Figure 2. Selecting Threads, Binaries, Functions, or Function Calls</p>
-<p>Each of the lines in the thread list represents a single thread. The color codes in the thread list correspond to the colors in the thread load graphs. Therefore, each color in the thread load graph represents the load of its corresponding thread.</p>
-<p>You can select a portion of the graph by clicking on the trace graph. The Information view beneath the graph displays information about the currently selected part of the graph. For example, thread load statistics are shown in the information view if the thread load graph is selected.</p>
+
+<p>The main analysis view is visible after trace data taken by Profiler has
+been imported into Carbide.c++ and opened with Analyzer. The thread load data
+in the main analysis view is built from the address/thread trace. Other trace
+data is also shown in the main analysis view, such as dynamic binary support
+trace and function call trace. Figure 1 is an example view of imported profiler
+data that has been opened with the analyzer, including memory and power usage
+information, with a time interval of 4 to 8 seconds selected.The Interrups
+graph and Performance Counters graph have been minized.</p>
+
+<p align="center"><img src="images/analyzer_mainview.png" width="679"
+height="770"> </p>
+
+<p align="center" class="figure">Figure 1. Analyzer main view showing Thread,
+Memory, and Power graphs</p>
+
+<p>The address/thread trace graph is the most generic and perhaps most
+informative visual of the sampled data. The different colors represent
+different items. Time is represented on the horizontal axis of the graph and
+share of CPU use is represented on the vertical axis. You can select Thread
+load, Binary load, or Function load by selecting the respective tabs at the
+bottom of the main view, as shown in Figure 2.</p>
+
+<p align="center"><img src="images/analz_loads_tabs.png" width="423"
+height="84"></p>
+
+<p align="center" class="figure">Figure 2. Selecting Threads, Binaries,
+Functions, or Function Calls</p>
+
+<p>Each of the lines in the thread table represents a single thread. The color
+codes in the thread list correspond to the colors in the thread load graphs.
+Therefore, each color in the thread load graph represents the load of its
+corresponding thread.</p>
+
+<p>You can select a portion of the graph by clicking on the trace graph. The
+legend table beneath the graph displays information about the currently
+selected part of the graph. For example, thread load statistics are shown in
+the table if the thread load graph is selected.</p>
+
 <p><strong>Related references</strong></p>
 <ul>
   <li><a href="GUI_tour.htm">Analyzer GUI Controls </a></li>
-<li><a href="thread_load.htm">Thread Load</a></li>
-<li><a href="binary_load.htm">Binary Load</a></li>
-<li><a href="function_load.htm">Function Load</a></li>
-<li><a href="function_calls.htm">Function Calls</a></li>
+  <li><a href="thread_load.htm">Thread Load</a></li>
+  <li><a href="binary_load.htm">Binary Load</a></li>
+  <li><a href="function_load.htm">Function Load</a></li>
+  <li><a href="function_calls.htm">Function Calls</a></li>
 </ul>
-<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. <br>
+License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
 </body>
 </html>

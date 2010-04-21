@@ -17,9 +17,10 @@
 
 package com.nokia.carbide.cpp.pi.address;
 
-import com.nokia.carbide.cpp.internal.pi.model.Function;
 import com.nokia.carbide.cpp.internal.pi.model.FunctionResolver;
 import com.nokia.carbide.cpp.internal.pi.model.GenericSampleWithFunctions;
+import com.nokia.carbide.cpp.internal.pi.model.IFunction;
+import com.nokia.carbide.cpp.internal.pi.model.UnresolvedFunction;
 
 public class GppSample extends GenericSampleWithFunctions
   {
@@ -32,11 +33,14 @@ public class GppSample extends GenericSampleWithFunctions
     public GppThread   thread;
     public GppFunction function;
     public long programCounter;
-    public SomMapping somMapping;
+    //public SomMapping somMapping;
     
-    public Function currentFunctionSym;    
-    public Function currentFunctionItt;
+    private IFunction currentFunctionSym;    
+    private IFunction currentFunctionItt;
     
+    /** CPU core number */
+    public int cpuNumber;
+
     public void resolveFunction(FunctionResolver res)
     {
     	if (res.getResolverName().equals("Symbol"))  //$NON-NLS-1$
@@ -46,15 +50,68 @@ public class GppSample extends GenericSampleWithFunctions
     	else if (res.getResolverName().equals("ITT"))  //$NON-NLS-1$
     	{
     		if (this.currentFunctionSym == null)
-    			this.currentFunctionItt = res.findFunctionForAddress(programCounter);
+    			this.currentFunctionItt = res.findFunctionForAddress(programCounter, sampleSynchTime);
     	}
     }
 
-    public String toString()
+
+	/**
+	 * @return the function resolved from symbol file
+	 */
+	public IFunction getCurrentFunctionSym() {
+		return currentFunctionSym;
+	}
+
+	/**
+	 * Setter for the function resolved from symbol file
+	 * @param currentFunctionSym the function to set
+	 */
+	public void setCurrentFunctionSym(IFunction currentFunctionSym) {
+		this.currentFunctionSym = currentFunctionSym;
+	}
+
+	/**
+	 * Getter
+	 * @return the function resolved from dynamic binary trace
+	 */
+	public IFunction getCurrentFunctionItt() {
+		if (currentFunctionItt == null && currentFunctionSym == null){
+			return new UnresolvedFunction(programCounter);
+		}
+		
+		return currentFunctionItt;
+	}
+
+	/**
+	 * Setter the function resolved from dynamic binary trace
+	 * @param currentFunctionItt the function to set
+	 */
+	public void setCurrentFunctionItt(IFunction currentFunctionItt) {
+		this.currentFunctionItt = currentFunctionItt;
+	}
+    
+	@Override
+    public String toString()    
 	  {
-	  	return "Gpp:#" + this.sampleSynchTime + " @0x"   //$NON-NLS-1$ //$NON-NLS-2$
-	  							  + Long.toHexString(this.programCounter) + " fS:"   //$NON-NLS-1$
-	  							  + this.currentFunctionSym != null ? this.currentFunctionSym.functionName : this.currentFunctionItt.functionName
-	  							  + " pr:" + this.thread.process.name + " th:"+ this.thread.threadName;  //$NON-NLS-1$ //$NON-NLS-2$
+  	StringBuilder sb = new StringBuilder("Gpp:#").append(this.sampleSynchTime);
+  	if (cpuNumber != -1){
+  		sb.append(" CPU: ").append(cpuNumber);
+  	}
+  	sb.append(" @0x").append(Long.toHexString(this.programCounter));   //$NON-NLS-1$ //$NON-NLS-2$
+  	if (currentFunctionSym != null){
+  		sb.append(" fS:").append(currentFunctionSym.getFunctionName());
+  	} else if (this.currentFunctionItt != null){
+  		sb.append(" fS:").append(currentFunctionItt.getFunctionName());
+  	}
+  	if (thread != null){
+  		if (thread.process != null && thread.process.name != null){
+  			sb.append(" pr:").append(this.thread.process.name);
+  		}
+  		if (thread.threadName != null){
+  			sb.append(" th:").append(this.thread.threadName);
+  		}
+  	}
+  	return sb.toString();
 	  }
+    
   }

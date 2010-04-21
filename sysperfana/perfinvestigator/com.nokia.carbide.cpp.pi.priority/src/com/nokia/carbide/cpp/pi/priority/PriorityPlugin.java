@@ -163,8 +163,22 @@ public class PriorityPlugin extends AbstractPiPlugin
 		return "Priority"; //$NON-NLS-1$
 	}
 
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#getTraceTitle()
+	 */
+	public String getTraceTitle() {
+		return Messages.getString("PriorityPlugin.0"); //$NON-NLS-1$
+	}
+
 	public int getTraceId() {
 		return 4;	//same id than MEM trace has because PRI trace is parsed from a MEM trace file
+	}
+
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#parseTraceFiles(java.io.File[])
+	 */
+	public ParsedTraceData parseTraceFiles(File[] files) throws Exception {
+		throw new UnsupportedOperationException();
 	}
 
 	public ParsedTraceData parseTraceFile(File file /*, ProgressBar progressBar*/) throws Exception 

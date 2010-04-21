@@ -48,7 +48,13 @@ import com.nokia.carbide.cpp.pi.editors.PIPageEditor;
 public class PowerPlugin extends AbstractPiPlugin
 		implements IViewMenu, ITrace, IClassReplacer, IVisualizable, IEventListener
 {
+
+	/** The plug-in ID */
+	public static final String PLUGIN_ID = "com.nokia.carbide.cpp.pi.power"; //$NON-NLS-1$
+
 	private static final String HELP_CONTEXT_ID = PIPageEditor.PI_ID + ".power";  //$NON-NLS-1$
+	/** context help id of the main page */
+	public static final String HELP_CONTEXT_ID_MAIN_PAGE = HELP_CONTEXT_ID + ".powerPageContext";  //$NON-NLS-1$
 
 	// There will be three graphs - one each for editor pages 0, 1, 2
 	// This code may assume that page 0 has the threads graph, 1 the binaries, and 2 the functions
@@ -145,8 +151,22 @@ public class PowerPlugin extends AbstractPiPlugin
 		return "Power"; //$NON-NLS-1$
 	}
 
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#getTraceTitle()
+	 */
+	public String getTraceTitle() {
+		return Messages.getString("PowerPlugin.0"); //$NON-NLS-1$
+	}
+
 	public int getTraceId() {
 		return 11;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#parseTraceFiles(java.io.File[])
+	 */
+	public ParsedTraceData parseTraceFiles(File[] files) throws Exception {
+		throw new UnsupportedOperationException();
 	}
 
 	public ParsedTraceData parseTraceFile(File file) throws Exception 
@@ -234,11 +254,7 @@ public class PowerPlugin extends AbstractPiPlugin
 			((PowerTraceGraph)trace.getTraceGraph(PIPageEditor.BINARIES_PAGE,  uid)).action(actionString);	
 			((PowerTraceGraph)trace.getTraceGraph(PIPageEditor.FUNCTIONS_PAGE, uid)).action(actionString);	
 		} else if (actionString.equals("scroll")) //$NON-NLS-1$
-		{
-			if (   !(event.data instanceof String)
-				|| !((String)event.data).equals("FigureCanvas")) //$NON-NLS-1$
-				return;
-			
+		{			
 			PIEvent be = new PIEvent(event, PIEvent.SCROLLED);
 			
 			((PowerTraceGraph)trace.getTraceGraph(PIPageEditor.THREADS_PAGE,   uid)).piEventReceived(be);
@@ -295,7 +311,7 @@ public class PowerPlugin extends AbstractPiPlugin
 		PwrTrace trace = (PwrTrace) NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.power"); //$NON-NLS-1$
 
 		if (trace != null)
-			return new Integer(trace.getLastSampleNumber());
+			return Integer.valueOf(trace.getLastSampleNumber());
 		else
 			return null;
 	}
@@ -345,12 +361,5 @@ public class PowerPlugin extends AbstractPiPlugin
 
 	public void setPageIndex(int index, int pageIndex) {
 		return;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.IVisualizable#getGraphTitle(int)
-	 */
-	public String getGraphTitle(int graphIndex) {
-		return Messages.getString("PowerPlugin.pluginTitle"); //$NON-NLS-1$
 	}
 }

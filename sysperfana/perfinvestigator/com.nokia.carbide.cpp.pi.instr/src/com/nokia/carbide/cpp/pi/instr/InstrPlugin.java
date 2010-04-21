@@ -97,8 +97,22 @@ public class InstrPlugin extends AbstractPiPlugin
 		return "Dynamic Binary Support"; //$NON-NLS-1$
 	}
 
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#getTraceTitle()
+	 */
+	public String getTraceTitle() {
+		return Messages.getString("InstrPlugin.0"); //$NON-NLS-1$
+	}
+
 	public int getTraceId() {
 		return 3;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#parseTraceFiles(java.io.File[])
+	 */
+	public ParsedTraceData parseTraceFiles(File[] files) throws Exception {
+		throw new UnsupportedOperationException();
 	}
 
 	public ParsedTraceData parseTraceFile(File file /*, ProgressBar progressBar*/) throws Exception 

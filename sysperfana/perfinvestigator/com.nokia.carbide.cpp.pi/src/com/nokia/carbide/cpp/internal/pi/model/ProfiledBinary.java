@@ -19,21 +19,22 @@ package com.nokia.carbide.cpp.internal.pi.model;
 
 public class ProfiledBinary extends ProfiledGeneric
 {
-    public ProfiledBinary()
+    public ProfiledBinary(int cpuNumber, int graphCount)
     {
-        super();
+        super(cpuNumber, graphCount);
    }
-   
-    public String toString(int graphIndex)
-    {
-    	if (this.isEnabled(graphIndex))
-    	{
-    		return "true  " + this.getAverageLoadValueString(graphIndex) + getNameString(); //$NON-NLS-1$
-	  	}
-		else
-		{
-	      	return "false " + this.getAverageLoadValueString(graphIndex) + getNameString(); //$NON-NLS-1$
-		}
-    }
+ 
+    //unused?
+//    public String toString(int graphIndex)
+//    {
+//    	if (this.isEnabled(graphIndex))
+//    	{
+//    		return "true  " + this.getAverageLoadValueString(graphIndex) + getNameString(); //$NON-NLS-1$
+//	  	}
+//		else
+//		{
+//	      	return "false " + this.getAverageLoadValueString(graphIndex) + getNameString(); //$NON-NLS-1$
+//		}
+//    }
     
 }

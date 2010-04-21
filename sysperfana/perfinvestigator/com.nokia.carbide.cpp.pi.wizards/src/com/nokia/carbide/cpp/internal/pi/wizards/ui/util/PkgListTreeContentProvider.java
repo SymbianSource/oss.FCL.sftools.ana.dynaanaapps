@@ -17,6 +17,7 @@
 
 package com.nokia.carbide.cpp.internal.pi.wizards.ui.util;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +35,7 @@ import org.eclipse.ui.model.WorkbenchContentProvider;
 import com.nokia.carbide.cdt.builder.CarbideBuilderPlugin;
 import com.nokia.carbide.cdt.builder.project.ICarbideBuildConfiguration;
 import com.nokia.carbide.cdt.builder.project.ICarbideProjectInfo;
+import com.nokia.carbide.cpp.pi.util.GeneralMessages;
 
 public class PkgListTreeContentProvider implements ITreeContentProvider {
 	PkgListTree tree;
@@ -50,9 +52,9 @@ public class PkgListTreeContentProvider implements ITreeContentProvider {
 		if (parentElement instanceof IPkgEntry) {
 			return null;
 		} else if (parentElement instanceof IViewSite) {
-			return getCarbideCppProjects();
+			return getCarbideCppProjects(false);
 		} else if (parentElement instanceof IWorkspaceRoot) {
-			return getCarbideCppProjects();
+			return getCarbideCppProjects(false);
 		} else if (parentElement instanceof IProject) {
 			return getConfigs((IProject)parentElement).toArray();
 		} else if (parentElement instanceof PkgListTree) {
@@ -95,7 +97,7 @@ public class PkgListTreeContentProvider implements ITreeContentProvider {
 		cp.inputChanged(viewer, oldInput, newInput);
 	}
 
-	private Object[] getCarbideCppProjects() {
+	public Object[] getCarbideCppProjects(boolean logWarnings) {
 		// lifted from com.nokia.carbide.cpp.project.ui.views.SPNViewContentProvider
 		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		List<IProject> list = new ArrayList<IProject>();
@@ -115,8 +117,12 @@ public class PkgListTreeContentProvider implements ITreeContentProvider {
 								break;
 							}
 						}
-						if (haveConfigWithPKG == false)
+						if (haveConfigWithPKG == false){
+							if(logWarnings){						
+								GeneralMessages.PiLog(MessageFormat.format(Messages.getString("PkgListTreeContentProvider.warning.sisBuilderConfiguration.missing"),projects[i].getName()), GeneralMessages.WARNING); //$NON-NLS-1$
+							}
 							continue;	// must have buildconfig with good PKG to show up
+						}							
 						list.add(projects[i]);
 					}
 				}

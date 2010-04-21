@@ -17,24 +17,23 @@
 
 package com.nokia.carbide.cpp.pi.instr;
 
-import com.nokia.carbide.cpp.internal.pi.model.Binary;
 import com.nokia.carbide.cpp.internal.pi.model.Function;
 import com.nokia.carbide.cpp.internal.pi.model.FunctionResolver;
 import com.nokia.carbide.cpp.internal.pi.model.GenericSampleWithFunctions;
+import com.nokia.carbide.cpp.internal.pi.model.IBinary;
+import com.nokia.carbide.cpp.internal.pi.model.IFunction;
 
 
 public class IttSample extends GenericSampleWithFunctions
 {
-  private static final long serialVersionUID = 31446918621985951L;
+	private static final long serialVersionUID = -6451379240317856526L;
 	
   public long[] instructions;
   public long checksum;
   public long programCounter;
 
-  public Function currentFunctionItt;
-  public Binary currentBinaryItt;
-  public Function currentFunctionSym;
-  public Binary currentBinarySym;
+  private IFunction currentFunctionItt;
+  private IFunction currentFunctionSym;
   
   public IttSample(int size)
   {
@@ -68,17 +67,11 @@ public class IttSample extends GenericSampleWithFunctions
   	if (res.getResolverName().equals("Symbol"))  //$NON-NLS-1$
   	{
   		this.currentFunctionSym = res.findFunctionForAddress(programCounter);
-  		
-  		if (this.currentFunctionSym != null)
-  			this.currentBinarySym = this.currentFunctionSym.functionBinary;
   	}
   	else if (res.getResolverName().equals("ITT"))  //$NON-NLS-1$
   	{
   		if (currentFunctionSym == null) {
-	  		this.currentFunctionItt = res.findFunctionForAddress(programCounter);
-	  		
-	  		if (this.currentFunctionItt != null)
-	  			this.currentBinaryItt = this.currentFunctionItt.functionBinary;
+	  		this.currentFunctionItt = res.findFunctionForAddress(programCounter, sampleSynchTime);
   		}
   	}
   }
@@ -98,14 +91,72 @@ public class IttSample extends GenericSampleWithFunctions
     }
     return s;
   }
-  
-  public String toString()
+	  
+	 /**
+	  * Getter for current function resolved from dynamic binary trace
+	 * @return the currentFunctionItt
+	 */
+	public IFunction getCurrentFunctionItt() {
+		return currentFunctionItt;
+	}
+	
+	/**
+	  * Setter for current function resolved from dynamic binary trace
+	 * @param currentFunctionItt the currentFunctionItt to set
+	 */
+	public void setCurrentFunctionItt(Function currentFunctionItt) {
+		this.currentFunctionItt = currentFunctionItt;
+	}
+	
+	/**
+	  * Getter for current function resolved from symbols
+	 * @return the currentFunctionSym
+	 */
+	public IFunction getCurrentFunctionSym() {
+		return currentFunctionSym;
+	}
+	
+	/**
+	  * Setter for current function resolved from symbols
+	 * @param currentFunctionSym the currentFunctionSym to set
+	 */
+	public void setCurrentFunctionSym(Function currentFunctionSym) {
+		this.currentFunctionSym = currentFunctionSym;
+	}
+
+	/**
+	 * Getter for the current binary resolved from dynamic binary trace
+	 * @return the currentBinaryItt
+	 */
+	public IBinary getCurrentBinaryItt() {
+		IBinary ret = null;
+  		if (this.currentFunctionItt != null){
+  			ret = this.currentFunctionItt.getFunctionBinary();
+  		}
+  		return ret;
+	}
+
+	/**
+	 * Getter for the current binary resolved from symbols
+	 * @return the currentBinarySym
+	 */
+	public IBinary getCurrentBinarySym() {
+		IBinary ret = null;
+  		if (this.currentFunctionSym != null){
+  			ret = this.currentFunctionSym.getFunctionBinary();
+  		}
+		return ret;
+	}
+
+
+	@Override
+	public String toString()
   {
   	long diff = 0;
   	
-  	if (this.currentBinaryItt != null && this.currentBinarySym != null)
-  		diff = this.currentBinaryItt.startAddress+this.currentBinaryItt.offsetToCodeStart-
-			   this.currentBinarySym.startAddress;
+  	if (this.getCurrentBinaryItt() != null && this.getCurrentBinarySym() != null)
+  		diff = this.getCurrentBinaryItt().getStartAddress()+this.getCurrentBinaryItt().getOffsetToCodeStart()-
+			   this.getCurrentBinarySym().getStartAddress();
   	else
   	{
   		System.out.println("NULL"); //$NON-NLS-1$
@@ -113,10 +164,10 @@ public class IttSample extends GenericSampleWithFunctions
   	
   	String result = "Itt:#"+this.sampleSynchTime+ //$NON-NLS-1$
 			" @0x"+Long.toHexString(this.programCounter)+ //$NON-NLS-1$
-			" fS:"+this.currentFunctionSym.functionName+ //$NON-NLS-1$
-			" oS:"+Long.toHexString(this.currentFunctionSym.startAddress.longValue())+" +"+(this.programCounter-this.currentFunctionSym.startAddress.longValue())+ //$NON-NLS-1$ //$NON-NLS-2$
-			" fI:"+this.currentFunctionItt.functionName+ //$NON-NLS-1$
-			" oI:"+Long.toHexString(this.currentFunctionItt.startAddress.longValue())+" +"+(this.programCounter-this.currentFunctionItt.startAddress.longValue()); //$NON-NLS-1$ //$NON-NLS-2$
+			" fS:"+this.currentFunctionSym.getFunctionName()+ //$NON-NLS-1$
+			" oS:"+Long.toHexString(this.currentFunctionSym.getStartAddress().longValue())+" +"+(this.programCounter-this.currentFunctionSym.getStartAddress().longValue())+ //$NON-NLS-1$ //$NON-NLS-2$
+			" fI:"+this.currentFunctionItt.getFunctionName()+ //$NON-NLS-1$
+			" oI:"+Long.toHexString(this.currentFunctionItt.getStartAddress().longValue())+" +"+(this.programCounter-this.currentFunctionItt.getStartAddress().longValue()); //$NON-NLS-1$ //$NON-NLS-2$
   	
   	if (diff != 0) result=" DIFF: "+diff+" "+result; //$NON-NLS-1$ //$NON-NLS-2$
   	

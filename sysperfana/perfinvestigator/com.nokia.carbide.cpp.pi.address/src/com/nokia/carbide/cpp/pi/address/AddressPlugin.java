@@ -20,20 +20,24 @@ package com.nokia.carbide.cpp.pi.address;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -42,6 +46,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 import com.nokia.carbide.cpp.internal.pi.actions.SetThresholdsDialog;
@@ -59,22 +64,21 @@ import com.nokia.carbide.cpp.internal.pi.model.TraceDataRepository;
 import com.nokia.carbide.cpp.internal.pi.plugin.model.AbstractPiPlugin;
 import com.nokia.carbide.cpp.internal.pi.plugin.model.IClassReplacer;
 import com.nokia.carbide.cpp.internal.pi.plugin.model.IEventListener;
+import com.nokia.carbide.cpp.internal.pi.plugin.model.IFinalizeTrace;
 import com.nokia.carbide.cpp.internal.pi.plugin.model.IRecordable;
 import com.nokia.carbide.cpp.internal.pi.plugin.model.IReportable;
 import com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace;
+import com.nokia.carbide.cpp.internal.pi.plugin.model.ITraceSMP;
 import com.nokia.carbide.cpp.internal.pi.plugin.model.IViewMenu;
 import com.nokia.carbide.cpp.internal.pi.plugin.model.IVisualizable;
 import com.nokia.carbide.cpp.internal.pi.resolvers.SymbolFileFunctionResolver;
 import com.nokia.carbide.cpp.internal.pi.test.AnalysisInfoHandler;
 import com.nokia.carbide.cpp.internal.pi.utils.PIUtilities;
-import com.nokia.carbide.cpp.internal.pi.visual.Defines;
-import com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph;
 import com.nokia.carbide.cpp.internal.pi.visual.GraphDrawRequest;
 import com.nokia.carbide.cpp.internal.pi.visual.PIEvent;
 import com.nokia.carbide.cpp.pi.core.SessionPreferences;
 import com.nokia.carbide.cpp.pi.editors.PIPageEditor;
 import com.nokia.carbide.cpp.pi.importer.SampleImporter;
-import com.nokia.carbide.cpp.pi.util.ColorPalette;
 import com.nokia.carbide.cpp.pi.util.GeneralMessages;
 
 
@@ -82,17 +86,26 @@ import com.nokia.carbide.cpp.pi.util.GeneralMessages;
  * The main plugin class to be used in the desktop.
  */
 public class AddressPlugin extends AbstractPiPlugin
-		implements ITrace, IViewMenu, IClassReplacer, //IExportItem,
-					IReportable, IRecordable, IVisualizable, IEventListener
+		implements ITrace, ITraceSMP, IViewMenu, IClassReplacer, //IExportItem,
+					IReportable, IRecordable, IVisualizable, IEventListener, IFinalizeTrace
 {
 	private static final String HELP_CONTEXT_ID = PIPageEditor.PI_ID + ".address";  //$NON-NLS-1$
+
+	public static final String ACTION_COMBINED_CPU_VIEW = "combined_cpu_view";//$NON-NLS-1$
+	public static final String ACTION_SEPARATE_CPU_VIEW = "separate_cpu_view";//$NON-NLS-1$
+	public static final int[] TRACE_IDS_SMP = new int[]{1, 21, 41, 62};
+
 	
 //	private static HashMap<Integer,Long> uidToAddrThreadPeriod = new HashMap<Integer,Long>();
 
 	// There will be three graphs - one each for editor pages 0, 1, 2
 	// This code assumes that page 0 has the threads graph, 1 the binaries, and 2 the functions
-	private final static int GRAPH_COUNT = 3;
+	//private final static int GRAPH_COUNT = 3;
+	private final static int PAGE_COUNT = 3;
 	private boolean pagesCreated = false;
+	
+	private IAction actionCombinedCpuView;
+	private IAction actionSeparateCpuView;
 
 	// The shared instance.
 	private static AddressPlugin plugin;
@@ -115,11 +128,17 @@ public class AddressPlugin extends AbstractPiPlugin
 		setPlugin(this);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#getTraceClass()
+	 */
 	public Class getTraceClass()
 	{
 		return GppTrace.class;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.IClassReplacer#getReplacedClass(java.lang.String)
+	 */
 	public Class getReplacedClass(String className)
 	{
 		if (   className.indexOf("com.nokia.carbide.cpp.pi.address.GppTrace") != -1 //$NON-NLS-1$
@@ -172,14 +191,14 @@ public class AddressPlugin extends AbstractPiPlugin
 			samplingInterval = (int) (((GppSample) trace.samples.get(1)).sampleSynchTime - ((GppSample) trace.samples.get(0)).sampleSynchTime); 
 		}
 			
-		NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.samplingInterval", new Integer(samplingInterval)); //$NON-NLS-1$
+		NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.samplingInterval", Integer.valueOf(samplingInterval)); //$NON-NLS-1$
 		
 		// make sure that the sorted samples array exists
 		if (trace.getSortedGppSamples() == null)
 			trace.sortGppSamples();
 
-		GppTraceGraph.refreshDataFromTrace(trace);
-		PIPageEditor.setTime(0.0f, 0.0f);
+		trace.refreshDataFromTrace(this.getGraphCount());
+//		PIPageEditor.setTime(0.0f, 0.0f);
 		long lastSampleTime = trace.getSample(trace.samples.size() - 1).sampleSynchTime;
 		PIPageEditor.currentPageEditor().setMaxEndTime(((double)lastSampleTime) / 1000.0f);
 	}
@@ -189,7 +208,7 @@ public class AddressPlugin extends AbstractPiPlugin
 		return (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.address"); //$NON-NLS-1$
 	}
 
-	public GenericTraceGraph getTraceGraph(int graphIndex)
+	public IGppTraceGraph getTraceGraph(int graphIndex)
 	{
 		GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.address"); //$NON-NLS-1$
 		
@@ -205,16 +224,6 @@ public class AddressPlugin extends AbstractPiPlugin
 		return (GenericTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.address"); //$NON-NLS-1$
 	}
 	
-/*
-	public GenericTraceGraph getTraceGraph(int graphIndex, int uid)
-	{	
-		GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.address"); //$NON-NLS-1$
-
-		// if we already had it, then we can pass in the formatted trace data
-		return trace.getTraceGraph(graphIndex, uid);
-	}
-*/
-	
 	public Integer getLastSample(int graphIndex)
 	{
 		GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.address"); //$NON-NLS-1$
@@ -223,15 +232,19 @@ public class AddressPlugin extends AbstractPiPlugin
 			return null;
 
 	  	//this sets GPP thread list visible by default
-	  	((GppTraceGraph)trace.getTraceGraph(graphIndex)).piEventReceived(new PIEvent(null, PIEvent.MOUSE_PRESSED));
+	  	trace.getTraceGraph(graphIndex).piEventReceived(new PIEvent(null, PIEvent.MOUSE_PRESSED));
 
-	  	return new Integer(trace.getLastSampleNumber());
+	  	return Integer.valueOf(trace.getLastSampleNumber());
 	}
 
 	public GraphDrawRequest getDrawRequest(int graphIndex) {
 		return null;
 	}
 
+	/**
+	 * Converts the given event string into a PIEvent if necessary, and passes it to the appropriate graph
+	 * @param eventString the event string indicating the action to be executed
+	 */
 	public void receiveSelectionEvent(String eventString)
 	{
 		if (eventString == null)
@@ -249,68 +262,109 @@ public class AddressPlugin extends AbstractPiPlugin
 		if (eventString.equals("fillSelected")) //$NON-NLS-1$
 	    {
 	    	PIEvent be = new PIEvent(null, PIEvent.SET_FILL_SELECTED_THREAD);
-	    	((GppTraceGraph)trace.getTraceGraph(PIPageEditor.THREADS_PAGE)).piEventReceived(be);
-	    	((GppTraceGraph)trace.getTraceGraph(PIPageEditor.BINARIES_PAGE)).piEventReceived(be);
-	    	((GppTraceGraph)trace.getTraceGraph(PIPageEditor.FUNCTIONS_PAGE)).piEventReceived(be);
+	    	for (int i = 0; i < getGraphCount(); i++) {
+		    	trace.getTraceGraph(i).piEventReceived(be);				
+			}
 	    	
 	    	NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.fillAll", Boolean.FALSE); //$NON-NLS-1$
 	    }
 		else if (eventString.equals("fillAll")) //$NON-NLS-1$
 		{
 			PIEvent be = new PIEvent(null, PIEvent.SET_FILL_ALL_THREADS);
-	    	((GppTraceGraph)trace.getTraceGraph(PIPageEditor.THREADS_PAGE)).piEventReceived(be);
-	    	((GppTraceGraph)trace.getTraceGraph(PIPageEditor.BINARIES_PAGE)).piEventReceived(be);
-	    	((GppTraceGraph)trace.getTraceGraph(PIPageEditor.FUNCTIONS_PAGE)).piEventReceived(be);
+	    	for (int i = 0; i < getGraphCount(); i++) {
+		    	trace.getTraceGraph(i).piEventReceived(be);				
+			}
 	    	
 	    	NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.fillAll", Boolean.TRUE); //$NON-NLS-1$
 		}
 		else if (eventString.equals("fillNone")) //$NON-NLS-1$
 		{
 			PIEvent be = new PIEvent(null, PIEvent.SET_FILL_OFF);
-	    	((GppTraceGraph)trace.getTraceGraph(PIPageEditor.THREADS_PAGE)).piEventReceived(be);
-	    	((GppTraceGraph)trace.getTraceGraph(PIPageEditor.BINARIES_PAGE)).piEventReceived(be);
-	    	((GppTraceGraph)trace.getTraceGraph(PIPageEditor.FUNCTIONS_PAGE)).piEventReceived(be);
+	    	for (int i = 0; i < getGraphCount(); i++) {
+		    	trace.getTraceGraph(i).piEventReceived(be);				
+			}
 	    	
 	    	NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.fillAll", Boolean.FALSE); //$NON-NLS-1$
 		}
 		else if (eventString.equals("setBarOn")) //$NON-NLS-1$
 		{
 			PIEvent be = new PIEvent(null, PIEvent.GPP_SET_BAR_GRAPH_ON);
-	    	((GppTraceGraph)trace.getTraceGraph(PIPageEditor.THREADS_PAGE)).piEventReceived(be);
-	    	((GppTraceGraph)trace.getTraceGraph(PIPageEditor.BINARIES_PAGE)).piEventReceived(be);
-	    	((GppTraceGraph)trace.getTraceGraph(PIPageEditor.FUNCTIONS_PAGE)).piEventReceived(be);
+	    	for (int i = 0; i < getGraphCount(); i++) {
+		    	trace.getTraceGraph(i).piEventReceived(be);				
+			}
 	    	
 	    	NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.bar", Boolean.TRUE); //$NON-NLS-1$
 		}
 		else if (eventString.equals("setBarOff")) //$NON-NLS-1$
 		{
 			PIEvent be = new PIEvent(null, PIEvent.GPP_SET_BAR_GRAPH_OFF);
-	    	((GppTraceGraph)trace.getTraceGraph(PIPageEditor.THREADS_PAGE)).piEventReceived(be);
-	    	((GppTraceGraph)trace.getTraceGraph(PIPageEditor.BINARIES_PAGE)).piEventReceived(be);
-	    	((GppTraceGraph)trace.getTraceGraph(PIPageEditor.FUNCTIONS_PAGE)).piEventReceived(be);
+	    	for (int i = 0; i < getGraphCount(); i++) {
+		    	trace.getTraceGraph(i).piEventReceived(be);				
+			}
 	    	
 	    	NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.bar", Boolean.FALSE); //$NON-NLS-1$
 		}
 	  	else if (eventString.equals("resetToCurrentMode")) //$NON-NLS-1$
 	  	{
-	  		((GppTraceGraph)trace.getTraceGraph(currentPage)).action(eventString);
-	  	}
+	  		trace.getTraceGraph(currentPage).action(eventString);
+	  	} else if (eventString.equals(ACTION_COMBINED_CPU_VIEW) || eventString.equals(ACTION_SEPARATE_CPU_VIEW)){
+	  		boolean showCombined = eventString.equals(ACTION_COMBINED_CPU_VIEW); 
+
+			if (currentPage == PIPageEditor.THREADS_PAGE){
+				trace.getGppGraph(PIPageEditor.THREADS_PAGE, -1).setVisible(showCombined);
+				for (int cpu = 0; cpu < trace.getCPUCount(); cpu++) {
+					trace.getGppGraph(PIPageEditor.FUNCTIONS_PAGE + 1 + cpu, -1).setVisible(!showCombined);
+				}
+
+				ArrayList<ProfileVisualiser> pages = NpiInstanceRepository.getInstance().activeUidGetProfilePages();
+				//hiding of graphs needs to take affect
+				pages.get(PIPageEditor.THREADS_PAGE).getTopComposite().getSashForm().layout();
+				if (actionCombinedCpuView != null && actionCombinedCpuView.isChecked() != showCombined){
+					actionCombinedCpuView.setChecked(showCombined);
+				}
+				if (actionSeparateCpuView != null && actionSeparateCpuView.isChecked() == showCombined){
+					actionSeparateCpuView.setChecked(!showCombined);
+				}
+			}
+			
+			
+			NpiInstanceRepository.getInstance().activeUidSetPersistState(NpiInstanceRepository.PERSISTED_SHOW_COMBINED_CPU_VIEW, showCombined);	//$NON-NLS-1$				
+			
+	  	} 
 	}
 
 	public String getTraceName() {
 		return "Address/Thread";	//$NON-NLS-1$
 	}
 
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#getTraceTitle()
+	 */
+	public String getTraceTitle() {
+		return Messages.getString("AddressPlugin.21"); //$NON-NLS-1$
+	}
+
 	public int getTraceId() {
 		return 1;
 	}
 
-	public ParsedTraceData parseTraceFile(File file /*, ProgressBar progressBar*/) throws IOException
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#getTraceIdsSMP()
+	 */
+	public int[] getTraceIdsSMP() {
+		return TRACE_IDS_SMP;
+	}
+
+	public ParsedTraceData parseTraceFile(File file /*, ProgressBar progressBar*/) throws IOException{
+		return parseTraceFiles(new File[]{file});
+	}
+
+	public ParsedTraceData parseTraceFiles(File[] files) throws IOException
 	{
 //		progressBar.setString("Parsing address and thread trace");
 
         GppTraceParser gppParser = new GppTraceParser();
-        ParsedTraceData parsed = gppParser.parse(file);
+        ParsedTraceData parsed = gppParser.parse(files);
         SymbolFileFunctionResolver sffp = this.resolveSymbolFileParser(/*progressBar*/);
 
         parsed.functionResolvers = new FunctionResolver[]{sffp};
@@ -353,7 +407,7 @@ public class AddressPlugin extends AbstractPiPlugin
 			ProfiledThread pt = (ProfiledThread)e.nextElement();
 			data.add(pt.getNameString());
 			data.add(pt.getAverageLoadValueString(currentPage));
-			summary.put(new Integer(pt.getThreadId()), data);
+			summary.put(Integer.valueOf(pt.getThreadId()), data);
 		}
 		return summary;
 	}
@@ -379,6 +433,9 @@ public class AddressPlugin extends AbstractPiPlugin
 		return sortTypes;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.IReportable#getActiveInfo(java.lang.Object, double, double)
+	 */
 	public String getActiveInfo(Object key, double startTime, double endTime)
 	{
 		int threadId;
@@ -405,10 +462,10 @@ public class AddressPlugin extends AbstractPiPlugin
 
 			String functionName = Messages.getString("AddressPlugin.2");  //$NON-NLS-1$
 
-			if (sample.currentFunctionSym != null)
-				functionName = sample.currentFunctionSym.functionName;
-			else if (sample.currentFunctionItt != null)
-				functionName = sample.currentFunctionItt.functionName;
+			if (sample.getCurrentFunctionSym() != null)
+				functionName = sample.getCurrentFunctionSym().getFunctionName();
+			else if (sample.getCurrentFunctionItt() != null)
+				functionName = sample.getCurrentFunctionItt().getFunctionName();
 
 			if (sample.thread.threadId.intValue() == threadId)
 			{
@@ -416,11 +473,11 @@ public class AddressPlugin extends AbstractPiPlugin
 				if (load != null)
 				{
 					functionLoad.remove(functionName);
-					functionLoad.put(functionName, new Integer(load.intValue()+1));
+					functionLoad.put(functionName, Integer.valueOf(load.intValue()+1));
 				}
 				else
 				{
-					functionLoad.put(functionName, new Integer(1));
+					functionLoad.put(functionName, Integer.valueOf(1));
 				}
 				threadSampleAmount++;
 			}
@@ -437,7 +494,7 @@ public class AddressPlugin extends AbstractPiPlugin
 		}
 
 		ArrayList<Object> sortedFunctions = new ArrayList<Object>();
-//		functionsShown = new Integer(functionsShownField.getText()).intValue();
+//		functionsShown = Integer.valueOf(functionsShownField.getText()).intValue();
 		while (functionLoad.size() != 0 && sortedFunctions.size() <= (functionsShown * 2) - 1)
 		{
 			String maxFunction = null;
@@ -454,7 +511,7 @@ public class AddressPlugin extends AbstractPiPlugin
 				}
 			}
 			sortedFunctions.add(maxFunction);
-			sortedFunctions.add(new Integer(maxCount));
+			sortedFunctions.add(Integer.valueOf(maxCount));
 			functionLoad.remove(maxFunction);
 		}
 
@@ -574,13 +631,17 @@ public class AddressPlugin extends AbstractPiPlugin
 		return reportManager;
 	}
 
+	/**
+	 * Adds actions to the Investigator top-menu 
+	 */
 	public MenuManager getViewOptionManager()
 	{
 		Action action;
 		
 		MenuManager manager = new MenuManager(Messages.getString("AddressPlugin.5"));  //$NON-NLS-1$
 		
-		action = new Action(Messages.getString("AddressPlugin.7"), Action.AS_CHECK_BOX) {  //$NON-NLS-1$
+		action = new Action(Messages.getString("AddressPlugin.7"), IAction.AS_CHECK_BOX) {  //$NON-NLS-1$
+			@Override
 			public void run() {
 				if (this.isChecked())
 					receiveSelectionEvent("setBarOn"); //$NON-NLS-1$
@@ -617,7 +678,8 @@ public class AddressPlugin extends AbstractPiPlugin
 			// set the initial value
 			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.fillAll", fillAll); //$NON-NLS-1$
 
-		action = new Action(Messages.getString("AddressPlugin.9"), Action.AS_CHECK_BOX) {  //$NON-NLS-1$
+		action = new Action(Messages.getString("AddressPlugin.9"), IAction.AS_CHECK_BOX) {  //$NON-NLS-1$
+			@Override
 			public void run() {
 				if (this.isChecked()) {
 					receiveSelectionEvent("fillAll"); //$NON-NLS-1$
@@ -642,13 +704,56 @@ public class AddressPlugin extends AbstractPiPlugin
 		
 		manager.add(new Separator());
 		
-		action = new Action(Messages.getString("AddressPlugin.12"), Action.AS_PUSH_BUTTON) {  //$NON-NLS-1$
+		action = new Action(Messages.getString("AddressPlugin.12"), IAction.AS_PUSH_BUTTON) {  //$NON-NLS-1$
+			@Override
 			public void run() {
 				new SetThresholdsDialog(Display.getCurrent());
 			}
 		};
 		action.setToolTipText(Messages.getString("AddressPlugin.24"));  //$NON-NLS-1$
 		manager.add(action);
+		
+		manager.add(new Separator());	
+		
+		
+		GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.address"); //$NON-NLS-1$
+		
+		if (trace != null && trace.getCPUCount() > 1){
+			//the following are SMP-related view options
+			manager.add(new Separator());
+
+			boolean showCombinedCPUView  = true;
+			
+			obj = NpiInstanceRepository.getInstance().activeUidGetPersistState(NpiInstanceRepository.PERSISTED_SHOW_COMBINED_CPU_VIEW);	
+			if ((obj != null) && (obj instanceof Boolean)){
+				showCombinedCPUView = (Boolean)obj;				
+			}
+			
+			actionCombinedCpuView = new Action(Messages.getString("AddressPlugin.14"), IAction.AS_RADIO_BUTTON) {  //$NON-NLS-1$
+				@Override
+				public void run() {
+					if (this.isChecked()){
+						receiveSelectionEvent(ACTION_COMBINED_CPU_VIEW); 						
+					}
+				}
+			};
+			actionCombinedCpuView.setChecked(showCombinedCPUView);
+			actionCombinedCpuView.setToolTipText(Messages.getString("AddressPlugin.18")); //$NON-NLS-1$
+			manager.add(actionCombinedCpuView);
+
+			actionSeparateCpuView = new Action(Messages.getString("AddressPlugin.19"), IAction.AS_RADIO_BUTTON) {  //$NON-NLS-1$
+				@Override
+				public void run() {
+					if (this.isChecked()){
+						receiveSelectionEvent(ACTION_SEPARATE_CPU_VIEW);  						
+					}
+				}
+			};
+			actionSeparateCpuView.setChecked(!showCombinedCPUView);
+			actionSeparateCpuView.setToolTipText(Messages.getString("AddressPlugin.20")); //$NON-NLS-1$
+			manager.add(actionSeparateCpuView);
+			
+		}
 
 		return manager;
 	}
@@ -673,7 +778,7 @@ public class AddressPlugin extends AbstractPiPlugin
 			ProfiledThread pt = (ProfiledThread)e.nextElement();
 			// backward compatibility with old Swing Color
 			java.awt.Color tmpAWTColor = new java.awt.Color(pt.getColor().getRed(),pt.getColor().getGreen(),pt.getColor().getBlue());
-			threadColors.put(new Integer(pt.getThreadId()), tmpAWTColor);
+			threadColors.put(Integer.valueOf(pt.getThreadId()), tmpAWTColor);
 		}
 		e = trace.getSortedBinariesElements();
 		while (e.hasMoreElements())
@@ -709,79 +814,8 @@ public class AddressPlugin extends AbstractPiPlugin
 		
 		try {
 			final GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.address"); //$NON-NLS-1$
-
-			Vector<Object> tmpData = (Vector<Object>)data;
-			Hashtable<Integer,java.awt.Color> threadColors = (Hashtable<Integer,java.awt.Color>)tmpData.elementAt(0);
-			Hashtable<String,java.awt.Color> binaryColors = (Hashtable<String,java.awt.Color>)tmpData.elementAt(1);
-			Hashtable<String,java.awt.Color> functionColors = (Hashtable<String,java.awt.Color>)tmpData.elementAt(2);
-
-			boolean changed;
-			Enumeration<ProfiledGeneric> e;
-			
-			changed = false;
-			e = trace.getSortedThreadsElements();
-			while (e.hasMoreElements())
-			{
-				ProfiledThread pt = (ProfiledThread)e.nextElement();
-				// backward compatibility with old Swing Color
-				java.awt.Color tmpAWTColor = threadColors.get(new Integer(pt.getThreadId()));
-				if (tmpAWTColor != null) {
-					Color color = ColorPalette.getColor(new RGB(tmpAWTColor.getRed(), tmpAWTColor.getGreen(), tmpAWTColor.getBlue()));
-					if (color != null) {
-						pt.setColor(color);
-						changed = true;
-					}
-				}
-			}
-			
-			final int uid = NpiInstanceRepository.getInstance().activeUid();
-
-			if (changed) {
-				// need to provide new colors for the thread load table
-				trace.getGppGraph(PIPageEditor.THREADS_PAGE, uid).getThreadTable().addColor(Defines.THREADS);
-			}
-
-			changed = false;
-			e = trace.getSortedBinariesElements();
-			while (e.hasMoreElements())
-			{
-				ProfiledBinary pb = (ProfiledBinary)e.nextElement();
-				// backward compatibility with old Swing Color
-				java.awt.Color tmpAWTColor = binaryColors.get(pb.getNameString());
-				if (tmpAWTColor != null) {
-					Color color = ColorPalette.getColor(new RGB(tmpAWTColor.getRed(), tmpAWTColor.getGreen(), tmpAWTColor.getBlue()));
-					if (color != null) {
-						pb.setColor(color);
-						changed = true;
-					}
-				}
-			}
-
-			if (changed) {
-				// need to provide new colors for the binary load table
-				trace.getGppGraph(PIPageEditor.BINARIES_PAGE, uid).getBinaryTable().addColor(Defines.BINARIES);
-			}
-			
-			changed = false;
-			e = trace.getSortedFunctionsElements();
-			while (e.hasMoreElements())
-			{
-				ProfiledFunction pb = (ProfiledFunction)e.nextElement();
-				// backward compatibility with old Swing Color
-				java.awt.Color tmpAWTColor = functionColors.get(pb.getNameString());
-				if (tmpAWTColor != null) {
-					Color color = ColorPalette.getColor(new RGB(tmpAWTColor.getRed(), tmpAWTColor.getGreen(), tmpAWTColor.getBlue()));
-					if (color != null) {
-						pb.setColor(color);
-						changed = true;
-					}
-				}
-			}
-
-			if (changed) {
-				// need to provide new colors for the binary load table
-				trace.getGppGraph(PIPageEditor.FUNCTIONS_PAGE, uid).getFunctionTable().addColor(Defines.FUNCTIONS);
-			}
+			int uid = NpiInstanceRepository.getInstance().activeUid();
+			trace.setAdditionalData((Vector<Object>)data);
 			
 		} catch (Exception e) {
 			System.out.println("Could not load additional address/thread data!"); //$NON-NLS-1$
@@ -822,21 +856,35 @@ public class AddressPlugin extends AbstractPiPlugin
 		return AbstractPiPlugin.imageDescriptorFromPlugin("com.nokia.carbide.cpp.pi.address", path); //$NON-NLS-1$
 	}
 
-	// number of graphs supplied by this plugin
+	/**
+	 *  number of graphs supplied by this plugin
+	 */
 	public int getGraphCount() {
-		return GRAPH_COUNT;
+		final GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.address"); //$NON-NLS-1$
+		int graphCount = trace.getCPUCount() > 1 ? PAGE_COUNT + trace.getCPUCount() : PAGE_COUNT;
+		return graphCount;
 	}
 
 	// page number of each graph supplied by this plugin
+	// in IVisualizable
 	public int getPageNumber(int graphIndex) {
+		return AddressPlugin.getPageIndex(graphIndex);
+	}
+	
+	/**
+	 * Returns the index of the page for the graph with this graphIndex
+	 * @param graphIndex the index of the graph
+	 * @return the page index, one of PIPageEditor.THREADS_PAGE, PIPageEditor.BINARIES_PAGE, PIPageEditor.FUNCTIONS_PAGE
+	 */
+	public static int getPageIndex(int graphIndex){
 		if (graphIndex == 0)
 			return PIPageEditor.THREADS_PAGE;
 		else if (graphIndex == 1)
 			return PIPageEditor.BINARIES_PAGE;
 		else if (graphIndex == 2)
 			return PIPageEditor.FUNCTIONS_PAGE;
-
-		return PIPageEditor.NEXT_AVAILABLE_PAGE;
+		else 
+			return PIPageEditor.THREADS_PAGE; //all SMP graphs go onto the threads page for now
 	}
 
 	// return whether this plugin's editor pages have been created
@@ -851,7 +899,7 @@ public class AddressPlugin extends AbstractPiPlugin
 
 	// number of editor pages to create
 	public int getCreatePageCount() {
-		return GRAPH_COUNT;
+		return PAGE_COUNT;
 	}
 
 	// editor page index for each created editor page
@@ -882,17 +930,16 @@ public class AddressPlugin extends AbstractPiPlugin
 			GeneralMessages.showErrorMessage("Address trace failed to create UI"); //$NON-NLS-1$
 			return null;
 		}
+		pageHelp = getPageHelpContextId(index);
 
 		if (index == 0) {
 			pageName = "Threads"; //$NON-NLS-1$
-			pageHelp = "threadsPageContext"; //$NON-NLS-1$
 		} else if (index == 1) {
 			pageName = "Binaries"; //$NON-NLS-1$
-			pageHelp = "binariesPageContext"; //$NON-NLS-1$
 		} else if (index == 2) {
 			pageName = "Functions"; //$NON-NLS-1$
-			pageHelp = "functionsPageContext"; //$NON-NLS-1$
-		} else {
+		}
+		else {
 			return null;
 		}
 
@@ -900,34 +947,42 @@ public class AddressPlugin extends AbstractPiPlugin
 		int uid = NpiInstanceRepository.getInstance().activeUid();
 		AnalysisInfoHandler infoHandler = NpiInstanceRepository.getInstance().activeUidGetAnalysisInfoHandler();
 		pV.getParserRepository().setPIAnalysisInfoHandler(infoHandler);
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(pV.getContentPane(), HELP_CONTEXT_ID + "." + pageHelp); //$NON-NLS-1$
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(pV.getContentPane(), pageHelp); //$NON-NLS-1$
 
 		return pV;
+	}
+	
+	/**
+	 * Returns the context help id for the given editor page index
+	 * @param pageIndex the editor page index to use
+	 * @return the context help id
+	 */
+	public static String getPageHelpContextId(int pageIndex){
+		if (pageIndex == 0) {
+			return HELP_CONTEXT_ID + "." + "threadsPageContext"; //$NON-NLS-1$
+		} else if (pageIndex == 1) {
+			return HELP_CONTEXT_ID + "." + "binariesPageContext"; //$NON-NLS-1$
+		} else if (pageIndex == 2) {
+			return HELP_CONTEXT_ID + "." + "functionsPageContext"; //$NON-NLS-1$
+		} else {
+			return null;
+		}
 	}
 
 	public void receiveEvent(String action, Event event) {
 		if (action.equals("scroll")) { //$NON-NLS-1$
-			if (   !(event.data instanceof String)
-				|| !((String)event.data).equals("FigureCanvas")) //$NON-NLS-1$
-				return;
 			
-			// the currently visible page has scrolled, so scroll the other pages
 			ArrayList<ProfileVisualiser> pages = NpiInstanceRepository.getInstance().activeUidGetProfilePages();
 			ProfileVisualiser pV;
 
-			int currentPV = PIPageEditor.currentPageIndex();
-			if (currentPV != PIPageEditor.THREADS_PAGE) {
-				pV = pages.get(PIPageEditor.THREADS_PAGE);
-				pV.getTopComposite().setScrolledOrigin(event.x, event.y);
-			}
-			if (currentPV != PIPageEditor.BINARIES_PAGE) {
-				pV = (ProfileVisualiser)pages.get(PIPageEditor.BINARIES_PAGE);
-				pV.getTopComposite().setScrolledOrigin(event.x, event.y);
-			}
-			if (currentPV != PIPageEditor.FUNCTIONS_PAGE) {
-				pV = (ProfileVisualiser)pages.get(PIPageEditor.FUNCTIONS_PAGE);
-				pV.getTopComposite().setScrolledOrigin(event.x, event.y);
-			}
+			// post the scroll event to all pages including the current page
+			// since there might be multiple graph components on each page even for the same plugin
+			pV = pages.get(PIPageEditor.THREADS_PAGE);
+			pV.getTopComposite().setScrolledOrigin(event.x, event.y, (FigureCanvas)event.data);
+			pV = (ProfileVisualiser)pages.get(PIPageEditor.BINARIES_PAGE);
+			pV.getTopComposite().setScrolledOrigin(event.x, event.y, (FigureCanvas)event.data);
+			pV = (ProfileVisualiser)pages.get(PIPageEditor.FUNCTIONS_PAGE);
+			pV.getTopComposite().setScrolledOrigin(event.x, event.y, (FigureCanvas)event.data);
 		} else if (action.equals("priority_init")) { //$NON-NLS-1$
 			// priority trace has been processed, so let the threads page know
 			Hashtable<Integer,String> priStringById = (Hashtable<Integer,String>)event.data;
@@ -935,19 +990,12 @@ public class AddressPlugin extends AbstractPiPlugin
 			if (getTrace() == null)
 				return;
 
-			GppTraceGraph addressGraph = ((GppTraceGraph) getTrace().getTraceGraph(PIPageEditor.THREADS_PAGE));
+			IGppTraceGraph addressGraph = ((IGppTraceGraph) getTrace().getTraceGraph(PIPageEditor.THREADS_PAGE));
 
 			if (addressGraph != null) {
 				addressGraph.updateThreadTablePriorities(priStringById);
 			}
 		}
-	}
-
-	/* (non-Javadoc)
-	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.IVisualizable#getGraphTitle(int)
-	 */
-	public String getGraphTitle(int graphIndex) {
-		return null;
 	}
 //	
 //	static public void putAddrThreadPeriod(long addrThreadPeriod) {
@@ -957,4 +1005,54 @@ public class AddressPlugin extends AbstractPiPlugin
 //	static public long getAddrThreadPeriod() {
 //		return uidToAddrThreadPeriod.get(NpiInstanceRepository.getInstance().activeUid());
 //	}
+	
+	/**
+	 * Returns a File corresponding to the given bundle relative path.
+	 * @param path the bundle relative path to resource to locate
+	 * @return the File corresponding to the given bundle relative path, or null
+	 * @throws IOException
+	 */
+	public File locateFileInBundle(final String path) throws IOException {
+		Bundle myBundle= getDefault().getBundle();
+		IPath ppath= new Path(path);
+		ppath= ppath.makeRelative();
+		URL[] urls= FileLocator.findEntries(myBundle, ppath);
+		if(urls.length != 1) {
+			return null;
+		}
+		return new File(FileLocator.toFileURL(urls[0]).getFile());
+	}
+
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.IFinalizeTrace#runOnDispose()
+	 */
+	public void runOnDispose() {
+		//no-op
+	}
+
+	/* (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.IFinalizeTrace#runOnPartOpened()
+	 */
+	public void runOnPartOpened() {
+		//execute the initial action; since it affects the GIU, execute in UI thread
+		GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.address"); //$NON-NLS-1$
+		
+		if (trace != null && trace.getCPUCount() > 1){
+			boolean showCombinedCPUView  = true;
+			
+			Object obj = NpiInstanceRepository.getInstance().activeUidGetPersistState(NpiInstanceRepository.PERSISTED_SHOW_COMBINED_CPU_VIEW);	
+			if ((obj != null) && (obj instanceof Boolean)){
+				showCombinedCPUView = (Boolean)obj;				
+			}
+			
+			final String actionRequest = showCombinedCPUView ? ACTION_COMBINED_CPU_VIEW : ACTION_SEPARATE_CPU_VIEW;
+			Display.getDefault().syncExec( new Runnable() {
+				public void run() {
+					receiveSelectionEvent(actionRequest);
+				}
+			});
+		}		
+		
+	}
+	
 }

@@ -23,6 +23,7 @@ import java.util.Vector;
 import com.nokia.carbide.cpp.internal.pi.model.Binary;
 import com.nokia.carbide.cpp.internal.pi.model.Function;
 import com.nokia.carbide.cpp.internal.pi.model.FunctionResolver;
+import com.nokia.carbide.cpp.internal.pi.model.IBinary;
 
 
 public class AdvancedMemoryMap implements FunctionResolver
@@ -154,10 +155,10 @@ public class AdvancedMemoryMap implements FunctionResolver
 			else
 			{
 				b = new Binary(Messages.getString("AdvancedMemoryMap.binaryForAddressNotFound1")+Long.toHexString(sample.programCounter)+Messages.getString("AdvancedMemoryMap.binaryForAddressNotFound2")); //$NON-NLS-1$ //$NON-NLS-2$
-				b.length = 0;
-				b.offsetToCodeStart = 0;
-				b.startAddress = sample.programCounter+4;
-				b.type = null;
+				b.setLength(0);
+				b.setOffsetToCodeStart(0);
+				b.setStartAddress( sample.programCounter+4);
+				b.setType(null);
 				return b;
 			}
 		}
@@ -177,14 +178,14 @@ public class AdvancedMemoryMap implements FunctionResolver
 			Binary b = this.decided.findBinaryForSample(sample);
 			if (b != null)
 			{
-				int offset = (int)(sample.programCounter+4-(b.startAddress+b.offsetToCodeStart));
-				pb = this.binReader.getProcessedBinaryForName(b.binaryName);
+				int offset = (int)(sample.programCounter+4-(b.getStartAddress()+b.getOffsetToCodeStart()));
+				pb = this.binReader.getProcessedBinaryForName(b.getBinaryName());
 				if (pb != null)
 				{
 					f = pb.getFunctionForOffset(offset);
 					if (f != null) 
 					{
-						f.startAddress = new Long(b.startAddress+f.offsetFromBinaryStart+pb.offsetToCodeStart);
+						f.setStartAddress(Long.valueOf(b.getStartAddress()+f.getOffsetFromBinaryStart()+pb.getOffsetToCodeStart()));
 						// function found ok
 						// System.out.println(f.toString());
 						return f;
@@ -192,15 +193,15 @@ public class AdvancedMemoryMap implements FunctionResolver
 					
 					// function not found in processed binary
 					f = new Function(Messages.getString("AdvancedMemoryMap.functionForAddressNotFound1")+Long.toHexString(sample.programCounter)+Messages.getString("AdvancedMemoryMap.functionForAddressNotFound2"), //$NON-NLS-1$ //$NON-NLS-2$
-							new Long(pb.startAddress),
-							pb.binaryName);
+							Long.valueOf(pb.getStartAddress()),
+							pb.getBinaryName());
 					return f;
 				}
 			}
 			
 			// in all other cases
 			f = new Function(Messages.getString("AdvancedMemoryMap.functionForAddressNotFound1")+Long.toHexString(sample.programCounter)+Messages.getString("AdvancedMemoryMap.functionForAddressNotFound2"), //$NON-NLS-1$ //$NON-NLS-2$
-					new Long(sample.programCounter),
+					Long.valueOf(sample.programCounter),
 					Messages.getString("AdvancedMemoryMap.binaryForAddressNotFound1")+Long.toHexString(sample.programCounter)+Messages.getString("AdvancedMemoryMap.binaryForAddressNotFound2")); //$NON-NLS-1$ //$NON-NLS-2$
 			return f;
 		}
@@ -210,7 +211,7 @@ public class AdvancedMemoryMap implements FunctionResolver
 		}
 	}
 	
-	public Function findFunctionForAddress(long address)
+	public Function findFunctionForAddress(long address, long sampleSynchTime)
 	{
 		if (this.ittTrace122 == null)
 		{
@@ -218,8 +219,12 @@ public class AdvancedMemoryMap implements FunctionResolver
 		}
 		else
 		{
-			return this.ittTrace122.getFunctionForAddress(address,this.binaryReader122);
+			return this.ittTrace122.getFunctionForAddress(address, sampleSynchTime, this.binaryReader122);
 		}
+	}
+	
+	public Function findFunctionForAddress(long address){
+		return findFunctionForAddress(address, -1);
 	}
 	
 	public String findFunctionNameForAddress(long address)
@@ -227,7 +232,7 @@ public class AdvancedMemoryMap implements FunctionResolver
 		Function f = this.findFunctionForAddress(address);
 		if (f != null)
 		{
-			return f.functionName;
+			return f.getFunctionName();
 		}
 		else
 		{
@@ -240,7 +245,7 @@ public class AdvancedMemoryMap implements FunctionResolver
 		Function f = this.findFunctionForAddress(address);
 		if (f != null)
 		{
-			return f.functionBinary.binaryName;
+			return f.getFunctionBinary().getBinaryName();
 		}
 		else
 		{
@@ -258,23 +263,28 @@ public class AdvancedMemoryMap implements FunctionResolver
 		return Messages.getString("AdvancedMemoryMap.resolverITT"); //$NON-NLS-1$
 	}
 	
-	public Binary findBinaryForAddress(long address)
+	public IBinary findBinaryForAddress(long address)
+	{
+		return findBinaryForAddress(address, -1);
+	}
+	
+	public IBinary findBinaryForAddress(long address, long sampleSynchTime)
 	{
 		if (this.ittTrace122 == null)
 		{
 			Function f = this.findFunctionForAddress(address);
 			
 			if (f != null)
-				return f.functionBinary;
+				return f.getFunctionBinary();
 			else 
 				return null;
 		}
 		else
 		{
-			Function f = this.ittTrace122.getFunctionForAddress(address,this.binaryReader122);
+			Function f = this.ittTrace122.getFunctionForAddress(address, sampleSynchTime, this.binaryReader122);
 			
 			if (f != null)
-				return f.functionBinary;
+				return f.getFunctionBinary();
 			else 
 				return null;
 		}
@@ -287,8 +297,8 @@ public class AdvancedMemoryMap implements FunctionResolver
 			Binary b = this.decided.findBinaryForSample(sample);
 			if (b != null)
 			{
-				int offset = (int)(sample.programCounter+4-(b.startAddress+b.offsetToCodeStart));
-				return this.binReader.getFunctionName(b.binaryName,offset);
+				int offset = (int)(sample.programCounter+4-(b.getStartAddress()+b.getOffsetToCodeStart()));
+				return this.binReader.getFunctionName(b.getBinaryName(),offset);
 			}
 			else 
 			{

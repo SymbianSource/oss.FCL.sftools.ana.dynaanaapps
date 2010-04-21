@@ -22,7 +22,7 @@ import java.util.Hashtable;
 import com.nokia.carbide.cpp.internal.pi.model.GenericSampledTrace;
 import com.nokia.carbide.cpp.internal.pi.model.GenericThread;
 import com.nokia.carbide.cpp.internal.pi.model.TraceWithThreads;
-import com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph;
+import com.nokia.carbide.cpp.pi.visual.IGenericTraceGraph;
 
 
 public class PriTrace extends GenericSampledTrace implements TraceWithThreads
@@ -50,7 +50,7 @@ public class PriTrace extends GenericSampledTrace implements TraceWithThreads
 		return (PriSample)this.samples.elementAt(number);
 	}
 	  
-	public GenericTraceGraph getTraceGraph()
+	public IGenericTraceGraph getTraceGraph()
 	{
 	  	return null;
 	}

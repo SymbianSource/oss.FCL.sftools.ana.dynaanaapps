@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Carbide.c++ Performance Investigator
 Bundle-SymbolicName: com.nokia.carbide.cpp.pi;singleton:=true
-Bundle-Version: 1.5.0.qualifier
+Bundle-Version: 2.3.0.qualifier
 Bundle-Activator: com.nokia.carbide.cpp.pi.PiPlugin
 Bundle-Vendor: Nokia
 Require-Bundle: org.eclipse.ui,
@@ -12,7 +12,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.draw2d,
  com.nokia.carbide.cpp.featureTracker,
  com.nokia.carbide.cpp.pi.core,
- com.nokia.carbide.cpp.pi.util
+ com.nokia.carbide.cpp.pi.util,
+ org.eclipse.help;bundle-version="3.4.0"
 Bundle-ActivationPolicy: lazy
 Export-Package: com.nokia.carbide.cpp.internal.pi.actions,
  com.nokia.carbide.cpp.internal.pi.analyser,
@@ -27,4 +28,6 @@ Export-Package: com.nokia.carbide.cpp.internal.pi.actions,
  com.nokia.carbide.cpp.internal.pi.visual,
  com.nokia.carbide.cpp.pi,
  com.nokia.carbide.cpp.pi.editors,
- com.nokia.carbide.cpp.pi.importer
+ com.nokia.carbide.cpp.pi.importer,
+ com.nokia.carbide.cpp.pi.visual
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

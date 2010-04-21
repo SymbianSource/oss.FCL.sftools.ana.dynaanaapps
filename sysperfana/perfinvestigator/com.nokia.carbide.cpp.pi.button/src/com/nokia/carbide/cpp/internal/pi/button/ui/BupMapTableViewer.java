@@ -98,7 +98,7 @@ public class BupMapTableViewer extends TableViewer {
 			TableColumn tableColumn = ((TableViewer)viewer).getTable().getSortColumn();
 			int result = 0;
 			if (tableColumn == columnKeyCode) {
-				result = new Integer(((BupMapEntry)o1).keyCode).compareTo(((BupMapEntry)o2).keyCode);
+				result = Integer.valueOf(((BupMapEntry)o1).keyCode).compareTo(((BupMapEntry)o2).keyCode);
 				if (dirKeyCode != SWT.UP) {
 					result *= -1;
 				}
