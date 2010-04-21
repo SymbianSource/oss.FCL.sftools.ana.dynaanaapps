@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Carbide.c++ Extensions - MemSpy Help Plug-in
+Bundle-SymbolicName: com.nokia.s60tools.memspy.help;singleton:=true
+Bundle-Version: 1.6.0
+Bundle-Vendor: Nokia

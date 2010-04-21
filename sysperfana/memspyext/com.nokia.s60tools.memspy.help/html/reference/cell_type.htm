@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>Cell Type</title>
+  <link href="../../book.css" type="text/css" rel="stylesheet">
+</head>
+
+<body>
+<h2>Cell Type</h2>
+
+<p>The Cell Type view is a low-level view of the layout of the heap. It is
+useful for getting a quick feel for fragmentation, for example, but the other
+views are more commonly used.</p>
+
+<p><img src="../images/ha_heap_view.png"></p>
+
+<p>The Cell Type view breaks down the heap into word-sized (4 byte) blocks,
+each represented by a coloured square. The following colour-coding is applied
+to each related group of words for easy identification:</p>
+<ul>
+  <li><strong>White</strong>: Contains a header word, used by the heap
+    allocator for book-keeping.</li>
+  <li><strong>Red/Orange</strong>: Contains the data of an allocated object
+    whose class has been identified via its vtable pointer.</li>
+  <li><strong>Yellow</strong>: Contains the data of a heap-allocated
+  descriptor.</li>
+  <li><strong>Purple/Brown</strong>: Contains the data of an allocated object
+    whose type cannot be identified, usually a raw data buffer.</li>
+  <li><strong>Blue</strong>: A free area of the heap that does not currently
+    contain an allocated object.</li>
+</ul>
+
+<p>The colour fade between the start and end of a group of words makes it
+easier for you to pick out the beginning and the end of cells.</p>
+
+<p>If you highlight a cell by hovering the mouse over it (the whole of the
+associated cell is highlighted), you get a pop-up summary of its contents as a
+tool-tip. You can also right-click to bring up a context menu of options.</p>
+
+<p>If you click on a cell to select it, or navigate to it using the cursor keys
+or the <strong>Previous / Next</strong> buttons, or search for it by address in
+the <strong>Search</strong> box, then that cell will be selected and you will
+get a summary in the <strong>Information</strong> box below.</p>
+<ul>
+  <li><strong>Address</strong> is the start of the cell, including book-keeping
+    info.</li>
+  <li><strong>Payload</strong> is the address range of the actual data stored
+    in the cell.</li>
+  <li><strong>Nesting level</strong> and <strong>Allocation number</strong>
+    info for a cell are only maintained by the debug (UDEB) version of RHeap,
+    and rarely used as a result.</li>
+</ul>
+
+<p>If you double-click on a cell, a floating memory inspector window will be
+displayed, showing you the cell contents. Cells that contain references to
+other memory locations are highlighted. Double-clicking a highlighted value
+jumps to the referenced location.</p>
+
+<h5>Related references</h5>
+<ul>
+  <li><a href="object_type.htm">Object Type</a></li>
+  <li><a href="parent_binary.htm">Parent Binary</a></li>
+  <li><a href="cell_lenght.htm">Cell Lenght</a></li>
+  <li><a href="isolation.htm">Isolation and Pervasiveness</a></li>
+  <li><a href="HA_data_analysis.htm">Data analysis with Heap Analyser</a></li>
+</ul>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

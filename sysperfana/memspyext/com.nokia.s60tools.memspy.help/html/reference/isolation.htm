@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>Isolation and Pervasiveness</title>
+  <link href="../../book.css" type="text/css" rel="stylesheet">
+</head>
+
+<body>
+<h2>Isolation and Pervasiveness</h2>
+
+<p>The Isolation and Pervasiveness views are about highlighting reference
+density.</p>
+
+<p>The <strong>Isolation</strong> view shades objects from cold (blue) to hot
+(more red) based on how &ldquo;popular&rdquo; they are with other objects. The
+actual incoming reference count is also displayed in the box at the start of
+each object. Darkest blue objects with a red zero count indicate objects that
+have no references at all within the heap itself. That does not necessarily
+mean they are orphans that have been leaked; they could be referenced from the
+stack or from static variables instead. However, if you do think you may have a
+memory leak then these zero count objects are a good place to start looking.</p>
+
+<p><img src="../images/ha_heap_view_isolation.png"></p>
+
+<p>The <strong>Pervasiveness</strong> view is the inverse of the Isolation
+view. In Pervasiveness view, objects are shaded from cold (blue) to hot (more
+red) based on how many other objects they are &ldquo;interested&rdquo; in. The
+actual outgoing reference count is also displayed in the box at the start of
+the object. The other highlighted boxes within cells are the actual locations
+of the potential outgoing references Heap Analyser has identified. As pure data
+datatypes with no outgoing references, descriptors are distinguished in yellow
+here. If you have a memory leak, bright red objects may be worth investigating
+as the potential home to an abnormally large number of references. For example,
+the buffer object within a large array of pointers may be highlighted in this
+view, and in some cases could be the source of a leak e.g. due to forgetting to
+delete objects from the array when they&rsquo;re no longer needed.</p>
+
+<p><img src="../images/ha_heap_view_pervasiveness.png"></p>
+
+<h5>Related references</h5>
+<ul>
+  <li><a href="cell_type.htm">Cell Type</a></li>
+  <li><a href="object_type.htm">Object Type</a></li>
+  <li><a href="parent_binary.htm">Parent Binary</a></li>
+  <li><a href="cell_lenght.htm">Cell Lenght</a></li>
+  <li><a href="HA_data_analysis.htm">Data analysis with Heap Analyser</a></li>
+</ul>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

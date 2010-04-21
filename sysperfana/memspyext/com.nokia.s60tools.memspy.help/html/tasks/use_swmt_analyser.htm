@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>Using SWMT Analyser</title>
+<link href="../../book.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+
+<h2>Using SWMT Analyser</h2>
+<p>You can start the tool in any of the following ways:</p>
+<ul>
+<li>When you finish the <b>SWMT Wizard</b>, that is, when logs are imported to the MemSpy Carbide.c++ Extension from the MemSpy S60 application.</li>
+<li>In the MemSpy Carbide.c++ Extension, select the SWMT log files you want to analyse and click <b>Launch SWMT Analyser</b>, or right-click the SWMT log files and select <b>Analyse with SWMT Analyser</b>.</li>
+</ul>
+
+<h5>Preconditions</h5>
+<p>If more than one files are selected, check that the following requirements are met:</p>
+<ul>
+<li>All the selected log files must be generated on the same device.</li>
+<li><b>ROM Version</b> and <b>ROM Checksum</b> must be the same for all the selected log files.</li>
+<li>The cycle number of the first log file must be 1.</li>
+</ul>
+
+<p>SWMT Analyser will open in Carbide.c++ with two tabs called <b>Overview</b> and <b>Graphs</b>. In addition, an <b>Analysis</b> tab will be displayed only when there are issues found in the analysis. The Graphs tab will be displayed only when you have more than one file selected. When you have only one file selected, the Overview tab is displayed with the following information:</p>
+
+<ul>
+<li>Properties of the selected log files:
+	<ul>
+		<li>Number of cycles.</li>
+		<li>Time period (time of the first cycle and time of the last cycle).</li>
+		<li>Time duration (time difference between the first and the last cycle).</li>
+	</ul>
+</li>
+<li>ROM details of the log files:
+	<ul>
+		<li>ROM Checksum</li>
+		<li>ROM Version</li>
+	</ul>
+</li>
+<li>Export options. You can export the combined log file data into an Excel sheet. There are two options for exporting the log files. You can export either all selected log files or only the selected number of cycles.</li>
+<li>Analysis overview. The Overview page list the top 5 issues found in analysis.</li>
+</ul>
+
+
+<h5>Related tasks</h5>
+<ul>
+<li><a href="analyse_data_using_graphs.htm">Analysing data using graphs</a></li>
+<li><a href="view_issues_on_the_analysis_tab.htm">Viewing issues on the Analysis tab</a></li>
+<li><a href="understanding_excel_data.htm">Understanding the Excel data</a></li>
+<li><a href="generate_pdf_report.htm">Generating PDF reports</a></li>
+<li><a href="../reference/troubleshooting.htm#swmt_analyser_trb">Troubleshooting SWMT Analyser</a></li>
+<li><a href="connection_settings.htm">Configuring connection settings</a></li>
+</ul>
+
+<div id="footer">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

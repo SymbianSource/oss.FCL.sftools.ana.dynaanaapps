@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Carbide.c++ Extensions - SWMT Analyser Thirdpartysources
+Bundle-SymbolicName: com.nokia.s60tools.swmtanalyser.thirdpartysources
+Bundle-Version: 1.6.0
+Bundle-Activator: com.nokia.s60tools.swmtanalyser.thirdpartysources.Activator
+Bundle-Vendor: Nokia
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.contexts"?>
+<contexts>
+
+ <context id="MEMSPY_HELP_MAIN_VIEW">
+  <description>MemSpy Main View</description>	   
+  <topic label="Table of Contents" href="html/toc.htm" />    	
+ </context>	  
+
+ <context id="MEMSPY_HELP_IMPORT_SELECT_ACTION">
+  <description>MemSpy Tasks</description>	   
+  <topic label="Tasks" href="html/tasks/tasks.htm" />    	
+ </context>
+ 
+ <context id="MEMSPY_HELP_IMPORT_HEAP">
+  <description>Importing and analyzing heap dump files</description>	   
+  <topic label="Importing and analyzing heap dump files" href="html/tasks/view_heap.htm" />    	
+ </context>
+
+  <context id="MEMSPY_HELP_IMPORT_SYMBOLS">
+  <description>Symbol and Map files</description>	   
+  <topic label="Symbol and Map files" href="html/concepts/files.htm" />    	
+ </context>
+
+  <context id="MEMSPY_HELP_IMPORT_COMPARE">
+  <description>Importing and comparing two heap dump files</description>	   
+  <topic label="Importing and comparing two heap dump files" href="html/tasks/compare_two_heaps.htm" />    	
+ </context>
+
+ <context id="MEMSPY_HELP_IMPORT_SWMT">
+  <description>Importing and analyzing System Wide Memory Tracking log files</description>	   
+  <topic label="Importing and analyzing System Wide Memory Tracking log files" href="html/tasks/view_swmt_log.htm" />   	
+ </context>
+
+ <context id="MEMSPY_HELP_IMPORT_SWMT_CATEGORIES_DIALOG">
+  <description>Setting System Wide Memory Tracking tracked categories</description>	   
+  <topic label="Setting System Wide Memory Tracking tracked categories" href="html/tasks/view_swmt_log.htm#set_tracked_categories" />   	
+ </context>
+
+ <context id="MEMSPY_HELP_IMPORT_CONNECTION_SETTINGS">
+  <description>Configuring connection settings</description>	   
+  <topic label="Configuring connection settings" href="html/tasks/connection_settings.htm" />    	
+ </context>
+ <context id="MEMSPY_SWMT_REPORT_GENERATION_WIZARD">
+    <description>Generating PDF reports</description>
+    <topic label="Generating PDF reports" href="html/tasks/generate_pdf_report.htm" />
+ </context>
+ 
+<!--  The context's id can be accessed from the source code
+      in the following way.
+ 
+ Define a class storing the context ID constants at
+ source code level:
+ 
+ public class AppDepHelpContextIDs {
+	...
+    public static final String APPDEP_COMPONENT_LIST_VIEW = 
+		  APPDEP_HELP_PROJECT_PLUGIN_ID 
+           +".APPDEP_COMPONENT_LIST_VIEW";
+	 ...
+	 }
+ 
+ // Somewhere in the code there is a UI item 
+ // the context help will be bound to.
+ private TableViewer listItemsViewer;
+ ...
+ // Binding context help ID into the control happens with SetHelp-method. 
+ // The first parameter	must be a sub class of org.eclipse.swt.widgets.Control.
+ PlatformUI.getWorkbench().getHelpSystem().setHelp(listItemsViewer.getControl(), 
+    		AppDepHelpContextIDs.APPDEP_COMPONENT_LIST_VIEW);
+ 
+ -->
+     		     
+</contexts>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            description="MemSpy"
+            id="com.nokia.s60tools.memspy.actionSet"
+            label="MemSpy"
+            visible="true">
+         <menu
+               id="com.nokia.carbide.cpp.ui.CarbideMenu"
+               label="&amp;Carbide">
+            <separator
+                  name="com.nokia.s60tools.ToolsMenuGroup">
+            </separator>
+         </menu>
+         <action
+               class="com.nokia.s60tools.memspy.ui.actions.ToolbarShortcutAction"
+               icon="icons/Memspy_16.png"
+               id="com.nokia.s60tools.memspy.ui.actions.ToolbarShortcutAction"
+               label="MemSpy"
+               menubarPath="com.nokia.carbide.cpp.ui.CarbideMenu/CarbideExtensions"
+               tooltip="MemSpy">
+         </action>
+         
+      </actionSet>
+   </extension>
+
+	
+  	<extension
+         point="org.eclipse.ui.views">
+      <category
+            name="Carbide Extensions"
+            id="com.nokia.s60tools">
+      </category>
+      <view
+            name="MemSpy"
+            icon="icons/Memspy_16.png"
+            category="com.nokia.s60tools"
+            class="com.nokia.s60tools.memspy.ui.views.MemSpyMainView"
+            id="com.nokia.s60tools.memspy.ui.views.MemSpyMainView">
+      </view>
+   </extension>
+   
+        <extension
+           id="com.nokia.s60tools.memspy.preferences"
+           point="org.eclipse.core.runtime.preferences">
+        <initializer
+              class="com.nokia.s60tools.memspy.preferences.MemSpyPreferenceInitializer">
+        </initializer>
+     </extension>
+   
+   <extension-point id="traceprovider" name="Trace Data Provider" schema="schema/traceprovider.exsd"/>
+
+</plugin>

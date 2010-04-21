@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>Using SWMT Analyser</title>
+<link href="../../book.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+
+<h2>Viewing issues on the Analysis tab</h2>
+<p>SWMT Analyser tool will analyse the data internally and list the issues found. The issues will be displayed in a tree format in three groups: <b>RAM and Disk Memory</b>, <b>Threads</b>, and <b>SystemData</b>.</p>
+<p>The tool internally analyses some events for items such as RAM, Disks, Threads, Chunks and etc. The analysis finds the growth of these events based on some calculations and uses that as the growing factor. All issues displayed in the Analysis tab would be sorted in the descending order of the growing factor by default.</p>
+<p>Each issue has four fields:</p>
+<ul>
+<li><b>Thread/Chunk/Item name</b>: Name of the item that the issue is related to.</li>
+<li><b>Event name</b>: Name of the event.</li>
+<li><b>Delta</b>: Difference between the first and the last cycle values.</li>
+<li><b>Severity</b>: Shows <b>red</b> if the growing factor is high, <b>yellow</b> if the growing factor is normal, and <b>green</b> if the growing factor is low. There is one dropdown to filter the issues based on its type like All, High, Normal, Low. 
+Severity column can be sorted and issues will be ordered by their growing factor.</li>
+</ul>
+
+<p>A graph illustrating the checked issues will be automatically displayed on the top of the <b>Analysis</b> tab.</p>
+
+<p>You can filter the issues by using the <b>Severity dropdown</b> or Select <b>Custom filter</b> in the drop-down menu.<p>
+<p>You can save a graph as an image by using the <b>Save graph…</b> option in the context menu of the graph.</p>
+
+<p>Note that the <b>Overview</b> tab will also display the top 5 issues.</p>
+<p>If the thread dies and restarts again then that would be treated as separate instances, those thread instances will be respresented like 'thread_name(01)' and 'thread_name(02)'. 
+For example, assume that there are 100 cycles and a thread starts at cycle 1 and dies at cycle 10. And the same thread starts again at cycle 20. Then this thread will be considered as having two instances.
+And those instances will be shown as 'thread_name(01)' and 'thread_name(02)' in Analysis tab. However, in Graphs tab this will be shown as single thread with 'thread_name'.</p>
+
+
+<h5>Related tasks</h5>
+<ul>
+<li><a href="analyse_data_using_graphs.htm">Analysing data using graphs</a></li>
+<li><a href="understanding_excel_data.htm">Understanding the Excel data</a></li>
+<li><a href="generate_pdf_report.htm">Generating PDF reports</a></li>
+<li><a href="../reference/troubleshooting.htm#swmt_analyser_trb">Troubleshooting SWMT Analyser</a></li>
+<li><a href="connection_settings.htm">Configuring connection settings</a></li>
+</ul>
+
+<div id="footer">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

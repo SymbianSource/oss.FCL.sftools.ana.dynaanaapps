@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>Using SWMT Analyser</title>
+<link href="../../book.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+
+<h2>Understanding the Excel data</h2>
+<p>Because reading and analyzing SWMT log files is difficult, SWMT Analyser tool can write the log file data to an Excel sheet in an appropriate manner so that you can easily understand and analyse the data.</p>
+<p>Excel contains different worksheets to represent various data such as heap-chunks, non heap-chunks, RAM and disk memory, and total heap size.</p>
+
+<p>The Excel tabs and the information displayed in them are explained in the following table.</p>
+
+<table width="615" border="1" cellspacing="1" cellpadding="2">
+<colgroup>
+<col width="149*">
+<col width="456*"></colgroup>
+<tbody>
+<tr>
+<th align="center">Tab</th>
+<th align="center">Description</th>
+</tr>
+
+<tr>
+<td><p>Overview</p></td>
+<td>
+<ul>
+<li>Cycle numbers, that is, numbers of selected log files to export, Time Period and Time Duration.</li>
+<li>Total delta of various fields like Heap Size, Free Cell Count, Allocated Cell Count, Free Space, Allocated Space, Slack   Space, Total files, and Total P&amp;S Handles for all the threads.</li>
+<li>Status of each thread in the last cycle and delta of various attributes for each thread.</li>
+</ul>
+<p><b>Note</b>: Stack size will be displayed for all threads which are alive.</p>
+</td>
+</tr>
+
+<tr>
+<td><p>RAM and Disk Memory</p></td>
+<td>
+<ul>
+<li>Specifies the amount of used RAM and disk memory of all drives in bytes and for each cycle in seconds.</li>
+<li>Shows how the used memory varies between RAM and other drives in each cycle.</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td><p>Non-Heap Chunk Size</p></td>
+<td>
+<ul>
+<li>Specifies the non-heap chunk sizes for all the threads that contain heap in bytes and for each cycle in seconds.</li>
+<li>Shows the difference between the first and the last cycle value.</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td><p>Global Chunk Size</p></td>
+<td>
+<ul>
+<li>Specifies the global chunk sizes for all the threads that contain heap in bytes and for each cycle in seconds.</li>
+<li>Shows the difference between the first and the last cycle value.</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td><p>Total Heap Size</p></td>
+<td>
+<ul>
+<li>Specifies the heap sizes for each thread and for each cycle.</li>
+<li>Shows the difference between the first and the last cycle value.</p>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td><p>Total Heap Allocated Space</p></td>
+<td>
+<ul>
+<li>Specifies the toal heap allocated space for each thread in bytes and for each cycle in seconds.</li>
+<li>Shows the difference between the first and the last cycle value.</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td><p>Total Heap Free Space</p></td>
+<td>
+<ul>
+<li>Specifies the toal heap free space for each thread in bytes and for each cycle in seconds.</li>
+<li>Shows the difference between the first and the last cycle value.</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td><p>Allocated Heap Cell Count</p></td>
+<td>
+<ul>
+<li>Specifies the allocated heap cell count for each thread in bytes and for each cycle in seconds.</li>
+<li>Shows the difference between the first and the last cycle value.</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td><p>Free Heap Cell Count</p></td>
+<td>
+<ul>
+<li>Specifies the free heap cell count for each thread in bytes and for each cycle in seconds.</li>
+<li>Shows the difference between first and the last cycle value.</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td><p>Slack Space Size</p></td>
+<td>
+<ul>
+<li>Specifies the free slack size for each thread in bytes and for each cycle in seconds.</li>
+<li>Shows the difference between first and the last cycle value.</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td><p>Largest Allocated Cell Size in Heap</p></td>
+<td>
+<ul>
+<li>Specifies the largest allocated cell size in heap for each thread in bytes and for each cycle in seconds.</li>
+<li>Shows the difference between the first and the last cycle value.</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td><p>Largest Free Cell Size in Heap</p></td>
+<td>
+<ul>
+<li>Specifies the largest free cell size in heap for each thread in bytes and for each cycle in seconds.</li>
+<li>Shows the difference between the first and the last cycle value.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<h5>Related tasks</h5>
+<ul>
+<li><a href="analyse_data_using_graphs.htm">Analysing data using graphs</a></li>
+<li><a href="view_issues_on_the_analysis_tab.htm">Viewing issues on the Analysis tab</a></li>
+<li><a href="generate_pdf_report.htm">Generating PDF reports</a></li>
+<li><a href="../reference/troubleshooting.htm#swmt_analyser_trb">Troubleshooting SWMT Analyser</a></li>
+<li><a href="connection_settings.htm">Configuring connection settings</a></li>
+</ul>
+
+<div id="footer">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>Importing and analyzing System Wide Memory Tracking log files</title>
+  <link href="../../book.css" type="text/css" rel="stylesheet">
+</head>
+
+<body>
+<h2>Importing and analyzing System Wide Memory Tracking log files</h2>
+<ol>
+  <li>Click the <img src="../images/Memspy_16.png"> icon to start the MemSpy
+    Import Wizard.</li>
+  <li>Select to <b>Import System Wide Memory Tracking logs and analyse them
+    with SWMT Analyser</b>, and click <b>Next</b>.</li>
+  <li><p>Select whether to get the SWMT log files <b>From File System</b> or
+    <b>From Device via TraceViewer</b>.</p>
+    <p><img src="../images/import_swmt_1.png"></p>
+    <ul>
+      <li>If you selected <b>From File System</b>, define the SWMT log file
+        location and then a log file, and click <b>Next</b>.</li>
+      <li><p>If you selected <b>From Device via TraceViewer</b>, click <b>Get
+        SWMT Log Now</b> to get an SWMT log file from the device. After this
+        you can set a timer interval to get log files automatically at defined
+        intervals. Select the interval and click <b>Start Timer</b>. Note that
+        each log added with a timer or by clicking <b>Get SWMT Log Now</b>
+        contains only changes since the last received log. To stop the timer,
+        click <b>Stop Timer</b>. </p>
+        <p><img src="../images/import_swmt_2.png"></p>
+      </li>
+      <li>In <b>Tracked Categories and Advanced Options</b>, select a
+        predefined set of categories, or select <b>Custom Categories and
+        Advanced Options</b> and click <b>Edit</b>. In the <b>Advanded
+        Options</b>, you can select categories for SWMT logging and customise
+        the logging options. 
+        <p>To stop the S60 MemSpy application in the target device between log
+        cycles, select the option <b>Close MemSpy Symbian Agent Between
+        Cycles</b>. Closing the agent between cycles makes it possible to get
+        full SWMT snapshot for each data fetch cycle (instead of getting only
+        delta information).</p>
+        <p>To include in the SWMT log cycle heap dumps for later analysis in
+        <b>Heap Analyser</b>, select the option <b>Get Heap Dumps for Threads
+        to Analyse with Heap Analyser</b>. </p>
+        To use a thread heap filter, type the filter name (such as <i>Akn</i>)
+        in the <b>Heap Data Thread Filter</b> field.
+        <p><img src="../images/import_swmt_3.png"></p>
+      </li>
+    </ul>
+    <p>If the connection to the target device fails, click <b>Connection
+    Settings</b> and configure connection settings.</p>
+  </li>
+  <li>Click <b>Finish</b>. A <b>MemSpy</b> tab appears in the Carbide.c++
+    Tabbed View Area with a file list populated. The received log files appear
+    in the file list.</li>
+</ol>
+
+<h5>Related tasks</h5>
+<ul>
+  <li><a href="use_swmt_analyser.htm">Using SWMT Analyser</a></li>
+  <li><a href="connection_settings.htm">Configuring connection settings</a></li>
+</ul>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

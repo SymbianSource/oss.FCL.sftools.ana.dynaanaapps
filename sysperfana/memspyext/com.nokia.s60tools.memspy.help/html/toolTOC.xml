@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="MemSpy" link_to="../com.nokia.carbide.help.common/carbideHelpTOC.xml#anchorCarbideFeature">
+	<topic label="MemSpy" href="html/tool.htm">
+
+		<topic label="Release Notes" href="html/release_notes.htm"/>
+
+		<topic label="Getting started" href="html/gettingstarted/GS_index.htm">
+			<link toc="html/tocGettingStarted.xml"/>
+		</topic>
+
+		<topic label="Concepts" href="html/concepts/concepts.htm">
+			<link toc="html/tocConcepts.xml"/>
+		</topic>
+
+		<topic label="Tasks" href="html/tasks/tasks.htm">
+			<link toc="html/tocTasks.xml"/>
+		</topic>
+
+		<topic label="Reference" href="html/reference/references.htm">
+			<link toc="html/tocReference.xml"/>
+		</topic>
+
+		<topic label="Legal" href="html/legal.htm"/>
+
+	</topic>
+
+</toc>

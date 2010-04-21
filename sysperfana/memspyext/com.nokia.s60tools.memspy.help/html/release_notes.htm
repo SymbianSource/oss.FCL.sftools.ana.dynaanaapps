@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>Release Notes</title>
+  <link href="../book.css" type="text/css" rel="stylesheet">
+  <style type="text/css">
+ </style>
+</head>
+
+<body>
+<h2>Release Notes</h2>
+
+<h4>MemSpy Carbide.c++ Extension &ndash; Version 1.6.0</h4>
+
+<p>Released 21st April 2010</p>
+<ul>
+  <li><a href="#description">Product description</a></li>
+  <li><a href="#features">Main features</a></li>
+  <li><a href="#newfeatures">What's new</a></li>
+  <li><a href="#installation">Installation notes</a></li>
+  <li><a href="#requirements">System requirements</a></li>
+  <li><a href="#compissues">Compatibility issues</a></li>
+  <li><a href="#issues">Known issues</a></li>
+</ul>
+
+<h3><a name="description"></a>Product description</h3>
+
+<p>The MemSpy extension for Carbide.c++ is a tool for importing heap dumps and
+System Wide Memory Tracking logs from a device to PC and analyzing them.</p>
+
+<p>MemSpy can be started either by selecting <b>Carbide &gt; MemSpy</b>, or
+from <b>File &gt; Import &gt; Carbide Extensions &gt; MemSpy</b>.</p>
+
+<h3><a name="features"></a>Main features</h3>
+<ul>
+  <li>Importing heap dump and SWMT log files either from a file or from a
+    target via TraceViewer connection.</li>
+  <li>Heap Analyser for heap dump file analysis and comparison.</li>
+  <li>SWMT Analyser for SWMT log file analysis.</li>
+</ul>
+
+<h3><a name="newfeatures"></a>What's new</h3>
+<ul>
+  <li><strong>Feature</strong>: Added checking for invalid heap dump files that
+    do not contain any threads with binary data information, or contain a
+    binary data error. </li>
+  <li><strong>Feature</strong>: In Heap Analyser's Object type view: If there
+    is a unique referrer for the object type, or if all referrers are of the
+    same known type, the object is no longer named [Unknown] but instead [Part
+    of XXX] is now displayed, where XXX is the type of the referrer. </li>
+  <li><strong>Fix</strong>: Corrected some paths in exported HTML files to use
+    JavaScript functions and display tooltips also in Heap Data and Cell
+    Associations sections.</li>
+  <li>Change: Heap Analyser documentation has been integrated to the MemSpy
+    Help in Carbide. </li>
+</ul>
+
+<h3><a name="installation"></a>Installation notes</h3>
+<ul>
+  <li>N/A</li>
+</ul>
+
+<h3><a name="requirements"></a>System requirements</h3>
+
+<p>Basic requirements:</p>
+<ul>
+  <li>Windows 2000, Windows XP</li>
+  <li>Carbide.c++.</li>
+  <li>Minimum SDK build PC.</li>
+  <li>Normal SDK build PC.</li>
+</ul>
+
+<p>Additional requirements:</p>
+<ul>
+  <li>TraceViewer Carbide.c++ Extension</li>
+  <li>.NET Framework v2.0.50727 or newer is needed for Heap Analyser
+    functionalities</li>
+</ul>
+
+<h3><a name="compissues"></a>Compatibility issues</h3>
+<ul>
+  <li>N/A</li>
+</ul>
+
+<h3><a name="issues"></a>Known issues</h3>
+<ul>
+  <li>N/A</li>
+</ul>
+
+<h3>Version history</h3>
+
+<h5>Version 1.5.0 &ndash; 11th December 2009</h5>
+<ul>
+  <li>Feature: Added possibility to receive <b>Heap Dump</b>s when fetching
+    <b>SWMT</b> logs from device.</li>
+  <li>Feature: Added profiles for <b>SWMT Tracked Categories</b>.</li>
+  <li>Feature: Added the <b>Copy</b> context menu to graphs in <b>SWMT
+    Analyser</b>.</li>
+  <li>Feature: Added the <b>Copy</b> context menu to <b>SWMT Analyser</b>'s
+    data tables.</li>
+  <li>Change: PDF report layout improved in <b>SWMT Analyser</b>'s
+    <b>Analysis</b> tab.</li>
+  <li>Change: Graphs are drawn only when a thread/chunk is alive in <b>SWMT
+    Analyser</b>.</li>
+  <li>Change: <b>Close MemSpy Symbian Agent Between Cycles</b> has been moved
+    to <b>Custom Categories and Advanced Options</b> dialog.</li>
+  <li>Change: Harmonized <b>Advanced filter options...</b> drop-down list item
+    and <b>Customized options...</b> button to use similar wording; these are
+    now using <b>Custom filter</b> and <b>Set Custom filter</b>.</li>
+  <li>Change: Improved error handling in S60 MemSpy launching
+  functionality.</li>
+  <li>Fix: The heap compare functionality does not work if the workstation's
+    regional settings are set to other than English issue is now fixed.</li>
+</ul>
+
+<h5>Version 1.4.0 &ndash; 5th October 2009</h5>
+<ul>
+  <li>Feature: Added the checkbox <b>Close MemSpy Symbian agent between
+    cycles</b> to the <b>System Wide Memory Tracking Wizard</b> which makes
+    possible to get full SWMT snapshot for each data fetch cycle (instead of
+    getting only delta information).</li>
+  <li>Feature: Added the <b>Copy</b> context menu to <b>SWMT Analyser</b>'s
+    data tables in the <b>Graphs</b> tab.</li>
+  <li>Change: X-axis time units in SWMT graphs has been adjusted to match the
+    analyzed/shown time interval.</li>
+  <li>Change: The usage of an incompatible version of MemSpy Launcher is now
+    detected and an error-specific message is shown instead of a generic error
+    message.</li>
+  <li>Change: The <b>Zoom In</b>/<b>Zoom Out</b> context menu items are now
+    disabled in the SWMT graph context menu in case the maximum/minimum zoom
+    factor is achieved.</li>
+  <li>Fix: The Issue of showing just an empty dialog when launching of
+    HeapAnalyser.exe fails because of missing .NET framework is now fixed.</li>
+  <li>Fix: The <b>Tracked Categories</b> group should be disabled after the
+    first SWMT cycle is fetched from device issue is now fixed.</li>
+  <li>Fix: The data table contents is not updated when the filter string search
+    match type is changed between 'Contains' and 'Starts with' issue is now
+    fixed.</li>
+</ul>
+
+<h5>Version 1.3.0 &ndash; 19th August 2009</h5>
+<ul>
+  <li>Feature: Added option to save the <b>SWMT Analyser</b> graph as image
+    into a local file system.</li>
+  <li>Feature: Added option to generate PDF report for the issues found with
+    <b>SWMT Analyser</b>.</li>
+  <li>Feature: Added provision to view the <b>SWMT Analyser</b> graph for the
+    selected issues in the analysis tab itself.</li>
+  <li>Feature: Provided advanced filter options to filter the issues found with
+    <b>SWMT Analyser</b>.</li>
+  <li>Feature: Added support for analysing <b>SWMT Analyser</b> log files even
+    if they do not have consecutive cycle numbers. i.e., now the log files will
+    be ordered based on the time of the cycle. Note however that cycle1 must be
+    available for the analysis.</li>
+  <li>Feature: Added possibility to select tracked SWMT categories in <b>System
+    Wide Memory Tracking Wizard</b>.</li>
+</ul>
+
+<h5>Version 1.2.1 &ndash; 14th August 2009</h5>
+<ul>
+  <li>Fix: Heap Analyser export-to-excel crashed when using Microsoft Office
+    2007 Excel issue is now fixed.</li>
+  <li>Fix: Maximum wait time for getting SWMT logs from device is too tight
+    issue is now fixed.</li>
+  <li>Fix: MemSpy S60 Launcher application installation fails because invalid
+    path name issue is now fixed.</li>
+</ul>
+
+<h5>Version 1.2.0 &ndash; 24th June 2009</h5>
+<ul>
+  <li>Feature: Added a new tab in the SWMT Analyser Editor View for
+    representing the exported data in a graphical format.</li>
+  <li>Feature: Added functionality to SWMT Analyser to analyse log data using
+    graphs</li>
+  <li>Feature: Added a new tab <b>Analysis</b> in the SWMT Analyser Editor view
+    for displaying issues found in analysis.</li>
+  <li>Change: Added thread list filtering based on the thread name into
+    <b>Import Heap Wizard</b> page.</li>
+</ul>
+
+<h5>Version 1.1.0 &ndash; 9th April 2009</h5>
+<ul>
+  <li>Feature: Added new tab for SWMT Analyser Editor View to represent the
+    exported data in graphical format.</li>
+  <li>Feature: Added functionality to SWMT Analyser to analyse log data using
+    graphs.</li>
+</ul>
+
+<h5>Version 1.0.0 &ndash; 16th February 2009</h5>
+
+<p>The first version.</p>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved.<br>
+This component and the accompanying materials are made available <br>
+under the terms of "Eclipse Public License v1.0" <br>
+which accompanies this distribution and is available <br>
+at the URL <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.
+<br>
+<br>
+Initial Contributors:<br>
+Nokia Corporation - initial contribution <br>
+<br>
+Contributors:<br>
+Description: </div>
+</body>
+</html>

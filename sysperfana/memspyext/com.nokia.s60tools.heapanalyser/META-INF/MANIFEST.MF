@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Carbide.c++ Extensions - Heapanalyser Plug-in
+Bundle-SymbolicName: com.nokia.s60tools.heapanalyser
+Bundle-Version: 1.6.0
+Bundle-Activator: com.nokia.s60tools.heapanalyser.HeapAnalyserPlugin
+Bundle-Vendor: Nokia
+Require-Bundle: org.eclipse.core.runtime,
+ com.nokia.s60tools.util;bundle-version="1.1.12"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy
+Export-Package: com.nokia.s60tools.heapanalyser.interfaces;x-friends:="com.nokia.s60tools.memspy"

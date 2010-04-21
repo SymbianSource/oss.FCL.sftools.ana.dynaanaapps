@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Carbide.c++ Extensions - MemSpy
+Bundle-SymbolicName: com.nokia.s60tools.memspy;singleton:=true
+Bundle-Version: 1.6.0
+Bundle-Activator: com.nokia.s60tools.memspy.plugin.MemSpyPlugin
+Bundle-Vendor: Nokia
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ com.nokia.s60tools.ui;bundle-version="1.5.0",
+ com.nokia.s60tools.sdk;bundle-version="1.2.1",
+ com.nokia.s60tools.heapanalyser;bundle-version="1.0.0",
+ com.nokia.s60tools.util;bundle-version="1.1.12",
+ com.nokia.s60tools.swmtanalyser;bundle-version="1.0.0",
+ org.eclipse.core.resources;bundle-version="3.4.1"
+Bundle-ActivationPolicy: lazy
+Export-Package: com.nokia.s60tools.memspy.export,
+ com.nokia.s60tools.memspy.interfaces;x-friends:="com.nokia.s60tools.memspy.tests",
+ com.nokia.s60tools.memspy.model;x-friends:="com.nokia.s60tools.memspy.tests"
+Import-Package: org.eclipse.core.filesystem,
+ org.eclipse.ui.ide
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

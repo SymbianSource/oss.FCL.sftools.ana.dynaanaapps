@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>Importing and comparing two heap dump files</title>
+  <link href="../../book.css" type="text/css" rel="stylesheet">
+</head>
+
+<body>
+<h2>Importing and comparing two heap dump files</h2>
+<ol>
+  <li>Click the <img src="../images/Memspy_16.png"> icon to start the MemSpy
+    Import Wizard.</li>
+  <li>Select to <b>Import heap and compare logs with Heap Analyser</b>, and
+    click <b>Next</b>.</li>
+  <li><p>Select whether to get the heap dumps <b>From File System</b> or
+    <b>From Device via TraceViewer</b>, and select the heap dump files to
+    import and compare.</p>
+    <ul>
+      <li>If you selected <b>From File System</b>, define the first heap dump
+        file location and then a heap, and click <b>Next</b>. Select the second
+        file and heap in the same way, and click <b>Next</b>. Note that you can
+        only compare two dumps from the same thread.</li>
+      <li>If you selected <b>From Device via TraceViewer</b>, click
+        <b>Load/Refresh Thread List</b> to get a thread list from the device,
+        select the first heap to compare, click <b>Get Selected Heap Now</b>,
+        and click <b>Next</b>. Similarly, select the second heap to compare,
+        and click <b>Next</b>.<br>
+        You can also filter the thread list by using the <b>Starts with</b> and
+        <b>Contains</b> selections.</li>
+    </ul>
+    <p>If this fails, click <b>Connection Settings</b> and configure connection
+    settings.</p>
+  </li>
+  <li>Define an output file location and name for the report file, and click
+    <b>Next</b>. The report is an MS Excel sheet (XLS) file.</li>
+  <li>Define the location of symbol and map files. You have to define at least
+    one symbol file. Defining map files is optional. For more information, see
+    <a href="../concepts/files.htm">Symbol and Map files</a>.</li>
+  <li>Click <b>Finish</b>. A MemSpy tab appears in the Carbide.c++ Tabbed View
+    Area with a file list populated.</li>
+  <li>A confirmation dialog opens, asking if you want to view the generated
+    file in Excel. See the figure below for an example of the outfile in
+  Excel.</li>
+</ol>
+<img src="../images/output_in_excel.png">
+<h5>Related references</h5>
+<ul>
+  <li><a href="../reference/HA_data_analysis.htm">Data analysis with Heap
+    Analyser</a></li>
+</ul>
+
+<h5>Related tasks</h5>
+<ul>
+  <li><a href="connection_settings.htm">Configuring connection settings</a></li>
+</ul>
+
+<h5>Related concepts</h5>
+<ul>
+  <li><a href="../concepts/files.htm">Symbol and Map files</a></li>
+</ul>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

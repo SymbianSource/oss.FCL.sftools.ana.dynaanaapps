@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>Basic walk-through</title>
+  <link href="../../book.css" type="text/css" rel="stylesheet">
+</head>
+
+<body>
+<h3>Basic walk-through</h3>
+
+<p>You can begin importing and analyzing heap dump and SWMT log files by
+activating the <b>MemSpy Import Wizard</b>. Select <b>Carbide &gt; MemSpy</b>
+and then take the following steps:</p>
+<ol>
+  <li>Select an action (<a href="../tasks/view_heap.htm">Importing and
+    analyzing heap dump files</a>, <a
+    href="../tasks/compare_two_heaps.htm">Importing and comparing two heap dump
+    files</a>, or <a href="../tasks/view_swmt_log.htm">Importing and analyzing
+    System Wide Memory Tracking log files</a>.</li>
+  <li>Select files to be imported and analyzed or compared. If you are
+    comparing two heap dumps, define the reporting settings.</li>
+  <li>When importing heap dumps, define the location of symbol and map files. 
+    <p>If the heap dumps are large, increase the buffer size in the tracing
+    application such as <b>TraceCoreUserApp</b> or <b>TraceSwitch</b>.</p>
+  </li>
+  <li>Start analyzing the files.</li>
+</ol>
+
+<p>When the files have been imported, they will be displayed in the
+<b>MemSpy</b> tab in the Carbide.c++ Tabbed View Area, and if you imported a
+single heap dump file or SWMT log files, <a
+href="../reference/heap_analyser_overview.htm">Heap Analyser</a> or <a
+href="../tasks/use_swmt_analyser.htm">SWMT Analyser</a> application will be
+automatically launched for analyzing the files.</p>
+
+<p>You can launch the MemSpy Import Wizard also by selecting <b>File &gt;
+Import &gt; Carbide Extensions &gt; MemSpy</b>.</p>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

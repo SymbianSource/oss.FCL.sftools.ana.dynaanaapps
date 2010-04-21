@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>Troubleshooting</title>
+  <link href="../../book.css" type="text/css" rel="stylesheet">
+</head>
+
+<body>
+<h2>Troubleshooting</h2>
+
+<h3 name="memspy_trb">MemSpy</h3>
+
+<p>The MemSpy&gt; Carbide.c++ Extension error messages are listed below:</p>
+
+<table width="615" border="1" cellspacing="1" cellpadding="2">
+  <colgroup><col width="250*">
+    <col width="356*">
+  </colgroup>
+  <tbody>
+    <tr>
+      <th>Message</th>
+      <th align="center">Description</th>
+    </tr>
+    <tr>
+      <td><i>MemSpy extension was unable to receive response from MemSpy
+        S60-application.</i></td>
+      <td>The target device does not respond to requests sent from the MemSpy
+        Carbide.c++ Extension. Restart the target device. If you are using an
+        USB connection, make sure you have activated trace sending in
+        TraceSwitch or TraceCoreUserApp.</td>
+    </tr>
+    <tr>
+      <td><i>MemSpy s60-application was not found from your device.</i></td>
+      <td>Your device has MemSpy Launcher, but not MemSpy S60 application
+        installed. Install MemSpy S60 application to the device and restart the
+        device.</td>
+    </tr>
+    <tr>
+      <td><i>Received log files are corrupt.</i></td>
+      <td>The heap dump or SWMT log files are missing lines. If you are using
+        an USB connection, increase the buffer size in TraceSwitch or
+        TraceCoreUserApp.</td>
+    </tr>
+    <tr>
+      <td><i>No Heap Found.</i></td>
+      <td>The selected thread is missing, probably because it has terminated.
+        Reload the thread list. If this does not help, restart the device. </td>
+    </tr>
+    <tr>
+      <td><i>Selected heap's heap type is wrong (needs to be Symbian OS
+        RHeap).</i></td>
+      <td>The heap of the selected thread is not supported, and the heap dump
+        cannot be retrieved by MemSpy.</td>
+    </tr>
+    <tr>
+      <td><i>Invalid heap dump file. The file doesn't contain any threads with
+        binary data information.</i></td>
+      <td>The file you are trying to import does not contain any threads with
+        binary data information, or contains a binary data error. The file will
+        not be imported.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 name="swmt_analyser_trb">SWMT Analyser</h3>
+
+<p>The SWMT Analyser error messages are listed below:</p>
+
+<table width="615" border="1" cellspacing="1" cellpadding="2">
+  <colgroup><col width="250*">
+    <col width="356*">
+  </colgroup>
+  <tbody>
+    <tr>
+      <th>Message</th>
+      <th align="center">Description</th>
+    </tr>
+    <tr>
+      <td><i>xyz.xls file is already exists and opened, could not overwrite.
+        Please close it and try again.</i></td>
+      <td>The Excel XLS file is already opened in the target folder.<br>
+        Close the Excel file and try exporting to Excel again.</td>
+    </tr>
+    <tr>
+      <td><i>Invalid order of the log files. The selected files must be in
+        consecutive order and must start from the cycle 1.</i></td>
+      <td>The selected files in the MemSpy view are not in consecutive order,
+        starting from cycle 1.<br>
+        Select the log files and make sure that they are in consecutive order
+        and starting from cycle 1.</td>
+    </tr>
+    <tr>
+      <td><i>This is a delta file. It does not contain the complete
+        information. Do you still want to continue?</i></td>
+      <td>You tried to open a single file which has a cycle number other than
+        1.<br>
+        Click <b>Yes</b> to continue, or <b>No</b> to cancel.</td>
+    </tr>
+    <tr>
+      <td><i>The file is invalid.</i></td>
+      <td>SWMT Analyser cannot read the data from the log file. This may occur
+        if there are typos or other manual edits in the log file.<br>
+        Please check the filename and the line number shown in the error
+        message, and act accordingly.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

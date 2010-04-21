@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.nokia.carbide.extensions.memspy"
+      label="Carbide.c++ Extensions - MemSpy"
+      version="1.6.0"
+      provider-name="Nokia"
+      plugin="com.nokia.s60tools.memspy">
+
+   <description>
+      MemSpy tool is used for analysing memory state and chances of s60 device over time.
+   </description>
+
+   <copyright>
+      Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies). 
+      All rights reserved. License: http://www.eclipse.org/legal/epl-v10.html.
+   </copyright>
+
+   <license url="license.txt">
+      Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.
+This component and the accompanying materials are made available
+under the terms of &quot;Eclipse Public License v1.0&quot;
+which accompanies this distribution, and is available
+at the URL &quot;http://www.eclipse.org/legal/epl-v10.html&quot;.
+   </license>
+
+
+   <requires>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.ui.console"/>
+      <import plugin="org.eclipse.cdt.core"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="com.nokia.carbide.cdt.builder"/>
+      <import plugin="com.nokia.s60tools.ui" version="1.2.1" match="greaterOrEqual"/>
+      <import plugin="com.nokia.s60tools.util" version="1.1.12" match="greaterOrEqual"/>
+      <import plugin="com.nokia.s60tools.sdk" version="1.1.6" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="com.nokia.s60tools.heapanalyser"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.nokia.s60tools.memspy.help"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.nokia.s60tools.memspy"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.nokia.s60tools.swmtanalyser"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.nokia.s60tools.swmtanalyser.thirdpartysources"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+
+</feature>

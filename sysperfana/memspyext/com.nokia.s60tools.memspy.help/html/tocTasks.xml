@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Tasks">
+	<topic label="Importing and analyzing heap dump files" href="html/tasks/view_heap.htm"/>
+	<topic label="Importing and comparing two heap dump files" href="html/tasks/compare_two_heaps.htm"/>
+	<topic label="Importing and analyzing System Wide Memory Tracking log files" href="html/tasks/view_swmt_log.htm"/>
+	<topic label="Using SWMT Analyser" href="html/tasks/use_swmt_analyser.htm">
+		<topic label="Analysing data using graphs" href="html/tasks/analyse_data_using_graphs.htm"/>
+		<topic label="Viewing issues on the Analysis tab" href="html/tasks/view_issues_on_the_analysis_tab.htm"/>
+		<topic label="Understanding the Excel data" href="html/tasks/understanding_excel_data.htm"/>
+		<topic label="Generating PDF reports" href="html/tasks/generate_pdf_report.htm"/>
+	</topic>
+	<topic label="Configuring connection settings" href="html/tasks/connection_settings.htm"/>
+</toc>

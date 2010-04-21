@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>Object Type</title>
+  <link href="../../book.css" type="text/css" rel="stylesheet">
+</head>
+
+<body>
+<h2>Object Type </h2>
+
+<p>The Object Type view presents the objects on the heap and their position
+within it, just as in the <strong>Cell Type</strong> view, but by tagging them
+with their C++ type name so that you can easily recognize the objects from your
+own code. Determining an object&rsquo;s type for display is usually possible
+for the majority of objects in the heap, but not for them all. An
+object&rsquo;s type can usually be determined if</p>
+<ul>
+  <li>it is an instance of a C++ class with at least one (directly defined or
+    inherited) virtual function, or</li>
+  <li>it is a descriptor.</li>
+</ul>
+
+<p>If the object type cannot be determined, but there is a unique referrer for
+the object type, or if all referrers are of the same known type, <em>[Part of
+XXX]</em> is displayed, where XXX is the type of the referrer.</p>
+
+<p>Otherwise, <em>[Unknown]</em> is displayed.</p>
+
+<p>A virtual function in a class means each instance of that class will contain
+a vtable pointer. The vtable pointer can be used, in combination with the
+symbolic information provided at startup, to determine the name of the class
+associated with the vtable for presentation. Symbian&rsquo;s CBase defines a
+virtual destructor, so all conventional C-prefixed classes in Symbian will have
+a vtable and so be identifiable in this way.</p>
+
+<p>There are a number of possibilities, but an <em>[Unknown]</em> or <em>[Part
+of XXX]</em> object is typically either a raw (non-descriptor) data buffer, or
+sometimes a T-class allocated on the heap. Because such an object is often
+owned and encapsulated by an identifiable C-class, one effective strategy for
+identifying objects, which type cannot be determined, is to use the incoming
+reference information Heap Analyser constructs. If an otherwise unknown object
+type has this reference information, it is displayed in the view as <em>[Part
+of XXX]</em>, where XXX is the type of the referrer. In addition, if you
+right-click an <em></em>object and select <strong>Go to&hellip;</strong> &gt;
+<strong>Incoming reference</strong>, the context menu will display the types of
+the objects that refer to the <em></em>object. In fact there are a number of
+ways of visualizing object reference relationships available from the
+right-click context menu, including drawing the link relationships between
+objects as an overlay of dotted lines (right click and select
+<strong>Relationships&hellip;</strong> &gt; <strong>Incoming</strong> &gt;
+<strong>Breadcrumbs</strong>).</p>
+
+<p>Colours are chosen arbitrarily on a type-by-type basis in this view, with
+the exception of descriptors (Yellow), <em>[Unknown]</em> and <em>[Part of
+XXX]</em> (Red), and free space (Blue). The colour allocation can be viewed and
+refined by clicking <strong>Set Filters</strong>. This filter settings panel is
+also useful for focusing down on just object types of particular interest;
+click <strong>Enable None</strong>, then selectively enable just the types you
+are interested in. To get an overview, select <strong>View</strong> &gt;
+<strong>Size</strong> &gt; <strong>Small</strong>.</p>
+
+<p><img src="../images/ha_heap_view_object_type.png"></p>
+
+<h5>Related references</h5>
+<ul>
+  <li><a href="cell_type.htm">Cell Type</a></li>
+  <li><a href="parent_binary.htm">Parent Binary</a></li>
+  <li><a href="cell_lenght.htm">Cell Lenght</a></li>
+  <li><a href="isolation.htm">Isolation and Pervasiveness</a></li>
+  <li><a href="HA_data_analysis.htm">Data analysis with Heap Analyser</a></li>
+</ul>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

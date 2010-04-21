@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Getting started"> 
+	
+	<topic label="Overview" href="html/gettingstarted/overview.htm"/>
+	<topic label="Prerequisites for use" href="html/gettingstarted/prerequisites.htm"/>
+	<topic label="Basic walk-through" href="html/gettingstarted/walk_through.htm"/>
+		
+</toc>

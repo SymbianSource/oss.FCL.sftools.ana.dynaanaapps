@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>Parent Binary</title>
+  <link href="../../book.css" type="text/css" rel="stylesheet">
+</head>
+
+<body>
+<h2>Parent Binary</h2>
+
+<p>The Parent Binary view is effectively the same as the <strong>Object
+Type</strong> view, except that instead of displaying each object&rsquo;s type,
+it displays the name of the object file that defined that type&rsquo;s
+<em>vtable</em>.</p>
+
+<p>What this view does not do is record the logical allocation point of an
+object, since that is simply not recoverable from the information available.
+For example, if some of your own code contains a <em>CFoo::NewL()</em> where
+<em>CFoo</em> is imported from a dll, then it will be an object file in the dll
+that is displayed for the resulting allocated cell, not the object file
+containing the call to <em>NewL</em>.</p>
+
+<p>This view can be useful to quickly find a module that is contributing into a
+heap objects that are unexpectedly large, or that you do not expect to be
+there.</p>
+
+<p></p>
+
+<p><img src="../images/ha_heap_view_parent_binary.png"></p>
+
+<h5>Related references</h5>
+<ul>
+  <li><a href="cell_type.htm">Cell Type</a></li>
+  <li><a href="object_type.htm">Object Type</a></li>
+  <li><a href="cell_lenght.htm">Cell Lenght</a></li>
+  <li><a href="isolation.htm">Isolation and Pervasiveness</a></li>
+  <li><a href="HA_data_analysis.htm">Data analysis with Heap Analyser</a></li>
+</ul>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

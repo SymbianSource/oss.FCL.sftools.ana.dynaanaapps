@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Reference">
+
+	<topic label="Toolbar" href="html/reference/toolbar.htm"/>	
+	<topic label="Troubleshooting" href="html/reference/troubleshooting.htm"/>
+ <topic href="html/reference/heap_analyser_overview.htm" label="Heap Analyser">
+    <topic href="html/reference/prerequisites_for_HA.htm" label="Prerequisites for Using Heap Analyser">
+    </topic>
+  <topic href="html/reference/HA_data_analysis.htm" label="Data analysis with Heap Analyser">
+    <topic href="html/reference/heap_view.htm" label="Heap View">
+       <topic href="html/reference/cell_type.htm" label="Cell Type">
+       </topic>
+       <topic href="html/reference/object_type.htm" label="Object type">
+       </topic>
+       <topic href="html/reference/parent_binary.htm" label="Parent Binary">
+       </topic>
+       <topic href="html/reference/cell_lenght.htm" label="Cell Length">
+       </topic>
+       <topic href="html/reference/isolation.htm" label="Isolation and Pervasiveness">
+       </topic>
+    </topic>
+    <topic href="html/reference/cell_list.htm" label="Cell List">
+    </topic>
+    <topic href="html/reference/objects.htm" label="Objects">
+    </topic>
+    <topic href="html/reference/relationships.htm" label="Relationships">
+    </topic>
+    <topic href="html/reference/cell_size.htm" label="Cell Size Distributions">
+    </topic>
+    <topic href="html/reference/graphs.htm" label="Graphs">
+       <topic href="html/reference/size_by_cell_index.htm" label="Size by Cell Index">
+       </topic>
+       <topic href="html/reference/free_cell_size.htm" label="Free Cell Size and Allocated Cell Size">
+       </topic>
+       <topic href="html/reference/cell_overhead.htm" label="Cell Overhead">
+       </topic>
+       <topic href="html/reference/associated_binary.htm" label="Associated Binary">
+       </topic>
+    </topic>
+ </topic>
+  <topic href="html/reference/saving_HA_reports.htm" label="Saving Heap Analyser reports">
+  </topic>
+ </topic>
+	
+</toc>
