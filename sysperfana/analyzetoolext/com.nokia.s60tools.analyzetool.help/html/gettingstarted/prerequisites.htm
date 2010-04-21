@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
 <title>AnalyzeTool Prerequisites</title>
-<link href="../nokia.css" type="text/css" rel="stylesheet">
+<link href="../../book.css" type="text/css" rel="stylesheet">
 </head>
 <body>
 
@@ -13,26 +13,26 @@
 	<li>AnalyzeTool command line tool (atool.exe).</li>
 	<li>Symbian component of AnalyzeTool extracted in build environment.</li>
 	<li>AnalyzeTool for target hardware (through SIS or ROM build).</li>
-	<li>Tracing utility Carbide.c++ Extension (any connection method to target hardware that can pass information through RDebug).</li>
+	<li>TraceViewer Carbide.c++ Extension (any connection method to target hardware that can pass information through RDebug).</li>
 </ul>
 <p><b>Note!</b> If you have taken AnalyzeTool into use through the Nokia internal SymSEE Installer, the required components have been automatically installed to your PC.</p>
 
 <h5>AnalyzeTool for target hardware</h5>
-<p>To run analysis in the target hardware, AnalyzeTool needs to be installed. You can either choose to install AnalyzeTool through an installation package, or add AnalyzeTool to a phone image. You can find the needed files from the <b>c:\apps\atool</b> directory, if you have acquired AnalyzeTool through the Nokia internal SymSEE environment. If you want to install AnalyzeTool from a SIS package, unzip the <i>AnalyzeToolPhone.zip</i> which contains the binaries of the release and debug versions for the supported platforms. In case of ROM image inclusion (with the 3.2 release), <i>AnalyzeTool.iby</i> needs to be included. In case of 5.x release, it is automatically included.</p>
+<p>To run analysis in the target hardware, AnalyzeTool needs to be installed. You can either choose to install AnalyzeTool through an installation package, or add AnalyzeTool to a phone image. You can find the needed files from the <b>c:\apps\atool</b> directory, if you have acquired AnalyzeTool through the Nokia internal SymSEE environment. If you want to install AnalyzeTool from a SIS package, unzip the <i>AnalyzeToolPhone.zip</i> which contains the binaries of the release and debug versions for the supported platforms. In case of ROM image inclusion, <i>AnalyzeTool.iby</i> needs to be included. In case of 5.x release, it is automatically included.</p>
 
 <h5>Additions to build environment</h5>
-<p>S60 version 3.2.x, 5.0, 5.0.1, and 5.1 platforms and MCL releases include AnalyzeTool so if you are using one of those you do not need to take any actions. If you are using a platform which does not include AnalyzeTool, you have to add some AnalyzeTool files to the platform to be able to build with AnalyzeTool. If you have installed AnalyzeTool through the Nokia internal SymSEE environment, these files can be found from <b>c:\apps\atool</b>. The file name is <i>S60_environment_changes_xx.zip</i> where <i>xx</i> specifies the S60 platform version number. To install these files, unzip the file to the directory which contains the <i>epoc32</i> directory. The zip file includes the necessary directory structure.</p>
+<p>S60 version 5.0, 5.0.1, and 5.1 platforms and MCL releases include AnalyzeTool so if you are using one of those you do not need to take any actions. If you are using a platform which does not include AnalyzeTool, you have to add some AnalyzeTool files to the platform to be able to build with AnalyzeTool. If you have installed AnalyzeTool through the Nokia internal SymSEE environment, these files can be found from <b>c:\apps\atool</b>. The file name is <i>S60_environment_changes_xx.zip</i> where <i>xx</i> specifies the S60 platform version number. To install these files, unzip the file to the directory which contains the <i>epoc32</i> directory. The zip file includes the necessary directory structure.</p>
 <p><b>Note!</b> Errors about missing AnalyzeTool files are displayed in the problems view if your build environment is missing any necessary AnalyzeTool files.</p>
 
 <h5>Checking the AnalyzeTool Carbide.c++ Extension installation</h5>
-<p>If you intend to use <a href="../tasks/capture.htm#capture_external">External data gathering mode</a>, check that Tracing utility Carbide.c++ Extension is configured correctly. </p>
+<p>If you intend to use <a href="../tasks/capture.htm#capture_external">External data gathering mode</a>, check that TraceViewer Carbide.c++ Extension is configured correctly. Check the TraceViewer settings from <b>Window > Preferences > Carbide Extensions > TraceViewer > Connection</b>. For more information, see the <a href="../../../com.nokia.traceviewer.help/html/toc.htm">TraceViewer Help.</a></p>
 
 <h5>Related concepts</h5>
 <ul>
 	<li><a href="../gettingstarted/basic.htm">Basic walk-through</a></li>
 </ul>
 
-<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
+<div id="footer">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
 License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
 </body>
 </html>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -72,13 +72,13 @@ public class YAxis extends Canvas implements IMemoryActivityModelChangeListener 
 
 	/**
 	 * Sets a new model as input
-	 * @param model
+	 * @param newModel
 	 */
-	public void setInput(IMemoryActivityModel model) {
+	public void setInput(IMemoryActivityModel newModel) {
 		if (this.model != null){
 			this.model.removeListener(this);
 		}
-		this.model = model;
+		this.model = newModel;
 		this.model.addListener(this);
 	}
 	
@@ -121,12 +121,12 @@ public class YAxis extends Canvas implements IMemoryActivityModelChangeListener 
 			}
 			org.eclipse.swt.graphics.Point extent = gc.stringExtent(legend);
 			
-			gc.drawLine(YLEGENDSPACE - 3, (int)y + 1, YLEGENDSPACE, (int)y + 1);
+			gc.drawLine(YLEGENDSPACE - 3, y + 1, YLEGENDSPACE, y + 1);
 			
 			if (y >= previousBottom)
 			{
-				gc.drawString(legend, YLEGENDSPACE - extent.x -2, (int)y);
-				previousBottom = (int)y + extent.y;
+				gc.drawString(legend, YLEGENDSPACE - extent.x -2, y);
+				previousBottom = y + extent.y;
 			}
 		}
 	

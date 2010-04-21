@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -41,7 +41,7 @@ import com.nokia.s60tools.analyzetool.global.Constants;
 import com.nokia.s60tools.analyzetool.global.Util;
 
 /**
- * Class to use atool.exe Atool.exe is usually used in command prompt so that's
+ * Class to use atool.exe. Atool.exe is usually used in command prompt so that's
  * why we executes atool commands with using CarbideCommandLauncher class.
  *
  * @author kihe
@@ -61,7 +61,7 @@ public class UseAtool {
 	}
 
 	/**
-	 * Check data file type Gets first line of file and compares that to
+	 * Check data file type. Gets first line of file and compares that to
 	 * predefined constants.
 	 *
 	 * @param path
@@ -308,7 +308,7 @@ public class UseAtool {
 
 	/**
 	 * Sets data file name and path
-	 * @param dataFileName Data file name and path
+	 * @param newDataFileName Data file name and path
 	 */
 	private void setDataFileName(String newDataFileName) {
 		dataFileName = newDataFileName;

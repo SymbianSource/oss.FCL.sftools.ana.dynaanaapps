@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -26,19 +26,21 @@ package com.nokia.s60tools.analyzetool.engine.statistic;
 public class DllLoad {
 
 	/** Dll load end address */
-	Long endAddress;
+	private Long endAddress;
 
 	/** Time when this dll is loaded. */
-	Long loadTime;
+	private long loadTime;
+	/** Time when this dll is unloaded */
+	private long unloadTime = Long.MAX_VALUE;
 
 	/** Name of the dll */
-	String name;
+	private String name;
 
 	/** Process ID of the dll load */
-	int processID;
+	private int processID;
 
 	/** Dll load start address */
-	Long startAddress;
+	private Long startAddress;
 
 	/**
 	 * Returns dll load end address
@@ -54,8 +56,17 @@ public class DllLoad {
 	 *
 	 * @return Time when this dll item is loaded
 	 */
-	public Long getLoadTime() {
+	public long getLoadTime() {
 		return loadTime;
+	}
+
+	/**
+	 * Returns unload time of the dll
+	 *
+	 * @return Time when this dll item is unloaded
+	 */
+	public long getUnloadTime() {
+		return unloadTime;
 	}
 
 	/**
@@ -106,6 +117,24 @@ public class DllLoad {
 		Long lValue = Long.parseLong(newLoadTime, 16);
 		this.loadTime = lValue;
 	}
+	/**
+	 * Set load time of this item
+	 *
+	 * @param loadTime
+	 *            Time when this dll is loaded.
+	 */
+	public void setLoadTime(long loadTime) {
+		this.loadTime = loadTime;
+	}
+	/**
+	 * Set unload time of this dll
+	 *
+	 * @param unloadTime
+	 *            Time when this dll is unloaded.
+	 */
+	public void setUnloadTime(long unloadTime) {
+		this.unloadTime = unloadTime;
+	}
 
 	/**
 	 * Sets dll load name
@@ -138,4 +167,13 @@ public class DllLoad {
 		Long lValue = Long.parseLong(newStartAddress, 16);
 		this.startAddress = lValue;
 	}
+
+	@Override
+	public String toString() {
+		return String
+				.format(
+						"DllLoad [name=%s, processID=%d, startAddress=0x%08X, endAddress=0x%08X, loadTime=%s, unloadTime=%s]",
+						name, processID, startAddress, endAddress, loadTime, unloadTime);
+	}
+
 }

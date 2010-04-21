@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -37,7 +37,8 @@ import com.nokia.s60tools.analyzetool.global.Constants;
 import com.nokia.s60tools.analyzetool.ui.IActionListener;
 
 /**
- * @author kihe The activator class controls the plug-in life cycle
+ * The activator class controls the plug-in life cycle
+ * @author kihe 
  */
 public class Activator extends AbstractUIPlugin {
 

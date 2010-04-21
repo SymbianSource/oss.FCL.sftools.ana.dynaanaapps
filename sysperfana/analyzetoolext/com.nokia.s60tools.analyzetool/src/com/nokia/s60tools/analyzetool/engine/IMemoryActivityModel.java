@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -39,31 +39,31 @@ public interface IMemoryActivityModel {
 	
 	/**
 	 * returns the last selected process
-	 * @return
+	 * @return Selected process
 	 */
 	public ProcessInfo getSelectedProcess();
 
 	/**
-	 * get the start time of the process that started first
+	 * Get the start time of the process that started first
 	 * @return time
 	 */
 	public Long getFirstProcessTime();
 
 	/**
-	 * get end time of the process that ended last
-	 * @return
+	 * Get end time of the process that ended last
+	 * @return Last process time
 	 */
 	public Long getLastProcessTime();
 
 	/**
-	 * get get first point time from all processes
-	 * @return time
+	 * Get time of the first memory operation
+	 * @return First memory operation time.
 	 */
 	public Long getFirstMemOpTime();
 
 	/**
-	 * get last point time from all processes
-	 * @return time
+	 * Get last memory operation time from all processes
+	 * @return Last memory operation time.
 	 */
 	public Long getLastMemOpTime();
 
@@ -74,8 +74,8 @@ public interface IMemoryActivityModel {
 	public int getHighestCumulatedMemoryAlloc();
 
 	/**
-	 * get list of processes
-	 * @return processes
+	 * Get list of processes
+	 * @return processes list
 	 */
 	public AbstractList<ProcessInfo> getProcesses();
 
@@ -90,4 +90,31 @@ public interface IMemoryActivityModel {
 	 */
 	void removeListener(IMemoryActivityModelChangeListener listener);
 	
+	/**
+	 * Returns true if callstack reading from files is done on demand after the
+	 * initial parsing phase. This assumes file positions are available from
+	 * BaseInfo
+	 * @return true for deferred callstack reading, false otherwise
+	 */
+	public boolean isDeferredCallstackReading();
+	
+	/**
+	 * Indicates whether this model is reading callstacks on demand 
+	 * after the initial parsing phase has finished
+	 * @param value
+	 */
+	public void setDeferredCallstackReading(boolean value);
+	
+	/**
+	 * Setter for the ICallstackManager
+	 * @param callstackManager the CallstackManager to set
+	 */
+	public void setCallstackManager(ICallstackManager callstackManager);
+	
+	/**
+	 * Getter for ICallstackManager. 
+	 * @return CallstackManager
+	 */
+	public ICallstackManager getCallstackManager();
+		
 }

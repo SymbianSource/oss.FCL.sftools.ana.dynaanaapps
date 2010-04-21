@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -98,6 +98,7 @@ public class ChartContainer extends Composite implements IMemoryActivityModelCha
 		propViewItem.addSelectionListener(new SelectionListener(){
 
 			public void widgetDefaultSelected(SelectionEvent e) {
+				//do nothing by design
 			}
 
 			public void widgetSelected(SelectionEvent e) {
@@ -119,6 +120,7 @@ public class ChartContainer extends Composite implements IMemoryActivityModelCha
 		helpItem.addSelectionListener(new SelectionListener(){
 
 			public void widgetDefaultSelected(SelectionEvent e) {
+				//do nothing by design
 			}
 
 			public void widgetSelected(SelectionEvent e) {
@@ -178,6 +180,7 @@ public class ChartContainer extends Composite implements IMemoryActivityModelCha
 		graphCanvas.setBackground(new Color(Display.getDefault(), new RGB(255,255,255)));
 		graphCanvas.createContent();
 		graphCanvas.addControlListener(new ControlAdapter() {
+			@Override
 			public void controlResized(ControlEvent e) {
 				//the client area of the graph panel might change if a scrollbar gets added/removed 
 				//this needs to be passed on to the y axis
@@ -213,7 +216,9 @@ public class ChartContainer extends Composite implements IMemoryActivityModelCha
 		
 		processCombo.addSelectionListener(new SelectionListener(){
 
-			public void widgetDefaultSelected(SelectionEvent e) {}
+			public void widgetDefaultSelected(SelectionEvent e) {
+				//do nothing by design
+			}
 
 			public void widgetSelected(SelectionEvent e) {
 				int sel = processCombo.getSelectionIndex();
@@ -238,13 +243,13 @@ public class ChartContainer extends Composite implements IMemoryActivityModelCha
 	 * callbacks to model change listeners.
 	 * @param aProject The currently selected project in the IDE, used for pinpointing
 	 * 
-	 * @param model the new IMemoryActivityModel to set
+	 * @param newModel the new IMemoryActivityModel to set
 	 */
-	public void setInput(IProject aProject, IMemoryActivityModel model) {
+	public void setInput(IProject aProject, IMemoryActivityModel newModel) {
 		if (this.model != null){
 			this.model.removeListener(this);
 		}
-		this.model = model;
+		this.model = newModel;
 		this.model.addListener(this);
 
 		graphCanvas.setInput(model);
@@ -258,6 +263,7 @@ public class ChartContainer extends Composite implements IMemoryActivityModelCha
 	 * @see com.nokia.s60tools.analyzetool.engine.IMemoryActivityModelChangeListener#onProcessSelected(com.nokia.s60tools.analyzetool.engine.statistic.ProcessInfo)
 	 */
 	public void onProcessSelected(ProcessInfo p) {
+		//do nothing by design
 	}
 
 	/* (non-Javadoc)
@@ -269,6 +275,7 @@ public class ChartContainer extends Composite implements IMemoryActivityModelCha
 		
 	}	
 	
+	@Override
 	public void update(){
 		graphCanvas.zoomGraph();
 		graphCanvas.redraw();

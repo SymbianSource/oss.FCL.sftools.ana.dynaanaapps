@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -39,6 +39,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -60,6 +61,7 @@ import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -67,8 +69,12 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -84,17 +90,21 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.views.navigator.ResourceNavigator;
 
 import com.nokia.carbide.cdt.builder.CarbideBuilderPlugin;
 import com.nokia.carbide.cdt.builder.project.ICarbideBuildConfiguration;
 import com.nokia.carbide.cdt.builder.project.ICarbideProjectInfo;
+import com.nokia.carbide.cpp.internal.project.ui.views.SymbianProjectNavigatorView;
 import com.nokia.s60tools.analyzetool.Activator;
 import com.nokia.s60tools.analyzetool.AnalyzeToolHelpContextIDs;
 import com.nokia.s60tools.analyzetool.builder.BuilderUtil;
 import com.nokia.s60tools.analyzetool.engine.AnalysisItem;
 import com.nokia.s60tools.analyzetool.engine.AnalyzeFactory;
 import com.nokia.s60tools.analyzetool.engine.CallstackItem;
+import com.nokia.s60tools.analyzetool.engine.DeferredCallstackManager;
 import com.nokia.s60tools.analyzetool.engine.EpocReader;
 import com.nokia.s60tools.analyzetool.engine.IMemoryActivityModel;
 import com.nokia.s60tools.analyzetool.engine.MMPInfo;
@@ -102,6 +112,7 @@ import com.nokia.s60tools.analyzetool.engine.ParseAnalyzeData;
 import com.nokia.s60tools.analyzetool.engine.ParseXMLFileSAX;
 import com.nokia.s60tools.analyzetool.engine.ProjectResults;
 import com.nokia.s60tools.analyzetool.engine.RunResults;
+import com.nokia.s60tools.analyzetool.engine.SimpleCallstackManager;
 import com.nokia.s60tools.analyzetool.engine.UseAtool;
 import com.nokia.s60tools.analyzetool.engine.statistic.ProcessInfo;
 import com.nokia.s60tools.analyzetool.engine.statistic.ReadFile;
@@ -113,28 +124,29 @@ import com.nokia.s60tools.analyzetool.ui.actions.FileActionHistory;
 import com.nokia.s60tools.analyzetool.ui.statistic.StatisticView;
 
 /**
- * Class to display memory analysis results also provides all the
- * functionalities what AnalyzeTool has.
- *
+ * AnalyzeTool main view which displays memory analysis results and provides
+ * interface for all the functionalities what AnalyzeTool has.
+ * 
  * @author kihe
- *
+ * 
  */
 public class MainView extends ViewPart implements ISelectionListener,
-		ITreeViewerListener, IActionListener, ISelectionChangedListener, KeyListener {
+		ITreeViewerListener, IActionListener, ISelectionChangedListener,
+		KeyListener {
 
 	/**
 	 * Sorts tree view objects.
-	 *
+	 * 
 	 * @author kihe
 	 */
 	public static class NameSorter extends ViewerSorter {
 
 		/**
 		 * Compares view items.
-		 *
+		 * 
 		 * @see org.eclipse.jface.viewers.ViewerComparator#compare(org.eclipse.jface.viewers.Viewer,
 		 *      java.lang.Object, java.lang.Object)
-		 *
+		 * 
 		 * @param viewer
 		 *            Viewer
 		 * @param e1
@@ -159,7 +171,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 	class ViewContentProvider implements ITreeContentProvider {
 
 		/**
-		 *
+		 * 
 		 * @see org.eclipse.jface.viewers.IContentProvider#dispose()
 		 */
 		public void dispose() {
@@ -168,7 +180,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 		}
 
 		/**
-		 *
+		 * 
 		 * @see org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.Object)
 		 */
 		public Object[] getChildren(Object parent) {
@@ -180,8 +192,10 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 		/*
 		 * (non-Javadoc)
-		 *
-		 * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
+		 * 
+		 * @see
+		 * org.eclipse.jface.viewers.IStructuredContentProvider#getElements(
+		 * java.lang.Object)
 		 */
 		public Object[] getElements(Object parent) {
 			if (parent.equals(getViewSite())) {
@@ -195,8 +209,10 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 		/*
 		 * (non-Javadoc)
-		 *
-		 * @see org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object)
+		 * 
+		 * @see
+		 * org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang
+		 * .Object)
 		 */
 		public Object getParent(Object child) {
 			if (child instanceof TreeObject) {
@@ -207,8 +223,10 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 		/*
 		 * (non-Javadoc)
-		 *
-		 * @see org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang.Object)
+		 * 
+		 * @see
+		 * org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang
+		 * .Object)
 		 */
 		public boolean hasChildren(Object parent) {
 			if (parent instanceof TreeParent) {
@@ -219,9 +237,10 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 		/*
 		 * (non-Javadoc)
-		 *
-		 * @see org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface.viewers.Viewer,
-		 *      java.lang.Object, java.lang.Object)
+		 * 
+		 * @see
+		 * org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse
+		 * .jface.viewers.Viewer, java.lang.Object, java.lang.Object)
 		 */
 		public void inputChanged(Viewer v, Object oldInput, Object newInput) {
 			// MethodDeclaration/Block[count(BlockStatement) = 0 and
@@ -232,9 +251,9 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * Provides elements of tree view.
-	 *
+	 * 
 	 * @author kihe
-	 *
+	 * 
 	 */
 	public class ViewLabelProvider extends LabelProvider {
 
@@ -285,9 +304,9 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 		/**
 		 * Gets current tree object image.
-		 *
+		 * 
 		 * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
-		 *
+		 * 
 		 * @param obj
 		 *            Current tree model item
 		 * @return Corresponding image of tree view object
@@ -324,9 +343,9 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 		/**
 		 * Gets current tree view object name.
-		 *
+		 * 
 		 * @see org.eclipse.jface.viewers.LabelProvider#getText(java.lang.Object)
-		 *
+		 * 
 		 * @return Current tree view object name
 		 */
 		@Override
@@ -361,7 +380,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 	public Action changeDetails;
 	/** Select S60 log file action. */
 	private Action s60LogTargetAction;
-	/** Select Tracing utility connection action. */
+	/** Select TraceViewer connection action. */
 	private Action externalLogTargetAction;
 	/** Select fast data gathering mode */
 	private Action externalFastLogTargetAction;
@@ -383,11 +402,11 @@ public class MainView extends ViewPart implements ISelectionListener,
 	private Action startSubtest;
 	/** Stop subtest action. */
 	private Action stopSubtest;
-	/**Refresh(re-creates) project results*/
+	/** Refresh(re-creates) project results */
 	private Action refreshResults;
-	/**Copies selected memory leak item info to the clipboard.*/
+	/** Copies selected memory leak item info to the clipboard. */
 	private Action copyAction;
-	/** Action to open AnalyzeTool preference page.*/
+	/** Action to open AnalyzeTool preference page. */
 	private Action openPrefs;
 	/**
 	 * Clears selected project results without removing temporary files
@@ -430,10 +449,13 @@ public class MainView extends ViewPart implements ISelectionListener,
 	/** Job for analyzing data files. */
 	private Job analyzeJob;
 
+	/** Job for reading the data files for the graph. */
+	private GraphLoadJob graphLoadJob;
+
 	/** Last selected tree item. */
 	private Object lastSelectedObject;
 
-	/** Contains information of which files is opened. */
+	/** Contains information of which files were opened. */
 	public FileActionHistory fileOpenHistory;
 
 	/** File open drop down menu. */
@@ -448,7 +470,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 	/** Tab item for the "Top allocation locations" tab */
 	CTabItem memoryTab;
 
-	/** Tab item for the memory results tab*/
+	/** Tab item for the memory results tab */
 	CTabItem mainTab;
 
 	/** StatisticView reference */
@@ -457,18 +479,17 @@ public class MainView extends ViewPart implements ISelectionListener,
 	/** Contains project related modules */
 	private final Hashtable<IProject, AbstractList<MMPInfo>> projectModules;
 
-	/**Reads epocwind.out file*/
+	/** Reads epocwind.out file */
 	EpocReader listeningJob;
-	
+
 	/** The chart view composite */
 	protected ChartContainer chart;
-
 
 	/**
 	 * The constructor.
 	 */
 	public MainView() {
-		parser = new ParseAnalyzeData(true, false);
+		parser = new ParseAnalyzeData(true, false, true);
 		cppFileNames = new ArrayList<String>();
 		startedSubtest = new ArrayList<ActiveSubtests>();
 		projectResults = new ProjectResults();
@@ -499,16 +520,15 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.nokia.s60tools.analyzetool.ui.IActionListener#allModulesBuilt()
 	 */
 	public final void buildStateChanged(final IProject projRef) {
 
-		//check validity
-		if(!project.equals(projRef) || projectResults == null) {
+		// check validity
+		if (!project.equals(projRef) || projectResults == null) {
 			return;
 		}
-
 
 		final String datafile = projectResults.getDataFileName(projRef);
 
@@ -543,21 +563,23 @@ public class MainView extends ViewPart implements ISelectionListener,
 				}
 			}
 
-
-			//data file is available
+			// data file is available
 			int dataFileType = UseAtool.checkFileType(datafile);
 
-			if( dataFileType == Constants.DATAFILE_INVALID || dataFileType == Constants.DATAFILE_XML || dataFileType == Constants.DATAFILE_EMPTY ) {
+			if (dataFileType == Constants.DATAFILE_INVALID
+					|| dataFileType == Constants.DATAFILE_XML
+					|| dataFileType == Constants.DATAFILE_EMPTY) {
 				return;
 			}
-			boolean reGenerate = Util.openConfirmationDialog(Constants.BUILD_STATE_CHANGED);
+			boolean reGenerate = Util
+					.openConfirmationDialog(Constants.BUILD_STATE_CHANGED);
 
-			if( reGenerate ) {
+			if (reGenerate) {
 				// sync with UI thread
 				runView.getControl().getDisplay().asyncExec(new Runnable() {
 					public void run() {
-						analyzeDataFile(Constants.ANALYZE_USE_DATA_FILE, datafile,
-								false);
+						analyzeDataFile(Constants.ANALYZE_USE_DATA_FILE,
+								datafile, false);
 					}
 				});
 			}
@@ -565,10 +587,9 @@ public class MainView extends ViewPart implements ISelectionListener,
 		}
 	}
 
-
 	/**
 	 * Opens file dialog and analyzing data file for given location.
-	 *
+	 * 
 	 * @param type
 	 *            Type to define is data file asked from the user or using the
 	 *            give data file
@@ -610,7 +631,8 @@ public class MainView extends ViewPart implements ISelectionListener,
 			runView.setInput(getStartupContent());
 			changeViewTitle(viewTitle);
 
-			AbstractList<MMPInfo> modules = Util.loadProjectTargetsInfo(project);
+			AbstractList<MMPInfo> modules = Util
+					.loadProjectTargetsInfo(project);
 			projectModules.put(project, modules);
 
 			boolean xmlFile = Util.isFileXML(selectedFile);
@@ -626,7 +648,8 @@ public class MainView extends ViewPart implements ISelectionListener,
 						monitor.beginTask(Constants.PROGRESSDIALOG_TITLE,
 								IProgressMonitor.UNKNOWN);
 						// Parse the data file
-						ParseXMLFileSAX dataFileParser = new ParseXMLFileSAX(project, selectedFile, projectResults);
+						ParseXMLFileSAX dataFileParser = new ParseXMLFileSAX(
+								project, selectedFile, projectResults);
 						boolean ret = dataFileParser.parse();
 
 						// set used datafile name
@@ -638,7 +661,9 @@ public class MainView extends ViewPart implements ISelectionListener,
 						// display memory leak results
 						if (ret) {
 							// update project results
-							projectResults.setProjectModules(project, projectModules.get(project), dataFileParser.getModules());
+							projectResults.setProjectModules(project,
+									projectModules.get(project), dataFileParser
+											.getModules());
 						} else {
 							fileOpenHistory.removeFileName(selectedFile);
 							if (showErrorInfo) {
@@ -657,10 +682,9 @@ public class MainView extends ViewPart implements ISelectionListener,
 				analyzingXMLJob.schedule();
 
 			} else {
-				try{
+				try {
 					analyzeWithAtool(project, selectedFile, showErrorInfo);
-				}
-				catch( Exception e ) {
+				} catch (Exception e) {
 					analyzeJob = null;
 				}
 			}
@@ -669,7 +693,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * Analyzing memory analysis results using atool.exe.
-	 *
+	 * 
 	 * @param projectRef
 	 *            Project reference
 	 * @param usedFile
@@ -690,26 +714,31 @@ public class MainView extends ViewPart implements ISelectionListener,
 					// this make progressdialog visible on the UI
 					monitor.beginTask(Constants.PROGRESSDIALOG_ATOOL,
 							IProgressMonitor.UNKNOWN);
-
+					
 					fileOpenHistory.setFileName(usedFile);
 					// add2UserActionHistory( "File opened: " + usedFile );
 
 					// set used datafile name
 					usedDataFileName = usedFile;
 
+					if (chart != null) {
+						resetGraphView();// clear out the graph view
+					}
+					
 					// create atool object and execute atool
 					UseAtool atool = new UseAtool();
 
 					// create xml file
-					Constants.COMMAND_LINE_ERROR_CODE errorCode = atool.createXMLFileToCarbide(
-							monitor, projectRef, usedFile, "-a");
+					Constants.COMMAND_LINE_ERROR_CODE errorCode = atool
+							.createXMLFileToCarbide(monitor, projectRef,
+									usedFile, "-a");
 					String xmlFileLocation = null;
 					xmlFileLocation = atool.getDataFileName();
-						
+
 					// if some error occurs display it to user.
-					if( errorCode != Constants.COMMAND_LINE_ERROR_CODE.OK ) {
+					if (errorCode != Constants.COMMAND_LINE_ERROR_CODE.OK) {
 						fileOpenHistory.removeFileName(usedFile);
-						Util.displayCommandLineError(errorCode);					
+						Util.displayCommandLineError(errorCode);
 					}
 					// if XML file generation failed => info to the user
 					else if (xmlFileLocation == null) {
@@ -719,65 +748,73 @@ public class MainView extends ViewPart implements ISelectionListener,
 						}
 					} else {
 						// Parse the xml file
-						ParseXMLFileSAX dataFileParser = new ParseXMLFileSAX(project,
-								xmlFileLocation, projectResults);
+						ParseXMLFileSAX dataFileParser = new ParseXMLFileSAX(
+								project, xmlFileLocation, projectResults);
 						boolean error = dataFileParser.parse();
 						if (showErrorInfo && !error) {
 							fileOpenHistory.removeFileName(usedFile);
 							showErrorMessage(Constants.INFO_FILE_INVALID);
 						}
 
-						projectResults.setProjectModules(project, projectModules.get(project), dataFileParser.getModules());
-						projectResults.setDataFileName(projectRef, usedDataFileName);
+						projectResults.setProjectModules(project,
+								projectModules.get(project), dataFileParser
+										.getModules());
+						projectResults.setDataFileName(projectRef,
+								usedDataFileName);
 						// update display
 						refreshView();
 					}
 
 					updateChangeDetailState(projectRef);
-					
-//					//this only generates statistics and this feature is currently disabled
-//					if( !monitor.isCanceled() ) {
-//
-//						IPreferenceStore store = Activator.getPreferences();
-//						boolean generateStatistic = store.getBoolean(Constants.CREATE_STATISTIC);
-//						//used file data file create statistic also
-//						if( generateStatistic && UseAtool.checkFileType(usedFile) == Constants.DATAFILE_TRACE )
-//						{
-//							monitor.setTaskName(Constants.STATISTICS_GENERATING_PROG_TITLE);
-//
-//							ReadFile fileReader = new ReadFile();
-//							boolean error = fileReader.readFile(usedFile);
-//							if( error && statisticView != null) {
-//								AbstractList<ProcessInfo> processes = fileReader.getStatistic();
-//								statisticView.setData( project, processes);
-//								fileReader.finish();
-//							}
-//
-//						}
-//					}
+
+					// //this only generates statistics and this feature is
+					// currently disabled
+					// if( !monitor.isCanceled() ) {
+					//
+					// IPreferenceStore store = Activator.getPreferences();
+					// boolean generateStatistic =
+					// store.getBoolean(Constants.CREATE_STATISTIC);
+					// //used file data file create statistic also
+					// if( generateStatistic && UseAtool.checkFileType(usedFile)
+					// == Constants.DATAFILE_TRACE )
+					// {
+					// monitor.setTaskName(Constants.STATISTICS_GENERATING_PROG_TITLE);
+					//
+					// ReadFile fileReader = new ReadFile();
+					// boolean error = fileReader.readFile(usedFile);
+					// if( error && statisticView != null) {
+					// AbstractList<ProcessInfo> processes =
+					// fileReader.getStatistic();
+					// statisticView.setData( project, processes);
+					// fileReader.finish();
+					// }
+					//
+					// }
+					// }
 					if (!monitor.isCanceled()) {
 
-						monitor.setTaskName(Constants.GRAPH_GENERATING_PROG_TITLE);
-						try {
-							ReadFile fileReader = new ReadFile();
-							boolean success = fileReader.readFile(usedFile);
-							if (success) {
-								if (chart != null){
-									resetGraphView();
-								}
-								AbstractList<ProcessInfo> processes = fileReader.getStatistic();
-								IMemoryActivityModel model = new AnalyzeFactory().createModel(processes.size() == 0);
-								chart.setInput(project, model);
-								model.addProcesses(processes);
-								fileReader.finish();
-							}	
-						}catch( OutOfMemoryError oome ) {
-							Activator.getDefault().logInfo(IStatus.ERROR, IStatus.ERROR, "Can not allocate enough memory for the memory usage graph model.");
-							analyzeJob = null;
-						}catch (Exception e ) {
-							Activator.getDefault().log(IStatus.ERROR, "Error while generating graph model", e);
-							analyzeJob = null;
-						}
+						// create the job for loading the graph model
+						// but only schedule it when the user gets to the graph
+						// tab
+						graphLoadJob = new GraphLoadJob(usedFile);
+						graphLoadJob.setUser(true);// set progress bar
+						graphLoadJob.setPriority(Job.LONG);
+
+						// run the following in UI thread, since widgets get
+						// accessed
+						PlatformUI.getWorkbench().getDisplay().syncExec(
+								new Runnable() {
+									public void run() {
+										if (((CTabFolder) chart.getParent())
+												.getSelection() != null && ((CTabFolder) chart.getParent())
+												.getSelection().getControl() == chart) {
+											// chart tab is currently selected
+											// so we can run the load job
+											// straight away
+											graphLoadJob.schedule();
+										}
+									}
+								});
 					}
 					analyzeJob = null;
 					return new Status(IStatus.OK, Constants.ANALYZE_CONSOLE_ID,
@@ -785,6 +822,11 @@ public class MainView extends ViewPart implements ISelectionListener,
 							Constants.PROGRESSDIALOG_ANALYZE_COMPLETE, null);
 				}
 			};
+			
+			if (graphLoadJob != null && graphLoadJob.getState() == Job.RUNNING) {
+				graphLoadJob.cancel();
+			}
+			graphLoadJob = null;			
 
 			analyzeJob.setUser(true);
 			analyzeJob.setPriority(Job.LONG);
@@ -794,7 +836,6 @@ public class MainView extends ViewPart implements ISelectionListener,
 			showMessage(Constants.INFO_ALLREADY_RUNNING);
 		}
 	}
-
 
 	/**
 	 * Change report detail level.
@@ -865,7 +906,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * Change logging mode.
-	 *
+	 * 
 	 * @param loggingMode
 	 *            Used logging mode
 	 */
@@ -895,7 +936,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 					.getImageDescriptor(Constants.BUTTON_COMPUTER));
 			logTargetMenu
 					.setToolTipText(Constants.ACTION_CHANGE_LOGGING_MODE_TOOLTIP_EXT);
-			if (loggingMode == null){
+			if (loggingMode == null) {
 				externalLogTargetAction.setChecked(true);
 				s60LogTargetAction.setChecked(false);
 				externalFastLogTargetAction.setChecked(false);
@@ -909,7 +950,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 					.getImageDescriptor(Constants.BUTTON_CELLURAR));
 			logTargetMenu
 					.setToolTipText(Constants.ACTION_CHANGE_LOGGING_MODE_TOOLTIP_S60);
-			if (loggingMode == null){
+			if (loggingMode == null) {
 				externalLogTargetAction.setChecked(false);
 				s60LogTargetAction.setChecked(true);
 				externalFastLogTargetAction.setChecked(false);
@@ -917,11 +958,12 @@ public class MainView extends ViewPart implements ISelectionListener,
 			}
 		}
 
-		else if( Constants.LOGGING_EXT_FAST.equals(usedLoggingMode)) {
+		else if (Constants.LOGGING_EXT_FAST.equals(usedLoggingMode)) {
 			logTargetMenu.setImageDescriptor(Activator
 					.getImageDescriptor(Constants.BUTTON_COMPUTER_FAST));
-			logTargetMenu.setToolTipText(Constants.ACTION_CHANGE_LOGGING_MODE_TOOLTIP_FAST);
-			if( loggingMode == null) {
+			logTargetMenu
+					.setToolTipText(Constants.ACTION_CHANGE_LOGGING_MODE_TOOLTIP_FAST);
+			if (loggingMode == null) {
 				externalLogTargetAction.setChecked(false);
 				s60LogTargetAction.setChecked(false);
 				externalFastLogTargetAction.setChecked(true);
@@ -934,7 +976,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 					.getImageDescriptor(Constants.BUTTON_ASK));
 			logTargetMenu
 					.setToolTipText(Constants.ACTION_CHANGE_LOGGING_MODE_TOOLTIP_ASK);
-			if (loggingMode == null){
+			if (loggingMode == null) {
 				externalLogTargetAction.setChecked(false);
 				s60LogTargetAction.setChecked(false);
 				externalFastLogTargetAction.setChecked(false);
@@ -942,9 +984,11 @@ public class MainView extends ViewPart implements ISelectionListener,
 			}
 		}
 
-		// if the fast data gathering mode is enabled by the preference page => enable also toolbar option
+		// if the fast data gathering mode is enabled by the preference page =>
+		// enable also toolbar option
 		// else disable fast data gathering mode
-		externalFastLogTargetAction.setEnabled(store.getBoolean(Constants.LOGGING_FAST_ENABLED));
+		externalFastLogTargetAction.setEnabled(store
+				.getBoolean(Constants.LOGGING_FAST_ENABLED));
 	}
 
 	/**
@@ -983,7 +1027,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * Change view title.
-	 *
+	 * 
 	 * @param newTitle
 	 *            New title text
 	 */
@@ -996,8 +1040,8 @@ public class MainView extends ViewPart implements ISelectionListener,
 	}
 
 	/**
-	 * Check project validity that is project is selected.
-	 *
+	 * Check that selected project is open and project information can be read.
+	 * 
 	 * @return True if project is open and accessible otherwise False
 	 */
 	public final boolean checkProjectValidity() {
@@ -1029,21 +1073,16 @@ public class MainView extends ViewPart implements ISelectionListener,
 		// if user confirms
 		if (ret) {
 			// clear AnalyzeTool made changes
-			Util util = new Util();
-			util.clearAtoolChanges(project);
+			Util.clearAtoolChanges(project);
 
 			cleanAnalyzeData(null);
+			resetGraphView();
 			updateChangeDetailState(project);
 		}
 
-		if( statisticView != null ) {
+		if (statisticView != null) {
 			statisticView.clean(null);
 		}
-		
-		if (chart != null){
-			resetGraphView();
-		}
-
 	}
 
 	/**
@@ -1055,26 +1094,22 @@ public class MainView extends ViewPart implements ISelectionListener,
 			// clean all the project related info and data
 			projectResults.clear();
 			projectModules.clear();
-		}
-		else {
+		} else {
 			// clear only one project results
 			if (projectResults.contains(projectRef)) {
 				projectResults.clearProjectData(projectRef);
 			}
 
-			if( projectModules.contains(projectRef)) {
+			if (projectModules.contains(projectRef)) {
 				projectModules.remove(projectRef);
 			}
 		}
-
-
 
 		cppFileNames.clear();
 
 		// update variables
 		activeTreeItem = null;
 		usedDataFileName = "";
-
 
 		// set default view contents
 		if (runView != null) {
@@ -1086,7 +1121,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 					}
 
 					changeViewTitle(viewTitle);
-					if( statisticView != null ) {
+					if (statisticView != null) {
 						statisticView.clean(projectRef);
 					}
 				}
@@ -1094,9 +1129,9 @@ public class MainView extends ViewPart implements ISelectionListener,
 		}
 
 		clearCallstackViewContent();
-		if( clearProjectResults != null && clearProjectResults != null ) {
+		if (clearProjectResults != null && clearProjectResults != null) {
 			clearProjectResults.setEnabled(false);
-		}else if( clearProjectResults != null ) {
+		} else if (clearProjectResults != null) {
 			updateChangeDetailState(projectRef);
 		}
 
@@ -1134,76 +1169,123 @@ public class MainView extends ViewPart implements ISelectionListener,
 		fillLocalToolBar(bars.getToolBarManager());
 	}
 
-
 	/**
-	* This is a callback that will allow us
-	* to create the viewer and initialize it.
-	*/
+	 * This is a callback that will allow us to create the viewer and initialize
+	 * it.
+	 */
 	@Override
-	public void createPartControl( Composite parent ){
+	public void createPartControl(Composite parent) {
 
-		//create new Tab
-		CTabFolder mainFolder = new CTabFolder( parent, SWT.TOP );
+		// create new Tab
+		final CTabFolder mainFolder = new CTabFolder(parent, SWT.TOP);
 
-		//create main view and add it tab
-		createMainView( mainFolder );
+		// create main view and add it tab
+		createMainView(mainFolder);
 
-		//create new statistic view
-		//createMemoryView( mainFolder );
-		//create graph
+		// create new statistic view
+		// createMemoryView( mainFolder );
+		// create graph
 		createGraphView(mainFolder);
 
-		//set initial selection
-		mainFolder.setSelection( mainTab );
+		// set initial selection
+		mainFolder.setSelection(mainTab);
+
+		mainFolder.addSelectionListener(new SelectionListener() {
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
+
+			public void widgetSelected(SelectionEvent e) {
+				// if we changed to the graph tab and the graph load job isn't already running
+				// schedule it now
+				if (graphLoadJob != null
+						&& graphLoadJob.getState() != Job.RUNNING
+						&& mainFolder.getSelection() != null
+						&& mainFolder.getSelection().getControl() == chart) {
+					graphLoadJob.schedule();
+				}
+
+				
+				if (mainFolder.getSelectionIndex() == 1) {
+					changeDetails.setEnabled(false);
+				} else {
+					changeDetails.setEnabled(true);
+					
+				}
+			}
+		});
+		
+		// stop any jobs that may be scheduled
+		mainFolder.addDisposeListener(new DisposeListener(){
+			public void widgetDisposed(DisposeEvent e) {
+				if (graphLoadJob != null){
+					graphLoadJob.cancel();		
+					graphLoadJob = null;
+				}
+				if (analyzeJob != null){
+					analyzeJob.cancel();
+					analyzeJob = null;
+				}
+			}
+		});
+		
 	}
 
 	/**
 	 * Creates graph view and add it to graph tab
-	 * @param parent CTabFolder parent of the view
+	 * 
+	 * @param mainFolder
+	 *            CTabFolder parent of the view
 	 */
 	private void createGraphView(CTabFolder mainFolder) {
 		final CTabItem chartTabItem = new CTabItem(mainFolder, SWT.NONE);
-		chartTabItem.setText("Graph"); 
-		chartTabItem.setToolTipText("AnalyzeTool graph per process"); 
-		
+		chartTabItem.setText("Graph");
+		chartTabItem.setToolTipText("AnalyzeTool graph per process");
+
 		chart = new ChartContainer(mainFolder, SWT.NONE);
 		chartTabItem.setControl(chart);
 		IMemoryActivityModel model = AnalyzeFactory.getEmptyModel();
 		chart.setInput(project, model);
-		model.addProcesses(model.getProcesses());//charts should get notified via listeners on the model
+		model.addProcesses(model.getProcesses());// charts should get notified
+		// via listeners on the
+		// model
 	}
-	
+
 	/**
 	 * Clears the graph by setting an empty model and causing paint events
 	 */
-	private void resetGraphView(){
-		if (chart != null){
+	private void resetGraphView() {
+		if (chart != null) {
 			chart.setInput(project, AnalyzeFactory.getEmptyModel());
-			//chart.update();
+			// chart.update();
 		}
 	}
 
 	/**
 	 * Creates new statistic view and add it to memory tab
-	 * @param parent Statistic view parent( CTabFolder )
+	 * 
+	 * @param parent
+	 *            Statistic view parent( CTabFolder )
 	 */
-	public void createMemoryView( CTabFolder parent )
-	{
+	public void createMemoryView(CTabFolder parent) {
 		statisticView = new StatisticView();
-		memoryTab = statisticView.createView( parent );
+		memoryTab = statisticView.createView(parent);
 	}
 
 	/**
 	 * Creates memory results view
-	 * @param parent View parent ( CTabFolder )
+	 * 
+	 * @param parent
+	 *            View parent ( CTabFolder )
 	 */
 	public void createMainView(CTabFolder parent) {
 
 		// Create SashForm this form includes all the current view components
 		SashForm sashForm = new SashForm(parent, SWT.HORIZONTAL);
 
-		mainTab = new CTabItem( parent, SWT.NONE );
-		mainTab.setControl( sashForm );
+		mainTab = new CTabItem(parent, SWT.NONE);
+		mainTab.setControl(sashForm);
 		mainTab.setText(Constants.MAIN_TAB_TITLE);
 
 		// create new treeviewer to shown memory analysis runs and leaks
@@ -1263,7 +1345,8 @@ public class MainView extends ViewPart implements ISelectionListener,
 		contributeToActionBars();
 
 		// set view title
-		viewTitle = String.format(Constants.ANALYZE_TOOL_TITLE_WITH_VERSION, Util.getAToolFeatureVersionNumber());
+		viewTitle = String.format(Constants.ANALYZE_TOOL_TITLE_WITH_VERSION,
+				Util.getAToolFeatureVersionNumber());
 		this.setContentDescription(viewTitle);
 
 		// add selection listener
@@ -1282,33 +1365,37 @@ public class MainView extends ViewPart implements ISelectionListener,
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(runView.getControl(),
 				AnalyzeToolHelpContextIDs.ANALYZE_MAIN);
 
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(new ATResourceListener());
-		
-		//get used command line engine version
-		String version = Util.getAtoolVersionNumber(Util.getAtoolInstallFolder());
-		
-		//compare current version to min version
-		int comp = Util.compareVersionNumber(Constants.CS_SUPPORT_MIN_VERSION, version);
-		
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(
+				new ATResourceListener());
+
+		// get used command line engine version
+		String version = Util.getAtoolVersionNumber(Util
+				.getAtoolInstallFolder());
+
+		// compare current version to min version
+		int comp = Util.compareVersionNumber(Constants.CS_SUPPORT_MIN_VERSION,
+				version);
+
 		IPreferenceStore store = Activator.getPreferences();
-		//if current version is same or higher than required version => set flag to true
-		if( comp == Constants.VERSION_NUMBERS_EQUALS || comp == Constants.VERSION_NUMBERS_SECOND ) {
+		// if current version is same or higher than required version => set
+		// flag to true
+		if (comp == Constants.VERSION_NUMBERS_EQUALS
+				|| comp == Constants.VERSION_NUMBERS_SECOND) {
 			store.setValue(Constants.LOGGING_FAST_ENABLED, true);
-		}
-		else {
+		} else {
 			store.setValue(Constants.LOGGING_FAST_ENABLED, false);
 		}
-		
+
 		// get default value for logging mode
 		preferenceChanged();
 	}
 
 	/**
-	 * When AnalyzeTool view is activated and Tracing utility plug-in is not
+	 * When AnalyzeTool view is activated and TraceViewer plug-in is not
 	 * available disable AnalyzeTool trace actions.
-	 *
+	 * 
 	 * @see com.nokia.s60tools.analyzetool.ui.IActionListener#disableTraceActions(boolean)
-	 *
+	 * 
 	 * @param disable
 	 *            Boolean state of trace action
 	 */
@@ -1329,7 +1416,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * Fills context menu.
-	 *
+	 * 
 	 * @param manager
 	 *            Menu manager
 	 */
@@ -1353,7 +1440,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * Fills local pull down menu.
-	 *
+	 * 
 	 * @param manager
 	 *            Menu manager
 	 */
@@ -1374,7 +1461,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * Fills local toolbar.
-	 *
+	 * 
 	 * @param manager
 	 *            Menu manager
 	 */
@@ -1419,7 +1506,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * Gets call stack information of current leak.
-	 *
+	 * 
 	 * @param treeObject
 	 *            Tree object
 	 * @return Object
@@ -1462,10 +1549,9 @@ public class MainView extends ViewPart implements ISelectionListener,
 		return parent;
 	}
 
-
 	/**
 	 * Gets callstack item name.
-	 *
+	 * 
 	 * @param callstackItem
 	 *            One callstack item
 	 * @return Callstack name if found otherwise null
@@ -1486,14 +1572,15 @@ public class MainView extends ViewPart implements ISelectionListener,
 		// check that project contains cpp file which is parsed from call stack
 		// list
 		Iterator<String> iterCppFiles = cppFileNames.iterator();
-		while( iterCppFiles.hasNext() ) {
+		while (iterCppFiles.hasNext()) {
 			String cppFileLocation = iterCppFiles.next();
 
-			//parse file name from the source path
+			// parse file name from the source path
 			int slash = Util.getLastSlashIndex(cppFileLocation);
-			if( slash != -1 ) {
-				String cppFile = cppFileLocation.substring(slash+1, cppFileLocation.length());
-				if( cppFile.equalsIgnoreCase(fileName)) {
+			if (slash != -1) {
+				String cppFile = cppFileLocation.substring(slash + 1,
+						cppFileLocation.length());
+				if (cppFile.equalsIgnoreCase(fileName)) {
 					cppFileName = cppFileLocation;
 					break;
 				}
@@ -1504,7 +1591,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * Gets file info for current project.
-	 *
+	 * 
 	 * @param projectRef
 	 *            Project reference
 	 */
@@ -1541,7 +1628,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * Gets project results.
-	 *
+	 * 
 	 * @param projectRef
 	 *            Project reference
 	 */
@@ -1573,18 +1660,17 @@ public class MainView extends ViewPart implements ISelectionListener,
 			}
 		}
 
-		//update clear project results action state
-		if( projectResults.contains(projectRef) ) {
+		// update clear project results action state
+		if (projectResults.contains(projectRef)) {
 			clearProjectResults.setEnabled(true);
-		}
-		else {
+		} else {
 			clearProjectResults.setEnabled(false);
 		}
 	}
 
 	/**
 	 * Gets memory leak analysis results.
-	 *
+	 * 
 	 * @param showErrorInfo
 	 *            Display error info or not
 	 * @return Object memory leak analysis results
@@ -1606,9 +1692,9 @@ public class MainView extends ViewPart implements ISelectionListener,
 				return getStartupContent();
 			}
 
-			if( !projectModules.containsKey(project) )
-			{
-				AbstractList<MMPInfo> modules = Util.loadProjectTargetsInfo(project);
+			if (!projectModules.containsKey(project)) {
+				AbstractList<MMPInfo> modules = Util
+						.loadProjectTargetsInfo(project);
 				projectModules.put(project, modules);
 			}
 
@@ -1639,8 +1725,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 			// create TreeHelper object
 			// TreeHelper class creates tree model to this view.
-			TreeHelper helper = new TreeHelper(lastSelectedObject,
-					store);
+			TreeHelper helper = new TreeHelper(lastSelectedObject, store);
 
 			// clear active item
 			activeTreeItem = null;
@@ -1649,8 +1734,8 @@ public class MainView extends ViewPart implements ISelectionListener,
 			usedDataFileName = projectResults.getDataFileName(project);
 
 			// change view title
-			changeViewTitle(viewTitle
-					+ " results from file: " + usedDataFileName);
+			changeViewTitle(viewTitle + " results from file: "
+					+ usedDataFileName);
 
 			// thru runs
 			Iterator<RunResults> runIterator = runs.iterator();
@@ -1659,7 +1744,8 @@ public class MainView extends ViewPart implements ISelectionListener,
 				RunResults oneRunResults = runIterator.next();
 
 				// creates one run information at the time
-				TreeParent oneRunTree = helper.createRunResults(oneRunResults, modules);
+				TreeParent oneRunTree = helper.createRunResults(oneRunResults,
+						modules);
 
 				// get active item
 				// active must ask from the TreeHelper class
@@ -1682,7 +1768,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * Sets startup contents for view.
-	 *
+	 * 
 	 * @return Object which can be displayd
 	 */
 	public TreeParent getStartupContent() {
@@ -1734,13 +1820,13 @@ public class MainView extends ViewPart implements ISelectionListener,
 	}
 
 	/**
-	 * Check that if subtest by given name allready exists.
-	 *
+	 * Check that if subtest by given name already exists.
+	 * 
 	 * @param subTestName
 	 *            Subtest name
 	 * @param target
 	 *            Testing target
-	 * @return True if allready exists otherwise False
+	 * @return True if already exists otherwise False
 	 */
 	public final boolean isSubtestExists(final String subTestName,
 			final String target) {
@@ -1756,11 +1842,9 @@ public class MainView extends ViewPart implements ISelectionListener,
 		return false;
 	}
 
-
-
 	/**
 	 * Go thru the project files and stores mmp files.
-	 *
+	 * 
 	 * @param resource
 	 *            One resource file of project
 	 */
@@ -1804,14 +1888,13 @@ public class MainView extends ViewPart implements ISelectionListener,
 				if (obj instanceof TreeObject) {
 					lastSelectedObject = obj;
 
-					//get callstack items
+					// get callstack items
 					Object resultObject = getCallStack((TreeObject) obj);
 
 					// if results not found
-					if( resultObject == null ) {
+					if (resultObject == null) {
 						copyAction.setEnabled(false);
-					}
-					else {
+					} else {
 						callstackView.setInput(resultObject);
 						copyAction.setEnabled(true);
 					}
@@ -1967,7 +2050,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 			@Override
 			public void run() {
 				cleanAnalyzeData(project);
-				if(statisticView != null ) {
+				if (statisticView != null) {
 					statisticView.clean(project);
 				}
 				updateChangeDetailState(project);
@@ -1979,13 +2062,14 @@ public class MainView extends ViewPart implements ISelectionListener,
 		refreshResults = new Action() {
 			@Override
 			public void run() {
-				if( project != null && project.isOpen() && projectResults != null ) {
+				if (project != null && project.isOpen()
+						&& projectResults != null) {
 					String dataFile = projectResults.getDataFileName(project);
-					if( dataFile != null || !("").equals(dataFile) ) {
-						analyzeDataFile(Constants.ANALYZE_USE_DATA_FILE, dataFile, true);
-					}
-					else {
-						//some internal error occurred => disable this action
+					if (dataFile != null || !("").equals(dataFile)) {
+						analyzeDataFile(Constants.ANALYZE_USE_DATA_FILE,
+								dataFile, true);
+					} else {
+						// some internal error occurred => disable this action
 						refreshResults.setEnabled(false);
 					}
 
@@ -1996,51 +2080,57 @@ public class MainView extends ViewPart implements ISelectionListener,
 		refreshResults.setToolTipText(Constants.ACTION_RE_ANALYZE_TOOLTIP);
 		refreshResults.setEnabled(false);
 
-		//copy active item contents to clipboard
-		copyAction = new Action(){
+		// copy active item contents to clipboard
+		copyAction = new Action() {
 			@Override
 			public void run() {
-				//copy active item contents to clipboard
+				// copy active item contents to clipboard
 
-				//Create new clipboard object
+				// Create new clipboard object
 				Clipboard cp = new Clipboard(runView.getControl().getDisplay());
 
-				//Create new TextTransfer object
-				//TextTransfer converts plain text represented as a java String to a platform specific representation of the data and vice versa
+				// Create new TextTransfer object
+				// TextTransfer converts plain text represented as a java String
+				// to a platform specific representation of the data and vice
+				// versa
 				TextTransfer tt = TextTransfer.getInstance();
 
-				//new StringBuffer which contains the copied text
+				// new StringBuffer which contains the copied text
 				StringBuffer sb = new StringBuffer(64);
 
 				// chech that project contains results
-				if( projectResults == null || !projectResults.contains(project) || activeTreeItem == null ) {
+				if (projectResults == null || !projectResults.contains(project)
+						|| activeTreeItem == null) {
 					return;
 				}
-				//get active item info (also callstack info)
+				// get active item info (also callstack info)
 				AnalysisItem item = null;
 
 				// if selected item is subtest
-				if( activeTreeItem.isSubTest() ) {
+				if (activeTreeItem.isSubTest()) {
 					item = projectResults.getSubtestItem(project,
-							activeTreeItem.getRunID(), activeTreeItem.getMemLeakID(),
-							activeTreeItem.getSubtestID());
-				}
-				else {
-					item = projectResults.getSpecific(project, activeTreeItem.getRunID(), activeTreeItem.getMemLeakID());
+							activeTreeItem.getRunID(), activeTreeItem
+									.getMemLeakID(), activeTreeItem
+									.getSubtestID());
+				} else {
+					item = projectResults.getSpecific(project, activeTreeItem
+							.getRunID(), activeTreeItem.getMemLeakID());
 				}
 
 				// check that item found
-				if( item == null ) {
+				if (item == null) {
 					return;
 				}
 
 				sb.append(activeTreeItem.getName());
-				String separator = System.getProperty ( "line.separator" );
+				String separator = System.getProperty("line.separator");
 				sb.append(separator);
 				char space = ' ';
-				AbstractList<CallstackItem> callstackItems = item.getCallstackItems();
-				Iterator<CallstackItem> iterCallstack = callstackItems.iterator();
-				while( iterCallstack.hasNext() ) {
+				AbstractList<CallstackItem> callstackItems = item
+						.getCallstackItems();
+				Iterator<CallstackItem> iterCallstack = callstackItems
+						.iterator();
+				while (iterCallstack.hasNext()) {
 					CallstackItem oneItem = iterCallstack.next();
 					sb.append("      ");
 					sb.append(oneItem.getMemoryAddress());
@@ -2052,36 +2142,39 @@ public class MainView extends ViewPart implements ISelectionListener,
 					sb.append(oneItem.getFileName());
 					sb.append(space);
 					int lineNbr = oneItem.getLeakLineNumber();
-					if( lineNbr > 0 ) {
+					if (lineNbr > 0) {
 						sb.append(lineNbr);
 					}
 					sb.append(separator);
 				}
 
-				//info is ready => now copy info to clipboard
+				// info is ready => now copy info to clipboard
 				cp.setContents(new Object[] { sb.toString() },
-			            new Transfer[] { tt });
+						new Transfer[] { tt });
 			}
 		};
 		copyAction.setText(Constants.ACTION_COPY);
 		copyAction.setEnabled(false);
-		
+
 		// open preferences action
 		openPrefs = new Action() {
 			@Override
 			public void run() {
-				PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-						Constants.ANALYZE_TOOL_PREFS_ID, null, null);
-				
-				if( dialog != null ) {
+				PreferenceDialog dialog = PreferencesUtil
+						.createPreferenceDialogOn(PlatformUI.getWorkbench()
+								.getActiveWorkbenchWindow().getShell(),
+								Constants.ANALYZE_TOOL_PREFS_ID, null, null);
+
+				if (dialog != null) {
 					dialog.open();
 				}
 			}
 		};
 		openPrefs.setText(Constants.ACTION_OPEN_PREFS);
 		openPrefs.setToolTipText(Constants.ACTION_OPEN_PREFS_TOOLTIP);
-		openPrefs.setImageDescriptor(Activator.getImageDescriptor(Constants.BUTTON_OPEN_PREFS));
-		
+		openPrefs.setImageDescriptor(Activator
+				.getImageDescriptor(Constants.BUTTON_OPEN_PREFS));
+
 		changeReportActionTooltip();
 		updateChangeDetailState(project);
 		updateBuildState(project);
@@ -2098,11 +2191,12 @@ public class MainView extends ViewPart implements ISelectionListener,
 	}
 
 	/**
-	 * Creates file open actions.
+	 * Creates data gathering actions.
 	 */
 	private void makeLogTargetActions() {
 
-		s60LogTargetAction = new Action(Constants.LOGGING_S60, Action.AS_RADIO_BUTTON) {
+		s60LogTargetAction = new Action(Constants.LOGGING_S60,
+				IAction.AS_RADIO_BUTTON) {
 			@Override
 			public void run() {
 				changeLogTarget(Constants.LOGGING_S60);
@@ -2114,7 +2208,8 @@ public class MainView extends ViewPart implements ISelectionListener,
 		s60LogTargetAction.setImageDescriptor(Activator
 				.getImageDescriptor(Constants.BUTTON_CELLURAR));
 
-		externalLogTargetAction = new Action(Constants.LOGGING_EXT, Action.AS_RADIO_BUTTON) {
+		externalLogTargetAction = new Action(Constants.LOGGING_EXT,
+				IAction.AS_RADIO_BUTTON) {
 			@Override
 			public void run() {
 				changeLogTarget(Constants.LOGGING_EXT);
@@ -2126,24 +2221,26 @@ public class MainView extends ViewPart implements ISelectionListener,
 		externalLogTargetAction.setImageDescriptor(Activator
 				.getImageDescriptor(Constants.BUTTON_COMPUTER));
 
-		externalFastLogTargetAction = new Action(Constants.LOGGING_EXT_FAST, Action.AS_RADIO_BUTTON) {
+		externalFastLogTargetAction = new Action(Constants.LOGGING_EXT_FAST,
+				IAction.AS_RADIO_BUTTON) {
 			@Override
 			public void run() {
 				changeLogTarget(Constants.LOGGING_EXT_FAST);
 			}
 		};
 		externalFastLogTargetAction.setText(Constants.PREFS_EXT_FAST);
-		externalFastLogTargetAction.setToolTipText(Constants.PREFS_EXT_FAST_TOOLTIP);
+		externalFastLogTargetAction
+				.setToolTipText(Constants.PREFS_EXT_FAST_TOOLTIP);
 		externalFastLogTargetAction.setImageDescriptor(Activator
 				.getImageDescriptor(Constants.BUTTON_COMPUTER_FAST));
 
-		askLogTargetAction = new Action(Constants.LOGGING_ASK_ALLWAYS, Action.AS_RADIO_BUTTON) {
+		askLogTargetAction = new Action(Constants.LOGGING_ASK_ALLWAYS,
+				IAction.AS_RADIO_BUTTON) {
 			@Override
 			public void run() {
 				changeLogTarget(Constants.LOGGING_ASK_ALLWAYS);
 			}
 		};
-
 
 		askLogTargetAction.setText(Constants.PREFS_ASK_ALWAYS);
 		askLogTargetAction
@@ -2154,9 +2251,8 @@ public class MainView extends ViewPart implements ISelectionListener,
 	}
 
 	/**
-	 * Opens current callstack item on default editor and pinpoints memory leak.
-	 * line
-	 *
+	 * Displays selected callstack item location on default file editor.
+	 * 
 	 * @param treeObject
 	 *            Tree object
 	 */
@@ -2245,7 +2341,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * Updates log target action and report action tooltips.
-	 *
+	 * 
 	 * @see com.nokia.s60tools.analyzetool.ui.IActionListener#preferenceChanged()
 	 */
 	public void preferenceChanged() {
@@ -2270,10 +2366,10 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 				// refresh callstack view
 				getCallStack(activeTreeItem);
-				if( project != null && project.isOpen() && projectResults.contains(project)) {
+				if (project != null && project.isOpen()
+						&& projectResults.contains(project)) {
 					clearProjectResults.setEnabled(true);
-				}
-				else {
+				} else {
 					clearProjectResults.setEnabled(false);
 				}
 				updateChangeDetailState(project);
@@ -2284,12 +2380,13 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * Runs user selected AnalyzeTool action.
-	 *
-	 * @see com.nokia.s60tools.analyzetool.ui.IActionListener#runAction(IProject, com.nokia.s60tools.analyzetool.global.Constants.ACTIONS)
-	 *
+	 * 
+	 * @see com.nokia.s60tools.analyzetool.ui.IActionListener#runAction(IProject,
+	 *      com.nokia.s60tools.analyzetool.global.Constants.ACTIONS)
+	 * 
 	 * @param projectRef
 	 *            Project reference
-	 *
+	 * 
 	 * @param action
 	 *            Which action to execute
 	 */
@@ -2315,12 +2412,13 @@ public class MainView extends ViewPart implements ISelectionListener,
 	}
 
 	/**
-	 * Saves existing report or data file asks user where to save.
-	 *
+	 * Copies existing report or data file to the new location. Asks from user
+	 * new location where to copy the file.
+	 * 
 	 * @param type
 	 *            Which kind of type the file is. Possible types xml or data
 	 *            file
-	 *
+	 * 
 	 * @return True if saving successfully otherwise false
 	 */
 	public final boolean saveReportFile(final int type) {
@@ -2432,10 +2530,10 @@ public class MainView extends ViewPart implements ISelectionListener,
 	/**
 	 * Notifies this action delegate that the selection in the workbench has
 	 * changed.
-	 *
+	 * 
 	 * @param part
 	 *            Workbench part
-	 *
+	 * 
 	 * @param selection
 	 *            User selection
 	 */
@@ -2444,9 +2542,12 @@ public class MainView extends ViewPart implements ISelectionListener,
 		// project reference
 		IProject selectedProject = null;
 
-		// check where the selection comes
-		// supported views: CommonNavigator and SymbianProjectNavigator
-		if (!(part instanceof org.eclipse.ui.navigator.CommonNavigator) ) {
+		// Check where the selection comes from
+		// Supported views: CommonNavigator, SymbianProjectNavigatorView and
+		// ResourceNavigator
+
+		if (!(part instanceof CommonNavigator
+				|| part instanceof SymbianProjectNavigatorView || part instanceof ResourceNavigator)) {
 			return;
 		}
 
@@ -2470,8 +2571,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 				selectedProject = ((org.eclipse.cdt.core.model.ICProject) adaptable)
 						.getProject();
 			} else {
-				resource = (IResource) adaptable
-						.getAdapter(IResource.class);
+				resource = (IResource) adaptable.getAdapter(IResource.class);
 			}
 
 			// resource found => get resource project
@@ -2490,18 +2590,17 @@ public class MainView extends ViewPart implements ISelectionListener,
 			project = selectedProject;
 			getProjectResults(selectedProject);
 			updateBuildState(project);
-			if( statisticView != null ) {
+			if (statisticView != null) {
 				statisticView.handleProjectChange(project);
 			}
 		}
 	}
 
-
 	/**
-	 * Executes clicAction when user selects item in the AnalyzeTool view.
-	 *
+	 * Executes clickAction when user selects item in the AnalyzeTool view.
+	 * 
 	 * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
-	 *
+	 * 
 	 * @param event
 	 *            Selection changed event
 	 */
@@ -2558,7 +2657,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * Shows error message.
-	 *
+	 * 
 	 * @param message
 	 *            Error message to show
 	 */
@@ -2572,7 +2671,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * Shows message.
-	 *
+	 * 
 	 * @param message
 	 *            Message to show
 	 */
@@ -2614,11 +2713,24 @@ public class MainView extends ViewPart implements ISelectionListener,
 			Util.deleteDataFile(project);
 		}
 
-		ICarbideProjectInfo info = CarbideBuilderPlugin.getBuildManager().getProjectInfo(project);
+		ICarbideProjectInfo info = CarbideBuilderPlugin.getBuildManager()
+				.getProjectInfo(project);
 		ICarbideBuildConfiguration config = info.getDefaultConfiguration();
 
-		//start listening emulator output
-		if( config.getPlatformString().equals(Constants.BUILD_TARGET_WINSCW) ) {
+		// start listening emulator output
+		if (config.getPlatformString().equals(Constants.BUILD_TARGET_WINSCW)) {
+
+			String dbghelpDllVersionInfo = Util.getDbghelpDllVersionInfo(Util
+					.getAtoolInstallFolder());
+
+			if (dbghelpDllVersionInfo != Constants.DBGHELPDLL_IS_UP_TO_DATE) {
+
+				DbghelpDllVersionInfoDialog dialog = new DbghelpDllVersionInfoDialog(
+						getSite().getShell(), dbghelpDllVersionInfo);
+
+				if (dialog.open() == Window.CANCEL)
+					return;
+			}
 
 			listeningJob = new EpocReader(project, this);
 			listeningJob.start();
@@ -2628,7 +2740,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 			return;
 		}
 
-		// else start trace capturing using Tracing utility connection
+		// else start trace capturing using TraceViewer connection
 
 		// main view class instance
 		// this instance if passed to the TraceWrapper class
@@ -2750,7 +2862,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 					Constants.SUBTEST_RUNNING_PROCESSES_INFO, targets);
 
 		}
-		if (target == null || ("").equals(target) ) {
+		if (target == null || ("").equals(target)) {
 			return;
 		}
 
@@ -2767,7 +2879,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 		// get process id for selected target
 		int processID = startedPros.get(target);
 
-		// if subtest allready exists
+		// if subtest already exists
 		if (isSubtestExists(subTestName, target)) {
 			Util.showMessage(Constants.SUBTEST_ALLREADY_RUNNING);
 			return;
@@ -2779,8 +2891,8 @@ public class MainView extends ViewPart implements ISelectionListener,
 		startedSubtest.add(subtes);
 
 		// start subtest
-		parser.parse(Constants.PREFIX + " " + processID + " TEST_START 0000 "
-				+ subTestName);
+		parser.parse(Constants.PREFIX + " " + subtes.getProcessID()
+				+ " TEST_START 0000 " + subTestName);
 		updateSubtestInfoText(Constants.SUBTEST_STARTED + target
 				+ Constants.ENRULE + subTestName);
 
@@ -2792,15 +2904,17 @@ public class MainView extends ViewPart implements ISelectionListener,
 	 */
 	public final void stop(boolean analyze) {
 
-		ICarbideProjectInfo info = CarbideBuilderPlugin.getBuildManager().getProjectInfo(project);
+		ICarbideProjectInfo info = CarbideBuilderPlugin.getBuildManager()
+				.getProjectInfo(project);
 		ICarbideBuildConfiguration config = info.getDefaultConfiguration();
-		if( config.getPlatformString().equalsIgnoreCase(Constants.BUILD_TARGET_WINSCW) ) {
+		if (config.getPlatformString().equalsIgnoreCase(
+				Constants.BUILD_TARGET_WINSCW)) {
 			listeningJob.stop();
 			traceStopped(analyze);
 			return;
 		}
 
-		//else stop Tracing utility connection
+		// else stop TraceViewer connection
 		try {
 			Class<?> buildManagerClass = Class
 					.forName("com.nokia.s60tools.analyzetool.trace.TraceWrapper");
@@ -2817,7 +2931,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 					if (("").equals(returnValue)) {
 						traceStopped(analyze);
 					} else {
-						showErrorMessage("Error while disconnecting Tracing utility");
+						showErrorMessage("Error while disconnecting TraceViewer");
 						traceAction.setImageDescriptor(Activator
 								.getImageDescriptor((Constants.BUTTON_STOP)));
 						traceActive = true;
@@ -2853,19 +2967,15 @@ public class MainView extends ViewPart implements ISelectionListener,
 		traceAction.setImageDescriptor(Activator
 				.getImageDescriptor((Constants.BUTTON_RUN)));
 		traceAction.setText(Constants.ACTION_START_TRACE);
-		traceAction
-				.setToolTipText(Constants.ACTION_START_TRACE);
+		traceAction.setToolTipText(Constants.ACTION_START_TRACE);
 		traceActive = false;
 
 		// close any active subtests
 		if (!startedSubtest.isEmpty()) {
 			for (int j = 0; j < startedSubtest.size(); j++) {
-				ActiveSubtests oneSubtest = startedSubtest
-						.get(j);
-				parser.parse(Constants.PREFIX + " "
-						+ oneSubtest.getProcessID()
-						+ " TEST_END" + " 0000 "
-						+ oneSubtest.getName());
+				ActiveSubtests oneSubtest = startedSubtest.get(j);
+				parser.parse(Constants.PREFIX + " " + oneSubtest.getProcessID()
+						+ " TEST_END" + " 0000 " + oneSubtest.getName());
 			}
 			startedSubtest.clear();
 		}
@@ -2886,15 +2996,14 @@ public class MainView extends ViewPart implements ISelectionListener,
 		project = traceStartedProjectRef;
 
 		// parse and analyze saved data file
-		if( analyze ) {
-			analyzeDataFile(Constants.ANALYZE_USE_DATA_FILE, null,
-					true);	
+		if (analyze) {
+			analyzeDataFile(Constants.ANALYZE_USE_DATA_FILE, null, true);
 		}
 	}
 
 	/**
-	 * Stop one subtest If there multiple subtest running ask for user to which
-	 * one to stop.
+	 * Stop one subtest. If there is multiple subtests running ask for user to
+	 * which one to stop.
 	 */
 	public final void stopSubTest() {
 		// no processes show info
@@ -2960,9 +3069,9 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * When AnalyzeTool view tree model is collapsed.
-	 *
+	 * 
 	 * @see org.eclipse.jface.viewers.ITreeViewerListener#treeCollapsed(org.eclipse.jface.viewers.TreeExpansionEvent)
-	 *
+	 * 
 	 * @param event
 	 *            Tree expansion event
 	 */
@@ -2973,9 +3082,9 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * When AnalyzeTool view tree model is expanded.
-	 *
+	 * 
 	 * @see org.eclipse.jface.viewers.ITreeViewerListener#treeExpanded(org.eclipse.jface.viewers.TreeExpansionEvent)
-	 *
+	 * 
 	 * @param event
 	 *            Tree expansion event
 	 */
@@ -2986,7 +3095,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * Updates allocation count in the information label.
-	 *
+	 * 
 	 * The information layout is hard to modify so we need to manage information
 	 * label text
 	 */
@@ -3036,7 +3145,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * Update build action icon and tooltip text.
-	 *
+	 * 
 	 * @param projectRef
 	 *            Project reference
 	 */
@@ -3067,18 +3176,25 @@ public class MainView extends ViewPart implements ISelectionListener,
 	}
 
 	/**
-	 * Indicates the target (emulator/device) by inspecting the given projects build configuration.
-	 * @param selectedProject the currently active project
-	 * @return "emulator" if the build configuration is WINSCW, "device" otherwise
+	 * Indicates the target (emulator/device) by inspecting the given projects
+	 * build configuration.
+	 * 
+	 * @param selectedProject
+	 *            the currently active project
+	 * @return "emulator" if the build configuration is WINSCW, "device"
+	 *         otherwise
 	 */
 	private static String getTraceTarget(final IProject selectedProject) {
 		String target = "";
 		if (selectedProject != null && selectedProject.isOpen()) {
-			ICarbideProjectInfo info = CarbideBuilderPlugin.getBuildManager().getProjectInfo(selectedProject);
+			ICarbideProjectInfo info = CarbideBuilderPlugin.getBuildManager()
+					.getProjectInfo(selectedProject);
 			if (info != null) {
-				ICarbideBuildConfiguration config = info.getDefaultConfiguration();
+				ICarbideBuildConfiguration config = info
+						.getDefaultConfiguration();
 				target = config.getPlatformString().equals(
-						Constants.BUILD_TARGET_WINSCW) ? Constants.INFO_TRACE_FROM_EMULATOR : Constants.INFO_TRACE_FROM_DEVICE;
+						Constants.BUILD_TARGET_WINSCW) ? Constants.INFO_TRACE_FROM_EMULATOR
+						: Constants.INFO_TRACE_FROM_DEVICE;
 			}
 		}
 		return target;
@@ -3086,7 +3202,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * Update change detail action state.
-	 *
+	 * 
 	 * @param projectRef
 	 *            Current project
 	 */
@@ -3106,23 +3222,22 @@ public class MainView extends ViewPart implements ISelectionListener,
 		}
 
 		String dataFile = projectResults.getDataFileName(projectRef);
-		if( dataFile != null ) {
+		if (dataFile != null) {
 			int fileType = UseAtool.checkFileType(dataFile);
-			if( fileType == Constants.DATAFILE_TRACE || fileType == Constants.DATAFILE_LOG ) {
+			if (fileType == Constants.DATAFILE_TRACE
+					|| fileType == Constants.DATAFILE_LOG) {
 				refreshResults.setEnabled(true);
-			}
-			else {
+			} else {
 				refreshResults.setEnabled(false);
 			}
-		}
-		else {
+		} else {
 			refreshResults.setEnabled(false);
 		}
 	}
 
 	/**
 	 * Sets information to the information label.
-	 *
+	 * 
 	 * @param infoText
 	 *            Info text
 	 */
@@ -3145,7 +3260,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * Updates label by given string.
-	 *
+	 * 
 	 * @param line
 	 *            String to display
 	 */
@@ -3167,10 +3282,10 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * Updates Subtest info to the information label.
-	 *
+	 * 
 	 * The information layout is hard to modify so we need to manage information
 	 * label text
-	 *
+	 * 
 	 * @param text
 	 *            New label text
 	 */
@@ -3221,17 +3336,16 @@ public class MainView extends ViewPart implements ISelectionListener,
 		traceStartedProjectRef = project;
 
 		// change icon and information text
-		traceAction
-				.setImageDescriptor(Activator
-						.getImageDescriptor((Constants.BUTTON_STOP)));
-		traceAction
-				.setText(Constants.ACTION_STOP_TRACE);
-		traceAction
-				.setToolTipText(Constants.ACTION_STOP_TRACE);
+		traceAction.setImageDescriptor(Activator
+				.getImageDescriptor((Constants.BUTTON_STOP)));
+		traceAction.setText(Constants.ACTION_STOP_TRACE);
+		traceAction.setToolTipText(Constants.ACTION_STOP_TRACE);
 		traceActive = true;
 
 		String fromTarget = getTraceTarget(traceStartedProjectRef);
-		updateLabel(fromTarget.length()==0 ? Constants.INFO_TRACE_START : String.format(Constants.INFO_TRACE_FROM_TARGET_START, fromTarget));
+		updateLabel(fromTarget.length() == 0 ? Constants.INFO_TRACE_START
+				: String.format(Constants.INFO_TRACE_FROM_TARGET_START,
+						fromTarget));
 		// add2UserActionHistory( "Trace started for
 		// project: "
 		// +project.getName() +" at "+ Util.getTime() );
@@ -3248,7 +3362,7 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * Overrided method to capture keyevents.
-	 *
+	 * 
 	 * @see org.eclipse.swt.events.KeyListener#keyPressed(org.eclipse.swt.events.KeyEvent)
 	 */
 	public void keyPressed(KeyEvent e) {
@@ -3265,8 +3379,8 @@ public class MainView extends ViewPart implements ISelectionListener,
 		// ctrl key pressed
 		boolean ctrlPressed = (e.stateMask & SWT.CTRL) != 0;
 
-		//if ctrl and c key pressed => run copy action
-		if(ctrlPressed & cPressed){
+		// if ctrl and c key pressed => run copy action
+		if (ctrlPressed & cPressed) {
 			// Triggering copy action
 			copyAction.run();
 		}
@@ -3275,9 +3389,77 @@ public class MainView extends ViewPart implements ISelectionListener,
 
 	/**
 	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.swt.events.KeyListener#keyReleased(org.eclipse.swt.events.KeyEvent)
 	 */
 	public void keyReleased(KeyEvent e) {
 		// This method is overrided
+	}
+
+	/**
+	 * This job parses the .dat file and loads the graph
+	 * 
+	 */
+	class GraphLoadJob extends Job {
+
+		/** Location of file to parse for graph model */
+		private String datFileLocation;
+
+		/**
+		 * Constructor
+		 * 
+		 * @param aDatFileLocation
+		 *            Location of file to parse for graph model
+		 */
+		public GraphLoadJob(String aDatFileLocation) {
+			super(Constants.GRAPH_LOAD_JOB_TITLE);
+			this.datFileLocation = aDatFileLocation;
+		}
+
+		@Override
+		protected IStatus run(IProgressMonitor monitor) {
+
+			monitor.beginTask(Constants.GRAPH_GENERATING_PROG_TITLE,
+					IProgressMonitor.UNKNOWN);
+			try {
+				ReadFile fileReader = new ReadFile();
+				boolean success = fileReader.readFile(datFileLocation);
+				if (success) {
+					AbstractList<ProcessInfo> processes = fileReader
+							.getStatistic();
+					IMemoryActivityModel model = new AnalyzeFactory()
+							.createModel(processes.size() == 0);
+					if (processes.size() > 0) {
+						model.setDeferredCallstackReading(fileReader
+								.hasDeferredCallstacks());
+						if (model.isDeferredCallstackReading()) {
+							DeferredCallstackManager callstackManager = new DeferredCallstackManager(
+									datFileLocation);
+							callstackManager.setProcesses(processes);
+							model.setCallstackManager(callstackManager);
+						} else {
+							model.setCallstackManager(new SimpleCallstackManager());
+						}
+					}
+					if (!monitor.isCanceled()) {
+						chart.setInput(project, model);
+						model.addProcesses(processes);
+					}
+					fileReader.finish();
+				}
+
+			} catch (OutOfMemoryError oome) {
+				Activator
+						.getDefault()
+						.logInfo(IStatus.ERROR, IStatus.ERROR,
+								"Can not allocate enough memory for the memory usage graph model.");
+			} catch (Exception e) {
+				Activator.getDefault().log(IStatus.ERROR,
+						"Error while generating graph model", e);
+			}
+			graphLoadJob = null;
+			return Status.OK_STATUS;
+		}
+
 	}
 }

@@ -5,6 +5,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Carbide.c++ Extensions - AnalyzeTool Help Plug-in
 Bundle-SymbolicName: com.nokia.s60tools.analyzetool.help;singleton:=tr
  ue
-Bundle-Version: 1.8.0
+Bundle-Version: 1.9.0
 Bundle-Vendor: Nokia
 

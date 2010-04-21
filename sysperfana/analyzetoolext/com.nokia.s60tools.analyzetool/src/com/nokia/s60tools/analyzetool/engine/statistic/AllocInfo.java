@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -25,6 +25,14 @@ package com.nokia.s60tools.analyzetool.engine.statistic;
  */
 public class AllocInfo extends BaseInfo {
 
+	/**
+	 * Constructor
+	 * @param memoryAddress memory address for this allocation
+	 */
+	public AllocInfo(String memoryAddress) {
+		super(memoryAddress);
+	}
+
 	private FreeInfo freedBy = null;
 
 	/**
@@ -49,5 +57,18 @@ public class AllocInfo extends BaseInfo {
 	 */
 	public boolean isFreed() {
 		return this.freedBy != null;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("AllocInfo [%s freedBy=[%s]]", super.toString(), freedByToString());
+	}
+	
+	private String freedByToString(){
+		if (freedBy == null){
+			return "null";
+		}
+		
+		return String.format("addr=0x%08X time=%s", freedBy.getMemoryAddress(), freedBy.getTime());
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -23,22 +23,26 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.core.runtime.IStatus;
 
 import com.nokia.s60tools.analyzetool.Activator;
 import com.nokia.s60tools.analyzetool.engine.statistic.AllocCallstack;
 import com.nokia.s60tools.analyzetool.engine.statistic.AllocInfo;
+import com.nokia.s60tools.analyzetool.engine.statistic.BaseInfo;
 import com.nokia.s60tools.analyzetool.engine.statistic.DllLoad;
 import com.nokia.s60tools.analyzetool.engine.statistic.FreeInfo;
 import com.nokia.s60tools.analyzetool.engine.statistic.ProcessInfo;
 import com.nokia.s60tools.analyzetool.global.Constants;
 
 /**
- * Parses trace messages which comes thru tracing utility.
- * If one message contains PCSS prefix the message will saved to the data file Data file will be saved
+ * Parses trace messages which comes thru TraceViewer.
+ * If one message contains PCSS prefix the message will be saved to the data file. Data file will be saved
  * to the project [bld.inf location]\atool_temp folder.
  *
  * @author kihe
@@ -74,25 +78,33 @@ public class ParseAnalyzeData {
 
 	/**
 	 * Allocation cache
-	 * Used when one free info is separated to multiple lines.
+	 * Used when one alloc info is separated to multiple lines.
 	 */
-	private final Hashtable<Long, AllocInfo> allocCache;
+	private Hashtable<Long, AllocInfo> allocCache = null;
+	
+	/**
+	 * For each memory operation, keeps count of how many 
+	 * callstacks are outstanding. This is used to clean up 
+	 * after all fragments have been processed.
+	 * 
+	 * Zero callstack counts should not be kept.
+	 */
+	private Map<BaseInfo, Integer> remainingCallstacksMap = null;
 
 
 	/**
 	 * Deallocation cache.
 	 * Used when one free info is separated to multiple lines.
 	 */
-	private final Hashtable<Long, FreeInfo> freeCache;
-
-
+	private Hashtable<Long, FreeInfo> freeCache = null;
+	
 	/**
 	 * Cache for dll loads.
 	 * We must find dll load item for every allocation callstack item.
 	 * This is heavy process and usually we must find more than thousand times.
 	 * So when using cache for found items => it makes finding process more rapid than without it.
 	 */
-	private final Hashtable<Long, DllLoad> dllLoadCache;
+	private Hashtable<Long, DllLoad> dllLoadCache = null;
 
 
 	/**
@@ -103,23 +115,78 @@ public class ParseAnalyzeData {
 	boolean saveDataToFile;
 
 	boolean createGraphModel;
+	
+	/** When set to true, ignore any callstack information. Can be used decrease memory consumption of the model */
+	boolean ignoreCallstacks;
+	
+	/** Callstacks will be read later on demand directly from file */
+	private boolean deferCallstacks;
+	/** file position showing current write position, this is saved in BaseInfo for deferred callstack reading */
+	private long filePos;
+	
+	long lastTime = 0;
+	private int lineBreakSize;
+	
+	
 	/**
 	 * Constructor.
-	 * @param saveData Need to save data to file.
+	 * 
+	 * @param saveData
+	 *            if true, save PCSS statements to file. Typical use case is for
+	 *            TraceWrapper
+	 * @param createModel
+	 *            boolean indicating whether to create a graph model. Used to
+	 *            improve performance.
+	 * @param deferCallstackReading
+	 *            true, if callstack reading is to be done later. This requires
+	 *            saving the file position during parse phase, so saveData must
+	 *            be true or use constructor with FileChannel.
 	 */
-	public ParseAnalyzeData(boolean saveData, boolean createModel) {
+	public ParseAnalyzeData(boolean saveData, boolean createModel, boolean deferCallstackReading) {
+		this(saveData, createModel, deferCallstackReading, 0);
+	}	
+	
+	/**
+	 * Constructor. Use this constructor when working with deferred callstacks and not
+	 * saving an output file.
+	 * 
+	 * @param saveData
+	 *            if true, save PCSS statements to file. Typical use case is for
+	 *            TraceWrapper
+	 * @param createModel
+	 *            boolean indicating whether to create a graph model. Used to
+	 *            improve performance.
+	 * @param deferCallstackReading
+	 *            true, if callstack reading is to be done later. This requires
+	 *            saving the file position during parse phase, so saveData must
+	 *            be true or use constructor with FileChannel.
+	 * @param lineBreakSize
+	 *            Size of line break, usually 1 for device-side file, and 2 for host-side file
+	 */
+	public ParseAnalyzeData(boolean saveData, boolean createModel, boolean deferCallstackReading, int lineBreakSize) {
+		
+		if (deferCallstackReading && !saveData && lineBreakSize == 0){
+			throw new IllegalArgumentException("linebreak size must be specified when trying to use deferred callstack reading with a .dat input file ");
+		}
 
 		processStart = new Hashtable<String, Integer>();
 		processEnd = new ArrayList<Integer>();
 		processes = new Hashtable<Integer, ProcessInfo>();
 		processList = new ArrayList<ProcessInfo>();
-		allocCache = new Hashtable<Long, AllocInfo>();
 		saveDataToFile = saveData;
-		dllLoadCache = new Hashtable<Long, DllLoad>();
-		freeCache = new Hashtable<Long, FreeInfo>();
+		deferCallstacks = deferCallstackReading; //orig data input might be streamed through TraceWrapper
 		createGraphModel = createModel;
+		ignoreCallstacks = !createGraphModel ; 
+		if (!ignoreCallstacks && !deferCallstacks){
+			allocCache = new Hashtable<Long, AllocInfo>();
+			freeCache = new Hashtable<Long, FreeInfo>();
+			remainingCallstacksMap = new HashMap<BaseInfo, Integer>();
+			dllLoadCache = new Hashtable<Long, DllLoad>();
+		}
+		filePos = deferCallstacks ? 0 : -1;//set to beginning of file if applicable
+		this.lineBreakSize = lineBreakSize;
 	}
-
+	
 	/**
 	 * Add one dllLoad object to process related list
 	 *
@@ -177,6 +244,7 @@ public class ParseAnalyzeData {
 				// clear file and fis
 				file = null;
 				fis = null;
+				filePos = 0;
 			}
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
@@ -207,9 +275,18 @@ public class ParseAnalyzeData {
 		processes.clear();
 		processStart.clear();
 		processEnd.clear();
-		allocCache.clear();
-		freeCache.clear();
-		dllLoadCache.clear();
+		if (allocCache != null){
+			allocCache.clear();			
+		}
+		if (freeCache != null){
+			freeCache.clear();
+		}
+		if (dllLoadCache != null){
+			dllLoadCache.clear();			
+		}
+		if (remainingCallstacksMap != null){
+			remainingCallstacksMap.clear();
+		}
 	}
 
 	/**
@@ -322,6 +399,7 @@ public class ParseAnalyzeData {
 	 *
 	 * @param data
 	 *            File name to be used
+	 * @return true on success
 	 */
 	public final boolean parse(final String data) {
 
@@ -333,6 +411,8 @@ public class ParseAnalyzeData {
 				//some unexpected error occurs
 				return true;
 			}
+			
+			
 
 			// if data must be saved to project group\atool_temp folder
 			if(saveDataToFile) {
@@ -345,6 +425,10 @@ public class ParseAnalyzeData {
 
 			if (contains) {
 				writeDataToFile(data);
+			}
+
+			if (deferCallstacks && !saveDataToFile){
+				filePos += (data.length()+lineBreakSize);
 			}
 			return true;
 		}catch(OutOfMemoryError oome) {
@@ -374,10 +458,13 @@ public class ParseAnalyzeData {
 			//thats why we must check which version is used.
 			if( processInfo.getTraceDataVersion() > 1 && splittedText.length > 6 ) {
 				dllLoad.setLoadTime(splittedText[4]);
+				lastTime = dllLoad.getLoadTime();
 				dllLoad.setStartAddress(splittedText[5]);
 				dllLoad.setEndAddress(splittedText[6]);
 			}
 			else {
+				//load time note present - assume last available time (typically from an alloc or process start)
+				dllLoad.setLoadTime(lastTime);
 				dllLoad.setStartAddress(splittedText[4]);
 				dllLoad.setEndAddress(splittedText[5]);
 			}
@@ -398,9 +485,9 @@ public class ParseAnalyzeData {
 		// which is forth item of trace data
 		if( splitted.length > 3 ) {
 			String processID = splitted[1];
-			FreeInfo freeInfo = new FreeInfo();
+			FreeInfo freeInfo = new FreeInfo(splitted[3]);
 			freeInfo.setProcessID(processID);
-			freeInfo.setMemoryAddress(splitted[3]);
+			freeInfo.setFilePos(-1);//a free doesn't have a callstack
 			removeMemAddress(freeInfo);
 		}
 	}
@@ -408,15 +495,14 @@ public class ParseAnalyzeData {
 
 	/**
 	 * Parse dealloction header from the line
-	 * @param line Allocation header line
+	 * @param splitted Split trace message
 	 */
 	private void parseFreeHeader(String[] splitted) {
 		//get free line info
 		String processID = splitted[1];
-		FreeInfo freeInfo = new FreeInfo();
+		FreeInfo freeInfo = new FreeInfo(splitted[3]);
 		freeInfo.setProcessID(processID);
-
-		freeInfo.setMemoryAddress(splitted[3]);
+		freeInfo.setFilePos(splitted.length > 6 ? filePos : -1);
 		
 		if( createGraphModel ) {
 		
@@ -426,7 +512,7 @@ public class ParseAnalyzeData {
 				ProcessInfo processInfo = processes.get(freeInfo.getProcessID());
 				traceFileVersion = processInfo.getTraceDataVersion();
 			}
-			// how many callstakc items
+			// how many callstack items
 			int callstackCount = 0;
 
 			// index where the callstack addresses begins
@@ -435,22 +521,27 @@ public class ParseAnalyzeData {
 			//if using the new trace file format
 			if( traceFileVersion > 1 ) {
 				freeInfo.setTime(splitted[4]);
+				lastTime = freeInfo.getTime();
 				callstackCount = Integer.parseInt(splitted[5], 16);
 				startIndex = 6;
 			}
 			else {
-				callstackCount = Integer.parseInt(splitted[5], 16);
+				callstackCount = Integer.parseInt(splitted[4], 16);
 			}
 
-			AbstractList<AllocCallstack> callstack = new ArrayList<AllocCallstack>();
-			createCallstack(splitted, freeInfo.getProcessID(), callstack, startIndex);
-			freeInfo.addCallstack(callstack);
-			
-			//if this free item contains fragments
-			//so we must store this info to cache
-			//and rest of the callstack items later
-			if( callstackCount > (splitted.length-startIndex) ) {
-				freeCache.put(freeInfo.getMemoryAddress(), freeInfo);
+			if (!ignoreCallstacks && !deferCallstacks){
+				AbstractList<AllocCallstack> callstack = new ArrayList<AllocCallstack>();
+				createCallstack(splitted, freeInfo.getProcessID(), callstack, startIndex, lastTime);
+				freeInfo.addCallstack(callstack);
+				
+				//if this free item contains fragments
+				//so we must store this info to cache
+				//and rest of the callstack items later
+				if( callstackCount > (splitted.length-startIndex) ) {
+					freeCache.put(freeInfo.getMemoryAddress(), freeInfo);
+					//expect fragments
+					remainingCallstacksMap.put(freeInfo, callstackCount - callstack.size());
+				}				
 			}
 		}
 		
@@ -462,7 +553,7 @@ public class ParseAnalyzeData {
 
 	/**
 	 * Parse dealloction fragment from the line
-	 * @param line Allocation fragment line
+	 * @param splitted Split trace message
 	 */
 	private void parseFreeFragment(String[] splitted)
 	{
@@ -473,6 +564,7 @@ public class ParseAnalyzeData {
 				String memAddr = splitted[3];
 				Long memoryAddress =Long.parseLong(memAddr, 16);
 				Long time = Long.parseLong(splitted[4],16);
+				lastTime = time;
 				String packetNumber = splitted[5];
 
 				//if cache contains corresponding free info
@@ -480,44 +572,75 @@ public class ParseAnalyzeData {
 					FreeInfo info = freeCache.get(memoryAddress);
 					if (info.getMemoryAddress() == memoryAddress && info.getTime() == time ) {
 						AbstractList<AllocCallstack> callstack = new ArrayList<AllocCallstack>();
-						createCallstack(splitted, processId, callstack, 6);
+						createCallstack(splitted, processId, callstack, 6, time);
 						info.updateFragment(callstack, packetNumber);
+
+						int callstackCount = callstack.size();
+						int remaining = remainingCallstacksMap.get(info);
+						remaining -= callstackCount;
+						if (remaining <= 0){
+							remainingCallstacksMap.remove(info);
+							freeCache.remove(info);
+							info.finaliseCallstack();
+						} else {
+							remainingCallstacksMap.put(info, remaining);
+						}
 					}
+					
 				}
 			}
 		}
 	}
 	
 	/**
-	 * Remove dll load from the list.
+	 * Mark dll as unloaded
 	 * This provides functionality for dynamically loaded dll loads
-	 * @param dllLoad DllLoad item to unload
+	 * @param lineFragments elements of text to parse for unloading dll
 	 */
-	private void unloadDll( DllLoad dllLoad )
+	private void unloadDll(String[] lineFragments)
 	{
-		if (processes.containsKey(dllLoad.getProcessID())) {
-			ProcessInfo tempProcessInfo = processes.get(dllLoad.getProcessID());
-			tempProcessInfo.unloadOneDll(dllLoad);
+		int processID = Integer.parseInt(lineFragments[1], 16);
+		
+		if(processes.containsKey(processID)) {
+			ProcessInfo processInfo = processes.get(processID);
+			String dllName = lineFragments[3];
 
+			//timestamp only exists for more recent trace versions
+			long dllUnloadTime;
+			long startAddr;
+			long endAddr;
+			
+			if( processInfo.getTraceDataVersion() > 1 && lineFragments.length > 6 ) {
+				dllUnloadTime = Long.parseLong(lineFragments[4], 16);
+				lastTime = dllUnloadTime;
+				startAddr = Long.parseLong(lineFragments[5], 16);
+				endAddr = Long.parseLong(lineFragments[6], 16);
+			}
+			else {
+				//load time note present - assume last available time (typically from an alloc or process start)
+				dllUnloadTime = lastTime;
+				startAddr = Long.parseLong(lineFragments[4], 16);
+				endAddr = Long.parseLong(lineFragments[5], 16);
+			}
+			
+			ProcessInfo p = processes.get(processID);
+			DllLoad dll = p.unloadOneDll(dllName, startAddr, endAddr, dllUnloadTime);
+			
 			//remove found dll load item from cache
-			for( java.util.Enumeration<Long> e = dllLoadCache.keys(); e.hasMoreElements();)
-			{
-				Long key = e.nextElement();
-				DllLoad tempDllLoad = dllLoadCache.get(key);
-
-				// if values equals remove it from the list
-				if (tempDllLoad.getProcessID() == dllLoad.getProcessID() && tempDllLoad.getStartAddress() == dllLoad.getStartAddress()
-						&& tempDllLoad.getEndAddress() == dllLoad.getEndAddress() && tempDllLoad.getName() == tempDllLoad.getName()) {
-					dllLoadCache.remove(key);
+			if (!ignoreCallstacks && !deferCallstacks && dll != null){
+				for (Entry<Long, DllLoad> entry : dllLoadCache.entrySet()) {
+					if (entry.getValue().equals(dll)){
+						dllLoadCache.remove(entry.getKey());
+						System.out.println("dllLoadCache.removedEntry for"+dll.getName());
+					}
 				}
 			}
-
 		}
 	}
 
 	/**
 	 * Parse allocation header info from the line
-	 * @param line Allocation line
+	 * @param splitted Split trace message
 	 */
 	private void parseAllocHeader(String[] splitted)
 	{
@@ -525,20 +648,29 @@ public class ParseAnalyzeData {
 			String procID = splitted[1];
 			int processID = Integer.parseInt(procID, 16);
 			if (processes.containsKey(processID)) {
-				AllocInfo oneAlloc = new AllocInfo();
+				AllocInfo oneAlloc = new AllocInfo(splitted[3]);
 				oneAlloc.setProcessID(procID);
-				oneAlloc.setMemoryAddress(splitted[3]);
+				oneAlloc.setFilePos(splitted.length > 6 ? filePos : -1);
 				if( createGraphModel ) {
 					oneAlloc.setTime(splitted[4]);
+					lastTime = oneAlloc.getTime();
 					
 					oneAlloc.setSizeInt(Integer.parseInt(splitted[5], 16));
 					// if one trace message contains callstack
-					if (splitted.length > 6) {
+					if (!ignoreCallstacks && !deferCallstacks && splitted.length > 6) {
+						
+						int callstackSize = Integer.parseInt(splitted[6], 16);
 
 						AbstractList<AllocCallstack> callstack = new ArrayList<AllocCallstack>();
-						createCallstack(splitted, processID, callstack, 7);
+						createCallstack(splitted, processID, callstack, 7, oneAlloc.getTime());
 						oneAlloc.addCallstack(callstack);
-						allocCache.put(oneAlloc.getMemoryAddress(), oneAlloc);
+						
+						callstackSize -= callstack.size();
+						if (callstackSize > 0){
+							//expect fragments
+							remainingCallstacksMap.put(oneAlloc, callstackSize);
+							allocCache.put(oneAlloc.getMemoryAddress(), oneAlloc);
+						}
 					}
 				}
 				addMemAddress(oneAlloc);
@@ -552,8 +684,7 @@ public class ParseAnalyzeData {
 	/**
 	 * Parse allocation fragment from the line
 	 * 
-	 * @param line
-	 *            Allocation fragment line
+	 * @param splitted Split trace message
 	 */
 	private void parseAllocFragment(String[] splitted) {
 		if( createGraphModel ) {
@@ -561,16 +692,28 @@ public class ParseAnalyzeData {
 			int processId = Integer.parseInt(procId, 16);
 			if (processes.containsKey(processId)) {
 				String memAddr = splitted[3];
-				Long memoryAddress = Long.parseLong(memAddr,16);
-				Long time = Long.parseLong(splitted[4],16);
+				long memoryAddress = Long.parseLong(memAddr,16);
+				long time = Long.parseLong(splitted[4],16);
+				lastTime = time;
 				String packetNumber = splitted[5];
 
 				if (allocCache.containsKey(memoryAddress)) {
 					AllocInfo info = allocCache.get(memoryAddress);
 					if (info.getMemoryAddress() == memoryAddress && info.getTime() == time) {
 						AbstractList<AllocCallstack> callstack = new ArrayList<AllocCallstack>();
-						createCallstack(splitted, processId, callstack, 6);
+						createCallstack(splitted, processId, callstack, 6, time);
 						info.updateFragment(callstack, packetNumber);
+						
+						int callstackCount = callstack.size();
+						int remaining = remainingCallstacksMap.get(info);
+						remaining -= callstackCount;
+						if (remaining <= 0){
+							remainingCallstacksMap.remove(info);
+							info.finaliseCallstack();
+							allocCache.remove(info);
+						} else {
+							remainingCallstacksMap.put(info, remaining);
+						}
 					}
 				}
 			}
@@ -589,15 +732,14 @@ public class ParseAnalyzeData {
 	 * @param startIndex
 	 *            Index where to start parse callstack values
 	 */
-	private void createCallstack(String[] splitted, int processId, AbstractList<AllocCallstack> callstack, int startIndex) {
+	private void createCallstack(String[] splitted, int processId, AbstractList<AllocCallstack> callstack, int startIndex, long time) {
 		// append whole callstack as a one memory address
 		for (int i = startIndex; i < splitted.length; i++) {
 			try{
-				AllocCallstack allocCAll = new AllocCallstack();
-				allocCAll.setMemoryAddress(splitted[i]);
+				AllocCallstack allocCAll = new AllocCallstack(splitted[i]);
 
 				// define dll load for current alloc
-				DllLoad dllLoad = getDllLoadName(processId, Long.parseLong(splitted[i],16));
+				DllLoad dllLoad = getDllLoadName(processId, Long.parseLong(splitted[i],16), time);
 				if( dllLoad != null ) {
 					allocCAll.setDllLoad(dllLoad);
 					callstack.add(allocCAll);	
@@ -617,30 +759,28 @@ public class ParseAnalyzeData {
 	 * message whole callstack to one memory address. This memory address is
 	 * used to calculate most used memory allocation location.
 	 * 
-	 * @param line
-	 *            One trace message
+	 * @param splitted Split trace message
 	 */
 	private void parseMemAddressesFromLine(String[] splitted) {
 
-		//TODO
 		String processID = splitted[1];
 		if (processes.containsKey(processID)) {
-			AllocInfo oneAlloc = new AllocInfo();
+			AllocInfo oneAlloc = new AllocInfo(splitted[3]);
 			oneAlloc.setProcessID(processID);
-			oneAlloc.setMemoryAddress(splitted[3]);
+			oneAlloc.setFilePos(splitted.length > 5 ? filePos : -1);
 			oneAlloc.setTime(splitted[4]);
+			lastTime = oneAlloc.getTime();
 			oneAlloc.setSizeInt(Integer.parseInt(splitted[5], 16));
 
 			// if one trace message contains callstack
-			if (splitted.length > 5) {
+			if (!ignoreCallstacks && !deferCallstacks && splitted.length > 5) {
 				AbstractList<AllocCallstack> callstack = new ArrayList<AllocCallstack>();
 				// append whole callstack as a one memory address
 				for (int i = 6; i < splitted.length; i++) {
-					AllocCallstack allocCAll = new AllocCallstack();
-					allocCAll.setMemoryAddress(splitted[i]);
+					AllocCallstack allocCAll = new AllocCallstack(splitted[i]);
 
 					// define dll load for current alloc
-					DllLoad dllLoad = getDllLoadName(oneAlloc.getProcessID(), allocCAll.getMemoryAddress());
+					DllLoad dllLoad = getDllLoadName(oneAlloc.getProcessID(), allocCAll.getMemoryAddress(), lastTime);
 					if (dllLoad != null) {
 						allocCAll.setDllLoad(dllLoad);
 					}
@@ -648,8 +788,8 @@ public class ParseAnalyzeData {
 					callstack.add(allocCAll);
 				}
 				oneAlloc.addCallstack(callstack);
-				addMemAddress(oneAlloc);
 			}
+			addMemAddress(oneAlloc);
 		}
 	}
 
@@ -663,10 +803,8 @@ public class ParseAnalyzeData {
 	 *            Memory address
 	 * @return DllLoad item if found otherwise null
 	 */
-	private DllLoad getDllLoadName(int processId, Long memoryAddress) {
+	private DllLoad getDllLoadName(int processId, Long memoryAddress, long time) {
 		if (processes.containsKey(processId)) {
-			ProcessInfo tempProcessInfo = processes.get(processId);
-			Hashtable<String, DllLoad> loads = tempProcessInfo.getDllLoads();
 
 			// check does cache contains already corresponding item
 			if (dllLoadCache.containsKey(memoryAddress)) {
@@ -674,20 +812,13 @@ public class ParseAnalyzeData {
 			}
 
 			// no item found in the cache loop thru the loaded dlls
-			for (java.util.Enumeration<String> e = loads.keys(); e.hasMoreElements();) {
-				try {
-					String key = e.nextElement();
-					DllLoad oneLoad = loads.get(key);
-					Long start = oneLoad.getStartAddress();
-					Long end =  oneLoad.getEndAddress();
-					Long actual = memoryAddress;
-					if (actual >= start && actual <= end) {
-						// dll load found => save it to cache and return it
-						dllLoadCache.put(memoryAddress, oneLoad);
-						return oneLoad;
-					}
-				} catch (java.lang.NumberFormatException nfe) {
-					// trace message corrupt?
+			ProcessInfo p = processes.get(processId);
+
+			for (DllLoad oneLoad : p.getDllLoads()) {
+				if (memoryAddress >= oneLoad.getStartAddress() && memoryAddress <= oneLoad.getEndAddress() && time >= oneLoad.getLoadTime() && time <= oneLoad.getUnloadTime()) {
+					// dll load found => save it to cache and return it
+					dllLoadCache.put(memoryAddress, oneLoad);
+					return oneLoad;
 				}
 			}
 		}
@@ -747,13 +878,17 @@ public class ParseAnalyzeData {
 				parseFreeHeader(lineFragments);
 				break;
 			case ALLOCF:
-				parseAllocFragment(lineFragments);
+				if (!ignoreCallstacks && !deferCallstacks){
+					parseAllocFragment(lineFragments);				
+				}
 				break;
 			case FREEF:
-				parseFreeFragment(lineFragments);
+				if (!ignoreCallstacks && !deferCallstacks){
+					parseFreeFragment(lineFragments);				
+				}
 				break;
 			case DLL_LOAD:
-				if(createGraphModel) {
+				if(createGraphModel && !ignoreCallstacks) {
 					dllLoad = new DllLoad();
 					dllLoad.setProcessID(lineFragments[1]);
 					dllLoad.setName(lineFragments[3]);
@@ -762,18 +897,15 @@ public class ParseAnalyzeData {
 				}
 				break;
 			case DLL_UNLOAD:
-				if(createGraphModel) {
-					dllLoad = new DllLoad();
-					dllLoad.setProcessID(lineFragments[1]);
-					dllLoad.setName(lineFragments[3]);
-					fillDllLoadInfo(dllLoad, lineFragments);
-					unloadDll(dllLoad);
+				if(createGraphModel && !ignoreCallstacks) {
+					unloadDll(lineFragments);
 				}
 				break;
 			default:
 				// ignore this line
 				break;
 			}
+			
 		}catch(Exception e) {
 			Activator.getDefault().log(IStatus.ERROR, "Error while parsing data", e);
 		}
@@ -798,12 +930,14 @@ public class ParseAnalyzeData {
 		if (processes.containsKey(processId)) {
 			if( lineFragments.length > 4 ){
 				//check is ABNORMAL process end and that there are enough data to parse
+				ProcessInfo p = processes.get(processId); 
 				if( lineFragments[4].equals(KEYWORD_ABNORMAL) && lineFragments.length > 5 ) {
-					processes.get(processId).setEndTime(lineFragments[5]);	
+					p.setEndTime(lineFragments[5]);	
 				}
 				else {
-					processes.get(processId).setEndTime(lineFragments[4]);
+					p.setEndTime(lineFragments[4]);
 				}	
+				lastTime = p.getEndTime();
 			}
 			
 
@@ -836,7 +970,9 @@ public class ParseAnalyzeData {
 
 			// clear the founded dll load items list
 			// this prevent that results between runs do not mixed up
-			dllLoadCache.clear();
+			if (dllLoadCache != null){
+				dllLoadCache.clear();				
+			}
 		}
 	}
 
@@ -858,6 +994,7 @@ public class ParseAnalyzeData {
 
 		if (lineFragments.length > 5) {
 			processInfo.setStartTime(lineFragments[5]);
+			lastTime = processInfo.getStartTime();
 		}
 
 		// set trace data version number
@@ -924,10 +1061,21 @@ public class ParseAnalyzeData {
 
 				// write data
 				fis.write(dataAndLineFeed.getBytes("UTF-8"));
+				filePos = deferCallstacks ? fis.getChannel().position() : -1;
 			}
 
 		} catch (IOException ioe) {
 			return;
 		}
+	}
+	
+	/**
+	 * Returns true if callstack reading from file is done
+	 * on demand; false if callstacks are made available during parsing
+	 * phase.
+	 * @return true for deferred callstack reading
+	 */
+	public boolean hasDeferredCallstacks(){
+		return deferCallstacks;
 	}
 }

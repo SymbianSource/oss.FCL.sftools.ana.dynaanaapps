@@ -31,6 +31,9 @@
 			<topic label="Capturing trace data" href="html/tasks/capture.htm" />
 			<topic label="Running subtests" href="html/tasks/subtest.htm" />
 			<topic label="Viewing memory leaks" href="html/tasks/viewmemoryleaks.htm" />
+			<topic label="Viewing memory activity graph" href="html/tasks/viewactivitygraph.htm" />
+			<!--<topic label="Viewing memory statistics" href="html/tasks/viewstatistic.htm" />
+			<topic label="Emulator support" href="html/tasks/emulatorsupport.htm" />-->
 		</topic>
 
 		<topic label="References" href="html/reference/references.htm">

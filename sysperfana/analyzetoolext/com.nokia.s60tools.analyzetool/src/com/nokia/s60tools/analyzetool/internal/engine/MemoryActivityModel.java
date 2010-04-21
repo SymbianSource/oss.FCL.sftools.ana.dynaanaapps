@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -19,6 +19,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.nokia.s60tools.analyzetool.engine.ICallstackManager;
 import com.nokia.s60tools.analyzetool.engine.IMemoryActivityModel;
 import com.nokia.s60tools.analyzetool.engine.IMemoryActivityModelChangeListener;
 import com.nokia.s60tools.analyzetool.engine.statistic.BaseInfo;
@@ -62,6 +63,9 @@ public class MemoryActivityModel implements IMemoryActivityModel {
 	
 	/** computed values for currently selected process*/
 	private ProcessInfoComputedValues selectedProcessComputedValues;
+
+	private boolean deferredCallstackReading;
+	private ICallstackManager callstackManager;
 	
 
 	/**
@@ -386,7 +390,34 @@ public class MemoryActivityModel implements IMemoryActivityModel {
 		}
 
 	}
-	
+	/* (non-Javadoc)
+	 * @see com.nokia.s60tools.analyzetool.engine.IMemoryActivityModel#setDeferredCallstackReading(boolean)
+	 */
+	public void setDeferredCallstackReading(boolean deferredCallstackReading) {
+		this.deferredCallstackReading = deferredCallstackReading;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.nokia.s60tools.analyzetool.engine.IMemoryActivityModel#isDeferredCallstackReading()
+	 */
+	public boolean isDeferredCallstackReading() {
+		return deferredCallstackReading;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.nokia.s60tools.analyzetool.engine.IMemoryActivityModel#getCallstackManager()
+	 */
+	public ICallstackManager getCallstackManager() {
+		return callstackManager;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.nokia.s60tools.analyzetool.engine.IMemoryActivityModel#setCallstackManager(com.nokia.s60tools.analyzetool.engine.statistic.CallstackManager)
+	 */
+	public void setCallstackManager(ICallstackManager callstackManager) {
+		this.callstackManager = callstackManager;
+		
+	}
 	
 	// Other public methods can be added here.
 }

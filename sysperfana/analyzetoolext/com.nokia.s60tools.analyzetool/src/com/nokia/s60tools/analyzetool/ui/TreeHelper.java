@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -194,7 +194,7 @@ public class TreeHelper {
 			return checkedModules.get(moduleName);
 		}
 		else if (!modules.isEmpty()) {
-			boolean build = Util.chechModuleBuildState(modules, moduleName);
+			boolean build = Util.checkModuleBuildState(modules, moduleName);
 			if( !build ) {
 				checkedModules.put(moduleName, build);
 			}
@@ -358,14 +358,20 @@ public class TreeHelper {
 
 		// get active logging mode
 		String reportLevel = store.getString(Constants.REPORT_LEVEL);
-
+		
 		// create tree parent for test runs
-		TreeParent testRuns = new TreeParent(Constants.ITEM_TREE_MEM_LEAKS
-				+ item.getID() + " " + item.getMemoryLeakTime());
-
+		String title = null;
+		if( item.getCallstackItems() != null ) {
+			title = Constants.ITEM_TREE_MEM_LEAKS
+			+ item.getID() + " - " + item.getMemoryLeakTime() +" - Callstack size: " +item.getCallstackItems().size();
+		}
+		else {
+			title = Constants.ITEM_TREE_MEM_LEAKS + item.getID() + " - " + item.getMemoryLeakTime();
+		}
+		TreeParent testRuns = new TreeParent(title);
+		
 		// get callstack items
-		Iterator<CallstackItem> stackItems = item.getCallstackItems()
-				.iterator();
+		Iterator<CallstackItem> stackItems = item.getCallstackItems().iterator();
 
 		// is one know line printed
 		boolean printed = false;
@@ -451,7 +457,19 @@ public class TreeHelper {
 			}
 
 		}
-
+		
+		Object[] childs = testRuns.getChildren();
+		int childCount = 0;
+		if( childs != null ) {
+			childCount = childs.length;
+		}
+		int callstackCount = item.getCallstackItems().size();
+		
+		if( callstackCount != childCount ) {
+			title = Constants.ITEM_TREE_MEM_LEAKS
+			+ item.getID() + " - " + item.getMemoryLeakTime() +" - Callstack size: " +callstackCount +" ("+(callstackCount - childCount)+" filtered)";
+			testRuns.setName(title);
+		}
 		TreeParent incRoot;
 		incRoot = new TreeParent(Constants.ANALYZE_TOOL_TITLE);
 		incRoot.addChild(testRuns);

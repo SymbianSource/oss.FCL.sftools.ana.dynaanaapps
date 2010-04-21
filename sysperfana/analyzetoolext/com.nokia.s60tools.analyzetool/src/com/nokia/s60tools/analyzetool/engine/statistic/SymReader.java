@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -14,7 +14,6 @@
  * Description:  Definitions for the class SymReader
  *
  */
-
 
 package com.nokia.s60tools.analyzetool.engine.statistic;
 
@@ -286,7 +285,7 @@ public class SymReader {
 		if (manager == null) {
 			//it's strange that we need to create another Object here so that DE releases the
 			//targets
-			manager = new SymbolReaderManager().getSymbolReaderManager();
+			manager = SymbolReaderManager.getSymbolReaderManager();
 		}
 		Set<String> keySet = allreayOpen.keySet();
 		for (String moduleName : keySet) {

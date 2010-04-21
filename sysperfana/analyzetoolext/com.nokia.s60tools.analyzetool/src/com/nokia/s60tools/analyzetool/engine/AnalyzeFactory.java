@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -40,7 +40,7 @@ public class AnalyzeFactory {
 	
 	/**
 	 * Returns an empty model
-	 * @return
+	 * @return Empty memory model
 	 */
 	public static IMemoryActivityModel getEmptyModel(){
 		return EMPTY_MODEL;
@@ -118,7 +118,24 @@ public class AnalyzeFactory {
 		public void setSelectedProcess(ProcessInfo processInfo) {
 			//cannot occur in empty model
 		}
-		
-	}
 
+		/* (non-Javadoc)
+		 * @see com.nokia.s60tools.analyzetool.engine.IMemoryActivityModel#isDeferredCallstackReading()
+		 */
+		public boolean isDeferredCallstackReading() {
+			return false;
+		}
+
+		public void setDeferredCallstackReading(boolean value) {
+			//nothing to do
+		}
+
+		public ICallstackManager getCallstackManager() {
+			return null;
+		}
+
+		public void setCallstackManager(ICallstackManager callstackManager) {
+			//nothing to do
+		}
+	}
 }

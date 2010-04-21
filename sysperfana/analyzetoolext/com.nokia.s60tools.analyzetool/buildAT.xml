@@ -17,7 +17,7 @@
 	<property name="compilerArg" value=""/>
 	<property name="javacSource" value="1.5"/>
 	<property name="javacTarget" value="1.5"/>
-	<property name="carbide.plugins" location="e:/carbide_libs"/>
+	<property name="carbide.plugins" location="C:\Carbide\Carbide.c_SYMSEE_layout_2.4.0.v200912150001_74"/>
 	<condition property="dir_bootclasspath" value="${java.home}/../Classes">
 		<os family="mac"/>
 	</condition>
@@ -186,5 +186,26 @@
 		<zip destfile="${plugin.destination}/com.nokia.s60tools.analyzetool_${pluginVersion}.zip" basedir="${temp.folder}" filesonly="true" whenempty="skip" update="false"/>
 		<delete dir="${temp.folder}"/>
 	</target>
+
+	<target name="javadoc" depends="build.jars">
+        <javadoc access="private" author="true" 
+		destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" 
+		packagenames="com.nokia.s60tools.analyzetool.global,
+		com.nokia.s60tools.analyzetool.ui,
+		com.nokia.s60tools.analyzetool.ui.actions,
+		com.nokia.s60tools.analyzetool.ui.statistics,
+		com.nokia.s60tools.analyzetool,
+		com.nokia.s60tools.analyzetool.builder,
+		com.nokia.s60tools.analyzetool.engine,
+		com.nokia.s60tools.analyzetool.engine.statistics,
+		com.nokia.s60tools.analyzetool.preferences,
+		com.nokia.s60tools.analyzetool.properties"		
+		source="1.5" sourcepath="src" splitindex="true" 
+		use="true" 
+		version="true"
+		useexternalfile="true"
+		classpathref="build_classpath"
+		/>
+    </target>
 
 </project>

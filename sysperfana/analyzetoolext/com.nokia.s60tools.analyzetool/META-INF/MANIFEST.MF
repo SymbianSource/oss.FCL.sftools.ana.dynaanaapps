@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Carbide.c++ Extensions - AnalyzeTool
 Bundle-SymbolicName: com.nokia.s60tools.analyzetool;singleton:=true
-Bundle-Version: 1.8.0
+Bundle-Version: 1.9.0
 Bundle-Activator: com.nokia.s60tools.analyzetool.Activator
 Bundle-Vendor: Nokia
 Require-Bundle: org.eclipse.ui,
@@ -25,7 +25,8 @@ Require-Bundle: org.eclipse.ui,
  com.trolltech.qtcppproject,
  com.nokia.s60tools.util,
  org.eclipse.gef,
- org.eclipse.help
+ org.eclipse.help,
+ org.eclipse.ui.forms
 Bundle-ActivationPolicy: lazy
 Eclipse-BuddyPolicy: registered
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -14,6 +14,7 @@
  * Description:  Definitions for the class AllocCallstack
  *
  */
+
 package com.nokia.s60tools.analyzetool.engine.statistic;
 
 /**
@@ -24,26 +25,25 @@ package com.nokia.s60tools.analyzetool.engine.statistic;
 public class AllocCallstack {
 
 	/** Callstack memory address */
-	Long memoryAddress;
+	long memoryAddress;
 
 	/** Dll name where this callstack belongs*/
 	DllLoad dllLoad;
 
 	/**
-	 * Returns memory address.
-	 * @return Memory address
+	 * Constructor
+	 * @param newMemoryAddress the memory address for this allocation
 	 */
-	public Long getMemoryAddress() {
-		return memoryAddress;
+	public AllocCallstack(String newMemoryAddress) {
+		this.memoryAddress = Long.parseLong(newMemoryAddress,16);
 	}
 
 	/**
-	 * Sets memory address
-	 * @param newMemoryAddress Memory address
+	 * Returns memory address as decimal value.
+	 * @return Memory address
 	 */
-	public void setMemoryAddress(String newMemoryAddress) {
-		Long iValue = Long.parseLong(newMemoryAddress,16);
-		this.memoryAddress = iValue;
+	public long getMemoryAddress() {
+		return memoryAddress;
 	}
 
 	/**

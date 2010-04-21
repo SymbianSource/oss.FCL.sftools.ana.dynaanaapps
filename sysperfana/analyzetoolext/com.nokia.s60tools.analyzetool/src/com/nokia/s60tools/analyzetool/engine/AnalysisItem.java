@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -21,20 +21,23 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 
 /**
- * Contains information of one memory leak item Information is parsed from
+ * Contains information of one memory leak item. Information is parsed from
  * atool.exe generated XML file so we can assume that all the information is
  * valid and no other checking is needed.
- *
+ * 
  * @author kihe
- *
+ * 
  */
 public class AnalysisItem extends BaseItem {
+
+	/** Call stack addresses. */
+	private final AbstractList<CallstackItem> callstackItems;
 
 	/** Size of leak. */
 	private int leakSize = 0;
 
-	/** Call stack addresses. */
-	private final AbstractList<CallstackItem> callstackItems;
+	/** Memory leak time. */
+	private String memoryLeakTime;
 
 	/**
 	 * Constructor.
@@ -46,7 +49,7 @@ public class AnalysisItem extends BaseItem {
 
 	/**
 	 * Adds new Callstack item.
-	 *
+	 * 
 	 * @param item
 	 *            Callstack item
 	 */
@@ -55,9 +58,10 @@ public class AnalysisItem extends BaseItem {
 	}
 
 	/**
-	 * Check contains current item valid callstack item.
-	 *
-	 * @return True one callstack info contains Function name and leak line
+	 * Check if any stored callstack items has is pinpointed to file and line
+	 * number.
+	 * 
+	 * @return True if any callstack item contains file name and leak line
 	 *         number, otherwise False
 	 */
 	public final boolean containValidCallstack() {
@@ -78,7 +82,7 @@ public class AnalysisItem extends BaseItem {
 
 	/**
 	 * Gets stored callstack items.
-	 *
+	 * 
 	 * @return Callstack items
 	 */
 	public final AbstractList<CallstackItem> getCallstackItems() {
@@ -87,21 +91,43 @@ public class AnalysisItem extends BaseItem {
 
 	/**
 	 * Gets size of memory leak.
-	 *
+	 * 
 	 * @return Memory leak size
 	 */
 	public final int getLeakSize() {
 		return this.leakSize;
 	}
 
+	/**
+	 * Gets memory leak time.
+	 * 
+	 * @return Memory leak time
+	 */
+	public final String getMemoryLeakTime() {
+		if (memoryLeakTime == null) {
+			return "";
+		}
+		return this.memoryLeakTime;
+	}
 
 	/**
 	 * Sets size for the memory leak.
-	 *
+	 * 
 	 * @param newSize
 	 *            Memory leak size
 	 */
 	public final void setLeakSize(final int newSize) {
 		this.leakSize = newSize;
+	}
+
+	/**
+	 * Sets memory leak time.
+	 * 
+	 * @param newMemoryLeakTime
+	 *            Memory leak time
+	 */
+	public final void setMemoryLeakTime(final String newMemoryLeakTime) {
+		this.memoryLeakTime = newMemoryLeakTime;
+
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -28,9 +28,9 @@ public class Constants {
 	public static enum ACTIONS {
 		RUN_VIEW_MEM_LEAKS, RUN_BUILD, RUN_CLEAN
 	}
-	
 	public static enum Operation {
-		PROCESS_START, PROCESS_END, ALLOC, FREE, ALLOCH, FREEH, ALLOCF, FREEF, DLL_LOAD, DLL_UNLOAD, NOVALUE;
+		PROCESS_START, 
+		PROCESS_END, ALLOC, FREE, ALLOCH, FREEH, ALLOCF, FREEF, DLL_LOAD, DLL_UNLOAD, NOVALUE;
 
 		public static Operation toOperation(String str) {
 			try {
@@ -47,6 +47,7 @@ public class Constants {
 	public final static String MAIN_TAB_TITLE = "Results";
 	public final static String ANALYZE_TOOL_VIEW_ID = "com.nokia.s60tools.analyzetool.ui.MainView";
 	public final static String ANALYZE_TOOL_PREFS_ID = "com.nokia.s60tools.analyzetool.preferences.AnalyzeToolPreferencePage";
+	public final static String DBGHELPDLL_IS_UP_TO_DATE = "dbghelp.dll is up to date";
 	/**
 	 * Progress monitor text displayed when AnalyzeTool processing some action
 	 * long time
@@ -170,14 +171,14 @@ public class Constants {
 	public static final String INFO_ALLOCATED_MEM = "Number of memory allocations: ";
 	public static final String NO_OPENED_FILES = "No recently opened files.";
 	public static final String STARTING_TRACE = "Starting trace capture";
-	/** Tracing utility error information */
-	public static final String TRACE_ALLREADY_CONNECTED = "Tracing utility connection reserved for another plug-in.";
-	public static final String TRACE_GENERAL_ERROR = "General Tracing utility error.";
-	public static final String TRACE_CON_SET_ERROR = "Invalid Tracing utility connection settings.";
+	/** TraceViewer error information */
+	public static final String TRACE_ALLREADY_CONNECTED = "TraceViewer connection reserved for another plug-in.";
+	public static final String TRACE_GENERAL_ERROR = "General TraceViewer error.";
+	public static final String TRACE_CON_SET_ERROR = "Invalid TraceViewer connection settings.";
 	public static final String TRACE_CANT_FIND_DATAPR = "Cannot find dataprocessor. \nPlease contact the support team.";
 	public static final String TRACE_ERROR_NONE = "";
-	public static final String TRACE_DISC_ERROR = "Error while disconnecting Tracing utility.";
-	public static final String TRACE_NOT_FOUND = "Could not load Tracing utility plugin.";
+	public static final String TRACE_DISC_ERROR = "Error while disconnecting TraceViewer.";
+	public static final String TRACE_NOT_FOUND = "Could not load TraceViewer plugin.";
 
 	/** Main view tree model related constants */
 	public static final String HANDLE_LEAK_MODULES_TITLE = "Modules with handle leaks";
@@ -277,6 +278,7 @@ public class Constants {
 	public static final String PREFS_CUSTOM_BUTTON = "Custom size (0-255)";
 	public static final String PREFS_CS_SIZE_DISABLED_TOOLTIP = "Command line engine version is too old, version must be 1.7.4 or higher";
 
+
 	/**Statistics view constants*/
 	public static final String STATISTICS_TAB_TITLE = "Top allocation locations";
 	public static final String STATISTICS_SELECT_RUN = "Select run";
@@ -289,6 +291,7 @@ public class Constants {
 	public static final String STATISTICS_GENERATING = "Generating statistics. Please wait...";
 	public static final String STATISTICS_GENERATING_PROG_TITLE = "Generating statistics";
 	public static final String GRAPH_GENERATING_PROG_TITLE = "Generating graph model";
+	public static final String GRAPH_LOAD_JOB_TITLE = "AnalyzeTool Loading Graph Data...";
 	public static final String STATISTICS_NO_STATS = "No statistics available.";
 
 
@@ -307,7 +310,7 @@ public class Constants {
 	/** Parser id's to command launcher */
 	public static final String[] atoolParserIds = new String[] { "com.nokia.s60tools.analyzetool" };
 
-	/** File name which is used when saving captured data thru Tracing utility */
+	/** File name which is used when saving captured data thru TraceViewer */
 	public static final String FILENAME = "AtoolDataFile.dat";
 
 	/** File name which is used when generating memory analysis results */
@@ -400,7 +403,7 @@ public class Constants {
 	/** S60 logging mode data file name */
 	public static final String LOGGING_S60_PROCESS_NAME = "process_name";
 	public static final String LOGGING_S60_USER_SPECIFIED = "user_secified";
-
+	
 	/** Save report file types */
 	public static final int SAVE_REPORT_FILE_DATA = 0;
 	public static final int SAVE_REPORT_FILE_XML = 1;
@@ -490,6 +493,7 @@ public class Constants {
 		/* Analyze errors */
 		WRONG_DATA_FILE_VERSION(10),
 		ANALYZE_ERROR(12),
+		EMPTY_DATA_FILE(13),
 		SYMBOL_FILE_ERROR(14),
 		DATA_FILE_EMPTY(31),
 		DATA_FILE_INVALID(32),
@@ -514,4 +518,13 @@ public class Constants {
 		   return code;
 		 }
 	}
+	
+	
+	static final String AT_CORE_INCLUDE_FILE_WITH_VERSION_NUMBER[] = {
+			"epoc32\\include\\domain\\osextensions\\analyzetool\\analyzetool.h",
+			"epoc32\\include\\oem\\analyzetool\\analyzetool.h",
+			"epoc32\\include\\platform\\analyzetool\\analyzetool.h"
+		};
+	
+	static final String AT_CORE_VERSION_NUMBER_TAG="ANALYZETOOL_CORE_VERSION_FOR_CLE";
 }

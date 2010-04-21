@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -19,10 +19,11 @@ package com.nokia.s60tools.analyzetool.ui.statistic;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
-import java.util.Calendar;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -63,8 +64,8 @@ import com.nokia.s60tools.analyzetool.engine.statistic.DllLoad;
 import com.nokia.s60tools.analyzetool.engine.statistic.ProcessInfo;
 import com.nokia.s60tools.analyzetool.engine.statistic.SourceFile;
 import com.nokia.s60tools.analyzetool.engine.statistic.SymReader;
-import com.nokia.s60tools.analyzetool.global.Util;
 import com.nokia.s60tools.analyzetool.global.Constants;
+import com.nokia.s60tools.analyzetool.global.Util;
 import com.nokia.s60tools.analyzetool.ui.ResourceVisitor;
 
 /**
@@ -341,7 +342,7 @@ public class StatisticView implements SelectionListener, MouseListener {
 			AllocInfo oneInfo = iterAllocs.next();
 
 			//get allocation callstack
-			AbstractList<AllocCallstack> allocCalls = oneInfo.getCallstack();
+			List<AllocCallstack> allocCalls = oneInfo.getCallstack();
 			Iterator<AllocCallstack> iterAllocCalls = allocCalls.iterator();
 
 			//go thru callstack values until find first source file

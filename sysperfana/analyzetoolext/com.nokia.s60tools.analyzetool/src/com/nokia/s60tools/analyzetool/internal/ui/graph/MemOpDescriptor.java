@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -17,6 +17,7 @@
 
 package com.nokia.s60tools.analyzetool.internal.ui.graph;
 
+import java.io.IOException;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +30,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -51,6 +53,8 @@ import com.nokia.carbide.cdt.builder.project.ICarbideProjectInfo;
 import com.nokia.cdt.debug.cw.symbian.symbolreader.IFunction;
 import com.nokia.cdt.debug.cw.symbian.symbolreader.ISourceLocation;
 import com.nokia.cdt.debug.cw.symbian.symbolreader.ISymbolFile;
+import com.nokia.s60tools.analyzetool.Activator;
+import com.nokia.s60tools.analyzetool.engine.ICallstackManager;
 import com.nokia.s60tools.analyzetool.engine.statistic.AllocCallstack;
 import com.nokia.s60tools.analyzetool.engine.statistic.AllocInfo;
 import com.nokia.s60tools.analyzetool.engine.statistic.BaseInfo;
@@ -71,38 +75,38 @@ class MemOpDescriptor implements IPropertySource {
 	BaseInfo memInfo;
 	
 	/** process Id descriptor */
-	private static final String PID_ID = "pid";
-	private final DotTextPropertyDescriptor PID_DESCRIPTOR = new DotTextPropertyDescriptor(PID_ID, "Process Id");
+	private static final String PID_ID = "pid"; //$NON-NLS-1$
+	private final DotTextPropertyDescriptor PID_DESCRIPTOR = new DotTextPropertyDescriptor(PID_ID, Messages.MemOpDescriptor_1);
 
 	/** Memory operation type Allocation/Leak/Free descriptor */
-	private static final String TYPE_ID = "type";
-	private final DotTextPropertyDescriptor TYPE_DESCRIPTOR = new DotTextPropertyDescriptor(TYPE_ID, "Operation Type");
+	private static final String TYPE_ID = "type"; //$NON-NLS-1$
+	private final DotTextPropertyDescriptor TYPE_DESCRIPTOR = new DotTextPropertyDescriptor(TYPE_ID, Messages.MemOpDescriptor_3);
 
 	/** Time descriptor */
-	private static final String TIME_ID = "time";
-	private final DotTextPropertyDescriptor TIME_DESCRIPTOR = new DotTextPropertyDescriptor(TIME_ID, "Time");
+	private static final String TIME_ID = "time"; //$NON-NLS-1$
+	private final DotTextPropertyDescriptor TIME_DESCRIPTOR = new DotTextPropertyDescriptor(TIME_ID, Messages.MemOpDescriptor_5);
 
 	/** size descriptor */
-	private static final String SIZE_ID = "size";
-	private final DotTextPropertyDescriptor SIZE_DESCRIPTOR = new DotTextPropertyDescriptor(SIZE_ID, "Size");
+	private static final String SIZE_ID = "size"; //$NON-NLS-1$
+	private final DotTextPropertyDescriptor SIZE_DESCRIPTOR = new DotTextPropertyDescriptor(SIZE_ID, Messages.MemOpDescriptor_7);
 
 	/** memory address descriptor */
-	private static final String ADDR_ID = "address";
-	private final DotTextPropertyDescriptor ADDR_DESCRIPTOR = new DotTextPropertyDescriptor(ADDR_ID, "Address");
+	private static final String ADDR_ID = "address"; //$NON-NLS-1$
+	private final DotTextPropertyDescriptor ADDR_DESCRIPTOR = new DotTextPropertyDescriptor(ADDR_ID, Messages.MemOpDescriptor_9);
 
 	/** total memory size consumed by the process descriptor */
-	private static final String TSIZE_ID = "total";
-	private final DotTextPropertyDescriptor TSIZE_DESCRIPTOR = new DotTextPropertyDescriptor(TSIZE_ID, "Total Size");
+	private static final String TSIZE_ID = "total"; //$NON-NLS-1$
+	private final DotTextPropertyDescriptor TSIZE_DESCRIPTOR = new DotTextPropertyDescriptor(TSIZE_ID, Messages.MemOpDescriptor_11);
 
 	/** life time of an allocation descriptor. This applies only to non Leaked allocations  */
-	private static final String LIFETIME_ID = "lifetime";
-	private final DotTextPropertyDescriptor LIFETIME_DESCRIPTOR = new DotTextPropertyDescriptor(LIFETIME_ID, "Life Time");
-	private static final String ATTRIBUTES_GROUP = "Attributes";
+	private static final String LIFETIME_ID = "lifetime"; //$NON-NLS-1$
+	private final DotTextPropertyDescriptor LIFETIME_DESCRIPTOR = new DotTextPropertyDescriptor(LIFETIME_ID, Messages.MemOpDescriptor_13);
+	private static final String ATTRIBUTES_GROUP = "Attributes"; //$NON-NLS-1$
 	/** used for making absolute time values relative */
 	private long baseTime;
 
 	/** callstack item descriptor id*/
-	private static final String CALL_STACK_ID = "callstack";
+	private static final String CALL_STACK_ID = "callstack"; //$NON-NLS-1$
 
 	/** current project */
 	IProject iCurrentProject = null;
@@ -110,21 +114,25 @@ class MemOpDescriptor implements IPropertySource {
 	SymReader iSymReader = null;
 	/** c++ files from the current project */
 	AbstractList<String> cppFileNames;
-	static final String LINE_SEPARATOR = " :: ";
+	static final String LINE_SEPARATOR = " :: "; //$NON-NLS-1$
+	
+	private ICallstackManager callstackManager;
 	/**
 	 * Constructor
-	 * @param baseTime usually process start time, used for making absolute time values relative   
+	 * @param newBaseTime usually process start time, used for making absolute time values relative   
 	 * @param info the alloc or free info
 	 * @param project IProject to use for locating source file 
 	 * @param symReader the SymReader to use for pinpointing
 	 * @param cppFiles 
+	 * @param callstackManager CallstackManager for reading callstacks from BaseInfo
 	 */
-	public MemOpDescriptor(Long baseTime, BaseInfo info, IProject project, SymReader symReader, AbstractList<String> cppFiles) {
+	public MemOpDescriptor(Long newBaseTime, BaseInfo info, IProject project, SymReader symReader, AbstractList<String> cppFiles, ICallstackManager callstackManager) {
 		memInfo = info;
 		iCurrentProject = project;
 		iSymReader = symReader;
 		cppFileNames = cppFiles;
-		this.baseTime = baseTime;	
+		this.baseTime = newBaseTime;	
+		this.callstackManager = callstackManager;
 	}
 
 	/* (non-Javadoc)
@@ -159,12 +167,21 @@ class MemOpDescriptor implements IPropertySource {
 			completeList.add(LIFETIME_DESCRIPTOR); //only non leaks
 		}
 		// add callstack descriptors
-		AbstractList<AllocCallstack> callstack = memInfo.getCallstack();
-		for (int i = 0; i < callstack.size(); i++) {
-			
-			final DotTextPropertyDescriptor propDesc = new DotTextPropertyDescriptor(i, CALL_STACK_ID);
-			propDesc.setCategory("CallStack");
-			completeList.add(propDesc);
+		if (callstackManager != null && callstackManager.hasCallstack(memInfo)){
+			try {
+				List<AllocCallstack> callstack = callstackManager.readCallstack(memInfo);
+				if (callstack != null){
+					for (int i = 0; i < callstack.size(); i++) {
+						
+						final DotTextPropertyDescriptor propDesc = new DotTextPropertyDescriptor(i, CALL_STACK_ID);
+						propDesc.setCategory("CallStack"); //$NON-NLS-1$
+						completeList.add(propDesc);
+					}					
+				}
+			} catch (IOException e) {
+				//since callstacks aren't fatal and we can't handle it usefully here, log this to the error log
+				Activator.getDefault().log(IStatus.ERROR, Messages.MemOpDescriptor_18, e);
+			}			
 		}
 		return completeList.toArray(new TextPropertyDescriptor[completeList.size()]);
 	}
@@ -178,40 +195,46 @@ class MemOpDescriptor implements IPropertySource {
 			return String.valueOf(memInfo.getProcessID());//process ids are usually decimal values
 		}
 		if (TYPE_ID.equals(id))
-			return memInfo instanceof AllocInfo ? ((AllocInfo)memInfo).isFreed() ? "Allocation" : "Leak" : "Free";
+			return memInfo instanceof AllocInfo ? ((AllocInfo)memInfo).isFreed() ? Messages.MemOpDescriptor_19 : Messages.MemOpDescriptor_20 : Messages.MemOpDescriptor_21;
 		if (TIME_ID.equals(id))
 			return GraphUtils.renderTime(memInfo.getTime() - baseTime);
 		if (SIZE_ID.equals(id))
-			return String.format("%,d B",memInfo.getSizeInt());
+			return String.format(Messages.MemOpDescriptor_22,memInfo.getSizeInt());
 		if (ADDR_ID.equals(id))
 			return Long.toString(memInfo.getMemoryAddress(),16);
 		if (TSIZE_ID.equals(id))
-			return String.format("%,d B",memInfo.getTotalMem());
+			return String.format(Messages.MemOpDescriptor_23,memInfo.getTotalMem());
 		if (LIFETIME_ID.equals(id)) {
 			if (memInfo instanceof AllocInfo && ((AllocInfo)memInfo).isFreed()) {
 				AllocInfo info = (AllocInfo) memInfo;
 				return GraphUtils.renderTime(info.getFreedBy().getTime() - info.getTime()); 
 			}
-			throw new IllegalStateException("Should not happen because we did not provide a lifetime descriptor for leak and free");
+			throw new IllegalStateException("Should not happen because we did not provide a lifetime descriptor for leak and free"); //$NON-NLS-1$
 		}
-		if (id instanceof Integer && memInfo.getCallstack() != null){
+		if (id instanceof Integer && callstackManager.hasCallstack(memInfo)){
 			int callstackId = (Integer)id;
-			if (callstackId < memInfo.getCallstack().size()){
-				AllocCallstack callstackItem = memInfo.getCallstack().get(callstackId);
-				DllLoad tempLoad = callstackItem.getDllLoad();
-				long addr = callstackItem.getMemoryAddress();
-				
-				String name = String.format("%1$08x",addr);
-				if (tempLoad != null && callstackItem.getMemoryAddress()!= tempLoad.getStartAddress()) {
-					SourceFile aSourcefile = pinpoint(callstackItem.getMemoryAddress(),
-							callstackItem.getDllLoad());
-					if (aSourcefile != null) { //callstack resolved to a file-function-line
-						return name + LINE_SEPARATOR + callstackItem.getDllLoad().getName() + LINE_SEPARATOR + aSourcefile.getFileName()+ LINE_SEPARATOR + aSourcefile.getFunctionName() + LINE_SEPARATOR + aSourcefile.getLineNumber();
+			try {
+				List<AllocCallstack> callstackList = callstackManager.readCallstack(memInfo);
+				if (callstackId < callstackList.size()){
+					AllocCallstack callstackItem = callstackList.get(callstackId);
+					DllLoad tempLoad = callstackItem.getDllLoad();
+					long addr = callstackItem.getMemoryAddress();
+					
+					String name = String.format(Messages.MemOpDescriptor_25,addr);
+					if (tempLoad != null && callstackItem.getMemoryAddress()!= tempLoad.getStartAddress()) {
+						SourceFile aSourcefile = pinpoint(callstackItem.getMemoryAddress(),
+								callstackItem.getDllLoad());
+						if (aSourcefile != null) { //callstack resolved to a file-function-line
+							return name + LINE_SEPARATOR + callstackItem.getDllLoad().getName() + LINE_SEPARATOR + aSourcefile.getFileName()+ LINE_SEPARATOR + aSourcefile.getFunctionName() + LINE_SEPARATOR + aSourcefile.getLineNumber();
+						}
 					}
+					return name + (tempLoad != null ? LINE_SEPARATOR + tempLoad.getName() : ""); //$NON-NLS-1$
 				}
-				return name + (tempLoad != null ? LINE_SEPARATOR + tempLoad.getName() : "");
-				}
+			} catch (IOException e) {
+				//since callstacks aren't fatal and we can't handle it usefully here, log this to the error log
+				Activator.getDefault().log(IStatus.ERROR, Messages.MemOpDescriptor_27, e);
 			}
+		}
 		return null;
 	}
 
@@ -312,6 +335,7 @@ class MemOpDescriptor implements IPropertySource {
 		//key
 
 		public void keyPressed(org.eclipse.swt.events.KeyEvent e) {
+			//do nothing by design
 		}
 
 		public void keyReleased(org.eclipse.swt.events.KeyEvent keyEvent) {
@@ -341,9 +365,11 @@ class MemOpDescriptor implements IPropertySource {
 		}
 
 		public void mouseDown(MouseEvent e) {
+			//do nothing by design
 		}
 
 		public void mouseUp(MouseEvent e) {
+			//do nothing by design
 		}
 	}
 	
@@ -409,14 +435,14 @@ class MemOpDescriptor implements IPropertySource {
 			if (func != null && loc != null) {
 				String sourceFile = loc.getSourceFile();
 				if (sourceFile == null
-						|| sourceFile.equalsIgnoreCase(""))
+						|| sourceFile.equalsIgnoreCase("")) //$NON-NLS-1$
 					return null;
 				int lineNumber = loc.getLineNumber();
 				if (lineNumber == 0)
 					return null;
 				String name = func.getName();
 				if (name == null
-						|| name.equalsIgnoreCase(""))
+						|| name.equalsIgnoreCase("")) //$NON-NLS-1$
 					return null;
 				/*
 				 * if( onlyForProjectFiles &&
@@ -455,8 +481,8 @@ class MemOpDescriptor implements IPropertySource {
 		//check that used information is given
 		//we need to know file name and file line number
 		//that we could open the right line in editor
-		if (cppFileName == null || ("").equals(cppFileName)
-				|| lineNumber == null || ("").equals(lineNumber)) {
+		if (cppFileName == null || ("").equals(cppFileName) //$NON-NLS-1$
+				|| lineNumber == null || ("").equals(lineNumber)) { //$NON-NLS-1$
 			return;
 		}
 		try {
@@ -477,7 +503,7 @@ class MemOpDescriptor implements IPropertySource {
 				IProject[] projects = myWorkspaceRoot.getProjects();
 				for (int i = 0; i < projects.length; i++) {
 					file = ResourcesPlugin.getWorkspace().getRoot().getFile(
-							new Path(projects[i].getName() + "\\"
+							new Path(projects[i].getName() + "\\" //$NON-NLS-1$
 									+ usedFileName));
 
 					// file found => skip the rest of the projects

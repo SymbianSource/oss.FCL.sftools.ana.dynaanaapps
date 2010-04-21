@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -62,7 +62,7 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 	Button askButton = null;
 
 	/** Atool.exe path field. */
-	Text atooDirText = null;
+	Text atoolDirText = null;
 
 	/** User specified atool.exe path. */
 	Label atoolDir = null;
@@ -92,7 +92,7 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 	Button processButton = null;
 
 	/** Button to refresh atool.exe version. */
-	Button refeshAtoolVersion = null;
+	Button refreshAtoolVersion = null;
 
 	/** Radio group for report level. */
 	RadioGroupFieldEditor reportLevels = null;
@@ -121,7 +121,7 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 	/** Button to verbose atool.exe output. */
 	Button verboseButton = null;
 
-	/** Button to select Tracing utility connection. */
+	/** Button to select TraceViewer connection. */
 	Button externalButton = null;
 
 	/** Button to select fast external data gathering mode */
@@ -129,6 +129,7 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 
 	/** No items button. */
 	Button zeroButton;
+
 
 	/**
 	 * Constructor.
@@ -143,7 +144,7 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 	 * Checks preferences initial values if logging mode is not set to S60
 	 * disables S60 data file name selections.
 	 */
-	public final void chechInitValues() {
+	public final void checkInitValues() {
 		IPreferenceStore store = Activator.getPreferences();
 		
 		// get stored atool folder
@@ -153,7 +154,7 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 		// if atool folder is set to point default atool location
 		if (atoolFolder.equals(Constants.DEFAULT_ATOOL_FOLDER)) {
 
-			// check stored atool location exists
+			// check that stored atool location exists
 			java.io.File file = new java.io.File(atoolFolder);
 			if (file.exists()) { // if exists use this location and update
 				// preference page buttons
@@ -173,7 +174,7 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 
 		// get atool.exe path and set it atool.exe path field
 		String atoolPath = store.getString(Constants.USER_SELECTED_FOLDER);
-		atooDirText.setText(atoolPath);
+		atoolDirText.setText(atoolPath);
 
 		// update preference page buttons
 		handleDefaultLocationChange();
@@ -182,7 +183,7 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 		if (useDefaultLocation.getSelection()) {
 			updateAtoolVersion(null);
 		} else {
-			updateAtoolVersion(atooDirText.getText());
+			updateAtoolVersion(atoolDirText.getText());
 		}
 
 		// get logging mode and update buttons
@@ -219,7 +220,7 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 			spinner.setEnabled(true);
 			spinner.setSelection(callstackSize);
 		}
-
+		
 	}
 
 	/**
@@ -413,8 +414,8 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 		atoolDir.setText(Constants.PREFS_ATOOL_PATH);
 
 		// directory field
-		atooDirText = new Text(compAtool, SWT.BORDER);
-		atooDirText.setLayoutData(new GridData(200, SWT.DEFAULT));
+		atoolDirText = new Text(compAtool, SWT.BORDER);
+		atoolDirText.setLayoutData(new GridData(200, SWT.DEFAULT));
 
 		// button which opens the folder selection dialog
 		browseButton = new Button(compAtool, SWT.NONE);
@@ -456,9 +457,9 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 		atoolVerLabel.setLayoutData(vergd13);
 
 		// create button to refresh atool.exe version
-		refeshAtoolVersion = new Button(groupVersion, SWT.NONE);
-		refeshAtoolVersion.setText(Constants.PREFS_REFRESH_VERSION);
-		refeshAtoolVersion.addListener(SWT.Selection, this);
+		refreshAtoolVersion = new Button(groupVersion, SWT.NONE);
+		refreshAtoolVersion.setText(Constants.PREFS_REFRESH_VERSION);
+		refreshAtoolVersion.addListener(SWT.Selection, this);
 
 		// create data gathering group
 		createGatheringGroup();
@@ -476,7 +477,8 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 				getFieldEditorParent(), true);
 
 		addField(reportLevels);
-		chechInitValues();
+		
+		checkInitValues();
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(super.getControl(),
 				AnalyzeToolHelpContextIDs.ANALYZE_TOOL_VIEW_MEM_LEAKS);
 
@@ -488,23 +490,21 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 	 */
 	public final void handleDefaultLocationChange() {
 		if (useDefaultLocation.getSelection()) {
-			atooDirText.setEnabled(false);
+			atoolDirText.setEnabled(false);
 			browseButton.setEnabled(false);
 			atoolDir.setEnabled(false);
 			useUserSpecified.setSelection(false);
 		} else {
-			atooDirText.setEnabled(true);
+			atoolDirText.setEnabled(true);
 			browseButton.setEnabled(true);
 			atoolDir.setEnabled(true);
 			useUserSpecified.setSelection(true);
 		}
 	}
-
-	/**
-	 * Handles events.
-	 *
-	 * @param event
-	 *            Preference page event
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.swt.widgets.Listener#handleEvent(org.eclipse.swt.widgets.Event)
 	 */
 	public final void handleEvent(final Event event) {
 		if (event.widget == browseButton) {
@@ -518,11 +518,11 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 		} else if (event.widget == useDefaultLocation
 				|| event.widget == atoolDir) {
 			handleDefaultLocationChange();
-		} else if (event.widget == refeshAtoolVersion) {
+		} else if (event.widget == refreshAtoolVersion) {
 			if (useDefaultLocation.getSelection()) {
 				updateAtoolVersion(null);
 			} else {
-				updateAtoolVersion(atooDirText.getText());
+				updateAtoolVersion(atoolDirText.getText());
 			}
 		} else if (event.widget == zeroButton || event.widget == fortyButton
 				|| event.widget == hundredButton) {
@@ -546,13 +546,13 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 	 * Opens folder selection dialog.
 	 */
 	public final void openFolderDialog() {
-		DirectoryDialog folderDialog = new DirectoryDialog(atooDirText
+		DirectoryDialog folderDialog = new DirectoryDialog(atoolDirText
 				.getShell(), SWT.OPEN);
 		folderDialog.setText(Constants.PREFS_SELECT_DIR);
-		folderDialog.setFilterPath(atooDirText.getText());
+		folderDialog.setFilterPath(atoolDirText.getText());
 		String folderPath = folderDialog.open();
 		if (folderPath != null) {
-			atooDirText.setText(folderPath);
+			atoolDirText.setText(folderPath);
 		}
 	}
 
@@ -568,7 +568,7 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 			userButton.setSelection(false);
 			setGroupButtons(Constants.LOGGING_EXT);
 
-			atooDirText.setText(Constants.DEFAULT_ATOOL_FOLDER);
+			atoolDirText.setText(Constants.DEFAULT_ATOOL_FOLDER);
 			useDefaultLocation.setSelection(true);
 			handleDefaultLocationChange();
 			verboseButton.setSelection(false);
@@ -577,6 +577,7 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 			hundredButton.setSelection(false);
 			customButton.setSelection(false);
 			spinner.setEnabled(false);
+			
 			//generateStatistic.setSelection(false);
 			super.performDefaults();	
 		//}
@@ -592,7 +593,7 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 		//check that AT prefs page is displayed
 		//if( getControl() != null && getControl().isVisible() ) {
 			IPreferenceStore store = Activator.getPreferences();
-			String atoolFolder = atooDirText.getText();
+			String atoolFolder = atoolDirText.getText();
 
 			// use default location is selected
 			if (useDefaultLocation.getSelection()) {
@@ -676,7 +677,7 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 			// store callstack size
 			store.setValue(Constants.USE_CALLSTACK_SIZE, userDefinedCSSize);
 			store.setValue(Constants.CALLSTACK_SIZE, size);
-
+			
 			// update view with new settings
 			IActionListener listener = Activator.getActionListener();
 			if (listener != null) {

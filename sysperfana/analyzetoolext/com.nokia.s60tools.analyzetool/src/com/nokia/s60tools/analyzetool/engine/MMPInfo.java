@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -90,27 +90,21 @@ public class MMPInfo {
 	}
 
 	/**
-	 * Sets info is mmp file build with AnalyzeTool.
-	 *
-	 * @param build
-	 *            Build info
-	 */
-	public final void setBuildInfo(final boolean build) {
-		buildSuccesfully = build;
-	}
-
-	/**
-	 * Sets info is mmp file build with AnalyzeTool.
+	 * Based on given MMP file checks is the module already 
+	 * built with AnalyzeTool and sets the internal data.
 	 *
 	 * @param location
 	 *            MMP file location
 	 */
-	public final void setBuildInfoAndCheck(final String location) {
-		buildSuccesfully = Util.isModuleBuild(location);
+	private final void setBuildInfo(final String location) {
+		if( location != null ) {
+			buildSuccesfully = Util.isModuleBuilt(location);	
+		}
 	}
 
 	/**
-	 * MMP file location.
+	 * Sets the MMP file location. 
+	 * Checks that file exists for the given location and updates internal data.
 	 *
 	 * @param location
 	 *            MMP file location
@@ -127,7 +121,7 @@ public class MMPInfo {
 			mmpFilePath = file.getLocation().toOSString();
 
 		}
-		setBuildInfoAndCheck(mmpFilePath);
+		setBuildInfo(mmpFilePath);
 	}
 
 	/**

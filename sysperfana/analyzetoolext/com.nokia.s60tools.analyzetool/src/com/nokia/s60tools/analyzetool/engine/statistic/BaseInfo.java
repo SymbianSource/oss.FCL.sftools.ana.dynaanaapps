@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -19,8 +19,9 @@ package com.nokia.s60tools.analyzetool.engine.statistic;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
-import java.util.Iterator;
+import java.util.List;
 
 /**
  * Base class for {@link AllocInfo} and {@link FreeInfo}
@@ -29,62 +30,64 @@ import java.util.Iterator;
  *
  */
 public class BaseInfo {
-
+	
+	private List<AllocCallstack> callstacks = null;
+	
 	/**
 	 * Cache for callstack items. Used when allocation fragment is parsed wrong
 	 * order.
 	 */
-	private final Hashtable<Integer, AbstractList<AllocCallstack>> callstackCache;
+	private Hashtable<Integer, AbstractList<AllocCallstack>> callstackCache = null;
 
 	/** Memory address of this memory allocation. */
-	private Long memoryAddress;
+	private long memoryAddress;
 
 	/** Memory allocation process id. */
 	private int processID;
 
 	/** Allocation time */
-	private Long time;
+	private long time;
 	
 	/** Total memory size at this time */
-	private int totalMemory = 0;
-	private int size = 0;
+	private int totalMemory;
+	private int size;
+	
+	/** file position to defer callstack reading */
+	private long filePos;
 
 	/**
 	 * Constructor
+	 * @param memoryAddress The address for this memory operation
 	 */
-	public BaseInfo() {
-		callstackCache = new Hashtable<Integer, AbstractList<AllocCallstack>>();
+	public BaseInfo(String memoryAddress) {
+		this.memoryAddress = Long.parseLong(memoryAddress, 16);
 	}
 
 	/**
-	 * Sets memory allocation callstack
+	 * Sets memory allocation callstack. Use this method
+	 * only for the first set of callstacks. 
 	 *
 	 * @param callstack
 	 *            Memory allocation callstack
 	 */
 	public void addCallstack(AbstractList<AllocCallstack> callstack) {
-		callstackCache.put(0, callstack);
+		if (callstack.size() > 0){
+			callstacks = new ArrayList<AllocCallstack>(callstack);						
+		}
 	}
 
 	/**
-	 * Returns memory allocation callstack.
-	 *
+	 * Returns memory allocation callstack. This method should only be called
+	 * after all data has finished loading.
+	 * 
 	 * @return Callstack of memory allocation
 	 */
-	public AbstractList<AllocCallstack> getCallstack() {
-		AbstractList<AllocCallstack> wholeCallstack = new ArrayList<AllocCallstack>();
-		int callstacksize = callstackCache.size();
-		for (int i = 0; i < callstacksize; i++) {
-			AbstractList<AllocCallstack> tempCallstack = callstackCache
-					.get(i);
-			if (tempCallstack == null || tempCallstack.isEmpty())
-				continue;
-			Iterator<AllocCallstack> iterCall = tempCallstack.iterator();
-			while (iterCall.hasNext()) {
-				wholeCallstack.add(iterCall.next());
-			}
-		}
-		return wholeCallstack;
+	public List<AllocCallstack> getCallstack() {
+		
+		//we assume all data has been loaded at this point
+		finaliseCallstack();
+		
+		return callstacks == null ? Collections.<AllocCallstack>emptyList() : Collections.unmodifiableList(callstacks);
 	}
 
 	/**
@@ -92,7 +95,7 @@ public class BaseInfo {
 	 *
 	 * @return Memory address
 	 */
-	public Long getMemoryAddress() {
+	public long getMemoryAddress() {
 		return memoryAddress;
 	}
 
@@ -110,20 +113,8 @@ public class BaseInfo {
 	 *
 	 * @return Allocation time
 	 */
-	public Long getTime() {
-		return time == null ? 0 : time;
-	}
-
-
-	/**
-	 * Sets memory address
-	 *
-	 * @param newMemoryAddress
-	 *            Memory address
-	 */
-	public void setMemoryAddress(String newMemoryAddress) {
-		Long lValue = Long.parseLong(newMemoryAddress, 16);
-		this.memoryAddress = lValue;
+	public long getTime() {
+		return time;
 	}
 
 	/**
@@ -144,11 +135,15 @@ public class BaseInfo {
 	 *            Allocation time
 	 */
 	public void setTime(String newTime) {
-		Long lValue = Long.parseLong(newTime, 16);
+		long lValue = Long.parseLong(newTime, 16);
 		this.time = lValue;
 	}
 	
-	public void setTime(Long newTime)
+	/**
+	 * Sets the timestamp of event occurrence
+	 * @param newTime
+	 */
+	public void setTime(long newTime)
 	{
 		this.time = newTime;
 	}
@@ -164,12 +159,47 @@ public class BaseInfo {
 	 */
 	public void updateFragment(AbstractList<AllocCallstack> callstack,
 			String packetNumber) {
-		callstackCache.put(Integer.parseInt(packetNumber, 16), callstack);
+		int pck = Integer.parseInt(packetNumber, 16);
+		if (pck == 1){
+			//special case; this can be added to the end of the list straight away
+			callstacks.addAll(callstack);
+		} else {
+			//packages may come out of order; this is managed in the callstackCache
+			if (callstackCache == null){
+				callstackCache = new Hashtable<Integer, AbstractList<AllocCallstack>>();			
+			}
+			callstackCache.put(pck, callstack);			
+		}
+	}
+	
+	/**
+	 * Optimises internal callstack data structures.
+	 * Should only be called after all data for this memory operation
+	 * has been loaded (i.e. all fragments)
+	 */
+	public void finaliseCallstack(){
+		if (callstacks == null && callstackCache != null){
+			throw new IllegalStateException(); //first set of callstacks should always be in callstacks
+		}
+		
+		if (callstackCache != null){
+			int size = callstackCache.size();
+			int i = 2;
+			while(size != 0){
+				AbstractList<AllocCallstack> nextCallStacks = callstackCache.get(i);
+				if (nextCallStacks != null){
+					size --;
+					callstacks.addAll(nextCallStacks);
+				} //TODO else: missing callstack: shall we report it or log it?
+				i++;
+			}
+			callstackCache = null;
+		}
 	}
 	
 	/**
 	 * set total memory used at this time.
-	 * @param size 
+	 * @param newSize 
 	 */
 	public void setTotalMem(int newSize) {
 		totalMemory = newSize;
@@ -183,11 +213,73 @@ public class BaseInfo {
 		return totalMemory;
 	}
 	
+	/**
+	 * Sets the number of bytes allocated or freed in this memory operation
+	 * @param aSize size in bytes
+	 */
 	public void setSizeInt(int aSize) {
 		size = aSize;
 	}
 	
+	/**
+	 * Gets the number of bytes allocated or freed in this memory operation
+	 * @return size in bytes
+	 */
 	public int getSizeInt() {
 		return size;
 	}
+
+	/**
+	 * Getter for file position pointing to first record in 
+	 * .dat file where callstack for this BaseInfo starts.
+	 * @return the file position for the start of callstack information,
+	 * or -1 if no callstack available for this BaseInfo
+	 */
+	public long getFilePos() {
+		return filePos;
+	}
+
+	/**
+	 * Setter for file position pointing to callstack information
+	 * @param filePos the file position pointing to start of record with callstack information;
+	 * or -1 if no callstack available for this BaseInfo
+	 */
+	public void setFilePos(long filePos) {
+		this.filePos = filePos;
+	}
+
+	@Override
+	public String toString() {
+		if (filePos > -1 && (callstacks == null || callstacks.size() == 0)){
+			return String.format(
+					"BaseInfo [memoryAddress=0x%08X, processID=%s, time=%s, size=%s, totalMemory=%s, callstacks on demand]",
+					memoryAddress, processID, time, size, totalMemory);  
+							
+		} else {
+			return String.format(
+					"BaseInfo [memoryAddress=0x%08X, processID=%s, time=%s, size=%s, totalMemory=%s, callstacks=%s]",
+					memoryAddress, processID, time, size, totalMemory,  
+					callstacksToString());
+			
+		}
+	}
+
+	private String callstacksToString() {
+		if (callstacks == null){
+			return "null";
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		boolean addComma = false;
+		for (AllocCallstack callstack : callstacks) {
+			if (addComma){
+				sb.append(", ");
+			}
+			addComma = true;
+			sb.append(String.format("addr=0x%08X dll=%s", callstack.getMemoryAddress(), callstack.getDllLoad() == null ? "null" : callstack.getDllLoad().getName()));
+		}
+		return sb.toString();
+	}
+	
+	
 }

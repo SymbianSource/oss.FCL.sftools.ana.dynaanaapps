@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -238,7 +238,7 @@ public class AnalyzeToolGraph extends FigureCanvas implements IMemoryActivityMod
 		graphics.setForegroundColor(ColorUtil.COLOR_100);
 		graphics.setBackgroundColor(ColorUtil.WHITE);
 		
-		int alignedLeftEdge = ((int)(canvasRect.x / 50))*50;
+		int alignedLeftEdge = (canvasRect.x / 50)*50;
 
 		// vertical lines (one darker, one lighter vertical line in turns every
 		// 50 points in width)
@@ -434,7 +434,7 @@ public class AnalyzeToolGraph extends FigureCanvas implements IMemoryActivityMod
 
 	/**
 	 * Returns the current scaling factor for the graph's width
-	 * @return
+	 * @return Scale
 	 */
 	public double getScale() {
 		return scale;
@@ -442,7 +442,7 @@ public class AnalyzeToolGraph extends FigureCanvas implements IMemoryActivityMod
 
 	/**
 	 * Sets the scaling factor for the graph's width
-	 * @param scale
+	 * @param newScale 
 	 */
 	public void setScale(double newScale) {
 		this.scale = newScale;
@@ -450,7 +450,7 @@ public class AnalyzeToolGraph extends FigureCanvas implements IMemoryActivityMod
 
 	/**
 	 * Returns the highest time value of the current graph in milliseconds
-	 * @return
+	 * @return Last time 
 	 */
 	public long getLastTimeValueInMilliSeconds() {
 		return model.getLastProcessTime() - model.getFirstProcessTime();
@@ -467,7 +467,7 @@ public class AnalyzeToolGraph extends FigureCanvas implements IMemoryActivityMod
 
 	/**
 	 * Adds a new model to this class 
-	 * @param model the IMemoryActivityModel to use
+	 * @param newModel the IMemoryActivityModel to use
 	 */
 	public void setInput(IMemoryActivityModel newModel) {
 		if (this.model != null){
@@ -508,7 +508,7 @@ public class AnalyzeToolGraph extends FigureCanvas implements IMemoryActivityMod
 		horizontalBar.addSelectionListener(new SelectionListener() {
 
 			public void widgetDefaultSelected(SelectionEvent arg0) {
-
+				//do nothing by design
 			}
 
 			public void widgetSelected(SelectionEvent event) {
@@ -637,6 +637,7 @@ public class AnalyzeToolGraph extends FigureCanvas implements IMemoryActivityMod
 		 * .MouseEvent)
 		 */
 		public void mouseEntered(MouseEvent e) {
+			//do nothing by design
 		}
 
 		/*
@@ -647,6 +648,7 @@ public class AnalyzeToolGraph extends FigureCanvas implements IMemoryActivityMod
 		 * .MouseEvent)
 		 */
 		public void mouseExited(MouseEvent e) {
+			//do nothing by design
 		}
 
 		/*
@@ -671,6 +673,7 @@ public class AnalyzeToolGraph extends FigureCanvas implements IMemoryActivityMod
 		 * .MouseEvent)
 		 */
 		public void mouseMoved(MouseEvent e) {
+			//do nothing by design
 		}
 
 		/*
@@ -755,7 +758,7 @@ public class AnalyzeToolGraph extends FigureCanvas implements IMemoryActivityMod
 			} else if (me.button == 1) {
 				BaseInfo info = findClosest(me.x, me.y);
 				if (info != null) {
-					iDotsSelecProv.setSelection(new StructuredSelection(new MemOpDescriptor(model.getFirstProcessTime(), info, iCurrentProject, iSymReader, cppFileNames)));
+					iDotsSelecProv.setSelection(new StructuredSelection(new MemOpDescriptor(model.getFirstProcessTime(), info, iCurrentProject, iSymReader, cppFileNames, model.getCallstackManager())));
 					lastShownAlloc = info;
 				}
 				}
@@ -764,6 +767,7 @@ public class AnalyzeToolGraph extends FigureCanvas implements IMemoryActivityMod
 
 
 		public void keyPressed(KeyEvent ke) {
+			//do nothing by design
 		}
 
 		public void keyReleased(KeyEvent ke) {
@@ -771,7 +775,7 @@ public class AnalyzeToolGraph extends FigureCanvas implements IMemoryActivityMod
 				if (lastShownAlloc != null) {
 					BaseInfo info = findNextAlloc(lastShownAlloc, ke.keycode == SWT.ARROW_RIGHT);
 					if (info != null) {
-						iDotsSelecProv.setSelection(new StructuredSelection(new MemOpDescriptor(model.getFirstProcessTime(), info, iCurrentProject, iSymReader, cppFileNames)));
+						iDotsSelecProv.setSelection(new StructuredSelection(new MemOpDescriptor(model.getFirstProcessTime(), info, iCurrentProject, iSymReader, cppFileNames, model.getCallstackManager())));
 						lastShownAlloc = info;
 						
 						//if info is hidden from the visible graph area, scroll to reveal

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -18,8 +18,8 @@
 package com.nokia.s60tools.analyzetool.engine;
 
 /**
- * Base class for {@link AnalysisItem} and {@link CallstackItem} Provides
- * methods to store basic information of one item
+ * Base class for {@link AnalysisItem} and {@link CallstackItem}. Provides
+ * methods to store basic information of one item.
  *
  * Information is parsed from atool.exe generated XML file so we can assume that
  * all the information is valid and no other checking is needed.
@@ -31,9 +31,6 @@ public class BaseItem {
 
 	/** Module name. */
 	private String moduleName;
-
-	/** Memory leak time. */
-	private String memoryLeakTime;
 
 	/** Memory item memory address. */
 	private String memoryAddress;
@@ -62,17 +59,7 @@ public class BaseItem {
 		return memoryAddress;
 	}
 
-	/**
-	 * Gets memory leak time.
-	 *
-	 * @return Memory leak time
-	 */
-	public final String getMemoryLeakTime() {
-		if (memoryLeakTime == null) {
-			return "";
-		}
-		return this.memoryLeakTime;
-	}
+	
 
 	/**
 	 * Gets module name.
@@ -107,17 +94,6 @@ public class BaseItem {
 	}
 
 	/**
-	 * Sets memory leak time.
-	 *
-	 * @param newMemoryLeakTime
-	 *            Memory leak time
-	 */
-	public final void setMemoryLeakTime(final String newMemoryLeakTime) {
-		this.memoryLeakTime = newMemoryLeakTime;
-
-	}
-
-	/**
 	 * Sets module name.
 	 *
 	 * @param newModuleName
@@ -135,7 +111,6 @@ public class BaseItem {
 	 */
 	protected boolean checkData() {
 		if ((moduleName == null || ("").equals(moduleName))
-				&& (memoryLeakTime == null || ("").equals(memoryLeakTime))
 				&& (memoryAddress == null || ("").equals(memoryAddress))) {
 			return false;
 		}

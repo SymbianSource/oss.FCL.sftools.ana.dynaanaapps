@@ -84,7 +84,6 @@
                class="com.nokia.s60tools.analyzetool.ui.actions.CompileSymbianComponent"
                menubarPath="com.nokia.s60tools.analyzetool.menu1/submen"
                enablesFor="+"
-                definitionId="com.nokia.s60tools.analyzetool.ui.actions.CompileSymbianComponent"
                id="com.nokia.s60tools.analyzetool.ui.actions.CompileSymbianComponent"
                tooltip="Instrument and build with AnalyzeTool">
          </action>
@@ -219,8 +218,12 @@
            class="com.nokia.s60tools.analyzetool.properties.PropertiesPage"
            id="com.nokia.s60tools.analyzetool.properties.PropertiesPage"
            name="AnalyzeTool"
-           objectClass="org.eclipse.core.resources.IProject">
            >
+           <enabledWhen>
+            <instanceof
+                  value="org.eclipse.core.resources.IProject">
+            </instanceof>
+         </enabledWhen>
      </page>
   </extension>
 

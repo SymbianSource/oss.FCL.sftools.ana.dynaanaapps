@@ -2,7 +2,7 @@
 <feature
       id="com.nokia.carbide.extensions.analyzetool"
       label="Carbide.c++ Extensions - AnalyzeTool"
-      version="1.8.0"
+      version="1.9.0"
       provider-name="Nokia"
       plugin="com.nokia.s60tools.analyzetool">
 
@@ -11,9 +11,7 @@
 SW for memory leaks and pinpointing the leaking problems from
 source codes.
 The test software is used from Windows command prompt or from
-Carbide 2.0 onwards. S60 3.1, S60 3.2 or S60 5.0 phone with R&amp;D certificates is
-required for the use of AnalyzeTool. Also HTI and XTI are required
-for some features.
+Carbide 2.0 onwards.
 Test can not be run without access to source codes of a tested
 application.
 Testing is also limited to user side SW instead of kernel SW.
@@ -973,20 +971,21 @@ SUCH DAMAGE.
          id="com.nokia.s60tools.analyzetool"
          download-size="0"
          install-size="0"
-         version="1.8.0"
+         version="1.9.0"
          unpack="false"/>
 
    <plugin
          id="com.nokia.s60tools.analyzetool.corecomponents"
          download-size="0"
          install-size="0"
-         version="1.8.0"/>
+         version="1.9.0"/>
 
    <plugin
          id="com.nokia.s60tools.analyzetool.help"
          download-size="0"
          install-size="0"
-         version="1.8.0"
+         version="1.9.0"
          unpack="false"/>
+
 
 </feature>

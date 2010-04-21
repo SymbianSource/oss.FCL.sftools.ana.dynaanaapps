@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -14,16 +14,18 @@
  * Description:  Definitions for the class ProcessInfo
  *
  */
+
 package com.nokia.s60tools.analyzetool.engine.statistic;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IStatus;
+
 import com.nokia.s60tools.analyzetool.Activator;
 
 /**
@@ -35,25 +37,25 @@ import com.nokia.s60tools.analyzetool.Activator;
 public class ProcessInfo {
 
 	/** List of allocations and frees sorted as they arrive in time */
-	AbstractList<BaseInfo> allocsFrees;
+	private AbstractList<BaseInfo> allocsFrees;
 
 	/** List of dll loads */
-	Hashtable<String, DllLoad> dllLoads;
+	private List<DllLoad> dllLoads;
 
 	/** Process id */
-	int processID;
+	private int processID;
 
 	/** Process Name */
-	String processName;
+	private String processName;
 
 	/** Process start time */
-	Long startTime;
+	private Long startTime;
 
 	/** Process start time */
-	Long endTime;
+	private Long endTime;
 
 	/** Trace data format version number */
-	int traceDataVersion = 1;
+	private int traceDataVersion = 1;
 
 	/** active allocations account */
 	private int allocCount = 0;
@@ -69,7 +71,7 @@ public class ProcessInfo {
 	 * Constructor
 	 */
 	public ProcessInfo() {
-		dllLoads = new Hashtable<String, DllLoad>();
+		dllLoads = new ArrayList<DllLoad>();
 		allocsFrees = new ArrayList<BaseInfo>();
 		allocCount = 0;
 		potentialLeaksMap = new HashMap<Long, List<AllocInfo>>(); 
@@ -106,7 +108,15 @@ public class ProcessInfo {
 	 *            One dll load
 	 */
 	public void addOneDllLoad(DllLoad dllLoad) {
-		dllLoads.put(dllLoad.getName(), dllLoad);
+		//make sure there is no dll with the same details already loaded
+		for (DllLoad dll : dllLoads) {
+			if (dll.getName().equalsIgnoreCase(dllLoad.getName()) && dll.getProcessID() == dllLoad.getProcessID()
+					&& dll.getUnloadTime()> dllLoad.getLoadTime()){
+				return;
+			}
+		}
+		
+		dllLoads.add(dllLoad);
 	}
 
 	/**
@@ -121,28 +131,29 @@ public class ProcessInfo {
 		
 		//remove allocs with the same address from the potential leaks map
 		Long freeAddr = info.getMemoryAddress();
-		List<AllocInfo> allocsSameAddr = potentialLeaksMap.remove(freeAddr);
+		List<AllocInfo> allocsSameAddr = potentialLeaksMap.remove(freeAddr);		
 		if (allocsSameAddr != null && allocsSameAddr.size()>0){
 			for(AllocInfo allocInfo : allocsSameAddr){
 				allocInfo.setFreedBy(info);
-				info.addFreedAlloc(allocInfo);
 				allocCount--;
 				int thisFreedSize = allocInfo.getSizeInt();
 				freeSize = freeSize + thisFreedSize;
 				totalMemory = totalMemory - thisFreedSize;
-			}			
+			}	
+			info.setFreedAllocs(new HashSet<AllocInfo>(allocsSameAddr));
 		}
+		
 
 		info.setSizeInt(freeSize);
 		info.setTotalMem(totalMemory);
 		
-		if (info.getTime() == null || info.getTime() == 0 ) {
+		if ( info.getTime() == 0 ) {
 			// support old format
 			//set time as last operation time or start time.
 			Long time = getPreviousTime();
 			if (time == null || time == -1L) {
 				Activator.getDefault().log(IStatus.WARNING, String.format("AnalyzeTool encountered a process = %s, which starts with FREE.", processID), null);
-				time = startTime;
+				time = startTime == null ? 0 : startTime;
 			}
 			info.setTime(time);
 		}
@@ -183,7 +194,7 @@ public class ProcessInfo {
 	 * 
 	 * @return List of dll loads
 	 */
-	public Hashtable<String, DllLoad> getDllLoads() {
+	public List<DllLoad> getDllLoads() {
 		return dllLoads;
 	}
 
@@ -271,7 +282,7 @@ public class ProcessInfo {
 	 *            Process start time
 	 */
 	public void setStartTime(String newTime) {
-		Long lValue = Long.parseLong(newTime, 16);
+		long lValue = Long.parseLong(newTime, 16);
 		this.startTime = lValue;
 	}
 
@@ -292,17 +303,25 @@ public class ProcessInfo {
 			traceDataVersion = 1;
 		}
 	}
-
 	/**
-	 * Unloads one dll load from the stored items
-	 * 
-	 * @param dllLoad
-	 *            Dll unload item
+	 * Marks given dll as unloaded
+	 * @param dllName Dll name
+	 * @param startAddr memory start address for DLL
+	 * @param endAddr memory end address for DLL
+	 * @param dllUnloadTime time when DLL is unloaded
+	 * @return the dll marked as unloaded, or null if no match found
 	 */
-	public void unloadOneDll(DllLoad dllLoad) {
-		if (dllLoads.containsKey(dllLoad.getName())) {
-			dllLoads.remove(dllLoad.getName());
+	public DllLoad unloadOneDll(String dllName, long startAddr, long endAddr, long dllUnloadTime) {
+		DllLoad ret = null;
+		for (DllLoad dll : dllLoads) {
+			if (dll.getName().equals(dllName)
+					&& dll.getStartAddress().longValue() == startAddr
+					&& dll.getEndAddress().longValue() == endAddr) {
+				dll.setUnloadTime(dllUnloadTime);
+				ret = dll;
+			}
 		}
+		return ret;
 	}
 
 	/**
@@ -339,7 +358,7 @@ public class ProcessInfo {
 
 	/**
 	 * get end time of the process
-	 * @return
+	 * @return End time
 	 */
 	public Long getEndTime() {
 		return endTime;
@@ -368,5 +387,6 @@ public class ProcessInfo {
 	public int getHighestCumulatedMemoryAlloc() {
 		return highestMemory;
 	}
+
 
 }

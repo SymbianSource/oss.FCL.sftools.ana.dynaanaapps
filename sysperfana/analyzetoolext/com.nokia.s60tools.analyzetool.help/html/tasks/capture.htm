@@ -1,40 +1,91 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 1.0 Transitional//EN">
 <html>
 <head>
-<meta content="text/html; charset=us-ascii" http-equiv="content-type">
-<meta content="text/css" http-equiv="content-style-type">
-<link href="../nokia.css" rel="StyleSheet" type="text/css">
-<title>Capturing data</title>
+  <meta content="text/html; charset=us-ascii" http-equiv="content-type">
+  <meta content="text/css" http-equiv="content-style-type">
+  <link href="../../book.css" rel="StyleSheet" type="text/css">
+  <title>Capturing data</title>
 </head>
+
 <body>
-
 <h2>Capturing data</h2>
-<p>There are two alternative ways to capture data, depending on the data gathering mode.</p>
 
-<h3 id="capture_external">Capturing data in monitored external or external data gathering mode</h3>
-<p><b>Note!</b> AnalyzeTool decides which connection method to use by checking the project active build configuration settings. If the active build configuration is set to <b>WINSCW</b>, AnalyzeTool captures data from the emulator output file <i>(%tmp%\epocwind.out)</i>; in <b>ARMV5</b> and <b>GCEE</b> build configurations AnalyzeTool captures data using the tracing utility connection.</p>
-<p><b>Note!</b> This option requires that a tracing utility is available and a connection is established to the target hardware.</p>
-<p>USB tracing can not be run from the device bootup because it requires USB tracing activation from the device side.</p>
+<p>There are two alternative ways to capture data, depending on the data
+gathering mode.</p>
+
+<h3 id="capture_external">Capturing data in monitored external or external data
+gathering mode</h3>
+
+<p><b>Note!</b> AnalyzeTool decides which connection method to use by checking
+the project active build configuration settings. If the active build
+configuration is set to <b>WINSCW</b>, AnalyzeTool captures data from the
+emulator output file <i>(%tmp%\epocwind.out)</i>; in <b>ARMV5</b> and
+<b>GCEE</b> build configurations AnalyzeTool captures data using the tracing
+utility connection.</p>
+
+<p><b>Note!</b> This option requires that a tracing utility is available and a
+connection is established to the target hardware.</p>
+
+<p>USB tracing can not be run from the device bootup because it requires USB
+tracing activation from the device side.</p>
+
 <p>To capture data:</p>
 <ol>
-<li>Open the <b>AnalyzeTool</b> view (if it is not already open) by selecting <b>Window > Show View > Other... > Carbide Extensions > AnalyzeTool.</b></li>
-<li>Start capturing data by clicking <b>Start tracing</b> in the AnalyzeTool toolbar.</li>
-<li>Start the application built with AnalyzeTool, and run the desired test cases. Note that Carbide.c++ needs to be connected to the target hardware.</li>
-<li>At the end of a test run, close the tested application (process). After you have closed the application, stop the test run by clicking <b>Stop tracing</b>. <p>Now AnalyzeTool has captured data, saved it into the project's <i>bld.inf\atool_temp</i> directory, and the memory analysis results are displayed in the <b>AnalyzeTool</b> view.</p></li>
-</ol>
-<h3 id="capture_s60_file">Capturing data in monitored internal data gathering mode</h3>
-<p>When you select the <b>monitored internal</b> data gathering mode in AnalyzeTool build, AnalyzeTool collects the test data into a file.</p><p><b>Note!</b> If you are analyzing an application in the target hardware, the file must be transferred to a PC after the test run is completed.</p>
-<p>To capture data:</p>
-<ol>
-<li>Install the AnalyzeTool software to the target hardware if not already installed.</li>
-<li>Install the test software built with AnalyzeTool to the target hardware.</li>
-<li>Start the application built with AnalyzeTool in the target hardware, and run the desired test cases.</li>
-<li>At the end of a test run, close the tested application (process). This will write the test data to a file. In the target hardware the file is saved in <i>e:\analyzetool\</i> or <i>c:\data\analyzetool\</i> depending if the memory card is used or not. In the emulator environment the file is saved in <i>\epoc32\winscw\c\logs\analyzetool\</i>.
-<p><b>Note!</b> The data file name was specified before the build.</p></li>
-<li>While the tested software project is active in the <b>Project Explorer</b>, open the data file by clicking <b>Open and analyze data file</b> in the <b>AnalyzeTool</b> toolbar. This will run the analysis and display the results in the <b>AnalyzeTool</b> view.</li>
+  <li>Open the <b>AnalyzeTool</b> view (if it is not already open) by selecting
+    <b>Window &gt; Show View &gt; Other... &gt; Carbide Extensions &gt;
+    AnalyzeTool.</b></li>
+  <li>Start capturing data by clicking <b>Start tracing</b> in the AnalyzeTool
+    toolbar. 
+    <p><strong>Note</strong> that at this point the system checks the version
+    of the dbghelp.dll library provided by Windows. If the version is not at
+    least 6.3.0.0, a confirmation dialog will appear with instructions on how
+    to update a later version. </p>
+  </li>
+  <li>Start the application built with AnalyzeTool, and run the desired test
+    cases. Note that Carbide.c++ needs to be connected to the target
+  hardware.</li>
+  <li>At the end of a test run, close the tested application (process). After
+    you have closed the application, stop the test run by clicking <b>Stop
+    tracing</b>. 
+    <p>Now AnalyzeTool has captured data, saved it into the project's
+    <i>bld.inf\atool_temp</i> directory, and the memory analysis results are
+    displayed in the <b>AnalyzeTool</b> view.</p>
+  </li>
 </ol>
 
-<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
-License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+<h3 id="capture_s60_file">Capturing data in monitored internal data gathering
+mode</h3>
+
+<p>When you select the <b>monitored internal</b> data gathering mode in
+AnalyzeTool build, AnalyzeTool collects the test data into a file.</p>
+
+<p><b>Note!</b> If you are analyzing an application in the target hardware, the
+file must be transferred to a PC after the test run is completed.</p>
+
+<p>To capture data:</p>
+<ol>
+  <li>Install the AnalyzeTool software to the target hardware if not already
+    installed.</li>
+  <li>Install the test software built with AnalyzeTool to the target
+  hardware.</li>
+  <li>Start the application built with AnalyzeTool in the target hardware, and
+    run the desired test cases.</li>
+  <li>At the end of a test run, close the tested application (process). This
+    will write the test data to a file. In the target hardware the file is
+    saved in <i>e:\analyzetool\</i> or <i>c:\data\analyzetool\</i> depending if
+    the memory card is used or not. In the emulator environment the file is
+    saved in <i>\epoc32\winscw\c\logs\analyzetool\</i>. 
+    <p><b>Note!</b> The data file name was specified before the build.</p>
+  </li>
+  <li>While the tested software project is active in the <b>Project
+    Explorer</b>, open the data file by clicking <b>Open and analyze data
+    file</b> in the <b>AnalyzeTool</b> toolbar. This will run the analysis and
+    display the results in the <b>AnalyzeTool</b> view.</li>
+</ol>
+
+<div id="footer">
+Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
 </body>
 </html>

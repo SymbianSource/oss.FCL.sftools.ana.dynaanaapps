@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -202,8 +202,8 @@ public class AnalyzeToolBuilder extends CarbideCPPBuilder {
 	 * @param monitor
 	 *            Currently running progress monitor
 	 * @param continueBuild
-	 *            Stop the whole build chain (including Carbide other builders)
-	 *            or not
+	 *            False stops the whole build chain (including Carbide and other builders)
+	 *            otherwise other than AnalyzeTool builds are executed normally.
 	 */
 	public final void buildCancelled(final IProgressMonitor monitor,
 			final boolean continueBuild) {
@@ -278,8 +278,8 @@ public class AnalyzeToolBuilder extends CarbideCPPBuilder {
 
 					// run pre steps for the build
 					if (!runPreSteps(cmdLauncher, monitor, cpi)) {
-						return new Status(IStatus.ERROR, Constants.ANALYZE_TOOL_TITLE,
-								IStatus.ERROR, Constants.CANCELLED, null);
+						return new Status(IStatus.OK, Constants.ANALYZE_TOOL_TITLE,
+								IStatus.OK, Constants.CANCELLED, null);
 					}
 
 					// build selected components
@@ -374,6 +374,7 @@ public class AnalyzeToolBuilder extends CarbideCPPBuilder {
 			usedArguments.add(Constants.ATOOL_SHOW_DEBUG);
 		}
 
+		// get callstack size
 		IPreferenceStore store = Activator.getPreferences();
 		if( store.getBoolean(Constants.USE_CALLSTACK_SIZE) ) {
 			int callstackSize = store.getInt(Constants.CALLSTACK_SIZE);
@@ -393,7 +394,7 @@ public class AnalyzeToolBuilder extends CarbideCPPBuilder {
 			buildCommand.append(buildTarget);
 			usedArguments.add(buildCommand.toString());
 		}
-		else
+		else //use abld 
 		{
 			usedArguments.add("abld");
 			usedArguments.add("build");
@@ -529,9 +530,10 @@ public class AnalyzeToolBuilder extends CarbideCPPBuilder {
 
 	/**
 	 * Parses mmp file from the entered path
-	 * @param fileLocation MMP file location
-	 * @param sbsBuild IS sbsv2 build system activated
-	 * @return MMP file name without path
+	 * @param fileLocation MMP file location with path.
+	 * @param sbsBuild Is sbsv2 build system activated
+	 * @return MMP file name without path. If SBSv2 is not activated the MMP 
+	 * 		 file is returned without file extension.
 	 */
 	public String getMMPFileName(IPath fileLocation, boolean sbsBuild)
 	{
@@ -548,7 +550,7 @@ public class AnalyzeToolBuilder extends CarbideCPPBuilder {
 		mmpFileName = fileLocation.toString().substring(
 				index + 1, fileLocation.toString().length());
 
-		//if not using the SBS2 builds => nees to remove mmp file name extension
+		//if not using the SBS2 builds => needs to remove mmp file name extension
 		if( !sbsBuild && mmpFileName.endsWith(".mmp")) {
 			mmpFileName = mmpFileName.substring(0, mmpFileName.length()-4);
 		}
@@ -736,7 +738,7 @@ public class AnalyzeToolBuilder extends CarbideCPPBuilder {
 	 *            Progress monitor
 	 * @param cpi
 	 *            Carbide project info
-	 * @return True is all checks are OK, otherwise False
+	 * @return True if all checks are OK, otherwise False
 	 */
 	protected final boolean runPreSteps(final CarbideCommandLauncher launcher,
 			final IProgressMonitor monitor, final ICarbideProjectInfo cpi) {
@@ -754,13 +756,30 @@ public class AnalyzeToolBuilder extends CarbideCPPBuilder {
 		}
 		
 		// check AnalyzeTool version, 1.6.0 and forward versions is supported
-		int compared = Util.compareVersionNumber(Util.getAtoolVersionNumber(Util.getAtoolInstallFolder()), Constants.MIN_VERSION);
+		String atoolVersion = Util.getAtoolVersionNumber(Util.getAtoolInstallFolder());
+		int compared = Util.compareVersionNumber(atoolVersion, Constants.MIN_VERSION);
 		if( compared == Constants.VERSION_NUMBERS_SECOND || compared == Constants.VERSION_NUMBERS_INVALID ) {
 			buildCancelled(monitor, false);
 			Util.showMessage(Constants.TOO_OLD_ENGINE);
 			return false;
 		}
 
+		/**
+		 *
+		 * Below is code a sample which are related to the AT-682,
+		 * but it is decided to let out from current release.
+		String coreVersion = Util.getAtoolCoreVersion(cpi.getProject());
+		compared = Util.compareVersionNumber(coreVersion, atoolVersion);
+		if( compared != Constants.VERSION_NUMBERS_EQUALS ) 
+		{
+			boolean retValue = Util.openConfirmationDialog("AnalyzeTool command line engine and AnalyzeTool core version mismatch.\n" +
+					"This usually leads to problems.\n\nDo you want to continue?");
+			if( !retValue ) {
+				buildCancelled(monitor, false);
+				return false;	
+			}
+		}
+		*/
 		// remove existing error markers
 		try {
 			CarbideCPPBuilder.removeAllMarkers(cpi.getProject());

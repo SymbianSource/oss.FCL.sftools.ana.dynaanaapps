@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -14,11 +14,12 @@
  * Description:  Definitions for the class FreeInfo
  *
  */
+
 package com.nokia.s60tools.analyzetool.engine.statistic;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 
@@ -29,17 +30,23 @@ import java.util.Set;
  *
  */
 public class FreeInfo extends BaseInfo {
-	Set<AllocInfo> allocsFreed;
-
+	
 	/**
-	 * Adds an alloc which has been freed by this Free 
-	 * @param alloc the alloc to add
+	 * Constructor
+	 * @param memoryAddress memory address for this free
 	 */
-	public void addFreedAlloc(AllocInfo alloc){
-		if (allocsFreed == null){
-			allocsFreed = new HashSet<AllocInfo>();
-		}
-		allocsFreed.add(alloc);
+	public FreeInfo(String memoryAddress) {
+		super(memoryAddress);
+	}
+
+	AllocInfo[] allocsFreedArr;
+	
+	/**
+	 * Sets all AllocInfos which were freed by this free
+	 * @param allocs The AllocInfos to set
+	 */
+	public void setFreedAllocs(Set<AllocInfo> allocs){
+		allocsFreedArr = allocs.toArray(new AllocInfo[allocs.size()]);
 	}
 	
 	/**
@@ -47,7 +54,29 @@ public class FreeInfo extends BaseInfo {
 	 * @return the Collection of AllocInfos freed
 	 */
 	public Collection<AllocInfo> getFreedAllocs(){
-		return Collections.unmodifiableSet(allocsFreed == null ? new HashSet<AllocInfo>() : allocsFreed);
+		return allocsFreedArr == null ? Collections.<AllocInfo>emptyList() : Arrays.asList(allocsFreedArr);
+	}
+
+	@Override
+	public String toString() {
+		return String.format("FreeInfo [%s allocsFreedArr=[%s]]", super.toString(), allocsFreedArrToString());
+	}
+
+	private String allocsFreedArrToString() {
+		if (allocsFreedArr == null){
+			return "null";
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		boolean addComma = false;
+		for (AllocInfo allocInfo : allocsFreedArr) {
+			if (addComma){
+				sb.append(", ");
+			}
+			addComma = true;
+			sb.append(String.format("addr=0x%08X time=%s", allocInfo.getMemoryAddress(), allocInfo.getTime()));
+		}
+		return sb.toString();
 	}
 	
 }

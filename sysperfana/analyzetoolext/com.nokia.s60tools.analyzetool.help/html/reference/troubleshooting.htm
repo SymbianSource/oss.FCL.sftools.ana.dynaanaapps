@@ -4,7 +4,7 @@
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 <meta http-equiv="content-style-type" content="text/css">
 <title>AnalyzeTool Troubleshooting</title>
-<link href="../nokia.css" type="text/css" rel="StyleSheet">
+<link href="../../book.css" type="text/css" rel="StyleSheet">
 </head>
 <body>
 
@@ -27,6 +27,18 @@
 <tr>
 <td>Could not find mmp file for current project.</td>
 <td>AnalyzeTool Carbide.c++ Extension could not load the mmp file info. Ensure that project's <i>bld.inf</i> file contains mmp files.</td>
+</tr>
+<tr>
+<td>TraceViewer connection reserved for another plug-in.</td>
+<td>Another Carbide.c++ Extension uses TraceViewer. First close the other TraceViewer Carbide.c++ Extension connection, and then try again.</td>
+</tr>
+<tr>
+<td>Invalid TraceViewer connection settings.</td>
+<td>The TraceViewer has invalid connection settings and could not connect to target hardware. Check the TraceViewer options from <b>Window &gt; Preferences... &gt; Carbide Extensions &gt; TraceViewer &gt; Connection</b>.</td>
+</tr>
+<tr>
+<td>General TraceViewer error.</td>
+<td>The TraceViewer cannot connect to target hardware and the AnalyzeTool Carbide.c++ Extension could not resolve the problem. Check the TraceViewer options from <b>Window &gt; Preferences... &gt; Carbide Extensions &gt; TraceViewer &gt; Connection</b>.</td>
 </tr>
 <tr>
 <td>Invalid name. Do you want to specify a valid name?</td>
@@ -103,7 +115,7 @@
 </tr>
 <tr>
 <td>Can not find AnalyzeTool libraries from current SDK</td>
-<td>Your build environment is missing the necessary files for building with AnalyzeTool. You need to compile AnalyzeTool to all platforms in your environment.</td>
+<td>Your build environment is missing the necessary files for building with AnalyzeTool. These files can be found from the AnalyzeTool installation folder from files S60_environment_changes31.zip, S60_environment_changes32.zip or S60_environment_changes50.zip. Unzip one of these to the desired Symbian OS root directory. The zip-package itself includes the necessary subfolder structure.</td>
 </tr>
 <tr>
 <td>AnalyzeTool : Errors :<br>
@@ -113,7 +125,7 @@ Missing symbol file: <symbol file name></td>
 </tbody>
 </table>
 
-<div id="footer">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
+<div id="footer">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
 License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
 </body>
 </html>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -18,7 +18,7 @@
 package com.nokia.s60tools.analyzetool.engine;
 
 /**
- * Contains information of one memory leak item Information is parsed from
+ * Contains information of one memory leak item. Information is parsed from
  * atool.exe generated XML file so we can assume that all the information is
  * valid and no other checking is needed.
  *

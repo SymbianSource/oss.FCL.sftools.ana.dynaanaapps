@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -24,7 +24,9 @@ import java.util.Iterator;
 import java.util.Locale;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IStatus;
 
+import com.nokia.s60tools.analyzetool.Activator;
 import com.nokia.s60tools.analyzetool.global.Util;
 
 /**
@@ -87,11 +89,11 @@ public class ProjectResults {
 	}
 
 	/**
-	 * Check that contains given project some data.
+	 * Checks is there stored results available for the given project reference.
 	 *
 	 * @param project
 	 *            Project reference
-	 * @return True if project contains data, otherwise False
+	 * @return True if project contains results, otherwise False
 	 */
 	public final boolean contains(final IProject project) {
 		if (project == null) {
@@ -292,16 +294,27 @@ public class ProjectResults {
 	 */
 	public void setProjectModules(IProject project, AbstractList<MMPInfo> mmps, AbstractList<String> modules)
 	{
-		Iterator<String> iterModules = modules.iterator();
-		AbstractList<String> unknownComponents = new ArrayList<String>();
-		while( iterModules.hasNext() ) {
-			String moduleName = iterModules.next();
-			boolean build = Util.isModulePartOfProject(mmps, moduleName);
-			if( !build ) {
-				unknownComponents.add(moduleName);
+		try{
+			if( modules.isEmpty() || mmps.isEmpty() ) {
+				return;
 			}
+			Iterator<String> iterModules = modules.iterator();
+			AbstractList<String> unknownComponents = new ArrayList<String>();
+			while( iterModules.hasNext() ) {
+				String moduleName = iterModules.next();
+				boolean build = Util.isModulePartOfProject(mmps, moduleName);
+				if( !build ) {
+					unknownComponents.add(moduleName);
+				}
+			}
+			setProjectUnknownModules(project, unknownComponents);
 		}
-		setProjectUnknownModules(project, unknownComponents);
+		catch(Exception e)
+		{
+			Activator.getDefault().log(IStatus.ERROR, "Can not set project modules", e);
+		}
+		
+		
 	}
 
 	/**

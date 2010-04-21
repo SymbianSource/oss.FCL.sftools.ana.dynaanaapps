@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
  * All rights reserved.
  * This component and the accompanying materials are made available
  * under the terms of "Eclipse Public License v1.0"
@@ -102,13 +102,21 @@ public class ParseXMLFileSAX implements org.xml.sax.ContentHandler {
 	/** xml file path. */
 	private final String filePath;
 
-	/** Do we parsing module leak summary field */
+	/** 
+	 * Flag to demonstrate that is the memory leak summary parsing active. 
+	 * If this flag is set to False, then information is stored to the handle leak summary object, 
+	 * otherwise information is stored to the memory leak summary object.
+	 */
 	private boolean moduleLeakActive = true;
 
 	/** List of modules */
 	private final AbstractList<String> moduleList;
 
-	/** Do we parsing subtest info just now */
+	/** 
+	 * Is subtest related information parsing active. 
+	 * If this flag is set to true all the information (such as 
+	 * memory leaks etc) is stored to the subtest object.
+	 */
 	private boolean parsingSubtest = false;
 
 	/** Project reference */
