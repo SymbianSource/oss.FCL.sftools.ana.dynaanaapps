@@ -1,0 +1,160 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{94F69E44-75FC-4035-9B08-920CF0E0188C}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>MemAnalysisLib</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>MemAnalysisLib</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\CollectionManager.cs" />
+    <Compile Include="MemoryOperations\Class\MemOpClass.cs" />
+    <Compile Include="MemoryOperations\Functions\Kernel\MemOpFnAllocations.cs" />
+    <Compile Include="MemoryOperations\Functions\Kernel\MemOpFnFrees.cs" />
+    <Compile Include="MemoryOperations\Functions\Kernel\MemOpFnKBase.cs" />
+    <Compile Include="MemoryOperations\Functions\Kernel\MemOpFnReallocations.cs" />
+    <Compile Include="MemoryOperations\Operations\MemOpReallocation.cs" />
+    <Compile Include="MemoryOperations\Operations\MemOpFree.cs" />
+    <Compile Include="MemoryOperations\Operations\MemOpAllocation.cs" />
+    <Compile Include="MemoryOperations\Operations\MemOpBase.cs" />
+    <Compile Include="MemoryOperations\Functions\User\MemOpFnReallocations.cs" />
+    <Compile Include="MemoryOperations\Functions\User\MemOpFnUBase.cs" />
+    <Compile Include="MemoryOperations\Functions\User\MemOpFnFrees.cs" />
+    <Compile Include="MemoryOperations\Functions\User\MemOpFnAllocations.cs" />
+    <Compile Include="MemoryOperations\Functions\MemOpFnBase.cs" />
+    <Compile Include="MemAnalysisRegionalCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MemAnalysisSorters.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MemAnalysisStatisticalCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Parser\Base\MemAnalysisParserBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Parser\Implementations\MemAnalysisRegionalParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Parser\Implementations\MemAnalysisStatisticalParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Parser\Options\MemAnalysisParserOptions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Parser\Prefixes\Kernel\MemAnalysisParserPrefixesKernel.cs" />
+    <Compile Include="Parser\Prefixes\MemAnalysisParserPrefixesBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Parser\Prefixes\User\MemAnalysisParserPrefixesUser.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\PerfToolsSharedLibraries\Engine\SymbianUtils\SymbianUtils.csproj">
+      <Project>{F6F4CE69-E73A-4917-97ED-B114DE90C92E}</Project>
+      <Name>SymbianUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\PerfToolsSharedLibraries\Engine\SymbolLib\SymbolLib.csproj">
+      <Project>{C657DF4B-FA67-47DD-89FC-A45583646184}</Project>
+      <Name>SymbolLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Misc\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,262 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D638AB12-FC64-4523-9B99-09F20BC2A791}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>HeapLib</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>HeapLib</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Array\HeapCellArrayBase.cs" />
+    <Compile Include="Array\HeapCellArrayUnsorted.cs" />
+    <Compile Include="Array\HeapCellArray.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Array\HeapCellArrayAllocationNumberMap.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Array\HeapCellArrayEnumerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Array\HeapCellArrayWithStatistics.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Cells\Descriptors\DescriptorAlgorithmBase.cs" />
+    <Compile Include="Cells\Descriptors\DescriptorAlgorithmManager.cs" />
+    <Compile Include="Cells\Descriptors\DescriptorInfo.cs" />
+    <Compile Include="Cells\Descriptors\Implementations\Ascii\DesAsciiAlgorithmNullTerminatedString.cs" />
+    <Compile Include="Cells\Descriptors\Implementations\Ascii\DesAsciiAlgorithmBase.cs" />
+    <Compile Include="Cells\Descriptors\Implementations\Ascii\DesAsciiAlgorithmHBufC.cs" />
+    <Compile Include="Cells\Descriptors\Implementations\Ascii\DesAsciiAlgorithmModifiableBuffers.cs" />
+    <Compile Include="Cells\Descriptors\Implementations\Unicode\DesUnicodeAlgorithmModifiableBuffers.cs" />
+    <Compile Include="Cells\Descriptors\Implementations\Unicode\DesUnicodeAlgorithmBase.cs" />
+    <Compile Include="Cells\Descriptors\Implementations\Unicode\DesUnicodeAlgorithmHBufC.cs" />
+    <Compile Include="Cells\HeapCell.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Cells\HeapCellComparers.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Constants\HeapLibConstants.cs" />
+    <Compile Include="Reconstructor\DataSources\Analyser\Extractor\Base\Extractor.cs" />
+    <Compile Include="Reconstructor\DataSources\Analyser\Extractor\ExtractorFactory.cs" />
+    <Compile Include="Reconstructor\DataSources\Analyser\Extractor\Implementations\ExtractorText.cs" />
+    <Compile Include="Reconstructor\DataSources\Analyser\Extractor\ExtractedData.cs" />
+    <Compile Include="Reconstructor\DataSources\Analyser\Extractor\Implementations\ExtractorBinary.cs" />
+    <Compile Include="Reconstructor\DataSources\Analyser\Interpreter\InterpreterFactory.cs" />
+    <Compile Include="Reconstructor\DataSources\Analyser\Interpreter\Implementations\InterpreterBinary.cs" />
+    <Compile Include="Reconstructor\DataSources\Analyser\Interpreter\Implementations\InterpreterText.cs" />
+    <Compile Include="Reconstructor\DataSources\Analyser\Interpreter\Base\InterpreterBase.cs" />
+    <Compile Include="Reconstructor\DataSources\Analyser\Readers\ReaderFile.cs" />
+    <Compile Include="Reconstructor\DataSources\Analyser\Readers\ReaderLines.cs" />
+    <Compile Include="Reconstructor\DataSources\Source\DataSource.cs" />
+    <Compile Include="Reconstructor\DataSources\Thread\DataSourceThreadCollection.cs" />
+    <Compile Include="Reconstructor\DataSources\Thread\DataSourceThread.cs" />
+    <Compile Include="Reconstructor\DataSources\Elements\Data\GlobalData.cs" />
+    <Compile Include="Reconstructor\DataSources\Elements\Groups\GpChunks.cs" />
+    <Compile Include="Reconstructor\DataSources\Elements\Groups\GpHeapAllocCell.cs" />
+    <Compile Include="Reconstructor\DataSources\Elements\Groups\GpHeapFreeCell.cs" />
+    <Compile Include="Reconstructor\DataSources\Elements\Groups\GpHeap.cs" />
+    <Compile Include="Reconstructor\DataSources\Elements\Groups\GpFooter.cs" />
+    <Compile Include="Reconstructor\DataSources\Elements\Groups\GpHeader.cs" />
+    <Compile Include="Reconstructor\DataSources\Elements\Data\StackData.cs" />
+    <Compile Include="Reconstructor\DataSources\Elements\Data\HeapData.cs" />
+    <Compile Include="Reconstructor\DataSources\Elements\MetaData.cs" />
+    <Compile Include="Reconstructor\RHeap\Extractor\ExtractionState.cs" />
+    <Compile Include="Reconstructor\RHeap\Extractor\ExtractionManager.cs" />
+    <Compile Include="Reconstructor\RHeap\Extractor\Extractor.cs" />
+    <Compile Include="Reconstructor\RHeap\Extractor\RawItemPrecursor.cs" />
+    <Compile Include="Reconstructor\RHeap\Extractor\RawItemQueue.cs" />
+    <Compile Include="Relationships\RelationshipDictionary.cs" />
+    <Compile Include="Relationships\RelationshipCollection.cs" />
+    <Compile Include="Relationships\RelationshipInfo.cs" />
+    <Compile Include="Relationships\RelationshipManager.cs" />
+    <Compile Include="Cells\HeapCellRawItemEnumerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Misc\HeapViewFormObjects.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Output_HTML\HeapToHTMLConverter.cs">
+    </Compile>
+    <Compile Include="Output_HTML\HeapToHTMLPageEntireListing.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Output_HTML\HeapToHTMLPageHeapCellManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Output_HTML\HeapToHTMLPageHeapData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Output_HTML\HeapToHTMLPageHeapLinkedCells.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Output_HTML\HeapToHTMLPageIndex.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Output_HTML\HeapToHTMLPageJavaScriptManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Output_Text\HeapToFileConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reconstructor\HeapReconstructor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reconstructor\DataSources\Source\DataSourceCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reconstructor\DataSources\Analyser\DataSourceAnalyser.cs" />
+    <Compile Include="Reconstructor\Misc\Options.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reconstructor\Misc\Prefixes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Relationships\RelationshipInspector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Statistics\Distribution\HeapCellSizeDistribution.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Statistics\Distribution\HeapCellSizeDistributionEnumerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Statistics\HeapStatistics.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Statistics\Tracking\Base\TrackingCollectionBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Statistics\Tracking\Base\TrackingComparisonObjects.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Statistics\Tracking\Base\TrackingInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Statistics\Tracking\ByUnknown\UnknownTrackingInfoCollection.cs" />
+    <Compile Include="Statistics\Tracking\ByDescriptor\DescriptorTrackingInfoCollection.cs" />
+    <Compile Include="Statistics\Tracking\ByObject\ObjectTrackingInfoCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Statistics\Tracking\BySymbol\SymbolTrackingInfoCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Statistics\Types\HeapStatisticsAllocated.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Statistics\Types\HeapStatisticsBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Statistics\Types\HeapStatisticsFree.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\PerfToolsSharedLibraries\Engine\SymbianDebugLib\SymbianDebugLib.csproj">
+      <Project>{796DD82D-9E7D-476D-B700-086CD9A893DA}</Project>
+      <Name>SymbianDebugLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\PerfToolsSharedLibraries\Engine\SymbianStructuresLib\SymbianStructuresLib.csproj">
+      <Project>{D3BDEB23-43DA-4534-986B-F6B3DD05EBF6}</Project>
+      <Name>SymbianStructuresLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\PerfToolsSharedLibraries\Engine\SymbianUtils\SymbianUtils.csproj">
+      <Project>{F6F4CE69-E73A-4917-97ED-B114DE90C92E}</Project>
+      <Name>SymbianUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\PerfToolsSharedLibraries\Engine\SymbianZipLib\SymbianZipLib.csproj">
+      <Project>{0B246F3F-62D3-4732-86D2-3EC1F3ADBD71}</Project>
+      <Name>SymbianZipLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="HeapDataJavaScriptLib.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

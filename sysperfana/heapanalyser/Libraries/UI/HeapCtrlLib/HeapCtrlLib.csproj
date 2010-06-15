@@ -1,0 +1,296 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4883C5F9-B83E-4262-8389-879AC9E1DF1B}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>HeapCtrlLib</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>HeapCtrlLib</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <Reference Include="XPTable, Version=1.1.13.21130, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\PerfToolsSharedLibraries\3rd Party\XPTable\bin\Debug\XPTable.dll</HintPath>
+    </Reference>
+    <ProjectReference Include="..\..\..\..\PerfToolsSharedLibraries\Engine\SymbianStructuresLib\SymbianStructuresLib.csproj">
+      <Project>{D3BDEB23-43DA-4534-986B-F6B3DD05EBF6}</Project>
+      <Name>SymbianStructuresLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\PerfToolsSharedLibraries\Engine\SymbianUtils\SymbianUtils.csproj">
+      <Project>{F6F4CE69-E73A-4917-97ED-B114DE90C92E}</Project>
+      <Name>SymbianUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\PerfToolsSharedLibraries\UI\SymbianUtilsUi\SymbianUtilsUi.csproj">
+      <Project>{48F86FA3-3B42-4826-8D06-E8F2E0E7B822}</Project>
+      <Name>SymbianUtilsUi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Engine\HeapLib\HeapLib.csproj">
+      <Project>{D638AB12-FC64-4523-9B99-09F20BC2A791}</Project>
+      <Name>HeapLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls\HeapDataControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\HeapFilteringControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\HeapFilteringControl.Designer.cs">
+      <DependentUpon>HeapFilteringControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\HeapRendererFilterConfigDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\HeapRendererFilterConfigDialog.Designer.cs">
+      <DependentUpon>HeapRendererFilterConfigDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Factories\FactoryRenderers.cs" />
+    <Compile Include="Factories\FactoryByEmbeddedReferences.cs" />
+    <Compile Include="Factories\FactoryByIsolation.cs" />
+    <Compile Include="Factories\Factory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Factories\FactoryByAge.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Factories\FactoryByCellType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Factories\FactoryByLength.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Factories\FactoryByObject.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Factories\FactoryBySymbol.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\HeapCellPopupManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interfaces\HeapCellRenderers.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Popups\Forms\PopupCellRelationshipInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Popups\Forms\PopupBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Popups\Forms\PopupCellAllocatedRaw.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Popups\Forms\PopupCellAllocatedSymbol.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Popups\Forms\PopupCellFree.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Popups\Forms\PopupMultiCellSelection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Popups\Managers\PopupManagerByEmbeddedReferences.cs" />
+    <Compile Include="Popups\Managers\PopupManagerBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Popups\Managers\PopupManagerByAge.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Popups\Managers\PopupManagerBySymbol.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderers\ContentBorders\HeapCellRendererContentBorder3d.cs" />
+    <Compile Include="Renderers\ContentBorders\HeapCellRendererContentBorderFloating.cs" />
+    <Compile Include="Renderers\ContentBorders\HeapCellRendererContentBorder.cs" />
+    <Compile Include="Renderers\SelectionBorders\HeapCellRendererSelectionBorderItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderers\SelectionBorders\HeapCellRendererSelectionBorder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderers\Contents\Bases\HeapCellRendererByColour.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderers\Contents\Bases\HeapCellRendererWithText.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderers\Contents\HeapCellRendererColourByEmbeddedReferences.cs" />
+    <Compile Include="Renderers\Contents\HeapCellRendererColourByIsolation.cs" />
+    <Compile Include="Renderers\Contents\HeapCellRendererColourByAge.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderers\Contents\HeapCellRendererColourByCellType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderers\Contents\HeapCellRendererColourByLength.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderers\Contents\HeapCellRendererColourByObject.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderers\Contents\HeapCellRendererColourBySymbol.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderers\RowHeader\HeapCellRendererRowHeader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderers\HeapDataRenderer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Types\HeapCellCtrlTypes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderers\Utilities\HeapCellRendererColour.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utilities\HeapSelectionBorderType.cs" />
+    <Compile Include="Utilities\HeapCellBorderType.cs" />
+    <Compile Include="Utilities\HeapCellBorderInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utilities\HeapCellFilterTriplet.cs" />
+    <Compile Include="Utilities\HeapCellLargestRectangleCalculator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utilities\HeapCellMetaData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utilities\HeapRenderingNavigator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="Controls\HeapDataControl.resx">
+      <DependentUpon>HeapDataControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\HeapFilteringControl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>HeapFilteringControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\HeapRendererFilterConfigDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>HeapRendererFilterConfigDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Popups\Forms\PopupCellRelationshipInfo.resx">
+      <DependentUpon>PopupCellRelationshipInfo.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Popups\Forms\PopupBase.resx">
+      <DependentUpon>PopupBase.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Popups\Forms\PopupCellAllocatedRaw.resx">
+      <DependentUpon>PopupCellAllocatedRaw.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Popups\Forms\PopupCellAllocatedSymbol.resx">
+      <DependentUpon>PopupCellAllocatedSymbol.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Popups\Forms\PopupCellFree.resx">
+      <DependentUpon>PopupCellFree.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Popups\Forms\PopupMultiCellSelection.resx">
+      <DependentUpon>PopupMultiCellSelection.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Renderers\HeapDataRenderer.resx">
+      <DependentUpon>HeapDataRenderer.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

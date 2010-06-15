@@ -1,0 +1,122 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0911ECEE-D330-4DE9-989C-8181604FAAB5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HeapComparisonLib</RootNamespace>
+    <AssemblyName>HeapComparisonLib</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CSV\DataSet\CSVDataSetCollection.cs" />
+    <Compile Include="CSV\Engine\CSVComparisonEngine.cs" />
+    <Compile Include="CSV\Excel\CSVExcelExporterAllDataSets.cs" />
+    <Compile Include="CSV\Thread\CSVThreadPair.cs" />
+    <Compile Include="CSV\Thread\CSVThread.cs" />
+    <Compile Include="CSV\DataSet\CSVDataSet.cs" />
+    <Compile Include="CSV\Excel\CSVExcelExporterTwoDataSets.cs" />
+    <Compile Include="CSV\Thread\CSVThreadParser.cs" />
+    <Compile Include="CSV\Thread\Parsers\CSVThreadParserFormatNew.cs" />
+    <Compile Include="CSV\Thread\Parsers\CSVThreadParserFormatOld.cs" />
+    <Compile Include="CSV\Workers\CSVWorkerAllDataSetComparator.cs" />
+    <Compile Include="CSV\Workers\CSVWorkerLogSplitter.cs" />
+    <Compile Include="CSV\Workers\CSVWorkerTwoDataSetComparator.cs" />
+    <Compile Include="Data\ComparsionEngine.cs" />
+    <Compile Include="Data\ComparsionWriter.cs" />
+    <Compile Include="Data\Pages\PageBase.cs" />
+    <Compile Include="Data\Pages\PageSimpleListing.cs" />
+    <Compile Include="Data\Pages\PageUnchanged.cs" />
+    <Compile Include="Data\Pages\PageUnique.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CSV\Comparers\CellCounts.cs" />
+    <Compile Include="CSV\Comparers\ComparerBase.cs" />
+    <Compile Include="CSV\Comparers\Fragmentation.cs" />
+    <Compile Include="CSV\Comparers\HeapSize.cs" />
+    <Compile Include="CSV\Comparers\LargestCells.cs" />
+    <Compile Include="CSV\Comparers\SlackSpace.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\PerfToolsSharedLibraries\Engine\SymbianExcelLib\SymbianExcelLib.csproj">
+      <Project>{13A8433A-108C-4EF2-9283-70FC6C549E74}</Project>
+      <Name>SymbianExcelLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\PerfToolsSharedLibraries\Engine\SymbianStructuresLib\SymbianStructuresLib.csproj">
+      <Project>{D3BDEB23-43DA-4534-986B-F6B3DD05EBF6}</Project>
+      <Name>SymbianStructuresLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\PerfToolsSharedLibraries\Engine\SymbianUtils\SymbianUtils.csproj">
+      <Project>{F6F4CE69-E73A-4917-97ED-B114DE90C92E}</Project>
+      <Name>SymbianUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HeapLib\HeapLib.csproj">
+      <Project>{D638AB12-FC64-4523-9B99-09F20BC2A791}</Project>
+      <Name>HeapLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <Private>True</Private>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <Private>True</Private>
+    </COMReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>copy /Y $(TargetDir)\Microsoft.Office.Interop.Excel.dll $(SolutionDir)\$(OutDir) &amp;&amp; copy /Y $(TargetDir)\office.dll $(SolutionDir)\$(OutDir) &amp;&amp; copy /Y $(TargetDir)\Microsoft.Vbe.Interop.dll $(SolutionDir)\$(OutDir) 
+</PostBuildEvent>
+  </PropertyGroup>
+</Project>

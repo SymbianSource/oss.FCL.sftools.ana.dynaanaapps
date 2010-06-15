@@ -1,0 +1,207 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{20255E8D-09BB-4524-8E10-66B22ACC6662}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>App.ico</ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>HeapAnalyser</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>HeapAnalyser</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>HeapAnalyser.EntryPoint</StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="App.ico" />
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Exceptions\HAUIException.cs" />
+    <Compile Include="UIs\Console\Files\HACmdLineFileSource.cs" />
+    <Compile Include="UIs\Console\Files\HACmdLineFSEntity.cs" />
+    <Compile Include="UIs\Console\Files\HACmdLineFSEntityList.cs" />
+    <Compile Include="UIs\Console\Inputs\HACmdLineInputParameters.cs" />
+    <Compile Include="UIs\Graphical\Wizard\HASetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UIs\Graphical\Wizard\HASetupWizard.Designer.cs">
+      <DependentUpon>HASetupWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UIs\HAUIManager.cs" />
+    <Compile Include="Engine\Types\ComparisonEngineHeapData.cs" />
+    <Compile Include="Engine\Types\AnalyseEngineHeapData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Engine\HeapWizardEngine.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Engine\Types\ComparisonEngineHeapCSV.cs" />
+    <Compile Include="EntryPoint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UIs\Console\HAUIConsole.cs" />
+    <Compile Include="UIs\HAUI.cs" />
+    <Compile Include="UIs\Graphical\HAUIGraphical.cs" />
+    <EmbeddedResource Include="UIs\Graphical\Wizard\HASetupWizard.resx">
+      <DependentUpon>HASetupWizard.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PerfToolsSharedLibraries\Engine\SymbianDebugLib\SymbianDebugLib.csproj">
+      <Project>{796DD82D-9E7D-476D-B700-086CD9A893DA}</Project>
+      <Name>SymbianDebugLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PerfToolsSharedLibraries\Engine\SymbianStructuresLib\SymbianStructuresLib.csproj">
+      <Project>{D3BDEB23-43DA-4534-986B-F6B3DD05EBF6}</Project>
+      <Name>SymbianStructuresLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PerfToolsSharedLibraries\Engine\SymbianSymbolLib\SymbianSymbolLib.csproj">
+      <Project>{6054A36B-F8A9-406F-B6CE-B531CC2AEADC}</Project>
+      <Name>SymbianSymbolLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PerfToolsSharedLibraries\Engine\SymbianTree\SymbianTree.csproj">
+      <Project>{2BE440C1-E5F6-4F5D-B533-0F745CAA65A8}</Project>
+      <Name>SymbianTree</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PerfToolsSharedLibraries\Engine\SymbianUtils\SymbianUtils.csproj">
+      <Project>{F6F4CE69-E73A-4917-97ED-B114DE90C92E}</Project>
+      <Name>SymbianUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PerfToolsSharedLibraries\Engine\SymbianXmlInputLib\SymbianXmlInputLib.csproj">
+      <Project>{56ECA873-7D1D-45E7-A583-A5388D753321}</Project>
+      <Name>SymbianXmlInputLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PerfToolsSharedLibraries\UI\SymbianDebugUiLib\SymbianDebugLibUi.csproj">
+      <Project>{6C30B8C1-BF87-4626-8125-D5681B22347C}</Project>
+      <Name>SymbianDebugLibUi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PerfToolsSharedLibraries\UI\SymbianUtilsUi\SymbianUtilsUi.csproj">
+      <Project>{48F86FA3-3B42-4826-8D06-E8F2E0E7B822}</Project>
+      <Name>SymbianUtilsUi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PerfToolsSharedLibraries\UI\SymbianWizardLib\SymbianWizardLib.csproj">
+      <Project>{AC323F51-47D6-46BE-8E06-7A75F4C5348D}</Project>
+      <Name>SymbianWizardLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\Engine\HeapComparisonLib\HeapComparisonLib.csproj">
+      <Project>{0911ECEE-D330-4DE9-989C-8181604FAAB5}</Project>
+      <Name>HeapComparisonLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\Engine\HeapLib\HeapLib.csproj">
+      <Project>{D638AB12-FC64-4523-9B99-09F20BC2A791}</Project>
+      <Name>HeapLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\UI\HeapComparisonUiLib\HeapComparisonUiLib.csproj">
+      <Project>{6DD1AC1D-22A6-4C7A-BB97-43FCBA9B8BE0}</Project>
+      <Name>HeapComparisonUiLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\UI\HeapUiLib\HeapUiLib.csproj">
+      <Project>{C53FA050-1FA1-4567-A83B-DADA64DA1464}</Project>
+      <Name>HeapUiLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

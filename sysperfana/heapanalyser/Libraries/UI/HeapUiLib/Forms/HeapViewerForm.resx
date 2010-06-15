@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <metadata name="iTimer_CreateToolBoxItems.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="iMainMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>207, 17</value>
+  </metadata>
+  <metadata name="iToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 45</value>
+  </metadata>
+  <data name="iPG1_RB_HeapView_ByCellType.ToolTip" xml:space="preserve">
+    <value>Changes the heap view to show cells coloured by their type.
+
+There are essentially four categories:
+
+1) Free cells are blue.
+2) Allocated cells, which have known type information are orange.
+3) Allocated cells that are of unknown type are red.
+4) Allocated cells that are descriptors are yellow.
+
+For all cells, white represents the cell meta-data (or overhead).
+The amount of overhead depends on the cell type and also the
+build of the relevant heap library in question (UDEB vs UREL 
+EUSER.DLL or EKERN.EXE).
+
+As with all views, each 'box' represents 4 bytes of heap memory.</value>
+  </data>
+  <data name="iPG1_RB_HeapView_ByObjectType.ToolTip" xml:space="preserve">
+    <value>Colours the cells based upon their type information.
+
+Objects that contain vTables can be cross referenced against
+the symbolic information provided during the wizard-phase.
+
+Each object type is presented in a different colour. Use the
+"Set Filters" button on the right of the screen to alter the
+presentation of the colours.
+
+Descriptors and unknown cells are not emphasised.</value>
+  </data>
+  <data name="iPG1_RB_HeapView_ByParentBinary.ToolTip" xml:space="preserve">
+    <value>Colours the cells based upon the binary within which the code 
+for the object originates.
+
+Objects that contain vTables can be cross referenced against
+the symbolic information provided during the wizard-phase.
+
+Each binary is presented in a different colour. Use the
+"Set Filters" button on the right of the screen to alter the
+presentation of the colours.
+
+Descriptors and unknown cells are not emphasised.</value>
+  </data>
+  <data name="iPG1_RB_HeapView_ByEmbeddedReferences.ToolTip" xml:space="preserve">
+    <value>A view that emphasises cells based upon how many outgoing references
+any given cell contains. 
+
+Each cell is made up of a number of 4-byte DWORDs. Each DWORD, or 'box'
+in the view, is inspected to identify if the cell references any other cells
+within the heap data.
+
+Cells with more references are coloured red, and those with little or none are
+coloured blue.
+
+The number in the first 'box' of each cell refers to the number of outgoing
+references the cell makes towards other cells in the heap data.</value>
+  </data>
+  <data name="iPG1_RB_HeapView_ByIsolation.ToolTip" xml:space="preserve">
+    <value>A view that shows emphasises the number of incoming references
+to each cell.
+
+Colder cells, shown in dark blue, have little incoming references from other
+cells within the heap.
+
+Warmer cells, in red/pink have more incoming references from other cells
+within the heap.
+
+The number that appears in the first DWORD of each cell refers to the
+number of overall incoming references (by other cells) to the cell in question.</value>
+  </data>
+  <data name="iPG1_RB_HeapView_ByCellAge.ToolTip" xml:space="preserve">
+    <value>This view emhpasises how old a given cell is within the heap data.
+
+The older the cell, the colder it appears (dark blue).
+
+The warmer the cell, the more recently it was allocated within the heap
+(light/bright blue).
+
+The oldest cells typically appear at the start of the heap, with cells generally
+becoming younger as they are allocated towards the end of the heap.
+
+This view can be useful in determining if your heap is heavily fragmented or
+whether the allocation strategy used by the code that controls this heap is
+causing an artificially inflated high water mark due to poor lifetime management
+of heap cells.
+
+This view is only available in debug (UDEB) builds of EUSER.DLL or EKERN.EXE</value>
+  </data>
+  <metadata name="iTab2_ColModel_Stats.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>312, 17</value>
+  </metadata>
+  <metadata name="iTab2_TabModel_Stats.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>473, 17</value>
+  </metadata>
+  <metadata name="iPG5_TableModel_CellDistributionFree.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>661, 11</value>
+  </metadata>
+  <metadata name="iPG5_TableModel_CellDistributionAllocated.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>942, 8</value>
+  </metadata>
+  <metadata name="iPG1_HeapView_ContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1206, 8</value>
+  </metadata>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>94</value>
+  </metadata>
+</root>
