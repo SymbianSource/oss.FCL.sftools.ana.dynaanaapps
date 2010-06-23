@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+    <extension
+          point="com.nokia.s60tools.traceanalyser.traceanalyserrule"
+          id="com.nokia.s60tools.traceanalyser.timingrule"
+          name="Timing Rule for Trace Analyser">
+            <timingrule
+              providerName="Timing Rule"
+              class="com.nokia.s60tools.traceanalyser.timingrule.rule.TimingRuleType" />
+    </extension>
+
+</plugin>

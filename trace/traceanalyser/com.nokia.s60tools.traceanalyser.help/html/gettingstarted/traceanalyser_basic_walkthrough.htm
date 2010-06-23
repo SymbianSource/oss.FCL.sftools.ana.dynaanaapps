@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>TraceAnalyser basic walk-through</title>
+<link href="../../book.css" type="text/css" rel="stylesheet"></head>
+<body><h2>TraceAnalyser basic walk-through</h2> <h5>Before you start</h5><p>
+Setting up TraceAnalyser requires the following tracing tools: </p><ul>
+<li><b>In Carbide.c++:</b> TraceBuilder and TraceViewer tools, accessible
+from the <b>Carbide</b> menu. </li>
+<li><b>In the device:</b> (Optional) The TraceSwitch tool that listens to
+the incoming traces. For more information on how to obtain it, see the <a
+href="../release_notes.htm#requirements">Release Note</a><?Pub Caret1>. </li>
+</ul><p>The following steps are needed for using this tool: </p><ol>
+<li>Open or create a project in Carbide.c++. </li>
+<li>To add OST traces to the source code, start the TraceBuilder tool from <b>
+Carbide > TraceBuilder</b>. <p> For more instructions, see the topic <i>Adding
+traces to the source code</i> in TraceBuilder Help. </p></li>
+<li>Set your project's include paths and compile the application. For instructions,
+see <i>Setting project include paths and compiling</i> in TraceBuilder Help. <p><b>
+Note:</b> Compilation uses TraceCompiler that generates the needed headers.
+After compilation, you should have two files: </p><ul>
+<li>a SIS file of your tool that you can now install into the device. </li>
+<li>an XML format dictionary file that is needed for activating and decoding
+traces in TraceViewer. It is generated into the following directory: <i>[SDK
+root]\epoc32\include\internal\symbiantraces\dictionary</i>. </li>
+</ul></li>
+<li>In TraceViewer, also define the settings for connecting your PC to the
+device. The options are USB or eXtended Trace Interface (XTI). <p>See <i>
+Setting TraceViewer preferences</i> in TraceViewer Help. </p><p><b>Tip:</b> If
+you have TraceSwitch enabled in the device, the USB connection is supported
+by default and you only need to plug in the device to start receiving traces. 
+</p></li>
+<li>To activate and decode traces, start the TraceViewer tool from <b>Carbide
+> TraceViewer</b>, and activate the dictionary file there. <p>For instructions,
+see <i>Trace activation </i> in TraceViewer Help. </p></li>
+<li>In TraceAnalyser, create the rules for issues you want to monitor: timings
+or parameters. <p>See example scenarios in <i>TraceAnalyser overview</i> and
+step-by-step instructions in <a href="../tasks/creating_rules.htm">Creating
+tracing rules</a>. </p></li>
+<li>Transfer your application's SIS file to the device and run it. <p>If some
+tracing rules fail during execution, they are listed on the TraceAnalyser's <b>
+Fail Log</b> tab.</p></li>
+<li>To analyse the failed rule in more detail, double-click it to view it
+in the TraceViewer application. TraceViewer will show the codeline that caused
+the failure.</li>
+</ol><div id="footer">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div> </body></html>

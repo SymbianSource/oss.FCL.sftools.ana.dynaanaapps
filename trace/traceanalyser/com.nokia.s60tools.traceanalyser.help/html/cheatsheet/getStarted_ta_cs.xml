@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?APT Element gi="cheatsheet" attrs="title"?>
+<?APT Element gi="intro"?>
+<?APT Element gi="description"?>
+<?APT Element gi="item" attrs="title href skip"?>
+<?APT Element gi="b"?>
+<cheatsheet title="Configuring tracing rules to analyse application's performance">
+<intro> 
+<description>This tutorial shows you the steps for creating tracing rules in the TraceAnalyser tool.
+<br/><br/>
+<b>Prerequisites</b>
+<br/><br/>
+* TraceViewer and TraceBuilder applications are present in your Carbide.c++ environment.
+<br/><br/>
+* (Optional) TraceSwitch SIS is installed on your device.
+<br/><br/>
+You can obtain TraceSwitch from the S60 RnD SDK, under the <b>RnD Tools</b> folder. TraceSwitch, together with the ToolsStarter SIS, support the USB connection method by default. You only need to plug in the device to start receiving traces.
+</description>  
+</intro>
+
+<item title="Create or open a project." href="" skip="false"> 
+<description>Open or create a new project in Carbide.c++. 
+</description> 
+</item>
+
+<item
+         href="/com.nokia.tracebuilder.help/html/tasks/addingtraces.htm"
+         skip="false"
+         title="Add OST traces to the source code."> 
+<description>Adding Open System Traces (OST) means adding &quot;tags&quot; to your application&apos;s source code, to those places that you want to monitor. 
+<br/>
+<br/>
+The easiest way to do this is by using the TraceBuilder application: <b>Carbide &gt; TraceBuilder</b>. 
+<br/>
+<br/>
+For example, to monitor timings in a camera application, you could add the first trace to capture the key press for taking a picture, and another where the taken picture is shown to the user. 
+<br/>
+<br/>
+The corresponding rule to be created in TraceAnalyser might then state that these actions must occur within 5 seconds.
+</description> 
+</item>
+   <item
+         href="/com.nokia.tracebuilder.help/html/tasks/setprojectandcompile.htm"
+         title="Set your project&apos;s include paths and compile your application.">
+      <description>
+         To use Open System Trace (OST) traces, you must include the &quot;OpenSystemTrace.h&quot; header file from the development environment.
+<br/><br/>
+      </description>
+   </item>
+   <item
+         title="Obtain the files generated in the compilation.">
+      <description>
+         After compiling your project, you should have two files: 
+<br/><br/>
+1: A SIS file of your application that you can install into the device by using USB. 
+<br/><br/>
+2: An XML format dictionary file that is needed for activating and decoding traces in TraceViewer. 
+<br/><br/>
+The file is generated into the following directory: 
+<br/><br/>
+[SDK root]\epoc32\include\internal\symbiantraces\dictionary.
+         
+      </description>
+   </item>
+   <item
+         href="/com.nokia.traceviewer.help/html/reference/preferencesconnection.htm"
+         title="Define connection settings.">
+      <description>
+         To start receiving traces on the TraceViewer application, define connection settings between the device and your PC. 
+<br/><br/>
+Start the TraceViewer tool from <b>Carbide &gt; TraceViewer</b>.
+<br/><br/>
+On the toolbar, click the small arrow and from the drop-down list, select <b>Connection Settings</b>. 
+<br/><br/>
+      </description>
+   </item>
+   <item
+         href="/com.nokia.traceviewer.help/html/tasks/traceactivation.htm"
+         title="Activate and decode traces.">
+      <description>
+         Trace activation is a way of generating specific trace data that is relevant for your components. This reduces the amount of traces listed on the TraceViewer user interface. 
+<br/><br/>
+Start the TraceViewer tool from <b>Carbide &gt; TraceViewer</b>.
+<br/><br/>
+Load the dictionary file (.xml) that contains the necessary component and group information. 
+<br/><br/>
+Activate the components and groups you want to use. 
+<br/><br/>
+For more information, see TraceViewer Help.
+      </description>
+   </item>
+   <item
+         href="/com.nokia.traceanalyser.help/html/tasks/creating_rules.htm"
+         title="Create rules for the traces you want to monitor.">
+      <description>
+         Start TraceAnalyser from <b>Carbide &gt; TraceAnalyser</b>. 
+<br/><br/>
+Create either <b>Timing</b> or <b>Parameter</b> rule type for the events you want to monitor.
+<br/><br/>
+An example of the rule could be a statement like this: &quot;Taking a picture should not take longer than 5 seconds.&quot;
+      </description>
+   </item>
+   <item
+         href="/com.nokia.traceviewer.help/html/tasks/connect.htm"
+         title="Connect to trace source and run your application.">
+      <description>
+         In TraceViewer, start receiving traces. 
+<br/><br/>
+Run the SIS file of your application on the device.
+      </description>
+   </item>
+   <item
+         href="/com.nokia.traceanalyser.help/html/tasks/viewing_failed_cases.htm"
+         title="Analyse the rules in TraceAnalyser and TraceViewer.">
+      <description>
+         All executed trace rules (both passed and failed ones) are listed on the TraceAnalyser main view. 
+<br/><br/>
+If some of them fail during execution (for example, an operation execution takes longer than defined in the rule), the TraceAnalyser icon will quickly flash to indicate that a rule violation has occurred.
+<br/><br/>
+To view the failed cases, select the <b>Fail Log</b> tab. 
+<br/><br/>
+To view the traces that caused the failure,  double-click a rule on the view. TraceViewer opens and scrolls to the traces. 
+<br/><br/>
+Double-click the trace to jump to the codeline that caused the failure.
+      </description>
+   </item>
+
+<item title="Analyse the code and correct errors as needed." href="" skip="false"> 
+<description>
+   To view the traces that caused the failure,  double-click a rule on the TraceAnalyser <b>Fail Log</b>. 
+<br/><br/>
+TraceViewer opens and scrolls to the trace. 
+<br/><br/>
+In TraceViewer, double-click the trace to jump to the codeline that caused the failure.
+<br/><br/>
+Once you have identified the problem in the source code, try to fix it and run the rule again.
+</description> 
+</item>
+
+</cheatsheet>

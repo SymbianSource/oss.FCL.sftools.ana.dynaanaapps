@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.nokia.carbide.extensions.traceanalyser"
+      label="Carbide.c++ Extensions - Trace Analyser"
+      version="1.0.5"
+      provider-name="Nokia"
+      plugin="com.nokia.s60tools.traceanalyser">
+
+   <description>
+      Trace Analyser tool is used for analysing OST trace data that is received from a device.
+   </description>
+
+   <copyright>
+      Nokia Corporation and/or its subsidiary(-ies). All rights reserved. License: http://www.eclipse.org/legal/epl-v10.html.
+   </copyright>
+
+   <license url="license.htm">
+      Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).All rights reserved.
+  This component and the accompanying materials are made available under the 
+  terms of &quot;Eclipse Public License v1.0&quot; which accompanies this 
+  distribution, and is available at the URL &quot;http://www.eclipse.org/legal/epl-v10.html&quot;.
+  
+  Part of the graphics of the program are from Eclipse 3.1 platform 
+  and CDT project in Eclipse community, which are made available under 
+  the terms of the Eclipse Public License v1.0.
+  A copy of the EPL is provided at 
+  http://www.eclipse.org/legal/epl-v10.html
+   </license>
+
+   <url>
+      <update label="Carbide.c++ Extensions Nokia Update Server" url="http://trwwwaps.nmp.nokia.com/programs/carbide"/>
+   </url>
+
+   <plugin
+         id="com.nokia.s60tools.traceanalyser"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.nokia.s60tools.traceanalyser.timingrule"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.nokia.s60tools.traceanalyser.parameterrule"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.nokia.s60tools.traceanalyser.help"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

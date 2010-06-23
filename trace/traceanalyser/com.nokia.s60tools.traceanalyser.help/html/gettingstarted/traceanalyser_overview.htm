@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>TraceAnalyser overview</title>
+<link href="../../book.css" type="text/css" rel="stylesheet"></head>
+<body><h2>TraceAnalyser overview</h2> <p>TraceAnalyser is a tool that enables
+you to supervise the target application's time consumption during an operation,
+or supervise parameters in Open System Trace (OST) traces. </p><p>With this
+tool, you can create a set of rules that define: </p><ul>
+<li>the order and maximum delay between two operations that are traced (see
+example scenario below). </li>
+<li>a desired range for parameter values (for example, <i>"The first parameter
+of Trace A should be at least 150"</i>). </li>
+</ul><p>TraceAnalyser lists both passed and failed events to the main view,
+along with other information such as the pass rate. See the following example: 
+</p><p><img src="images\dg_mainview.png" alt="Sample view of data filled in on the tabbed view."></p><p>
+If a rule fails (for example, the interval between operations is longer than
+defined), you can view more information about the violation on the <b>Fail
+Log</b> tab.</p><p>You can also view history graphs of the defined rules,
+to see how the performance of your application has changed over time. </p><h3><a
+name="case1"></a>Example: Analysing timings in a camera application</h3><p>
+When developing a camera application, you might want to define the following
+kind of rule: </p><p><i>&ldquo;Taking a picture should not take longer than
+5 seconds.&rdquo;</i></p><p>To monitor this programmatically, you can instrument
+your code so that OST trace is placed to capture the key press for taking
+a picture, and another where the taken picture is shown to the user. The corresponding
+rule would then state that these actions must occur within 5 seconds. </p><h5>
+Related Tasks</h5><ul>
+<li><a href="../tasks/creating_rules.htm">Creating tracing rules</a></li>
+<li><a href="../tasks/modifying_rules.htm">Modifying rules</a></li>
+<li><a href="../tasks/viewing_failed_cases.htm">Viewing the log of failed rules
+<li><a href="../tasks/viewing_the_history.htm">Viewing the rule history</a></li>
+</a></li>
+</ul><div id="footer">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div> </body></html>

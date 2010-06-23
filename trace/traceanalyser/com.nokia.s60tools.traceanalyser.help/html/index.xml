@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.index"?>
+
+	<!-- INDEX INSTRUCTIONS
+	
+	Use the index.xml file to define the index entries for the plugin's 
+	help contents. In Eclipse 3.2 and beyond an Index tab appears in the Help
+	viewer making it possible for user to more easily locate subjects of
+	interest to them.
+		
+	In brief, every file used in the help documentation should have at least one
+	associated index entry for it. Ideally, it's simple to make two entries per
+	page by simply re-wording the subject slightly. For example, a view could
+	be indexed twice like this, 1) Breakpoint view, and 2) Views/Breakpoint.
+	
+	See ??? for details on creating indexes.
+	
+	-->
+
+<index>
+
+	<!-- AAAAAAAA -->
+
+	<!-- BBBBBBBB -->	
+
+	<!-- CCCCCCCC -->	
+
+	<!-- DDDDDDDD -->		
+
+	<!-- EEEEEEEE -->	
+
+	<!-- FFFFFFFF -->
+
+	<!-- GGGGGGGG -->	
+	
+	<!-- HHHHHHHH -->	
+	
+	<!-- IIIIIIII -->
+	
+	<!-- JJJJJJJJ -->
+	
+	<!-- KKKKKKKK -->
+	
+	<!-- LLLLLLLL -->
+	
+	
+	<!-- MMMMMMMM -->
+	
+	<!-- NNNNNNNN -->
+	
+	<!-- OOOOOOOO -->
+	
+	<entry keyword="TraceAnalyser overview" >
+		<topic href="html/gettingstarted/traceanalyser_overview.htm" />
+	</entry>
+	
+	<!-- PPPPPPPP -->
+
+	<entry keyword="parameter rules" >
+		<topic href="html/tasks/creating_rules.htm" />
+	</entry>
+	
+	<!-- QQQQQQQQ -->
+	
+	<!-- RRRRRRRR -->
+
+	<!-- SSSSSSSS -->
+	
+	<!-- TTTTTTTT -->
+	
+	<entry keyword="tracing rules" >
+		<topic href="html/gettingstarted/traceanalyser_overview.htm" />
+	</entry>
+	
+	<entry keyword="timing rules" >
+		<topic href="html/tasks/creating_rules.htm" />
+	</entry>
+	
+	<entry keyword="Tracing rule walk-through" >
+		<topic href="html/Getting_Started/walk_through.htm" />
+	</entry>
+	
+	<!-- UUUUUUUU -->
+	
+	<!-- VVVVVVVV -->
+	
+	<!-- WWWWWWWW -->
+	
+	<!-- XXXXXXXX -->
+	
+	<!-- YYYYYYYY -->
+	
+	<!-- ZZZZZZZZ -->
+
+</index>

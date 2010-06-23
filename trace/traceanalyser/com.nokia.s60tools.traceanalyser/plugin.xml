@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="traceanalyserrule" name="Trace Analyser&apos;s Rule Type" schema="schema/traceanalyserrule.exsd"/>
+
+ <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            description="Trace Analyser"
+            id="com.nokia.s60tools.traceanalyser.ui.actions.ToolbarShortcutAction"
+            label="Trace Analyser"
+            visible="true">
+         <menu
+               id="com.nokia.carbide.cpp.ui.CarbideMenu"
+               label="&amp;Carbide">
+            <separator
+                  name="com.nokia.s60tools.ToolsMenuGroup">
+            </separator>
+         </menu>
+         <action
+               class="com.nokia.s60tools.traceanalyser.ui.actions.ToolbarShortcutAction"
+               icon="icons/TraceAnalyser.png"
+               id="com.nokia.s60tools.traceanalyser.ui.actions.ToolbarShortcutAction"
+               label="Trace Analyser"
+               menubarPath="com.nokia.carbide.cpp.ui.CarbideMenu/CarbideExtensions"
+               tooltip="Trace Analyser">
+         </action>
+         
+      </actionSet>
+   </extension>
+
+      <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="Carbide Extensions"
+            id="com.nokia.s60tools">
+      </category>
+      <view
+            name="Trace Analyser"
+            icon="icons/TraceAnalyser.png"
+            category="com.nokia.s60tools"
+            class="com.nokia.s60tools.traceanalyser.ui.views.MainView"
+            id="com.nokia.s60tools.traceanalyser.ui.views.MainView">
+      </view>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.nokia.s60tools.traceanalyser.ui.editors.HistoryEditor"
+            default="false"
+            icon="icons/TraceAnalyser.png"
+            id="com.nokia.s60tools.traceanalyser.ui.editors.HistoryEditor"
+            name="History View"/>
+   </extension>
+
+
+
+
+	<extension point="org.eclipse.ui.startup"> 
+		<startup class="com.nokia.s60tools.traceanalyser.model.StartupHandler"/>
+	</extension>
+
+</plugin>

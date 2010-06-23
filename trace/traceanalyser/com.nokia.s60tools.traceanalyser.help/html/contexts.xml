@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.contexts"?>
+<contexts>
+
+
+<!-- An example context definition in contexts.xml file:
+ 
+ <context id="TOOL_NAME_MAIN_VIEW">
+  <description>TOOL NAME's Main View</description>	   
+  <topic label="Task 1" href="html/tasks/tasks1.htm" />    	
+  <topic label="Task 2" href="html/tasks/tasks2.htm" />    	
+ </context>	  
+
+-->
+
+
+
+<!--  The context's id can be accessed from the source code
+      in the following way.
+ 
+ Define a class storing the context ID constants at
+ source code level:
+ 
+ public class AppDepHelpContextIDs {
+	...
+    public static final String APPDEP_COMPONENT_LIST_VIEW = 
+		  APPDEP_HELP_PROJECT_PLUGIN_ID 
+           +".APPDEP_COMPONENT_LIST_VIEW";
+	 ...
+	 }
+ 
+ // Somewhere in the code there is a UI item 
+ // the context help will be bound to.
+ private TableViewer listItemsViewer;
+ ...
+ // Binding context help ID into the control happens with SetHelp-method. 
+ // The first parameter	must be a sub class of org.eclipse.swt.widgets.Control.
+ PlatformUI.getWorkbench().getHelpSystem().setHelp(listItemsViewer.getControl(), 
+    		AppDepHelpContextIDs.APPDEP_COMPONENT_LIST_VIEW);
+ 
+ -->
+    
+    
+ <context id="TRACE_ANALYSER_MAIN_VIEW">
+  <description>In TraceAnalyser, you can create rules to supervise the time consumption of an application and detect timing violations. The main view shows both passed and failed rules. </description>	   
+  <topic label="TraceAnalyser overview" href="html/gettingstarted/traceanalyser_overview.htm" />    	
+  <topic label="Creating tracing rules" href="html/tasks/creating_rules.htm" />    	
+ </context>	  
+
+ <context id="TRACE_ANALYSER_FAIL_LOG">
+  <description>If a tracing rule fails (for example, the interval between operations is longer than defined), you can view more information about the violation on the Fail Log tab.</description>	   
+  <topic label="Viewing the log of failed rules" href="html/tasks/viewing_failed_cases.htm" />    	  	
+ </context>	  
+ 
+  <context id="TRACE_ANALYSER_RULE_EDITOR">
+  <description>TraceAnalyser's Rule Editor dialog contains general fields for all rule types, and some specific fields for timing and parameter rules separately. </description>	   
+  <topic label="Creating tracing rules" href="html/tasks/creating_rules.htm" />    	
+  <topic label="Modifying rules" href="html/tasks/modifying_rules.htm" />    	
+ </context>	
+ 
+  <context id="TRACE_ANALYSER_TRACE_SELECTION_DIALOG">
+  <description>In the Trace Selection dialog, you can view the trace dictionaries that are loaded in TraceViewer application, and select the traces you want to use. </description>	   
+  <topic label="Creating tracing rules" href="html/tasks/creating_rules.htm" />    	  	
+ </context>	
+ 
+  <context id="TRACE_ANALYSER_HISTORY_VIEW">
+  <description>TraceAnalyser history view shows you information on the rule's performance over time. </description>	   
+  <topic label="Viewing the rule history" href="html/tasks/viewing_the_history.htm" />    	
+  </context>	
+  
+</contexts>

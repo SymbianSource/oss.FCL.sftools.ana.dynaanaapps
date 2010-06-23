@@ -1,0 +1,85 @@
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>Creating tracing rules</title>
+<link href="../../book.css" type="text/css" rel="stylesheet"></head>
+<body><h2>Creating tracing rules</h2> <h5>Before you start</h5><p>Before you
+can create tracing rules, check that you have: </p><ul>
+<li>compiled your code, </li>
+<li>and loaded the generated dictionary file to TraceViewer. </li>
+</ul><p>See <a href="../gettingstarted/traceanalyser_basic_walkthrough.htm">
+TraceAnalyser basic walk-through</a> for the complete steps. </p><p>To create
+tracing rules, do the following: </p><ol>
+<li>Start TraceAnalyser from the <b>Carbide > TraceAnalyser</b> menu item. 
+</li>
+<li>Click <b>Create new rule</b>. <p>The <b>Edit Rule</b> dialog is displayed.
+</p></li>
+<li>From the <b>Rule Type</b> list box, select which kind of rule you are
+creating: <ul>
+<li><b>Timing rule</b> for detecting if an operation can be executed within
+a specified time limit. </li>
+<li><b>Trace parameter rule</b> for detecting if parameters are beyond a desireable
+value range. </li>
+</ul></li>
+<li>In the <b>Rule Name</b> field, type in a name for the rule. <p>For example: <i>
+Camera Test</i>. </p></li>
+<li>(Optional) In the <b>Description</b> field, type in a free-form description
+of what the rule is about. <p> For example, for a timing rule: <i>Test that
+the Camera application is able to capture a picture within 1000ms time limit.
+</i></p></li>
+<li>Configure the rule-specific settings. <p>For instructions, see either <a
+href="#timing">To define timing rules</a> or <a href="#parameter">To define
+parameter rules</a> below. </p></li>
+<li>Connect your PC to the device by using the connection settings defined
+in TraceViewer (USB or XTI). </li>
+<li>In TraceViewer, activate the traces you want to receive.  </li>
+<li>Run your application on the device. <p>During execution, TraceAnalyser
+lists both passed and failed events to the main view, along with other information
+such as the pass rate. See the following example: </p><p><img src="images\dg_mainview.png"
+alt="Sample of the main view, showing rules and activated/deactivated cases."></p></li>
+</ol><p>After the rules have been executed, you can do either of the following: 
+</p><ul>
+<li><a href="viewing_failed_cases.htm">View the log of failed rules</a>, and
+together with TraceViewer determine which codeline caused the rule violation. 
+</li>
+<li><a href="viewing_the_history.htm">View the rule history graph</a> to see
+how the performance of the application has changed over time. </li>
+</ul><p></p><h3><a name="timing"></a>To define timing rules:</h3><ol>
+<li>To select which trace should be monitored as the first part of this rule
+(Trace A), click <b>Select Trace</b>. <p>The <b>Select Trace for Rule</b> dialog
+is opened, showing the trace dictionaries that you loaded in TraceViewer earlier. 
+</p></li>
+<li>Select the traces you want to use and click <b>OK. </b> </li>
+<li>Repeat the above steps for Trace B. </li>
+<li>In the <b>Time Limit</b> fields, enter the range the values in milliseconds
+for Trace A and Trace B. <ul>
+<li>For <b>Time Limit A</b>, the value means that Trace B must arrive after
+this. </li>
+<li>For <b>Time Limit B</b>, the value means that Trace B must arrive before
+this. </li>
+</ul><p>The following figure shows an example of how a tracing rule could
+look like: </p><p><img src="images\dg_timingRule.png" alt="Sample of the Edit Rule dialog with the sample values filled in."></p></li>
+<li>To finish, click <b>OK</b>. </li>
+</ol><h3><a name="parameter"></a>To define parameter rules:</h3><ol>
+<li>To select which trace should be monitored as the first part of this rule,
+click <b>Select Trace</b>. <p>The <b>Select Trace for Rule</b> dialog is opened,
+showing the trace dictionaries that you loaded in TraceViewer earlier. </p></li>
+<li>Select the traces you want to use and click <b>OK. </b> </li>
+<li>From the <b>Trace parameter should be</b> list box, select the behavior
+what you want the parameter and values to be: <?Pub Caret><ul>
+<li><b>Greater than/Equal to</b> </li>
+<li><b>Less than/Equal to</b> </li>
+<li><b>Between</b> </li>
+<li><b>Equal to</b> </li>
+</ul><p>The following figure shows an example of how a tracing rule could
+look like: </p><p><img src="images\ParameterRuleDialog.png" alt="Sample of the UI showing values for parameter rule type"></p></li>
+<li>To finish, click <b>OK</b>. </li>
+</ol><h5>Related tasks</h5><ul>
+<li><a href="modifying_rules.htm">Modifying rules</a></li>
+<li><a href="viewing_failed_cases.htm">Viewing the log of failed rules</a></li>
+<li><a href="viewing_the_history.htm">Viewing the rule history</a></li>
+</ul>   <div id="footer">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div> </body></html>
+<?Pub *0000004916>

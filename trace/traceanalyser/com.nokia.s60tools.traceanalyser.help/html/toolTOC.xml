@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<!-- 
+	Links tool docs to main TOC for Carbide help in the defined location. 
+	NOTE: Tool name seems to be ignored here for display purposes but needed to
+	make the link_to section work.
+-->
+
+<!-- Current link_to attribute works on top of Carbide 1.3 -->
+<toc label="TraceAnalyser" link_to="../com.nokia.carbide.help.common/carbideHelpTOC.xml#anchorCarbideFeature"> 
+
+		<topic label="TraceAnalyser" href="html/tool.htm">
+
+		<topic label="Release notes" href="html/release_notes.htm" />
+
+		<topic label="Getting started" href="html/gettingstarted/gs_index.htm">
+			<topic label="TraceAnalyser overview" href="html/gettingstarted/traceanalyser_overview.htm" />
+			<topic label="TraceAnalyser basic walk-through" href="html/gettingstarted/traceanalyser_basic_walkthrough.htm" />
+		</topic>
+
+		<topic label="Configuring tracing rules with TraceAnalyser" href="html/tasks/tasks.htm">
+			<topic label="Creating rules" href="html/tasks/creating_rules.htm" />
+			<topic label="Modifying rules" href="html/tasks/modifying_rules.htm" />
+			<topic label="Viewing the failed rules" href="html/tasks/viewing_failed_cases.htm" />
+			<topic label="Viewing the rule history" href="html/tasks/viewing_the_history.htm" />
+		</topic>
+
+		<topic label="Legal" href="html/legal.htm" />
+			   
+	</topic>
+		
+	
+</toc>

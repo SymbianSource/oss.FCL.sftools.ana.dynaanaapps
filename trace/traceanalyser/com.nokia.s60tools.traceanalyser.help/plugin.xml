@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<plugin>
+	<extension point="org.eclipse.help.toc">
+		<toc
+			file="html/toolTOC.xml"
+			primary="true" />
+		<toc
+			file="html/tocTasks.xml"
+			primary="false" />
+		<toc
+			file="html/tocGettingStarted.xml"
+			primary="false" />
+	</extension>
+	
+<!-- Carbide.c++ cheatsheets extension -->
+	<extension point="org.eclipse.ui.cheatsheets.cheatSheetContent">
+		<category
+			id="com.nokia.carbide.cpp.tools.cheatsheets"
+			name="Carbide.c++ Tools" />
+		<cheatsheet
+			category="com.nokia.carbide.cpp.tools.cheatsheets"
+			composite="false"
+			contentFile="html/cheatsheet/getStarted_ta_cs.xml"
+			id="com.nokia.s60tools.traceanalyser.quickstart"
+			name="Trace Analyser Quick Start Guide" />  
+	</extension>
+	
+<!-- CONTEXT IDs for CONTEXTUAL HELP in windows, dialogs, and views -->
+	<extension point="org.eclipse.help.contexts">
+		<contexts 
+			file="html/contexts.xml" 
+			plugin="com.nokia.s60tools.traceanalyser.help" />
+	</extension>
+
+<!-- CONTEXT IDs for INDEX in windows, dialogs, and views -->
+	<extension point="org.eclipse.help.index">
+		<index file="html/index.xml" />
+	</extension>
+
+<!-- Universal Intro support for welcome pages -->
+	<extension point="org.eclipse.ui.intro.configExtension">	
+		<configExtension
+			configId="org.eclipse.ui.intro.universalConfig" 
+			content="html/intro/overviewTraceAnalyserExtContent.xml" />
+		<configExtension
+			configId="org.eclipse.ui.intro.universalConfig"
+			content="html/intro/whatsnewTraceAnalyserExtContent.xml" />		
+		<configExtension
+			configId="org.eclipse.ui.intro.universalConfig"
+			content="html/intro/tutorialsTraceAnalyserExtContent.xml" /> 
+	</extension>
+	
+</plugin>
