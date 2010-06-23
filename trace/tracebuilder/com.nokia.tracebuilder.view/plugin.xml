@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+      		id="com.nokia.s60tools"
+      		name="Carbide Extensions"/>
+      <view
+            category="com.nokia.s60tools"
+            class="com.nokia.tracebuilder.view.TraceView"
+            icon="icons/view/tracebuilder.gif"
+            id="com.nokia.tracebuilder.view.TraceView"
+            name="%traceView"/>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="com.nokia.tracebuilder.category.trace"
+            defaultHandler="com.nokia.tracebuilder.action.AddTraceGlobalAction"
+            description="%addTraceDescription"
+            helpContextId="com.nokia.tracebuilder.help.add_trace"
+            id="com.nokia.tracebuilder.command.add_trace"
+            name="%addTraceCommand"/>
+      <command
+            categoryId="com.nokia.tracebuilder.category.trace"
+            defaultHandler="com.nokia.tracebuilder.action.AddParameterGlobalAction"
+            description="%addParameterDescription"
+            helpContextId="com.nokia.tracebuilder.help.add_parameter"
+            id="com.nokia.tracebuilder.command.add_parameter"
+            name="%addParameterCommand"/>
+      <command
+            categoryId="com.nokia.tracebuilder.category.trace"
+            defaultHandler="com.nokia.tracebuilder.action.FocusGlobalAction"
+            description="%focusViewDescription"
+            id="com.nokia.tracebuilder.command.focus"
+            name="%focusViewCommand"/>
+      <command
+            categoryId="com.nokia.tracebuilder.category.trace"
+            defaultHandler="com.nokia.tracebuilder.action.EditPropertiesGlobalAction"
+            description="%editPropertiesDescription"
+            helpContextId="com.nokia.tracebuilder.help.edit_properties"
+            id="com.nokia.tracebuilder.command.edit_properties"
+            name="%editPropertiesCommand"/>
+      <command
+            categoryId="com.nokia.tracebuilder.category.trace"
+            defaultHandler="com.nokia.tracebuilder.action.AddConstantGlobalAction"
+            description="%addConstantDescription"
+            helpContextId="com.nokia.tracebuilder.help.add_constant"
+            id="com.nokia.tracebuilder.command.add_constant"
+            name="%addConstantCommand"/>
+      <command
+            categoryId="com.nokia.tracebuilder.category.trace"
+            defaultHandler="com.nokia.tracebuilder.action.DeleteGlobalAction"
+            description="%deleteDescription"
+            helpContextId="com.nokia.tracebuilder.help.delete"
+            id="com.nokia.tracebuilder.command.delete"
+            name="%deleteCommand"/>
+      <command
+            categoryId="com.nokia.tracebuilder.category.trace"
+            defaultHandler="com.nokia.tracebuilder.action.InstrumentGlobalAction"
+            description="%instrumenterDescription"
+            helpContextId="com.nokia.tracebuilder.help.instrumenter"
+            id="com.nokia.tracebuilder.command.instrumenter"
+            name="%instrumenterCommand"/>
+      <command
+            categoryId="com.nokia.tracebuilder.category.trace"
+	    defaultHandler="com.nokia.tracebuilder.action.DeleteTracesGlobalAction"
+            description="%deleteTracesDescription"
+            helpContextId="com.nokia.tracebuilder.help.delete_traces"
+            id="com.nokia.tracebuilder.command.delete_traces"
+            name="%deleteTracesCommand"/>
+      <command
+            categoryId="com.nokia.tracebuilder.category.trace"
+	    defaultHandler="com.nokia.tracebuilder.action.ParseEnumGlobalAction"
+            description="%parseEnumDescription"
+            helpContextId="com.nokia.tracebuilder.help.parse_enum"
+            id="com.nokia.tracebuilder.command.parse_enum"
+            name="%parseEnumCommand"/>
+      <category
+            description="%commandCategoryDescription"
+            id="com.nokia.tracebuilder.category.trace"
+            name="%commandCategoryName"/>
+      <command
+            categoryId="com.nokia.tracebuilder.category.trace"
+	    defaultHandler="com.nokia.tracebuilder.action.ConvertTraceGlobalAction"	    
+            description="%convertTraceDescription"
+            helpContextId="com.nokia.tracebuilder.help.convert_trace"
+            id="com.nokia.tracebuilder.command.convert_trace"
+            name="%convertTraceCommand"/>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="com.nokia.tracebuilder.command.add_trace"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M3+T"/>
+      <key
+            commandId="com.nokia.tracebuilder.command.add_parameter"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M3+Y"/>
+
+   </extension>
+   
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer class="com.nokia.tracebuilder.preferences.PreferenceInitializer"/>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.nokia.tracebuilder.preferences.GeneralPreferencePage"
+            category="com.nokia.carbide.cpp.preferences.ExtensionsPreferencesPage"
+            id="com.nokia.tracebuilder.preferences.GeneralPreferencePage"
+            name="Trace Builder"/>
+   </extension>
+   
+   <extension point="org.eclipse.ui.actionSets">
+    <actionSet
+      description="Trace Builder&apos;s Actions"
+      id="com.nokia.tracebuilder.ui.actionSet"
+      label="Trace Builder"
+      visible="true">
+      <action                
+        class="com.nokia.tracebuilder.action.ToolbarShortcutAction"
+        icon="icons/view/tracebuilder.gif"
+        id="com.nokia.tracebuilder.action.ToolbarShortcutAction"
+        label="&amp;Trace Builder"               
+        menubarPath="com.nokia.carbide.cpp.ui.CarbideMenu/CarbideExtensions"
+        tooltip="Trace Builder">
+      </action>
+      <menu
+        id="com.nokia.carbide.cpp.ui.CarbideMenu"
+        label=" &amp;Carbide"
+        path="additions">
+        <groupMarker name="additions"/>
+      </menu>
+    </actionSet>
+  </extension>
+   
+</plugin>

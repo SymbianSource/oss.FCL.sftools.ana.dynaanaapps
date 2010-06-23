@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Carbide.c++ Extensions - Trace Builder
+Bundle-SymbolicName: com.nokia.tracebuilder; singleton:=true
+Bundle-Version: 2.4.0
+Bundle-Activator: com.nokia.tracebuilder.TracebuilderPlugin
+Bundle-Vendor: Nokia
+Require-Bundle: org.eclipse.core.runtime,
+ com.nokia.trace.eventrouter
+Bundle-ActivationPolicy: lazy
+Export-Package: com.nokia.tracebuilder.engine,
+ com.nokia.tracebuilder.engine.project,
+ com.nokia.tracebuilder.engine.propertydialog,
+ com.nokia.tracebuilder.engine.propertyfile,
+ com.nokia.tracebuilder.engine.rules,
+ com.nokia.tracebuilder.engine.rules.osttrace,
+ com.nokia.tracebuilder.engine.source,
+ com.nokia.tracebuilder.engine.utils,
+ com.nokia.tracebuilder.file,
+ com.nokia.tracebuilder.model,
+ com.nokia.tracebuilder.plugin,
+ com.nokia.tracebuilder.project,
+ com.nokia.tracebuilder.rules,
+ com.nokia.tracebuilder.source,
+ com.nokia.tracebuilder.utils
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Import-Package: com.nokia.carbide.cdt.builder

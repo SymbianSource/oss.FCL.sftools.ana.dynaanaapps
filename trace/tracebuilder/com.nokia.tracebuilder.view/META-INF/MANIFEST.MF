@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: TraceBuilder View Plug-in
+Bundle-SymbolicName: com.nokia.tracebuilder.view;singleton:=true
+Bundle-Version: 2.4.0
+Bundle-Activator: com.nokia.tracebuilder.view.TraceViewPlugin
+Bundle-Vendor: Nokia
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.ui,
+ com.nokia.tracebuilder,
+ org.eclipse.ui.ide,
+ com.nokia.carbide.cdt.builder,
+ com.nokia.carbide.cpp.epoc.engine,
+ com.nokia.carbide.cpp.sdk.core,
+ com.nokia.carbide.trk.support,
+ com.nokia.carbide.cpp.featureTracker
+Bundle-ActivationPolicy: lazy
+Export-Package: com.nokia.tracebuilder.action
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

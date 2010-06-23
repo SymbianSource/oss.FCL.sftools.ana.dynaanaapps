@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>Open System Trace (OST)</title>
+<link href="../../book.css" type="text/css" rel="stylesheet"></head>
+<body>
+
+<h2>Open System Trace (OST)</h2>
+<p>The Open System Trace (OST) trace format for data transfer is an open, 
+platform-independent solution that is easily integrated into the software 
+development process.</p>
+<p>The OST Application Programming Interface (API) defines a set of macros 
+to instrument traces to the source code. The underlying OST Framework then 
+sends the instrumented traces out of the device. Before code compilation, 
+traces are compiled by the <i>trace compiler</i>. The trace compiler assigns 
+each trace a unique identifier, which is sent together with trace parameters. 
+The trace compiler also generates decode file for decoding traces 
+(the decoding process can be seen to translate identifier back to text).</p>
+<p>The benefits of using OST include: </p>
+<ul>
+<li>Use of standard interfaces and file formats for, for example, instrumentation
+macros, log file format, and trace format definition. </li>
+<li>Data packages transferred are significantly smaller in size than with
+other data formats. </li>
+<li>Traces can be activated or deactivated in group during runtime: image
+does not have to be recompiled or rebuilt after adding or removing traces.</li>
+</ul>
+
+<h5>Related concepts</h5>
+<ul>
+	<li><a href="tracecompiler.htm">Trace Compiler</a></li>
+</ul>
+
+<div id="footer">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

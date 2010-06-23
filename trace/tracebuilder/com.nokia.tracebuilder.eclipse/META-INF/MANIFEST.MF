@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: TraceBuilder Eclipse Dependencies
+Bundle-SymbolicName: com.nokia.tracebuilder.eclipse;singleton:=true
+Bundle-Version: 2.4.0
+Bundle-Activator: com.nokia.tracebuilder.eclipse.Activator
+Bundle-Vendor: Nokia
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.ui,
+ org.eclipse.ui.ide,
+ org.eclipse.ui.workbench.texteditor,
+ org.eclipse.ui.console,
+ org.eclipse.jface.text,
+ com.nokia.tracebuilder,
+ com.nokia.carbide.cdt.builder,
+ com.nokia.carbide.cpp.sdk.core,
+ com.nokia.carbide.cpp.epoc.engine
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+

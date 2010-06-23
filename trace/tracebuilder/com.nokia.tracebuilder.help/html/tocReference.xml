@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="References">
+	
+	<!-- Enter topic entries here for References section of help -->
+	
+	<topic label="TraceBuilder menubar" href="html/reference/menubar.htm" />
+	<topic label="TraceBuilder tips and tricks" href="html/reference/nonsourcefiles.htm" />
+</toc>

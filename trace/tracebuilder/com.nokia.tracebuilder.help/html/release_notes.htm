@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>Release notes</title>
+  <link href="../book.css" type="text/css" rel="stylesheet">
+  <style type="text/css">
+<!-- .style2 {font-size: 12px} -->
+
+  </style>
+</head>
+
+<body bgcolor="#FFFFFF">
+<h2>Release notes</h2>
+
+<h4>TraceBuilder &ndash; Version 2.4.0</h4>
+
+<p>Released 20th June 2010</p>
+<ul>
+  <li><a href="#description">Product description</a></li>
+  <li><a href="#features">Main features</a></li>
+  <li><a href="#newfeatures">What's new</a></li>
+  <li><a href="#installation">Installation notes</a></li>
+  <li><a href="#requirements">System requirements</a></li>
+  <li><a href="#compissues">Compatibility issues</a></li>
+  <li><a href="#issues">Known issues</a></li>
+</ul>
+
+<h3><a name="description"></a>Product description</h3>
+
+<p>The TraceBuilder extension for Carbide.c++ IDE is a tool for adding Open
+System Traces (OST) to the source code.</p>
+
+<p>TraceBuilder consists of two tools: </p>
+<ul>
+  <li><b>TraceCompiler</b> that parses OST Application Programming Interface
+    (API) format from the source files and generates the corresponding decode
+    files. </li>
+  <li><b>TraceBuilder UI</b> that enables you to add and maintain OST
+  traces.</li>
+</ul>
+
+<p>TraceBuilder can be activated by selecting the <b>Carbide &gt;
+TraceBuilder</b> menu item, or via <b>Window &gt; Show View &gt; Other... &gt;
+Carbide Extensions &gt; TraceBuilder</b>.</p>
+
+<h3><a name="features"></a>Main features</h3>
+<ul>
+  <li>UI for adding traces to source code. </li>
+  <li>UI for adding parameters to traces. </li>
+  <li>Function instrumenter. </li>
+</ul>
+
+<h3><a name="newfeatures"></a>What's new</h3>
+<ul>
+  <li>Change: TraceBuilder is now released under EPL license.</li>
+  <li>Fix: Bug fixes.</li>
+</ul>
+
+<h3><a name="installation"></a>Installation notes</h3>
+<ul>
+  <li>N/A</li>
+</ul>
+
+<h3><a name="requirements"></a>System requirements</h3>
+
+<p><b>Requirements:</b></p>
+<ul>
+  <li>Carbide.c++ 2.0.4 or newer</li>
+  <li>Java Runtime Environment JRE1.5</li>
+  <li>com.nokia.trace.eventview 1.1.0 or newer</li>
+</ul>
+
+<h3><a name="compissues"></a>Compatibility issues</h3>
+<ul>
+  <li>N/A</li>
+</ul>
+
+<h3><a name="issues"></a>Known issues</h3>
+<ul>
+  <li>TraceBuilder does not support the definition of non-source files on the
+    user interface but you can define them manually by adding the needed file
+    elements to the <i>trace.properties</i> property file. For more
+    information, see the <a href="reference/nonsourcefiles.htm">Reference &gt;
+    Tips and tricks</a> section in this help. </li>
+</ul>
+
+<h3>Version history</h3>
+
+<h5>Version 2.3.0 &ndash; 10th January 2010</h5>
+<ul>
+  <li>Change: TraceBuilder supports new name formats for <em>traces</em>
+  folder.</li>
+  <li>Fix: Bug fixes.</li>
+</ul>
+
+<h5>Version 2.2.0 &ndash; 10th January 2010</h5>
+<ul>
+  <li>Change: TraceBuilder supports OSTv1 and OSTv2.</li>
+  <li>Fix: Bug fixes.</li>
+</ul>
+
+<h5>Version 2.1.0 &ndash; 19th November 2009</h5>
+<ul>
+  <li>Change: Trace Builder show all the Trace Points for a Carbide project not
+    just a single source file.</li>
+  <li>Change: TraceBuilder updated to understand all the commonly used Group
+    IDs defined in OSTv2.</li>
+  <li>Change: Added warning to "Add "this" pointer" title.</li>
+  <li>Fix: Bug fixes.</li>
+</ul>
+
+<h5>Version 1.3.1 &ndash; 7th October 2009</h5>
+<ul>
+  <li>Change: Code cleanup.</li>
+  <li>Fix: Bug fixes.</li>
+</ul>
+
+<h5>Version 1.2.3 &ndash; 1st September 2009</h5>
+<ul>
+  <li>Fix: Bug fixes.</li>
+</ul>
+
+<h5>Version 1.2.2 &ndash; 11th August 2009</h5>
+<ul>
+  <li>Fix: Bug fixes.</li>
+</ul>
+
+<h5>Version 1.2.1 &ndash; 11th May 2009</h5>
+<ul>
+  <li>Fix: Bug fixes.</li>
+</ul>
+
+<h5>Version 1.2.0 &ndash; 16th April 2009</h5>
+<ul>
+  <li>Change: Removed <b>Insert selected trace</b> feature.</li>
+</ul>
+
+<h5>Version 1.0.42 &ndash; 26th January 2009</h5>
+<ul>
+  <li>Fix: Bug fixes.</li>
+</ul>
+
+<h5>Version 1.0.36 &ndash; 24th November 2008</h5>
+<ul>
+  <li>Change: Support to fixed group and trace ids.</li>
+  <li>Change: Add traces folder user include to MMP files if needed.</li>
+  <li>Change: Get export path from Carbide preferences.</li>
+  <li>Change: Added support to type "p" in the OST macro.</li>
+  <li>Change: Removed <b>Link with Editor</b> button. Trace Builder is now
+    always linked with an editor.</li>
+  <li>Change: Removed Dictionary preference page. Dictionary export is now
+    always defaulted to the <i>\epoc32\ost_dictionaries</i> directory.</li>
+  <li>Fix: Bug fixes.</li>
+  <li>Doc: Online Help added. </li>
+</ul>
+
+<h5>Version 1.0.27 &ndash; 28th October 2008</h5>
+
+<p>The first version.</p>
+
+<div id="footer">
+<p>Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies).<br>
+All rights reserved. <br>
+This component and the accompanying materials are made available <br>
+under the terms of "Eclipse Public License v1.0" <br>
+which accompanies this distribution and is available <br>
+at the URL <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.
+<br>
+<br>
+Initial Contributors:<br>
+Nokia Corporation - initial contribution <br>
+<br>
+Contributors:<br>
+Description:</p>
+
+<p></p>
+</div>
+</body>
+</html>

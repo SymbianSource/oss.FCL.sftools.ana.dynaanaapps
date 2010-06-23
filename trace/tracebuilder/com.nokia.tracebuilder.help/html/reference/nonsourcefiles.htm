@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>Tips and tricks</title>
+  <link href="../../book.css" type="text/css" rel="stylesheet">
+</head>
+
+<body>
+<h2>TraceBuilder tips and tricks</h2>
+
+<h3>Handling non-source files</h3>
+
+<p>TraceCompiler parses Open System Traces (OST) from source files listed in a
+project's MMP file. However, if traces need to be parsed from header files or
+inline files (<i>.inl</i>), the files need to be explicitly specified in the
+<i>trace.properties</i> property file. </p>
+
+<p>TraceBuilder does not support the definition of non-source files but you can
+define them manually by adding the needed file elements to the
+<i>trace.properties</i> property file. </p>
+
+<p>For example:</p>
+
+<p><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;<br>
+&lt;trace_properties&gt;<br>
+<b>&lt;file&gt;../inc/MyFunctions.inl&lt;/file&gt;<br>
+&lt;file&gt;../inc/MyFunctions.h&lt;/file&gt;</b><br>
+&lt;/trace_properties&gt;</code><br>
+</p>
+
+<p>The path to the file is relative to the location of the property file. The
+header file where the traces will be generated follows the same naming rules as
+the source files. From the above example, traces from both
+<i>MyFunctions.inl</i> and <i>MyFunctions.h</i> (and also
+<i>MyFunctions.cpp</i> if it exists) would go to the <i>MyFunctionsTraces.h</i>
+file.</p>
+
+<p><b>NOTE!</b> Location of the property file <i>trace.properties</i> is the
+trace directory. It could be that the property file <i>trace.properties</i>
+does not exist if there are no enumeration type definitions or non-source file
+definitions. In that case, it needs to be created manually.</p>
+
+<h5>Related concepts</h5>
+<ul>
+  <li><a href="../concepts/trace_format.htm">Open System Trace (OST)</a></li>
+</ul>
+
+<div id="footer">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

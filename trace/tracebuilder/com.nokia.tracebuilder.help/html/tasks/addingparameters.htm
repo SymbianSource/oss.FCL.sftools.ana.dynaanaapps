@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Adding parameters to existing traces</title>
+<link href="../../book.css" type="text/css" rel="stylesheet"></head>
+<body>
+
+<h2>Adding parameters to existing traces</h2>
+<p>Parameters can be used to associate data to traces: integers, strings and enumerations. A parameter
+specifies the format in which the parameter is shown in the viewer and text
+label associated with the parameter. </p><p>To add parameters to existing
+traces, do the following: </p>
+<ol>
+	<li>Select an existing trace from either of the following places:
+		<ul>
+			<li>from the source code</li>
+			<li>from the TraceBuilder tree view. </li>
+		</ul>
+	</li>
+	<li>Click the TraceBuilder menu and select <b>Add New Parameter</b>.</li>
+	<li>In the <b>Parameter Name</b> field, enter the variable name you want to
+		add to your trace.</li>
+	<li>In the <b>Parameter Type</b> field, enter the type for your parameter.<p>
+		The type defines how the parameter should be determined, for example:</p>
+		<ul>
+			<li><i>Signed</i> means signed integer and <i>Unsigned</i> means unsigned integer.</li>
+			<li><i>Hex</i> means that the parameter is an integer, but should be shown as hexadecimal number.</li>
+			<li>Also possible Enumerations are shown in the end of this list.</li>
+		</ul>
+	</li>
+	<li>(Optional) Select a <b>Template</b> for your parameter.<br>
+		The template defines pre-defined parameters that have special properties.
+		<p><img src="images/add_parameter.png"></p></li>
+	<li>Click <b>OK</b>. You should get this kind of change to your trace:<br><br>
+		<img src="images/ost_code_2.png"></li>
+</ol>
+<p>Note that you can always edit the trace text also manually.<p>
+<p>Now you can go on to <a href="setprojectandcompile.htm">compiling your source code</a>.</p>
+
+<h5>Related tasks</h5>
+<ul>
+	<li><a href="enumerations.htm">Adding and parsing Enumerations</a></li>
+	<li><a href="instrumenting.htm">Instrumenting traces</a></li>
+</ul>
+
+<div id="footer">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

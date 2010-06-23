@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Adding traces to the source code</title>
+<link href="../../book.css" type="text/css" rel="stylesheet"></head>
+<body>
+
+<h2>Adding traces to the source code</h2>
+<p>To add a new trace, do the following: </p>
+<ol>
+	<li>Place the cursor in your source code where you want to add the trace.</li>
+	<li>Click the TraceBuilder menu and select <b>Add New Trace</b>.</li>
+	<li>In the <b>Add Trace</b> dialog, enter trace group, name, and text:
+	<ul>
+		<li><b>Trace Group</b>: the trace group is needed when you want to activate 
+			your traces from the device. There are some predefined groups which you 
+			can use if your trace fits the purpose. You can also define your own group 
+			just by typing to the field.</li>
+		<li><b>Trace Name</b>: the trace name is needed for creating unique identifiers 
+			for each OST trace so that they can be identified in the PC side. 
+			The trace name must be unique.</li>
+		<li><b>Trace Text</b>: enter here the string you want to see when you receive 
+			the trace in TraceViewer.</li>
+		<li>(Optional) From the <b>Templates</b> list, you can select pre-defined
+			format for the trace name and trace text.
+			<p>For example, <i>Function entry-exit</i> template parses the name of the 
+			class and function where the cursor is currently located. An entry trace is 
+			added to the beginning of the function and the exit trace is added to the end.</p></li>
+	</ul>		
+		<p><img src="images/add_trace.png"></p>
+	</li>
+	<li>Click <b>OK</b>. You should get this kind of line to your source code:<br><br>
+		<img src="images/ost_code.png"></li>
+</ol>
+
+<p>The trace is added to the defined location in the code, and details
+such as the trace group are displayed in TraceBuilder's tree view. </p>
+
+<h5>Related tasks</h5>
+<ul>
+	<li><a href="addingparameters.htm">Adding parameters to traces</a></li>
+	<li><a href="instrumenting.htm">Instrumenting traces</a></li>
+</ul>
+
+<div id="footer">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.contexts"?>
+<contexts>
+
+<context id="TREE_VIEWER">
+ 	<description>Help on the Trace Builder</description>
+ 	<topic label="Menubar" href="html/reference/menubar.htm"/>
+	<topic label="Basic steps" href="html/gettingstarted/basic_steps.htm"/>
+ 	<topic label="Adding traces" href="html/tasks/addingtraces.htm"/>
+ 	<topic label="Adding parameters" href="html/tasks/addingparameters.htm"/>
+ 	<topic label="Adding Enumerations" href="html/tasks/enumerations.htm"/>
+ 	<topic label="Function Instrumenter" href="html/tasks/instrumenting.htm"/>
+ 	<topic label="Other tasks..." href="html/tasks/tasks.htm"/>
+ 	<topic label="Non-source files" href="html/reference/nonsourcefiles.htm" />
+</context>
+
+<context id="ADD_TRACE">
+ 	<description>You can add traces to source code</description>	   
+ 	<topic label="Adding traces" href="html/tasks/addingtraces.htm"/>
+</context>
+
+<context id="ADD_PARAMETER">
+ 	<description>You can add parameters to a existing trace</description>	   
+ 	<topic label="Adding parameters" href="html/tasks/addingparameters.htm"/>
+</context>
+
+<context id="ADD_ENUM">
+ 	<description>You can add Enumerations to your trace project</description>	   
+ 	<topic label="Adding Enumerations" href="html/tasks/enumerations.htm"/>
+</context>
+
+<context id="EDIT_PROPERTIES">
+ 	<description>You can edit properties of an trace object in this dialog</description>
+</context>
+
+<context id="DELETE_OBJECT">
+ 	<description>You can delete trace object from project</description>
+</context>
+
+<context id="DELETE_TRACES">
+ 	<description>You can delete multiple traces at once from this dialog</description>	   
+ 	<topic label="Deleting traces" href="html/tasks/deletingtraces.htm"/>
+</context>
+
+<context id="INSERT_TRACE">
+ 	<description>Inserts a copy of currently selected trace to a selected offset in the source code</description>
+</context>
+
+<context id="REMOVE_TRACE">
+ 	<description>Removes a trace from source</description>
+</context> 
+
+<context id="REMOVE_UNRELATED">
+ 	<description>Removes all unrelated traces from source</description>
+</context> 
+
+<context id="CONVERT_TRACE">
+ 	<description>Converts selected trace to OST trace</description>	   
+ 	<topic label="Converting traces to OST traces" href="html/tasks/converting.htm"/>
+</context> 
+
+<context id="INSTRUMENTER">
+ 	<description>Function instrumenter is used to instrument multiple traces at once</description>	   
+ 	<topic label="Function instrumenter" href="html/tasks/instrumenting.htm"/>
+</context> 
+
+<context id="PARSE_ENUM" title="Enumeration parser">
+	<description>Enumeration parser can be used to parse existing Enumeration from source</description>
+	<topic label="Enumeration parser" href="html/tasks/enumerations.htm"/>
+</context>
+
+<context id="GENERAL_PREFERENCES" title="General preferences">
+	<description>Trace Builder general preferences</description>
+	<topic label="General preferences" href="html/tasks/preferences.htm"/>
+</context>
+
+<context id="SELECT_COMPONENT">
+ 	<description>In this dialog you need to select component, that you are going to work with</description>	   
+</context>
+</contexts>

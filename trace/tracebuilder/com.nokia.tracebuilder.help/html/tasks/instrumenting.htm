@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Instrumenting traces</title>
+<link href="../../book.css" type="text/css" rel="stylesheet"></head>
+<body>
+
+<h2>Instrumenting traces</h2>
+<p>To instrument traces to your source code, do the following: </p>
+<ol>
+	<li>From the TraceBuilder menu, select <b>Instrument Code</b>. </li>
+	<li>Select a group for your traces or define a new one by typing the name
+		into the <b>Trace Group</b> field. </li>
+	<li>Type a name format for your traces. 
+		<p>The default is <b>{$CN}_{$FN}</b>, which means 
+		<code>className_functionName</code>. </p>
+		<p>The values for <code>className</code> and <code>functionName</code> 
+		are parsed from the source code.</p></li>
+	<li>Type a text format for your traces. 
+		<p>The default is <b>{$cn}::{$fn}</b>, which means 
+		<code>className::functionName</code>. </p>
+		<p>The values for <code>className</code> and <code>functionName</code> 
+		are parsed from the source code.</p></li>
+	<li>(Optional) From the <b>Templates</b> list, you can select pre-defined
+		format for the trace. 
+		<p>For example, <i>Function entry-exit</i> template parses the name 
+		of the class and function where the cursor is currently located.
+		An entry trace is added to the beginning of the function and the exit trace
+		is added to the end.</p></li>
+	<li>(Optional) Select any of the following options, as needed:
+	<ul>
+		<li><b>Add "this" pointer parameter</b> to add <i>this</i> pointer to the
+			instrumented traces. </li>
+		<li><b>Add function parameters</b> to add function parameters to the instrumented
+			traces. </li>
+		<li><b>Add exit traces</b> to add exit trace to every function instrumented. 
+			<b>Note:</b> this option is selected only if the <i>Function Entry-Exit</i> template
+			is selected.</li>
+		<li><b>Add return value to exit traces</b> to add a function return value
+			to every function that is instrumented.</li>
+	</ul>
+	</li>
+	<li>Click <b>OK</b>. </li>
+	<li>In the displayed dialog, select the functions you want to instrument.</li>
+	<li>Click <b>OK</b> to start instrumentation of the source code. </li>
+</ol>
+
+<h5>Related tasks</h5>
+<ul>
+	<li><a href="addingparameters.htm">Adding parameters to traces</a></li>
+	<li><a href="deletingtraces.htm">Deleting traces</a></li>
+</ul>
+
+<h5>Related concepts</h5>
+<ul>
+	<li><a href="../concepts/trace_format.htm">Open System Trace (OST)</a></li>
+</ul>
+
+<div id="footer">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

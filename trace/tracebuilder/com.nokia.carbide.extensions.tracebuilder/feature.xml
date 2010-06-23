@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.nokia.carbide.extensions.tracebuilder"
+      label="Carbide.c++ Extensions - Trace Builder"
+      version="2.4.0"
+      provider-name="Nokia"
+      plugin="com.nokia.tracebuilder">
+
+   <description>
+      Trace Builder is used for adding traces to the source code.
+   </description>
+
+   <copyright>
+      Nokia Corporation and/or its subsidiary(-ies). All rights reserved. License: http://www.eclipse.org/legal/epl-v10.html.
+   </copyright>
+
+   <license url="license.htm">
+      Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
+  This component and the accompanying materials are made available under the 
+  terms of the License "Eclipse Public License v1.0" which accompanies this 
+  distribution, and is available at the URL &quot;http://www.eclipse.org/legal/epl-v10.html&quot;.
+  
+  Part of the graphics of the program are from Eclipse 3.1 platform 
+  and CDT project in Eclipse community, which are made available under 
+  the terms of the Eclipse Public License v1.0.
+  A copy of the EPL is provided at 
+  http://www.eclipse.org/legal/epl-v10.html
+   </license>
+
+   <url>
+      <update label="Carbide.c++ Extensions Nokia Update Server" url="http://trwwwaps.nmp.nokia.com/programs/carbide"/>
+   </url>
+
+   <requires>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="com.nokia.trace.eventrouter"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="com.nokia.trace.dictionary"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor"/>
+      <import plugin="org.eclipse.ui.console"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="com.nokia.trace.eventview"/>
+      <import feature="com.nokia.carbide.extensions.traceviewer" version="2.6.0" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="com.nokia.tracebuilder"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+
+   <plugin
+         id="com.nokia.tracebuilder.eclipse"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.nokia.tracebuilder.eventhandler"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.nokia.tracebuilder.help"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.nokia.tracebuilder.view"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

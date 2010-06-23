@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+
+<plugin>
+    <extension point="org.eclipse.help.toc">
+        <toc
+            file="html/toolTOC.xml"
+            primary="true" /> 
+
+     <toc
+            file="html/tocConcepts.xml"
+            primary="false"/>
+      <toc
+            file="html/tocGettingStarted.xml"
+            primary="false"/>
+      <toc
+            file="html/tocTasks.xml"
+            primary="false"/>
+      <toc
+            file="html/tocReference.xml"
+            primary="false"/>
+
+    </extension>
+
+   <extension point="org.eclipse.help.index">
+      <index file="html/index.xml"/>
+   </extension>
+
+    <extension point="org.eclipse.help.contexts">
+        <contexts
+            file="html/contexts.xml"
+            plugin="com.nokia.tracebuilder.help" />
+    </extension>
+</plugin>
