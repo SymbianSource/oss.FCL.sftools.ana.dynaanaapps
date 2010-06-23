@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Decoding binary traces with a Dictionary file</title>
+<link href="../../book.css" type="text/css" rel="stylesheet"></head>
+<body>
+
+<h2>Decoding binary traces with a Dictionary file</h2>
+<p>To activate and deactivate binary traces that are in the Open
+System Trace (OST) format, you must first define the used <i>Dictionary file
+</i> for the component that is outputting the traces. Dictionary files are
+in XML and are usually available in your development environment. They are
+automatically re-generated everytime you compile a component that contains
+OST traces.</p>
+<p>You can open a Dictionary file to be used for decoding
+binary traces, based on a decode model.</p>
+<p>To open a Dictionary file: </p>
+<ol>
+<li>On the TraceViewer menu, select <b>Trace Activation</b>. </li>
+<li>In the <b>Activation</b> dialog, click <b>Add Dictionary</b>.</li>
+<li>In the <b>Open file</b> dialog, choose one or more decode files from the
+file system. <p>By default, these files are located in the <i>\epoc32\ost_dictionaries</i> directory, and named <i>[componentname]_uid_dictionary.xml</i><br>
+<b>Note</b>: You can also load a ZIP file containing one or more Dictionary files.
+</li>
+<li>Click <b>OK</b>. <p>TraceViewer will load the chosen files to the decoding
+model and decode the traces currently in the view.</p> </li>
+</ol>
+
+<h5>Related tasks</h5>
+<ul>
+	<li><a href="traceactivation.htm">Activating traces</a></li>
+</ul>
+
+<h5>Related concepts</h5>
+<ul>
+	<li><a href="../concepts/decode_file.htm">Dictionary file and trace activation</a></li>
+</ul>
+
+<div id="footer">Copyright &copy; 2007-2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.</div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Carbide.c++ Extensions - Trace Common
+Bundle-SymbolicName: com.nokia.trace.dictionary;singleton:=true
+Bundle-Version: 2.6.0
+Bundle-Activator: com.nokia.trace.dictionary.TraceDictionaryPlugin
+Bundle-Vendor: Nokia
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.ui,
+ com.nokia.trace.eventrouter
+Bundle-ActivationPolicy: lazy
+Export-Package: com.nokia.trace.dictionary,
+ com.nokia.trace.dictionary.decoder,
+ com.nokia.trace.dictionary.model,
+ com.nokia.trace.dictionary.model.decodeparameters,
+ com.nokia.trace.dictionary.model.handlers
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

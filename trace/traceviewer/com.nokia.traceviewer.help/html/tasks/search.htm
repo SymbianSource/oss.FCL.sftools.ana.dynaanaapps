@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Searching for traces</title>
+<link href="../../book.css" type="text/css" rel="stylesheet"></head>
+<body>
+
+<h2>Searching for traces</h2>
+<p>To find a specific trace, do the following: </p>
+<ol>
+<li>On the TraceViewer toolbar, click <b>Search</b>. <p>The standard <b>Search
+</b> dialog is opened. </p> </li>
+<li>In the <b>Find what</b> field, type your search criterion. </li>
+<li>Specify the following options as needed:
+<ul>
+<li><b>Match whole word only:</b> the searchable text must be found from the
+text separated with white space in both sides. For example, finding <i>ell
+</i> with this option will not find, for example, a line containing the word <i>
+hello</i>. If this option is off, the line will be found.</li>
+<li><b>Match case:</b> the search is case-sensitive. For example, finding <i>
+Hello</i> will not find a line <i>hello world</i> because the case of the <i>
+h</i> letter is different.</li>
+<li><b>Regular expression search:</b> to find traces with a specific search
+pattern. The syntax of the regular expressions can be found from <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/regex/Pattern.html">
+java.util.regex.Pattern</a>.</li>
+</ul>
+</li>
+<li>To start the search, click <b>Find next</b>. <p>Traces that match the
+criteria are high-lighted on the view.</p></li>
+</ol>
+
+<img src="images/searchView.png" alt="Search dialog">
+<p><b>Tip</b>: There are few shortcuts you can use:</p>  
+<ul>
+	<li><b>ALT + w</b> - Enables / Disables the "Match whole word only" option</li>
+	<li><b>ALT + c</b> - Enables / Disables the "Match case" option</li>
+	<li><b>ALT + d</b> - Changes the search direction</li>
+</ul>
+
+<div id="footer">Copyright &copy; 2007-2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.</div>
+</body>
+</html>

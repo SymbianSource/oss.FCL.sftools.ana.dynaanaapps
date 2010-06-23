@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Tasks" link_to="toolTOC.xml#tasks" topic="html/tasks/tasks.htm">
+	
+	<!-- Enter topic entries here for Tasks section of help -->
+	
+	<topic label="Setting TraceViewer preferences" href="html/tasks/preferences.htm" />	
+	<topic label="Configuring triggers" href="html/tasks/trigger.htm" />
+	<topic label="Configuring logging for traces" href="html/tasks/log.htm" />
+	<topic label="Setting up rules and filters" href="html/tasks/setup_rules.htm" />
+	<topic label="Using an external filter application" href="html/tasks/externalfilter.htm" />
+	<topic label="Setting filtering options" href="html/tasks/advancedfilter.htm" />
+	<topic label="Decoding binary traces with a Dictionary file" href="html/tasks/decoding_traces.htm" />
+	<topic label="Activating traces" href="html/tasks/traceactivation.htm" />
+	<topic label="Connecting to the trace source" href="html/tasks/connect.htm" />	
+	<topic label="Searching for traces" href="html/tasks/search.htm" />
+	<topic label="Viewing line count and variable tracing items" href="html/tasks/viewing_traces.htm" />
+	
+</toc>

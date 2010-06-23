@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.nokia.carbide.extensions.traceviewer"
+      label="Carbide.c++ Extensions - TraceViewer"
+      version="2.6.0"
+      provider-name="Nokia"
+      plugin="com.nokia.traceviewer">
+
+   <description>
+      TraceViewer is used for receiving and manipulating traces.
+   </description>
+
+   <copyright>
+      Nokia Corporation and/or its subsidiary(-ies). All rights reserved. License: http://www.eclipse.org/legal/epl-v10.html.
+   </copyright>
+
+   <license url="license.htm">
+      Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).All rights reserved.
+  This component and the accompanying materials are made available under the 
+  terms of &quot;Eclipse Public License v1.0&quot; which accompanies this 
+  distribution, and is available at the URL &quot;http://www.eclipse.org/legal/epl-v10.html&quot;.
+  
+  Part of the graphics of the program are from Eclipse 3.1 platform 
+  and CDT project in Eclipse community, which are made available under 
+  the terms of the Eclipse Public License v1.0.
+  A copy of the EPL is provided at 
+  http://www.eclipse.org/legal/epl-v10.html
+   </license>
+
+   <url>
+      <update label="Carbide.c++ Extensions Nokia Update Server" url="http://trwwwaps.nmp.nokia.com/programs/carbide"/>
+      <discovery label="Carbide.c++ Extensions Nokia Update Server" url="http://trwwwaps.nmp.nokia.com/programs/carbide"/>
+   </url>
+
+   <requires>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.ui.console"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="com.nokia.tcf"/>
+      <import plugin="com.nokia.carbide.remoteConnections"/>
+      <import plugin="com.nokia.carbide.trk.support"/>
+   </requires>
+
+   <plugin
+         id="com.nokia.traceviewer"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.nokia.traceviewer.dictionary"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.nokia.traceviewer.eventhandler"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.nokia.traceviewer.help"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+
+   <plugin
+         id="com.nokia.traceviewer.ost"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+         
+   <plugin
+         id="com.nokia.trace.eventrouter"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.nokia.trace.eventview"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.nokia.trace.dictionary"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.nokia.trace.help"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>         
+
+</feature>

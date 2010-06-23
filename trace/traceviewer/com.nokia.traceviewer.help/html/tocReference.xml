@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="References" link_to="toolTOC.xml#references" topic="html/reference/references.htm">
+	
+	<!-- Enter topic entries here for References section of help -->
+	
+	<topic label="TraceViewer toolbar" href="html/reference/toolbar.htm" />
+	<topic label="TraceViewer General settings" href="html/reference/preferencesgeneral.htm" />
+	<topic label="TraceViewer Connection settings" href="html/reference/preferencesconnection.htm" />
+	<topic label="TraceViewer Advanced settings" href="html/reference/preferencesadvanced.htm" />
+	
+</toc>

@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>When to use OST traces</title>
+<link href="../../book.css" type="text/css" rel="stylesheet"></head>
+<body>
+
+<h2>When to use OST traces</h2>
+<p>In general, it is not good idea to trace &ldquo;just in case&rdquo;, 
+or to see that everything works OK. Consider these points: </p>
+<ul>
+<li>Use traces to find the rough location of the problem and then use a debugger
+for the rest of the job. You save time as you are able to see registers, call-stacks
+and program variables. Do not debug using traces, it is very slow.  </li>
+<li>Some good cases to use tracing are:  
+	<ul>
+		<li>in code that manages error situations,  </li>
+		<li>initialization or stopping of operation,  </li>
+		<li>control operations that happen rarely (user input, for example). </li>
+	</ul>
+</li>
+<li>It is not recommended to add traces to code that is called very often,
+as each software tracepoint causes performance overhead. When tracepoint is
+not activated, some time is spent for checking if the trace is activated or
+not. When tracepoint is activated, additional time is taken when sending it
+to the trace port.</li>
+<li>If you get error reports after your code has been submitted to the release,
+well-planned traces can help you find out what went wrong and where to start
+looking for the problem. You can even instruct the problem reporter to take
+additional trace log with certain tracepoints enabled: <i>&ldquo;Send us a
+log where tracegroups X and Y from component Z are activated.&rdquo; </i></li>
+</ul>
+
+<h5>Related concepts</h5>
+<ul>
+	<li><a href="trace_format.htm">Trace formats</a></li>
+</ul>
+
+<h5>Related tasks</h5>
+<ul>
+	<li><a href="../tasks/connect.htm">Connecting to the trace source</a></li>
+	<li><a href="../tasks/decoding_traces.htm">Decoding binary traces with a Dictionary file</a></li>
+	<li><a href="../tasks/traceactivation.htm">Activating traces</a></li>
+</ul>
+
+<div id="footer">Copyright &copy; 2007-2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

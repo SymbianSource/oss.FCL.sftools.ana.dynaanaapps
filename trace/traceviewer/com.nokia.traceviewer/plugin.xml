@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="com.nokia.traceviewer.traceprovider" name="TraceViewer Trace Provider" schema="schema/com.nokia.traceviewer.traceprovider.exsd"/>
+   <extension-point id="com.nokia.traceviewer.decodeprovider" name="TraceViewer Decode Provider" schema="schema/com.nokia.traceviewer.decodeprovider.exsd"/>
+   <extension-point id="com.nokia.traceviewer.trimprovider" name="TraceViewer Trim Provider" schema="schema/com.nokia.traceviewer.trimprovider.exsd"/>
+
+  <extension
+    point="org.eclipse.core.runtime.products"
+    id="product">      
+      <product name="TraceViewer" application="org.eclipse.ui.ide.workbench"> 
+        <property name="appName" value="Carbide.c++ Extensions - TraceViewer"/> 
+      </product> 
+  </extension>
+
+  <extension point="org.eclipse.ui.views">
+    <category
+      id="com.nokia.s60tools"
+      name="Carbide Extensions"/>
+   
+    <view
+      category="com.nokia.s60tools"
+      class="com.nokia.traceviewer.view.TraceViewerView"
+      icon="icons/traceviewer.gif"
+      id="com.nokia.traceviewer.view.TraceViewerView"
+      name="TraceViewer"/>
+    <view
+      category="com.nokia.s60tools"
+      class="com.nokia.traceviewer.view.TracePropertyView"
+      icon="icons/traceproperty.gif"
+      id="com.nokia.traceviewer.view.TracePropertyView"
+      name="TraceViewerPropertyView"/>
+  </extension>
+     
+   <extension point="org.eclipse.core.runtime.preferences">
+        <initializer class="com.nokia.traceviewer.engine.preferences.PreferenceInitializer"/>
+   </extension>
+   
+   <extension point="org.eclipse.ui.preferencePages">
+     <page
+       class="com.nokia.traceviewer.engine.preferences.TraceViewerPreferencesPage"
+       category="com.nokia.carbide.cpp.preferences.ExtensionsPreferencesPage"
+       id="com.nokia.traceviewer.preferences.TraceViewerPreferences"
+       name="TraceViewer"/>
+     <page
+       category="com.nokia.traceviewer.preferences.TraceViewerPreferences"
+       class="com.nokia.traceviewer.engine.preferences.TraceViewerAdvancedPreferencesPage"
+       id="com.nokia.traceviewer.preferences.AdvancedPreferences"
+       name="Advanced"/>
+     <page
+       category="com.nokia.traceviewer.preferences.TraceViewerPreferences"
+       class="com.nokia.traceviewer.engine.preferences.TraceViewerConnectionPreferencesPage"
+       id="com.nokia.traceviewer.preferences.ConnectionPreferences"
+       name="Connection"/>
+     <page
+       category="com.nokia.traceviewer.preferences.TraceViewerPreferences"
+       class="com.nokia.traceviewer.engine.preferences.TraceViewerPluginsPreferencesPage"
+       id="com.nokia.traceviewer.preferences.PluginsPreferences"
+       name="Plugins"/>       
+  </extension>
+  
+  <extension point="org.eclipse.ui.exportWizards">
+    <category
+      id="com.nokia.traceviewer.category"
+      name="%CategoryName">
+    </category>
+    <wizard
+      category="com.nokia.traceviewer.category"
+      class="com.nokia.traceviewer.engine.preferences.wizard.ExportWizard"
+      icon="icons/traceviewer.gif"
+      id="com.nokia.traceviewer.exportWizard"
+      name="%WizardName">
+      <description>
+        %ExportDescription  
+      </description>      
+    </wizard>
+  </extension>
+  <extension point="org.eclipse.ui.importWizards">
+    <category
+      id="com.nokia.traceviewer.category"
+      name="%CategoryName">
+    </category>
+    <wizard
+      category="com.nokia.traceviewer.category"
+      class="com.nokia.traceviewer.engine.preferences.wizard.ImportWizard"
+      icon="icons/traceviewer.gif"
+      id="com.nokia.traceviewer.importWizard"
+      name="%WizardName">
+      <description>
+        %ImportDescription  
+      </description>
+    </wizard>
+  </extension>
+
+  <extension point="org.eclipse.ui.actionSets">
+    <actionSet
+      description="TraceViewer&apos;s Actions"
+      id="com.nokia.traceviewer.ui.actionSet"
+      label="TraceViewer"
+      visible="true">
+      <action                
+        class="com.nokia.traceviewer.action.ToolbarShortcutAction"
+        icon="icons/traceviewer.gif"
+        id="com.nokia.traceviewer.action.ToolbarShortcutAction"
+        label="&amp;TraceViewer"               
+        menubarPath="com.nokia.carbide.cpp.ui.CarbideMenu/CarbideExtensions"
+        tooltip="TraceViewer">
+      </action>
+      <menu
+        id="com.nokia.carbide.cpp.ui.CarbideMenu"
+        label=" &amp;Carbide"
+        path="additions">
+        <groupMarker name="additions"/>
+      </menu>
+    </actionSet>
+  </extension>
+
+  <extension point="org.eclipse.ui.commands">
+    <category
+      description="%commandCategoryDescription"
+      id="com.nokia.traceviewer.category.commands"
+      name="%commandCategoryName"/>
+      
+    <command
+      categoryId="com.nokia.traceviewer.category.commands"
+      defaultHandler="com.nokia.traceviewer.action.LogCloseAsciiGlobalAction"
+      description="%closeAsciiLogDescription"
+      helpContextId="com.nokia.traceviewer.help.TRACEVIEWER_HELP_LOGGING"
+      id="com.nokia.traceviewer.command.close_ascii_log"
+      name="%closeAsciiLogCommand"/>
+      
+    <command
+      categoryId="com.nokia.traceviewer.category.commands"
+      defaultHandler="com.nokia.traceviewer.action.LogCloseBinaryGlobalAction"
+      description="%closeBinaryLogDescription"
+      helpContextId="com.nokia.traceviewer.help.TRACEVIEWER_HELP_LOGGING"
+      id="com.nokia.traceviewer.command.close_binary_log"
+      name="%closeBinaryLogCommand"/>      
+      
+    <command
+      categoryId="com.nokia.traceviewer.category.commands"
+      defaultHandler="com.nokia.traceviewer.action.LogNewAsciiGlobalAction"
+      description="%newAsciiLogDescription"
+      helpContextId="com.nokia.traceviewer.help.TRACEVIEWER_HELP_LOGGING"
+      id="com.nokia.traceviewer.command.new_ascii_log"
+      name="%newAsciiLogCommand"/>         
+      
+    <command
+      categoryId="com.nokia.traceviewer.category.commands"
+      defaultHandler="com.nokia.traceviewer.action.LogNewBinaryGlobalAction"
+      description="%newBinaryLogDescription"
+      helpContextId="com.nokia.traceviewer.help.TRACEVIEWER_HELP_LOGGING"
+      id="com.nokia.traceviewer.command.new_binary_log"
+      name="%newBinaryLogCommand"/>     
+      
+    <command
+      categoryId="com.nokia.traceviewer.category.commands"
+      defaultHandler="com.nokia.traceviewer.action.LogOpenLogGlobalAction"
+      description="%openLogDescription"
+      helpContextId="com.nokia.traceviewer.help.TRACEVIEWER_HELP_LOGGING"
+      id="com.nokia.traceviewer.command.open_log"
+      name="%openLogCommand"/>             
+      
+    <command
+      categoryId="com.nokia.traceviewer.category.commands"
+      defaultHandler="com.nokia.traceviewer.action.LogSaveAsciiGlobalAction"
+      description="%saveAsciiLogDescription"
+      helpContextId="com.nokia.traceviewer.help.TRACEVIEWER_HELP_LOGGING"
+      id="com.nokia.traceviewer.command.save_ascii_log"
+      name="%saveAsciiLogCommand"/>        
+      
+    <command
+      categoryId="com.nokia.traceviewer.category.commands"
+      defaultHandler="com.nokia.traceviewer.action.LogSaveBinaryGlobalAction"
+      description="%saveBinaryLogDescription"
+      helpContextId="com.nokia.traceviewer.help.TRACEVIEWER_HELP_LOGGING"
+      id="com.nokia.traceviewer.command.save_binary_log"
+      name="%saveBinaryLogCommand"/>         
+      
+    <command
+      categoryId="com.nokia.traceviewer.category.commands"
+      defaultHandler="com.nokia.traceviewer.action.TraceActivationGlobalAction"
+      description="%traceActivationDescription"
+      helpContextId="com.nokia.traceviewer.help.TRACEVIEWER_HELP_ACTIVATION_DIALOG"
+      id="com.nokia.traceviewer.command.trace_activation"
+      name="%traceActivationCommand"/>           
+      
+    <command
+      categoryId="com.nokia.traceviewer.category.commands"
+      defaultHandler="com.nokia.traceviewer.action.AppendDecodeFileGlobalAction"
+      description="%appendDecodeFileDescription"
+      helpContextId="com.nokia.traceviewer.help.TRACEVIEWER_HELP_ACTIVATION_DIALOG"
+      id="com.nokia.traceviewer.command.append_decode_file"
+      name="%appendDecodeFileCommand"/>              
+      
+    <command
+      categoryId="com.nokia.traceviewer.category.commands"
+      defaultHandler="com.nokia.traceviewer.action.TriggerGlobalAction"
+      description="%triggerDescription"
+      helpContextId="com.nokia.traceviewer.help.TRACEVIEWER_HELP_TRIGGERING"
+      id="com.nokia.traceviewer.command.trigger"
+      name="%triggerCommand"/>
+            
+  </extension>
+
+</plugin>

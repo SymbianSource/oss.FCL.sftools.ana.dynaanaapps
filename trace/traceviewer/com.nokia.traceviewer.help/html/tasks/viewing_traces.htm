@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Viewing line count and variable tracing items</title>
+<link href="../../book.css" type="text/css" rel="stylesheet"></head>
+<body>
+
+<h2>Viewing line count and variable tracing items</h2>
+<h5>Before you start</h5>
+<p>On the <b>TraceViewerPropertyView</b>, you can check the properties
+of traces the based on the rules that were defined for line count and variable
+tracing.</p>
+<ul>
+<li><b>Line count</b> can be used to calculate the number of occurrences for
+a certain type of trace. This may mean, for example, a trace from a specific
+component, from a certain group of a certain component, or traces that contain
+a certain text. </li>
+<li><b>Variable tracing</b> means that you can follow up or monitor certain
+values that occur in traces. <p>For example, to monitor RAM consumption in
+the Kernel, there can be the following kind of trace: <br><br><i>00:11:31:624
+[0] Kernel Memory:Initial free RAM;Bytes:127598592</i><br><br>When you create
+a variable tracing rule that contains the text <i>Kernel Memory:Initial free
+RAM;Bytes</i>, you can view what the latest value of this variable was, as
+well as a number of its previous values.</p></li>
+</ul>
+
+<p>For generic instructions on how to create rules and definitions, see
+instructions in <a href="setup_rules.htm">Setting up rules and filters</a>. 
+</p>
+
+<h3><a name="varhist"></a>Viewing variable tracing history</h3>
+<p>To open the history: </p>
+<ol>
+<li>Select one or more items from the list. </li>
+<li>Right-click and select <b>Open history</b> from the menu.
+<p>The <b>Variable tracing history</b> dialog is displayed.</p>
+<p><img src="images/variabletracingHistoryDialog.png"
+alt="Variable Tracing History Dialog"></p>
+<p>In the history, you can see the last <i>n</i> number of events of 
+the variable changing. There is a timestamp (and time from the previous event), 
+new value and the line number where the change happened. The <b>Has codeline</b> 
+column indicates whether or not this item has location metadata available.</p></li>
+<li>(Optional) To open the source code of a line that has had changes:
+<ol>
+<li>Select the <b>Activate corresponding codeline</b> box.</li>
+<li>Double-click a line that shows <b>Yes</b> in the <b>Has codeline</b> column. </li>
+</ol>
+</li>
+<li>(Optional) To view the line number where changes happened:
+<ol>
+<li>Select the <b>Activate corresponding trace</b> box, if not selected already. </li>
+<li>Double-click a line in the dialog and TraceViewer jumps to that line in the code. </li>
+</ol>
+</li>
+</ol>
+<p><b>Tip</b>: If you close TraceViewer when you have any of the variable
+tracing rules enabled, they will get automatically enabled the next time you start TraceViewer.</p>
+
+<h5>Related tasks</h5>
+<ul>
+<li><a href="setup_rules.htm">Setting up rules and filters</a></li>
+</ul>
+
+<div id="footer">Copyright &copy; 2007-2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.</div>
+</body>
+</html>

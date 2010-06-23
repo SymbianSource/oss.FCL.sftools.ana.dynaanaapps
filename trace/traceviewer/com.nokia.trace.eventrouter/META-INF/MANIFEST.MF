@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Trace Event Router Plug-in
+Bundle-SymbolicName: com.nokia.trace.eventrouter;singleton:=true
+Bundle-Version: 2.6.0
+Bundle-Activator: com.nokia.trace.eventrouter.Activator
+Bundle-Vendor: Nokia
+Require-Bundle: org.eclipse.core.runtime
+Bundle-ActivationPolicy: lazy
+Export-Package: com.nokia.trace.eventrouter
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

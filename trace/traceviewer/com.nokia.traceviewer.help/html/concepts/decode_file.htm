@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>Dictionary file and trace activation</title>
+<link href="../../book.css" type="text/css" rel="stylesheet"></head>
+<body>
+
+<h2>Dictionary file and trace activation</h2>
+<p>Trace activation is a way of generating specific trace data that is 
+relevant for your components. This reduces the amount of traces listed 
+on the TraceViewer user interface.</p>
+<p>All the traces that come from various components on the device are
+first passed onto a trace handler, called TraceCore. TraceCore then determines
+which traces should be handed over to the PC and which ones should not. TraceCore
+only passes on those traces that have been activated and ignores the rest. 
+</p>
+<p>To activate and deactivate traces that are in the Open System Trace
+(OST) format, you must first define the used <i>Dictionary file</i>. </p>
+<p>Dictionary files are XML files that are usually available in your development
+environment. They are automatically re-generated every time Trace Compiler
+is run. This usually happens when you compile a component that contains Open
+System Trace (OST) traces. Dictionary files can normally be found from the <i>
+\epoc32\ost_dictionaries</i> directory under your Software Development Kit
+(SDK).</p>
+
+<h5>Related tasks</h5>
+<ul>
+	<li><a href="../tasks/traceactivation.htm">Activating traces</a></li>
+	<li><a href="../tasks/decoding_traces.htm">Decoding binary traces with a Dictionary file</a></li>
+</ul>
+
+<h5>Related concepts</h5>
+<ul>
+	<li><a href="trace_format.htm">Trace formats</a></li>
+</ul>
+
+<div id="footer">Copyright &copy; 2007-2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

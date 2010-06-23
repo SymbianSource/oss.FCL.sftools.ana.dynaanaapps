@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Using an external filter application</title>
+<link href="../../book.css" type="text/css" rel="stylesheet"></head>
+<body>
+
+<h2>Using an external filter application</h2>
+<p>You can specify an external filter application used while tracing. 
+Every trace is then pushed to the <b>stdin</b> of the specified application. 
+The application can handle the trace in various ways (write it to file, 
+modify it, and so on), or write it back to the <b>stdout</b>, where 
+TraceViewer will catch it and write it to the view.</p> <p>To use an 
+external filter application, do the following:</p>
+<ol>
+<li>Define the external filter application in TraceViewer's preferences. For
+more information, see <a href="../reference/preferencesadvanced.htm">Advanced
+settings</a>.</li>
+<li>To launch the application, click the <b>Start external Filter command
+</b> button on the TraceViewer toolbar.
+<p></p><img src="images/externalFilterToolbar.png"alt="Start external Filter button"></li>
+<li>To stop the application, click the <b>Stop external Filter</b> button.</li>
+</ol>
+
+<h3>Dealing with rules</h3>
+<p>If there are normal filter rules defined in TraceViewer, they are 
+applied <b>after</b> traces have been processed through the external 
+filter application. This means that only Text rules are applied
+because the format is changed to text. </p>
+<ul>
+<li>If there are Text rules defined, all traces coming from the external filter
+application are run through those rules, and if a line does not hit a rule,
+it will not be shown in the view.</li>
+<li>If no Text rules are defined, all traces coming from the external application
+are shown. </li>
+</ul>
+<p>For more information, see <a href="setup_rules.htm">Setting up
+rules and filters</a>.</p>
+
+<h3>Example of script and trace output</h3>
+<p>The following Perl script uses automatic flushing because otherwise some traces
+can be left in a buffer and never get back to TraceViewer. The script reads
+from the <b>sdtin</b>, gets a line, adds the text "Prefix: " in front of the
+line and prints it back to the <b>stdout</b> for TraceViewer to catch.</p> 
+
+<pre>#!perl -w
+
+use English;
+use Strict;
+
+$OUTPUT_AUTOFLUSH = 1;
+
+while (&lt;>) {
+  print "Prefix: " . $_;
+}</pre>
+<p></p>
+<p>As a result, the following traces are displayed:</p>
+<img src="images/externalFilterView.png" alt="TraceViewer view with the above Perl script"><br>
+<p><b>Note:</b> If the external filter application does not print traces back to
+the <b>stdout</b>, no traces will be visible in the TraceViewer view. Also,
+the external filter application does not have to be a Perl script as in this
+example, it can be anything, as long it gets data from <b>stdin</b> and writes
+it back to <b>stdout</b>.</p>
+
+<h5>Related tasks</h5>
+<ul>
+	<li><a href="advancedfilter.htm">Setting filtering options</a></li>
+</ul>
+
+<div id="footer">Copyright &copy; 2007-2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.</div>
+</body>
+</html>

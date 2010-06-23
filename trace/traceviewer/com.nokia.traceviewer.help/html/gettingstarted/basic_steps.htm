@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>TraceViewer basic steps</title>
+<link href="../../book.css" type="text/css" rel="stylesheet"></head>
+<body>
+
+<h2>TraceViewer basic steps</h2>
+<p>Open the TraceViewer tool in either of the following ways: </p>
+<ul>
+	<li>From the <b>Carbide > TraceViewer</b> menu. </li>
+	<li>From the  <b>Window > Show view > Other > Carbide extensions</b> menu.</li>
+</ul>
+<p>Tracing a target device involves the following stages, some of which are optional. </p>
+<ol>
+	<li>Set up tracing for your development goals.
+	<ul>
+		<li><a href="../tasks/preferences.htm">Setting TraceViewer preferences</a> 
+			(Connection settings are mandatory to define)</li>
+		<li><a href="../tasks/trigger.htm">Configuring triggers</a> (optional)</li>
+		<li><a href="../tasks/log.htm">Configuring logging for traces</a> (optional)</li>
+		<li><a href="../tasks/setup_rules.htm">Setting up rules and filters</a> (optional)</li>
+		<li><a href="../tasks/decoding_traces.htm">Decoding binary traces with a Dictionary 
+			file</a>(mandatory for OST traces)</li>
+		<li><a href="../tasks/traceactivation.htm">Activating traces</a>(mandatory for OST traces)</li>
+	</ul>
+	</li>
+	<li>Connect to the device to start receiving traces.
+	<ul>
+		<li><a href="../tasks/connect.htm">Connecting to the trace source</a>.</li>
+	</ul>
+	</li>
+	<li>Start the device, the application or the test case you are working on. <p>
+		The received traces should be visible in the TraceViewer main view, as shown
+		below in an example.</p>
+		<p><img src="images/mainview2.png" alt="Sample of trace listing on the user interface"></p>
+	</li>
+	<li>Analyse the data to get more information of the trace itself or open the
+		trace location in a text editor (only for OST traces). </li>
+	<li>(Optional) You can also copy the trace information to the clipboard or 
+		<a href="../tasks/search.htm">search for traces</a>. </li>
+</ol>
+
+<div id="footer">Copyright &copy; 2007-2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

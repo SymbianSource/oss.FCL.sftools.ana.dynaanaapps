@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: TraceViewer OST Plug-in
+Bundle-SymbolicName: com.nokia.traceviewer.ost;singleton:=true
+Bundle-Version: 2.6.0
+Bundle-Activator: com.nokia.traceviewer.ost.OstPlugin
+Bundle-Vendor: Nokia
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ com.nokia.traceviewer,
+ com.nokia.tcf
+Bundle-ActivationPolicy: lazy
+Export-Package: com.nokia.traceviewer.ost
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

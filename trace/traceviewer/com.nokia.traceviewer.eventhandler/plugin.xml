@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup class="com.nokia.traceviewer.eventhandler.EventHandlerStartup"/>
+   </extension>
+   
+  <extension point="org.eclipse.ui.menus">
+    <menuContribution
+      locationURI="toolbar:org.eclipse.ui.trim.status?after=additions">
+      <toolbar
+        id="com.nokia.traceviewer.eventhandler.contributions.contributedTrim">
+        <control
+          class="com.nokia.traceviewer.eventhandler.TrimInformation"
+          id="com.nokia.traceviewer.eventhandler.trimInformation">
+        </control>
+      </toolbar>
+    </menuContribution>
+  </extension>
+  
+   <extension
+         point="com.nokia.traceviewer.trimprovider">
+      <client
+            class="com.nokia.traceviewer.eventhandler.TrimUpdater">
+      </client>
+   </extension>
+  
+</plugin>

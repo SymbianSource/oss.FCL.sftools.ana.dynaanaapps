@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.contexts"?>
+<contexts>
+
+<context id="TRACEVIEWER_HELP_MAIN_VIEW">
+ 	<description>Help on the TraceViewer main view</description>	   
+ 	<topic label="Toolbar" href="html/reference/toolbar.htm"/>
+	<topic label="Basic steps" href="html/gettingstarted/basic_steps.htm"/>
+ 	<topic label="Connecting to the trace source" href="html/tasks/connect.htm"/>
+ 	<topic label="Searching for traces" href="html/tasks/search.htm"/>
+ 	<topic label="Activating traces" href="html/tasks/traceactivation.htm"/>
+ 	<topic label="Using an external filter application" href="html/tasks/externalfilter.htm"/>
+ 	<topic label="Decoding binary traces with a Dictionary file" href="html/tasks/decoding_traces.htm"/>
+ 	<topic label="Setting up rules and filters" href="html/tasks/setup_rules.htm"/>
+</context>
+
+<context id="TRACEVIEWER_HELP_ACTIONS">
+ 	<description>Rules, filters and definitions for rules for various items can be set up in separate dialogs.</description>	   
+ 	<topic label="Setting up rules and filters" href="html/tasks/setup_rules.htm"/>
+ 	<topic label="Setting filtering options" href="html/tasks/advancedfilter.htm"/>
+</context>
+
+<context id="TRACEVIEWER_HELP_ACTIVATION_CONFIGURATIONS">
+ 	<description>Loading a saved activation configuration in the Load Configuration dialog</description>	   
+ 	<topic label="Loading a saved activation configuration" href="html/tasks/traceactivation.htm#act_conf"/>
+</context>
+
+<context id="TRACEVIEWER_HELP_ACTIVATION_DIALOG">
+ 	<description>Loading Dictionary files and activating traces in the Trace Activation dialog</description>	   
+ 	<topic label="Decoding binary traces with a Dictionary file" href="html/tasks/decoding_traces.htm"/>
+ 	<topic label="Activating traces" href="html/tasks/traceactivation.htm"/>
+</context>
+
+
+<context id="TRACEVIEWER_HELP_LOGGING">
+ 	<description>Logging dialog</description>	   
+ 	<topic label="Configuring logging for traces" href="html/tasks/log.htm"/>
+</context>
+
+<context id="TRACEVIEWER_HELP_PROPERTY_VIEW">
+ 	<description>TraceViewer Property View</description>	   
+ 	<topic label="Viewing line count and variable tracing items" href="html/tasks/viewing_traces.htm"/>
+</context>
+
+<context id="TRACEVIEWER_HELP_VARIABLE_TRACING_HISTORY">
+ 	<description>Variable Tracing History dialog</description>	   
+ 	<topic label="Viewing variable tracing history" href="html/tasks/viewing_traces.htm#varhist"/>
+</context>
+
+<context id="TRACEVIEWER_HELP_TRIGGERING">
+ 	<description>Trigger Rules dialog</description>	   
+ 	<topic label="Configuring triggers" href="html/tasks/trigger.htm"/>
+</context>
+
+<context id="TRACEVIEWER_HELP_SEARCHING">
+ 	<description>Search dialog</description>	   
+ 	<topic label="Searching traces" href="html/tasks/search.htm"/>
+</context>
+
+<context id="TRACEVIEWER_HELP_GENERAL_PREFERENCES">
+ 	<description>TraceViewer General Settings</description>	   
+ 	<topic label="General settings" href="html/reference/preferencesgeneral.htm"/>
+</context> 
+
+<context id="TRACEVIEWER_HELP_ADVANCED_PREFERENCES">
+ 	<description>TraceViewer Advanced Settings</description>	   
+ 	<topic label="Advanced settings" href="html/reference/preferencesadvanced.htm"/>
+</context> 
+
+<context id="TRACEVIEWER_HELP_CONNECTION_PREFERENCES">
+ 	<description>TraceViewer Connection Settings</description>	   
+ 	<topic label="Connection settings" href="html/reference/preferencesconnection.htm"/>
+</context> 
+
+<context id="TRACEVIEWER_HELP_PLUGINS_PREFERENCES">
+ 	<description>TraceViewer Plugins Settings</description>	   
+ 	<topic label="TraceViewer Plugins settings" href="html/reference/preferencesplugins.htm"/>
+</context> 
+
+<context id="TRACEVIEWER_HELP_TRACE_INFO_DIALOG" title="Trace information dialog">
+	<description>In trace information dialog you can see more detailed information about the selected trace. This information include trace number in the view and the trace in hex string. Also, if trace is decoded, there can be information such as method name, class name, file name and line number where the trace is defined.
+	</description>
+	</context>
+</contexts>

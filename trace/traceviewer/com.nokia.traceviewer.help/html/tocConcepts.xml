@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Concepts" link_to="toolTOC.xml#concepts" topic="html/concepts/concepts.htm">
+	
+	<!-- Enter topic entries here for Concepts section of help -->
+	
+		<topic label="Tracing" href="html/concepts/tracing.htm" />
+		<topic href="html/concepts/trace_format.htm" label="Open System Trace (OST)">
+  </topic>
+  <topic href="html/concepts/when_to_use_ost.htm" label="When to use OST">
+  </topic>
+		<topic label="Dictionary file and trace activation" href="html/concepts/decode_file.htm" />
+		<topic label="Rules and filtering" href="html/concepts/filter.htm" />
+  <topic href="html/concepts/tracecompiler.htm" label="Trace Compiler">
+  </topic>
+</toc>

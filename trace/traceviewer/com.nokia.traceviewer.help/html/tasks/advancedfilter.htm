@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Setting filtering options</title>
+<link href="../../book.css" type="text/css" rel="stylesheet"></head>
+<body>
+
+<h2>Setting filtering options</h2>
+<p>TraceViewer provides various options for setting up filtering. 
+In some cases, it may also be necessary to use an external filter 
+application to modify the results. For instructions, 
+see <a href="externalfilter.htm">Using an external filter application</a>.</p>
+
+<h3><a name="basic"></a>Basic options</h3>
+<p>You can create new filter rules in the basic <b>Rules</b> dialog, as for 
+other items. For instructions, see <a href="setup_rules.htm">Setting up rules 
+and filters</a>.</p>
+
+<p>To set filtering-specific options: </p>
+<ol>
+<li>After the rules are defined, select one or more of them from the tree.</li>
+<li>Select either <b>Hide</b> or <b>Show</b>, to make the selected rules visible
+on the tree. <p><img src="images\filterDialog.png" alt="Special fields in Filter Rules dialog"></p></li>
+<li>Select either the <b>OR</b> or <b>AND</b> operator:
+<ul>
+<li>OR means that if a trace hits just one rule, it is applied. </li>
+<li>AND means that the trace must hit all the selected rules for it to be
+applied. </li>
+</ul>
+</li>
+<li>To take the selected rules to use, click <b>Apply</b>.</li>
+</ol>
+
+<h3><a name="advanced"></a>Creating rule statements</h3>
+<p>You can make also more complicated filtering rules by setting advanced options. The point
+is to make an effective and reasonable filter rule set, which will then be
+used when filtering traces.</p>
+<p>A rule set is written the form of a statement such as this: </p>
+<p><i>(rule AND rule2) OR (smallRule AND NOT filterRule)</i></p>
+<p>where traces are included or excluded based on this criterion. </p>
+<p><b>Tip:</b> You can also type the rule set statement manually into
+the text field. </p>
+<p>To set advanced options: </p>
+<ol>
+<li>In the <b>Filter Rules</b> dialog, click <b>Advanced</b>. <p>The <b>Advanced
+Filter Rules</b> dialog is displayed, showing the basic rules already created. 
+</p></li>
+<li>To start creating a new rule set, click <b>Start Set</b>. <p>An opening
+parenthesis ( is inserted into the text field to indicate the beginning.</p></li>
+<li>To edit the rule set, select rules from the tree and combine them with
+each other by clicking any of the following buttons: 
+<ul>
+<li><b>AND:</b> Indicates logical AND. Is used between two rules or rule sets
+and means that both rules / sets will have to hit the rule for it to be true.
+</li>
+<li><b>OR:</b> Indicates logical OR. Is used between two rules or rule sets
+and means that either rule / set will have to hit the rule for it to be true.
+</li>
+<li><b>NOT:</b> Indicates logical NOT. Is used before a rule or rule set.
+Indicates that the rule / rule set after the NOT can not hit the rule for
+it to be true.</li>
+</ul>
+<p>The <b>Back</b> button removes the last word from the text field,
+starting from the caret position. </p></li>
+<li>(Optional) To quickly add all the rules from a group to the set, click
+the group name on the tree. <p>From the pop-up, select OR or AND. After choosing,
+all the rules from this group are added to the text field, separated by the
+selected logical operation. </p><p><img src="images/advancedFilterDialogGroup.png"
+alt="Selecting all rules from a group"></p></li>
+<li>Click <b>End Set</b> to insert a closing parenthesis ) into the field. <p><b>
+Note:</b> TraceViewer automatically checks that the rule is reasonable and
+well-formed, that is, contains as many start brackets as end brackets. The
+following is an example of a reasonable filter rule set that is correct and
+ready to be applied: </p><p><img src="images/advancedFilterDialogReady.png"
+alt="Filter rule ready to be applied"></p></li>
+<li>(Optional) To hide or show a trace that hits this filter rule, change
+the value of <b>Show</b> and <b>Hide</b> selection as needed.</li>
+<li>Click <b>OK</b> to save the rule set. </li>
+</ol>
+
+<ul>
+<li>To clear the rule text field and start creating a new one, click <b>Clear
+</b>. </li>
+<li>To return to the <b>Basic</b> dialog, click <b>Simple</b>.</li>
+</ul>
+
+<h5>Related tasks</h5>
+<ul>
+<li><a href="setup_rules.htm">Setting up rules and filters</a></li>
+<li><a href="externalfilter.htm">Using an external filter application</a></li>
+</ul>
+
+<div id="footer">Copyright &copy; 2007-2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.</div>
+</body>
+</html>

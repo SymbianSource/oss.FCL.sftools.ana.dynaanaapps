@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.index"?>
+
+	<!-- INDEX INSTRUCTIONS
+	
+	Use the index.xml file to define the index entries for the plugin's 
+	help contents. In Eclipse 3.2 and beyond an Index tab appears in the Help
+	viewer making it possible for user to more easily locate subjects of
+	interest to them.
+		
+	In brief, every file used in the help documentation should have at least one
+	associated index entry for it. Ideally, it's simple to make two entries per
+	page by simply re-wording the subject slightly. For example, a view could
+	be indexed twice like this, 1) Breakpoint view, and 2) Views/Breakpoint.
+	
+	-->
+
+<index>
+
+	<entry keyword="Open System Trace" >
+		<topic href="html/concepts/trace_format.htm" />
+	</entry> 
+
+	<entry keyword="OST" >
+		<topic href="html/concepts/trace_format.htm" />
+	</entry> 
+
+	<entry keyword="when to use OST" >
+		<topic href="html/concepts/when_to_use_ost.htm" />
+	</entry> 
+
+	<entry keyword="tracing" >
+		<topic href="html/concepts/tracing.htm" />
+	</entry> 
+	
+	<entry keyword="dictionary file" >
+		<topic href="html/concepts/decode_file.htm" />
+	</entry>
+
+	<entry keyword="activating traces" >
+		<topic href="html/tasks/traceactivation.htm" />
+	</entry> 
+
+	<entry keyword="TraceViewer preferences" >
+		<topic href="html/tasks/preferences.htm" />
+	</entry> 
+
+	<entry keyword="decoding traces" >
+		<topic href="html/tasks/decoding_traces.htm" />
+	</entry> 
+
+	<entry keyword="connecting to trace source" >
+		<topic href="html/tasks/connect.htm" />
+	</entry> 
+
+</index>
+
+

@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Setting up rules and filters</title>
+<link href="../../book.css" type="text/css" rel="stylesheet"></head>
+<body>
+
+<h2>Setting up rules and filters</h2>
+<h5>Before you start</h5>
+<p>You can work with generated traces in various ways, by setting rules and filters
+for them. The settings are saved into a configuration file named <i>userConf.xml
+</i>, and can be exported from TraceViewer or imported back in by using Carbide's
+import and export functions available under the <b>File</b> menu. </p>
+<p>You can configure rules and filters in a separate dialog that lists its contents
+like a tree. </p>
+
+<p>To set up rules for traces, do the following:</p>
+<ol>
+<li>On the TraceViewer toolbar, click the item for which you want to create
+a rule or a rule definition:
+<p></p>
+<table width="456" border="1" cellspacing="1" cellpadding="2">
+<colgroup>
+	<col width="26*">
+	<col span="1" width="167*">
+</colgroup>
+<thead>
+<tr>
+<td><p><b>Button</b></p></td>
+<td><p><b>Use it to open:</b></p></td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="images\iconfilter.gif"></td>
+<td><p>Basic filter settings. </p></td>
+</tr>
+<tr>
+<td><img src="images\iconcolor.gif"></td>
+<td><p>Trace coloring settings, including definitions for foreground and background
+colors.</p></td>
+</tr>
+<tr>
+<td><img src="images\iconcount.gif"></td>
+<td><p>Trace counting settings</p></td>
+</tr>
+<tr>
+<td><img src="images\icontracevariable.gif"></td>
+<td><p>Variable value tracing settings, including definitions for the number
+of steps stored in variable tracing history. </p></td>
+</tr>
+<tr>
+<td><img src="images\icontrigger.gif"></td>
+<td><p>Trigger settings, including definitions for start and stop triggers.
+For instructions, see <a href="trigger.htm">Configuring triggers</a>. </p></td>
+</tr>
+</tbody>
+</table>
+
+<p>The <b>Rules</b> dialog for the selected item is displayed. </p></li>
+<li>To manage the rules, do any of the following:
+<ul>
+<li>To create a new rule, click <b>Add</b>. The <b>Definition</b> dialog is
+opened. </li>
+<li>To edit an existing rule, select it and click <b>Edit</b>. The <b>Definition
+</b> dialog is opened. </li>
+<li>To delete a rule, select it and click <b>Remove</b>.</li>
+<li>To clear the whole tree, click <b>Clear</b>. </li>
+<li>To create groups for rules, click <b>Group</b>. </li>
+<li><b>Note:</b> For filtering, there are more configuration settings available.
+See <a href="advancedfilter.htm">Setting filtering options</a>.</li>
+</ul></li>
+<li>(Optional) In the <b>Definition</b> dialog, do any of the following modifications
+and click <b>OK</b> to return to the <b>Rules</b> dialog.
+<ol>
+<li>Enter a name for the rule.</li>
+<li>Select rule type, either <b>Text rule</b> and <b>Component / Group rule
+</b>. <ul>
+<li><b>Text rule:</b> type in the text to be matched with each trace. </li>
+<li><b>Component / Group rule:</b> type in the component name and/or group
+IDs from where you want traces to be found. You can use the asterisk * as
+a wildcard character for any component or group. </li>
+<li>For text rules, select <b>Match case</b> to make the trace text be in
+the same case as with the rule.</li>
+</ul></li>
+</ol>
+<p><b>Example:</b> The following figure shows the <b>Color Definition</b> dialog.</p>
+<p><img src="images/colorPropertyDialog.png" alt="Color Definitions"></p></li>
+<li>When rules are created and they are listed in the dialog, select the ones
+you want to enable. <p><img src="images\selected_rules.png" alt="Sample of rules selected in the dialog."></p></li>
+<li>To save your changes, click <b>OK</b>. </li>
+</ol>
+
+<p><b>Tip</b>: If you close TraceViewer when you have any
+of the rules (color, filter, line count, variable tracing) enabled, they will
+get automatically enabled the next time you start TraceViewer.</p>
+
+<h5>Related tasks</h5>
+<ul>
+	<li><a href="advancedfilter.htm">Setting filtering options</a></li>
+	<li><a href="viewing_traces.htm#varhist">Viewing variable tracing history</a></li>
+</ul>
+
+<div id="footer">Copyright &copy; 2007-2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.</div>
+</body>
+</html>

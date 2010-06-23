@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>Connection settings</title>
+  <link href="../../book.css" type="text/css" rel="stylesheet">
+</head>
+
+<body>
+<h2>Connection settings</h2>
+
+<p>The connection preferences can be accessed from: <b>Window &gt;
+Preferences.</b> In the Preferences dialog list, select <b>Carbide Extensions
+&gt; TraceViewer &gt; Connection</b>. The <b>Connection</b> page opens to right
+side of the dialog.</p>
+
+<p><img src="images/preferencesConnection.png"
+alt="Connection settings dialog"></p>
+<ol>
+  <li>In <b>Use connection</b>, select an existing connection to use and click
+    <b>OK</b>, or click <b>New...</b> to create a new connection or
+    <b>Edit...</b> to edit an existing one. Follow the next steps if you
+    selected to create a new connection or to edit an existing one.
+    <p class="note">NOTE For USB tracing connection, you must have the
+    TraceSwitch application installed in your device. You must also have
+    connectivity software such as Nokia PC Suite installed in your PC.</p>
+  </li>
+  <li>In <b>Connection type</b>, select a connection method: 
+    <ul>
+      <li><b>PlatSim</b> if you are using a PlatSim connection between the PC
+        and the target device.</li>
+      <li><b>TCP/IP Musti</b> if you are using an XTI connection between the PC
+        and the target device.</li>
+      <li><b>USB</b> if you are using a USB cable connection between the PC and
+        the target device. 
+        <p><img src="images\connection_01.png" alt=""></p>
+      </li>
+    </ul>
+  </li>
+  <li>In <b>Connection name</b>, enter a unique name for this connection. </li>
+  <li><p>Modify the connection settings:</p>
+    <ul>
+      <li>For <b>PlatSim</b>: Define Platsim location and Instance 
+        <p><img src="images\connection_platsim.png" alt=""></p>
+      </li>
+      <li>For<strong>TCP/IP Musti</strong>: define the IP address, Musti
+        channel and Port. 
+        <p><img src="images/connection_musti.png" alt=""></p>
+      </li>
+      <li><p>For <b>USB</b>: define the serial port used for USB connection on
+        your PC. To find out the port:</p>
+        <ol type="1">
+          <li>Connect your phone to the PC using a USB cable and the Nokia PC
+            Suite application.</li>
+          <li>(Optional) If you connect for the first time, install the
+            necessary drivers to your phone.</li>
+          <li>In <b>Windows</b>, check the correct serial port from the
+            <b>Device Manager </b> in the <b>Control Panel</b>. Select <b>Ports
+            (COM &amp; LPT)</b>, and locate an item similar to <b>Series 60
+            Nokia S60 Phone USB (COMX)</b>, where X means the port to connect
+            to.</li>
+        </ol>
+        <p><img src="images\connection_usb.png"></p>
+      </li>
+    </ul>
+  </li>
+  <li>Click <b>Finish</b> to save and exit.</li>
+  <li>(Optional) A connections can be set as the "Current connection" from
+    either the Remote Connection view or the "Current connection" Trim widget.
+    When you connect a device through USB, dynamic connections are created
+    automatically. If you want to automatically connect to the dynamic
+    connection that is set as &ldquo;Current connection&rdquo;, you should
+    check the <b>Auto connect to dynamic connections</b> checkbox in the
+    Connection page of the Preferences dialog. For auto connect, you also need
+    to have "Current connection" selected as the main connection for
+    TraceViewer in the Preferences dialog.</li>
+  <li>(Optional) Use the <strong>Test Connection</strong> tab of the New
+    Connection dialog to make sure that the connection works. For more
+    information, see <a
+    href="../../../com.nokia.carbide.cpp.doc.user/html/reference/trk/wnd_on_device_check_tab.htm">Test
+    Connection</a>.  </li>
+</ol>
+
+<h5>Related tasks</h5>
+<ul>
+  <li><a href="../tasks/connect.htm">Connecting to the trace source</a></li>
+  <li><a href="../tasks/preferences.htm">Setting TraceViewer
+  preferences</a></li>
+</ul>
+
+<div id="footer">Copyright &copy; 2007-2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>

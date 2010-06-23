@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>Configuring triggers </title>
+  <link href="../../book.css" type="text/css" rel="stylesheet">
+</head>
+
+<body>
+<h2>Configuring triggers</h2>
+
+<p>You can create start, stop, and activation triggers to TraceViewer. </p>
+<ul>
+  <li>A start trigger means that receiving traces starts only when the start
+    trigger is met. </li>
+  <li>A stop trigger means that the view will be paused when the stop trigger
+    is met. </li>
+  <li>An activation trigger means that when trace with the given trigger text
+    is received, a given activation configuration is loaded from the defined
+    activation configuration file, and sent to the device.</li>
+</ul>
+
+<p>To configure the triggers: </p>
+<ol>
+  <li>Open the TraceViewer menu by clicking <img
+    src="images/icon_menu_open.png">, and select <b>Triggers</b>. 
+    <p>The <b>Trigger Rules </b> dialog is displayed. </p>
+  </li>
+  <li>To manage the rules, do any of the following: 
+    <ul>
+      <li>To create a new start or stop rule, click <b>Add</b>. The <b>Trigger
+        Rule Definition</b> dialog is opened. </li>
+      <li>To edit an existing start or stop rule, select it and click
+        <b>Edit</b>. The <b>Trigger Rule Definition</b> dialog is opened. </li>
+      <li>To delete a rule, select it and click <b>Remove</b>.</li>
+      <li>To clear the whole tree, click <b>Clear</b>. </li>
+      <li>To create groups for rules, click <b>Group</b>. </li>
+    </ul>
+    <p>See the following figure for an example: </p>
+    <p></p>
+    <p><img src="images/triggerDialog.png" alt="Trigger dialog"></p>
+  </li>
+  <li>In the <b>Trigger Rule Definition</b> dialog, enter a name for the
+    trigger and the text to be matched with each trace. </li>
+  <li>From the <strong>Type</strong> listbox, select the trigger type: <b>Start
+    trigger</b>, <b>Stop trigger</b>, or <strong>Activation trigger</strong>.
+    See following example: 
+    <p><img src="images\sample_start_trigger.png"></p>
+    <p>If you selected Activation trigger, continue to step 5, otherwise skip
+    to <a name="step" id="step" href="#Click">step 8</a>.</p>
+  </li>
+  <li>Click the <img alt="nn" src="images/browse_button.png" width="28"
+    height="23"> button next to the <strong>Conf</strong> field to select the
+    configuration file to be used for the Activation trigger. The Load
+    Configuration dialog opens: 
+    <p><img src="images/LoadConfiguration_dialog.png"></p>
+  </li>
+  <li>Browse to the desired activation file and select the configuration from
+    the <strong>Load configuration</strong> listbox. 
+    <p>Activation files and configurations are created by using the
+    <strong>Trace Activation</strong> dialog. For more information, see <a
+    href="traceactivation.htm">Activating traces</a>.</p>
+  </li>
+  <li>Click OK in the <strong>Load Configuration</strong> dialog.</li>
+  <li><a name="Click" id="Click">Click <b>OK</b> in the <strong>Trigger Rule
+    Definition</strong> dialog to either create a new rule or update an
+    existing rule.</a></li>
+</ol>
+
+<h5>Related tasks</h5>
+<ul>
+  <li><a href="traceactivation.htm">Activating traces</a></li>
+  <li><a href="setup_rules.htm">Setting up rules and filters</a></li>
+</ul>
+
+<div id="footer">
+Copyright © 2007-2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved.</div>
+</body>
+</html>

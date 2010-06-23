@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Tracing User&apos;s Guide" link_to="../com.nokia.carbide.help.common/carbideHelpTOC.xml#anchorCarbideFeature">
+   <topic href="html/toc.htm" label="Tracing User&apos;s Guide">
+      <topic href="html/gettingstarted/GS_index.htm" label="Getting started with tracing tools"></topic>
+	  <topic href="html/gettingstarted/walk_through.htm" label="Basic walk-through of tracing"></topic>
+      <topic href="html/whats_new.htm" label="What&apos;s New in this release?">
+         <topic href="../com.nokia.tracebuilder.help/html/release_notes.htm" label="TraceBuilder"></topic>
+         <topic href="../com.nokia.traceviewer.help/html/release_notes.htm" label="TraceViewer"></topic>
+         <topic href="../com.nokia.s60tools.traceanalyser.help/html/release_notes.htm" label="TraceAnalyser"></topic>
+      </topic>
+      <topic href="html/concepts/concepts.htm" label="Understanding tracing">
+         <link toc="../com.nokia.traceviewer.help/html/tocConcepts.xml"/>
+      </topic>
+      <topic href="../com.nokia.tracebuilder.help/html/gettingstarted/basic_steps.htm" label="Adding traces to the code (TraceBuilder)">
+         <link toc="../com.nokia.tracebuilder.help/html/tocTasks.xml"/>
+      </topic>
+      <topic href="../com.nokia.traceviewer.help/html/gettingstarted/basic_steps.htm" label="Setting up and receiving traces (TraceViewer)">
+         <link toc="../com.nokia.traceviewer.help/html/tocTasks.xml"/>
+      </topic>
+      <topic href="../com.nokia.s60tools.traceanalyser.help/html/gettingstarted/traceanalyser_basic_walkthrough.htm" label="Analysing traces (TraceAnalyser)">
+         <link toc="../com.nokia.s60tools.traceanalyser.help/html/tocTasks.xml"/>
+      </topic>
+      <topic href="html/reference/references.htm" label="Tips &amp; Tricks">
+         <link toc="../com.nokia.tracebuilder.help/html/tocReference.xml"/>
+         <link toc="../com.nokia.traceviewer.help/html/tocReference.xml"/>
+      </topic>
+      <topic href="html/legal.htm" label="Legal" >
+      </topic>
+   </topic>		
+</toc>

@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>Configuring logging for traces</title>
+  <link href="../../book.css" type="text/css" rel="stylesheet">
+</head>
+
+<body>
+<h2>Configuring logging for traces</h2>
+
+<p>You can create a log out of the received traces. The log can be either a
+plain text (ASCII) log file that can be opened in a normal text editor, or a
+binary log file that will contain all the data in the same form as coming from
+the trace source. Note that the binary file can only be opened in TraceViewer.
+</p>
+
+<p>Some typical cases for logging could be: </p>
+<ul>
+  <li>To work the with trace data independently of the device (uses binary
+    logs).</li>
+  <li>To compare two logs taken from the same test case, run at different times
+    (uses ASCII logs).</li>
+  <li>To analyse the log in other applications (uses ASCII logs). </li>
+</ul>
+
+<p>To start logging, do the following: </p>
+<ol>
+  <li>From the TraceViewer menu, select <b>Log...</b>. 
+    <p>A submenu containing options is displayed. You have multiple choices:</p>
+  </li>
+  <li><p>To open a previously written ASCII or Binary log file, select <b>Open
+    log</b>. A file selection dialog is displayed where you can select your log
+    file.</p>
+  </li>
+  <li><p>To write a new Binary log, select <b>New Binary log</b>. A file
+    selection dialog is displayed where you can select where to create your log
+    file.</p>
+  </li>
+  <li><p>To save currently shown traces to a Binary log file, select <b>Save
+    current traces to Binary log</b>. A file selection dialog is displayed
+    where you can select where to create your log file.</p>
+  </li>
+  <li><p>To stop currently ongoing Binary logging, select <b>Close Binary
+    log</b>. This option is not selectable if Binary logging is not ongoing.
+    </p>
+  </li>
+  <li><p>To write a new ASCII log, select <b>New ASCII log</b>. A file
+    selection dialog is displayed where you can select where to create your log
+    file. After file selection, a dialog is displayed where you can select few
+    options:</p>
+    <ul>
+      <li><p>(Optional) To omit timestamps from the plain text log files for a
+        better comparability between the log files, select <b>Omit timestamps
+        from the log</b>.</p>
+        <p>This option is useful for situations where the timestamp information
+        does not bring additional value to the analysis of data.</p>
+      </li>
+      <li><p>(Optional) To write a machine readable plain text log file, select
+        <b>Write machine readable ASCII log</b>.</p>
+        <p>This log file format is easy to read using automatic scripts.</p>
+      </li>
+    </ul>
+  </li>
+  <li><p>To save currently shown traces to a ASCII log file, select <b>Save
+    current traces to ASCII log</b>. A file selection dialog is displayed where
+    you can select where to create your log file.</p>
+  </li>
+  <li><p>To stop the currently ongoing ASCII logging, select <b>Close ASCII
+    log</b>. This option is not selectable if ASCII logging is not ongoing. </p>
+  </li>
+</ol>
+
+<p><b>Note:</b> If you have added comments to the traces, they will get written
+to a separate file called &lt;log_file_name&gt;.meta. To see the comments when
+you open the log file to TraceViewer, the .meta file must be in the same
+directory as the log file itself.</p>
+
+<h5>Related concepts</h5>
+<ul>
+  <li><a href="../concepts/tracing.htm">Tracing</a></li>
+</ul>
+
+<div id="footer">
+Copyright &copy; 2007-2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved.</div>
+</body>
+</html>

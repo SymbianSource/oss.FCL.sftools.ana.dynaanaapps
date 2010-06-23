@@ -1,0 +1,348 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>Release Notes</title>
+  <link href="../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body bgcolor="#FFFFFF">
+<h2>Release Notes</h2>
+
+<h4>TraceViewer &ndash; Version 2.6.0</h4>
+
+<p>Released 20th June 2010</p>
+<ul>
+  <li><a href="#description">Product description</a></li>
+  <li><a href="#features">Main features</a></li>
+  <li><a href="#newfeatures">What's new</a></li>
+  <li><a href="#installation">Installation notes</a></li>
+  <li><a href="#requirements">System requirements</a></li>
+  <li><a href="#compissues">Compatibility issues</a></li>
+  <li><a href="#issues">Known issues</a></li>
+</ul>
+
+<h3><a name="description"></a>Product description</h3>
+
+<p>TraceViewer is a tool for tracing a target device. The device can be
+connected to a PC via USB connection. TraceViewer gathers the trace data
+directly to the host side for further manipulation.</p>
+
+<p>The TraceViewer tool can be started either by selecting the <b>Carbide &gt;
+TraceViewer</b> menu item or via <b>Window &gt; Show View &gt; Other...</b>
+under <b>Carbide Extensions</b> category. </p>
+
+<h3><a name="features"></a>Main features</h3>
+<ul>
+  <li>UI for displaying traces received from the connected device. </li>
+  <li>Search and filter traces from the view. </li>
+  <li>Write traces to an ASCII or binary log file.</li>
+  <li>Color and count the traces.</li>
+  <li>Trace variable values shown in the traces.</li>
+  <li>Activate Open System Traces (OST) from the device during run-time.</li>
+  <li>Saving trace configurations in a file. </li>
+</ul>
+
+<h3><a name="newfeatures"></a>What's new</h3>
+<ul>
+  <li>New: Added max ASCII line length (10000 characters) check to prevent
+    possible freeze up in case of too much data.</li>
+  <li>New: Opened log file name is shown in the TraceViewer name tab.</li>
+  <li>Bug fix: Sometimes, other DataReader was left alive to background when
+    changing Data Format.</li>
+  <li>Bug fix: TraceViewer didn't save connection settings over Carbide.c++
+    reboot.</li>
+  <li>Bug fix: Reloading of the Dictionaries were not always reliable.</li>
+  <li>Changed: Fixed some FindBugs warnings.</li>
+  <li>Changed: TraceViewer is now released under EPL license.</li>
+</ul>
+
+<h3><a name="installation"></a>Installation notes</h3>
+
+<p>To install the tool, do the following:</p>
+<ul>
+  <li>The tool already comes in SymSEE installation of Carbide.c++</li>
+  <li>To upgrade to newer version:</li>
+  <li>Unzip everything inside the zip into Carbide "dropins" folder. If you
+    already had old TraceViewer go to "Help - About Carbide.c++ - Installation
+    details - TraceViewer" and click "Update...</li>
+</ul>
+
+<h3><a name="requirements"></a>System requirements</h3>
+
+<p>Basic requirements:</p>
+<ul>
+  <li>Windows XP</li>
+  <li>Carbide.c++ 2.5.0 or newer.</li>
+</ul>
+
+<p>Additional requirements:</p>
+<ul>
+  <li>Connection to a target device using USB.</li>
+</ul>
+<!--
+<h5>How to upgrade from older versions</h5>
+
+<p>The new version of the extension comes with updated versions of common utility plug-ins. Once
+you have installed the new set of plug-ins, do the following: </p><ol>
+<li>Open the command prompt. </li>
+<li>Go to the Carbide.c++ installation directory on your PC (for example, <code>C:\Program Files\Nokia\Carbide.c++ v1.2</code>).</li>
+<li>Enter the following command to start Carbide.c++: <code>"Carbide.c++.exe"-clean</code></li>
+</ol>
+<p>Starting up Carbide.c++ with the <code>clean</code> option ensures that the latest versions of the plug-ins are loaded. </p>
+-->
+
+<h3><a name="compissues"></a>Compatibility issues</h3>
+<ul>
+  <li>N/A</li>
+</ul>
+
+<h3><a name="issues"></a>Known issues</h3>
+<ul>
+  <li>N/A</li>
+</ul>
+
+<h3>Version history</h3>
+
+<h5>Version 2.5.3 &ndash; 9th April 2010</h5>
+<ul>
+  <li>New: Dropped traces notification is now added before the timestamp of the
+    trace.</li>
+  <li>New: Support for formatting to length in trace parameters (e.g. "My var =
+    %02x").</li>
+  <li>New: Added possibility to create shortcut keys to some TraceViewer
+    actions. This can be done from "Keys" preference page in Carbide.c++.</li>
+  <li>New: Possibility to create Activation trigger so that when a specific
+    trace is received, activation is sent to the device.</li>
+</ul>
+
+<h5>Version 2.4.12 &ndash; 16th February 2010</h5>
+<ul>
+  <li>Requires Carbide.c++ 2.5.0 or newer to work!</li>
+  <li>New: New connection preference option called "Current connection". If
+    this is selected, user can change the currently active connection easily
+    either from Remote Connection view or from a new Trim widget showing the
+    current connection.</li>
+  <li>New: Support for some XTIv3 tracebox control messages.</li>
+  <li>New: Possibility to add comments to traces when taking log file. This
+    will result in a separate .meta file when the log file is closed. Both
+    files are needed to see the comments when opening the log file again.</li>
+  <li>New: Added "Deactivate rule" actions for line count and variable tracing
+    rules in Property View.</li>
+  <li>New: Support for Ctrl+Home and Ctrl+End keys. Ctrl+Home jumps to the
+    first trace and Ctrl+End to the last one.</li>
+  <li>New: Support for searching again with F3.</li>
+  <li>Changed: Cleaned up the code.</li>
+  <li>Bug fix: Setting trigger when in pause state sets wrong pause mode icon
+    to toolbar.</li>
+  <li>Bug fix: Line count and variable tracing rules were count again even no
+    changes were done.</li>
+  <li>Bug fix: Triggering didn't work with filtering on.</li>
+  <li>Bug fix: Regression: Copying data from the view didn't work.</li>
+  <li>Bug fix: One trace too much was copied to clipboard in some cases.</li>
+  <li>Bug fix: Regression: Trace text was missing when there is Thread ID but
+    no CPU ID.</li>
+  <li>Bug fix: Sometimes, trace offset went wrong by one which caused view to
+    look weird and coloring not to work properly.</li>
+  <li>Bug fix: Sometimes, the "Traces selected X. Time difference: X" text
+    could not fit in to the Trim.</li>
+</ul>
+
+<h5>Version 2.3.8 &ndash; 8th December 2009</h5>
+<ul>
+  <li>New: Option to not to show component and group name in OST traces.</li>
+  <li>New: API function to get trace name with component, group and trace
+  ID.</li>
+  <li>New: Line count and variable tracing rules can now be added and edited
+    with right mouse button from Trace Property View.</li>
+  <li>New: Option to save currently visible traces to a ASCII log file.</li>
+  <li>New: Combined option to hide Thread ID to option to hide CPU ID from the
+    OST traces.</li>
+  <li>New: Support for XTIv3 messages containing multipart OST messages inside
+    them.</li>
+  <li>Changed: TraceProperties.timeFromPreviousTrace now contains milliseconds
+    passed from previous trace. TraceProperties.timestampString doesn't contain
+    that information anymore but only the actual timestamp.</li>
+  <li>Bug fix: Drag and Drop of rules in various dialogs didn't work.</li>
+  <li>Bug fix: Progressbar didn't advance from 0% when saving current traces to
+    ASCII log.</li>
+  <li>Bug fix: CPU ID was not shown correctly on real SMP HW if it was
+    something else than CPU 0.</li>
+</ul>
+
+<h5>Version 2.2.17 &ndash; 13th October 2009</h5>
+<ul>
+  <li>Requires Carbide.c++ 2.0.4 or newer to work!</li>
+  <li>New: Option to turn off displaying Thread ID in OST traces.</li>
+  <li>New: Added BTrace variables into info dialog.</li>
+  <li>New: Added new alternative client API (TraceViewerAPI2 class). The client
+    of the API gets notifications when connection status or connection
+    preferences are changed.</li>
+  <li>New: Support for multipart BTrace traces.</li>
+  <li>New: Color headers and data parts of multipart BTraces in info dialog.
+  </li>
+  <li>Changed: Reworked some help files.</li>
+  <li>Changed: When using OST protocol, OST TraceCore protocol header is added
+    to outgoing messages.</li>
+  <li>Changed: Modified older client API implementation (TraceViewerAPI class)
+    to not disconnect active connection in case there are currently registered
+    TraceViewerAPI2 using the connection.</li>
+  <li>Bug fix: Copy to clipboard didn't always work as it should.</li>
+  <li>Bug fix: Retake machine readable log button didn't disappear
+  correctly.</li>
+  <li>Bug fix: More than one ZIP was offered for reload in certain
+    circumstances.</li>
+  <li>Bug fix: It was possible to crash Filter dialog so that it didn't open
+    anymore.</li>
+  <li>Bug fix: It was possible to freeze TraceViewer by opening specific ASCII
+    log.</li>
+  <li>Bug fix: When connection settings are set through the API, empty selected
+    connection from UI.</li>
+  <li>Bug fix: Possible extended length bytes were not read properly.</li>
+  <li>Bug fix: Double-clicking group table in Activation dialog removed group
+    filtering.</li>
+  <li>Bug fix: Connecting with no Remote Connection set will now pop up a
+    preferences dialog.</li>
+  <li>Bug fix: Opening a trace information dialog when another trace
+    information dialog was open caused coloring of the hex string not to
+  work.</li>
+</ul>
+
+<h5>Version 2.1.12</h5>
+<ul>
+  <li>Requires Carbide.c++ 2.0.2 to work!</li>
+  <li>New: Double-clicking a trace opens the trace location in source file
+    (only for OST traces).</li>
+  <li>New: syncToTrace() and syncToTimestamp() methods open the trace location
+    in source file.</li>
+  <li>New: New button to easily close and retake machine readable ASCII
+  log.</li>
+  <li>New: Support for OST v0.5.</li>
+  <li>Changed everything to Symbian Foundation compatible.</li>
+  <li>Changed: Send deactivation message of visible component if group states
+    were not changed at all.</li>
+  <li>Changed: Add event to Trace Events view when reloading changed
+    Dictionaries.</li>
+  <li>Changed: Send activation messages of all selected components in
+    Activation dialog.</li>
+  <li>Changed: In trace information dialog, header and data parts is now
+    colored with different colors.</li>
+  <li>Bug fix: Dictionary ZIP could not be reloaded when restarting
+  TraceViewer.</li>
+  <li>Bug fix: Double- or triple-clicking did not show Trim information.</li>
+  <li>Bug fix: Canceling filtering could make view pause to wrong position.</li>
+</ul>
+
+<h5>Version 2.0.27</h5>
+<ul>
+  <li>Switched to own branch for Carbide 2.0.</li>
+  <li>New: Use Remote Connections UI from Carbide.</li>
+  <li>New: Connection Settings button in Menu bar.</li>
+  <li>New: TraceViewer now requires Carbide.c++ Trace license to work.</li>
+  <li>New: Use OVERWRITE activation messages. Will now only send one activation
+    message per component.</li>
+  <li>New: Uses EPOCroot drive path from active project when trying to jump to
+    source code line.</li>
+  <li>New: Option to write machine readable ASCII log.</li>
+  <li>New: Trace number is now a member variable of TraceProperties class.</li>
+  <li>New: New API functions: syncToTraceNumber, syncToTimestamp.</li>
+  <li>New: New API functions: saveCurrentTracesToLog, openLogFile,
+    getDictionaryComponents.</li>
+  <li>New: Automatically reload changed Dictionaries option.</li>
+  <li>New: API function getDictionaryComponents() now also returns trace
+  list.</li>
+  <li>Changed: Speed up clearing the view.</li>
+  <li>Changed: TraceViewerAPI.getDictionaryComponents() doesn't return null
+    anymore.</li>
+  <li>Updated: Help files.</li>
+  <li>Bug fix: Sometimes, the view contained one trace too much.</li>
+  <li>Bug fix: Remote Connections UI was not updated when connecting.</li>
+  <li>Bug fix: Color rules were lost if there was Groups defined.</li>
+  <li>Bug fix: Log dialog gave access to plain log options even when not
+    writing plain log.</li>
+  <li>Bug fix: It was possible to freeze TraceViewer with simultaneous async
+    commands.</li>
+  <li>Bug fix: Canceling filtering didn't work very well.</li>
+  <li>Bug fix: Filters were not marked after switching to advanced filter
+  view.</li>
+  <li>Bug fix: Thread ID was not written separately to machine readable ASCII
+    log.</li>
+  <li>Bug fix: Added coprocessors went to wrong offset if TraceViewer view was
+    not yet initialized.</li>
+  <li>Bug fix: TraceViewer didn't ask about changing Data Format with USB in
+    certain case.</li>
+  <li>Bug fix: Variable tracing history didn't always show up correctly.</li>
+  <li>Bug fix: API function connect() should not pop up error message.</li>
+  <li>Bug fix: Open previously opened Dictionaries dialog offered also removed
+    Dictionaries.</li>
+  <li>Bug fix: Traces are not decoded after closing and reopening
+  TraceViewer.</li>
+  <li>Bug fix: Missed notification about number of selected traces if using
+    CTRL + A.</li>
+</ul>
+
+<h5>Version 1.0.21</h5>
+<ul>
+  <li>Made changes for releasing to Carbide 2.0.</li>
+  <li>Made changes to be able to release into SymSEE.</li>
+  <li>Made to work with TraceCommon feature.</li>
+  <li>New: TraceViewer API functions: getTraceComponentName and
+    getTraceGroupName.</li>
+  <li>New: TraceViewer can now open ZIP files containing Dictionary decode
+    files.</li>
+  <li>New: TraceViewer will now show a warning icon in a toolbar if decode file
+    is changed after loading.</li>
+  <li>Updated: TraceViewer help files to follow Carbide help guidelines.</li>
+  <li>Updated: Loading of Dictionary files is now much faster.</li>
+  <li>Updated: Added preference option to show class name and function name
+    before the trace text.</li>
+  <li>Changed: Don't disable apply button from activation dialog when apply is
+    clicked.</li>
+  <li>Changed: Activation dialog now shows components sorted by the name.</li>
+  <li>Changed: Removed Configurations preference page. Importing and exporting
+    configuration can bow be done from File - Import / Export in Eclipse
+  menu.</li>
+  <li>Changed: Changed default binary log extension from .log to .bin.</li>
+  <li>Bug fix: Saving and loading configuration XML files did not work if
+    workspace path contains spaces.</li>
+  <li>Bug fix: If loaded lots of Dictionaries, "open previous files" dialog was
+    too big.</li>
+  <li>Bug fix: Confusing text "defaultActivations.xml" under the configurations
+    tag.</li>
+  <li>Bug fix: Trace EventView doesn't open if there is error when loading
+    Dictionary.</li>
+  <li>Bug fix: Parameters were not correctly decoded when using OST traces with
+    USB connection.</li>
+  <li>Bug fix: Activation information of groups doesn't anymore disappear when
+    appending more decode files.</li>
+  <li>Bug fix: Configurations in Activation dialog now shows the file path and
+    only allows file to be changed using the "Change file" button.</li>
+  <li>Bug fix: Rule text was replicated from rule name when editing a old
+  rule.</li>
+  <li>Bug fix: Wrong text copied to search window after clicking twice on
+  trace.</li>
+  <li>Bug fix: Wrong help in search dialog.</li>
+  <li>Bug fix: When using loadDecodeFile API function, Trace Activation dialog
+    was not updated.</li>
+</ul>
+
+<div id="footer">
+<p>Copyright © 2007-2010 Nokia Corporation and/or its subsidiary(-ies).<br>
+All rights reserved. <br>
+This component and the accompanying materials are made available <br>
+under the terms of "Eclipse Public License v1.0" <br>
+which accompanies this distribution and is available <br>
+at the URL <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.
+<br>
+<br>
+Initial Contributors:<br>
+Nokia Corporation - initial contribution <br>
+<br>
+Contributors:<br>
+Description:</p>
+
+<p></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+  <extension
+    point="org.eclipse.ui.views">
+    <category
+      id="com.nokia.s60tools"
+      name="Carbide Extensions"/>
+    <view
+      category="com.nokia.s60tools"
+      class="com.nokia.trace.eventview.TraceEventView"
+      id="com.nokia.trace.eventview.TraceEventView"
+      name="%traceEventView"/>
+  </extension>
+</plugin>

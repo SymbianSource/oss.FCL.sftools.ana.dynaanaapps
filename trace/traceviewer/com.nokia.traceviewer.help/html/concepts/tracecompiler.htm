@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>Trace Compiler</title>
+<link href="../../book.css" type="text/css" rel="stylesheet"></head>
+<body>
+
+<h2>Trace Compiler</h2>
+<p>The Trace Compiler is a tool that is attached
+to the Symbian OS Build System. It is run before the actual C++ compiler.
+The purpose of Trace Compiler is to generate the needed headers for Open System
+Traces (OST) traces to compile. Trace Compiler is run when you normally compile
+your component that has OST traces.</p>
+<p>When Trace Compiler is run and the project contains OST traces, 
+you should find the following text printed on the <b>Console</b> tab, 
+as in the following example for the <i>HelloWorld</i> component:</p>
+
+<pre>perl C:/Symbian/9.3/S60_3rd_FP2/epoc32/tools/tracecompiler.pl WINSCW
+******************* TRACECOMPILER STARTS *******************
+Building traces for component HelloWorld. Component UID: 0xEAAEC036.
+******************* TRACECOMPILER ENDS *********************</pre>
+
+<p>After Trace Compiler is run, the needed headers are generated to the <b>traces</b> 
+folder of your component. If you have OST traces in <i>HelloWorld.cpp</i>, 
+the header to be generated is <i>HelloWorldTraces.h</i>, which is included
+from <i>HelloWorld.cpp</i>.</p>
+<p><b>Note:</b> If you cannot find the following line or similar when compiling 
+your component, it might be that your SDK does not  have Trace Compiler installed:</p>
+
+<pre>perl C:/Symbian/9.3/S60_3rd_FP2/epoc32/tools/tracecompiler.pl WINSCW</pre>
+
+<h5>Related concepts</h5>
+<ul>
+	<li><a href="trace_format.htm">Open System Trace (OST)</a></li>
+</ul>
+
+<div id="footer">Copyright &copy; 2007-2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. 
+License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+</body>
+</html>
