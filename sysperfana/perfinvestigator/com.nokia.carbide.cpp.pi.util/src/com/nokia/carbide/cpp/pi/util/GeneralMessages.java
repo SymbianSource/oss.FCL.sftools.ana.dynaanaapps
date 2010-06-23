@@ -47,10 +47,11 @@ public class GeneralMessages
 				MessageBox messageBox = new MessageBox(
 						PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
 						SWT.ICON_ERROR | SWT.OK | SWT.SYSTEM_MODAL);
-				if (error == null)
+				if (error == null){
 					displayMessage = Messages.getString("GeneralMessages.unknownError"); //$NON-NLS-1$
-				else
+				}else{
 					displayMessage = error;
+				}
 				messageBox.setMessage(displayMessage);
 				messageBox.setText(Messages.getString("GeneralMessages.piError")); //$NON-NLS-1$
 				messageBox.open();				
@@ -129,11 +130,11 @@ public class GeneralMessages
 		return result;
 	}
 	
-	public static void PiLog(String message, int severity) {
-		PiLog(message, severity, new Throwable());
+	public static void piLog(String message, int severity) {
+		piLog(message, severity, new Throwable());
 	}
 	
-	public static void PiLog(String message, int severity, Throwable throwable) {
+	public static void piLog(String message, int severity, Throwable throwable) {
 
 		switch (severity) {
 			case IStatus.OK:

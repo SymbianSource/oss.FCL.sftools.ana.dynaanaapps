@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 1.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title>Troubleshooting</title>
+  <link rel="StyleSheet"
+  href="../../../../../../ProfilerActivator/trunk/com.nokia.s60tools.profileractivator.help/book.css"
+  type="text/css">
+</head>
+
+<body>
+<h2>Troubleshooting</h2>
+
+<p>Below are listed the error messages and resolutions for problems with the PI
+Import wizard during file import.</p>
+
+<table border="1" cellspacing="1" cellpadding="2">
+  <colgroup><col width="250*">
+    <col width="356*">
+  </colgroup>
+  <tbody>
+    <tr>
+      <th>Message</th>
+      <th align="center">Resolution</th>
+    </tr>
+    <tr>
+      <td>Unable to resolve current connection. Please check your connection
+        settings.</td>
+      <td>This message usually appears when you select to get profiler files
+        form device via TraceViewer for the first time, and the connections
+        settings have not yet defined. 
+
+        <p>To resolve the problem, click <strong>Connection
+        Settings...</strong> to open the dialog where you can select the
+        correct settings for the connection you want to use. After saving the
+        settings, click Refresh Plug-ins List and continue with tracing. For
+        more specific instructions, see <a
+        href="../../tasks/analyser/an_load_trace_files.htm">Importing Profiler
+        Data files</a>.</p>
+      </td>
+    </tr>
+    <tr>
+      <td>Could not read available plug-ins from device. See Troubleshooting
+        topic from Help.</td>
+      <td><p>This message appears when the connection settings have been
+        defined, but the information for the plug-in list cannot be fetched.</p>
+
+        <p>To resolve the problem, test that the Tracing service connection is
+        working:</p>
+        <ol>
+          <li>Click <strong>Connection Settings... </strong></li>
+          <li>Select the connection you are using and click
+            <strong>Edit...</strong></li>
+          <li>Select the <strong>Test Connection</strong> tab</li>
+          <li>Select the Device OS</li>
+          <li>Select Tracing as the service to test</li>
+          <li>Click <strong>Initiate Service Testing</strong>.</li>
+        </ol>
+
+        <p>If the connection works, but you still get the error message, makes
+        sure that PI Profiler is installed on the device.</p>
+      </td>
+    </tr>
+    <tr>
+      <td>Received corrupted data! See Troubleshooting topic from Help 
+
+        <p></p>
+      </td>
+      <td>This message appears when try to use a USB connections for profiling
+        several plugins, and the connection cannot handle the amount of data. 
+
+        <p>To resolve the problem, try profiling fewer plugins; or, if you need
+        to profile several plugins in the same trace, change to TCP/IP Musti
+        connection. For more specific instructions, see <a
+        href="../../tasks/analyser/an_load_trace_files.htm">Importing Profiler
+        Data files</a>.</p>
+      </td>
+    </tr>
+    <tr>
+      <td>Multiple problems have occurred. Jave heap space.</td>
+      <td>This message can appear when you try to import a large profiler date
+        file. 
+
+        <p>Although Carbide.c++ reserves a large block of memory for the Java
+        Virtual Machine (JVM) to run the whole IDE, in some cases, the trace
+        import process may fail due to out-of-memory situation. This is usually
+        due to the Profiler trace log being too long in time and/or CPU load
+        being extensively high over the use case. The out-of-menory may also
+        lead to instability issues with Carbide itself, in which case the error
+        is shown.</p>
+
+        <p>This problem can be avoided by keeping the profiled use cases
+        shorter (the recommendation is maximum 5 minutes), and by selecting
+        only those Profiler plug-ins that are needed for analysing the use
+        case. Shorter use cases (in time) and smaller amount of selected
+        profiler plug-ins also ease up the analysis phase, since it is easier
+        to a browse shorter set of data and to pinpoint the possible
+        performance issues within the trace.</p>
+
+        <p>If you need to analyse longer use cases, there are also other tools
+        available for long-period-testing (LPT). For example, you can run the
+        Nokia Energy Profiler (NEP) directly on target and it can be used for
+        LPT type of use cases.</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved.</div>
+</body>
+</html>

@@ -23,7 +23,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Vector;
 
-public class TraceDataRepository 
+public final class TraceDataRepository 
 {	
 	private static Hashtable<Integer,LinkedHashMap<Class,ParsedTraceData>> analysisSpecificTraces;
 	private static TraceDataRepository instance;

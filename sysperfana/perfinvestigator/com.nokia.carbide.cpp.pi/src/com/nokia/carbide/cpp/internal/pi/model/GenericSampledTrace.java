@@ -17,21 +17,35 @@
 
 package com.nokia.carbide.cpp.internal.pi.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 
 public abstract class GenericSampledTrace extends GenericTrace
 {
 	private static final long serialVersionUID = 5248402326692863890L;
+	
+	/** highest sync time within samples */
 	private long lastSampleTime;
 	
+	/** the samples */
 	public Vector<GenericSample> samples;
 	
+	/**
+	 * Constructor
+	 */
 	public GenericSampledTrace()
 	{
 	  this.samples = new Vector<GenericSample>();
 	}
 	
+	/**
+	 * Adds the given sample to the samples collection
+	 * @param sample the sample to add
+	 */
 	public void addSample(GenericSample sample)
 	{
 	  this.samples.add(sample);
@@ -59,16 +73,31 @@ public abstract class GenericSampledTrace extends GenericTrace
 		return lastSampleTime;
 	}
 	
+	/**
+	 * returns all samples as an enumeration
+	 * @return
+	 */
 	public Enumeration<GenericSample> getSamples()
 	{
 	  return samples.elements();
 	}
 	
+	/**
+	 * Gets the nth element of the collection of samples  
+	 * @param number the index to look for
+	 * @return the found sample (or ArrayIndexOutOfBoundsException)
+	 */
 	public GenericSample getSample(int number)
 	{
 	  return (GenericSample)this.samples.elementAt(number);
 	}
 	
+	/**
+	 * Returns samples inside the given time period (including the boundaries).
+	 * @param start the start time at which to include samples
+	 * @param end the end time at which to include samples
+	 * @return samples included in the time period
+	 */
 	public Vector<GenericSample> getSamplesInsideTimePeriod(long start, long end)
 	{
 		Enumeration<GenericSample> sEnum = samples.elements();
@@ -88,128 +117,55 @@ public abstract class GenericSampledTrace extends GenericTrace
 		
 		return okSamples;
 	}
-	
-	public GenericSample[] getSamplesForTime(long time)
-	{
-		// start the search from the middle of the sample set
-		long location = this.samples.size() / 2;
-		
-		// next, add or remove 1/4 of the length of the sample set
-		int div = 4;
-		
-		// boolean value indicating that the search proceeds now one step at a time
-		boolean saturated = false;
-		
-		// search algorithm, proceed until a value is found or 
-		// reached the boundaries of the search area
 
-		// note that the sample numbers MUST increase with growing
-		// indices within the samples vector in order for this 
-		// algorithm to work!
-		while (true)
-		{
-			// take the sample from the location
-			GenericSample s = (GenericSample)samples.elementAt((int)location);
-			
-			// if the searched value is larger than the value at the proposed location
-			// increment the proposed location with the length of the data set divided
-			// by the divisor
-			if (s.sampleSynchTime < time)
-			{
-				if (!saturated)
-				{
-					int change = this.samples.size() / div;
-					if (change >= 1)
-					{
-						location += change;
-						div *= 2;
-					}
-					else 
-					{
-						saturated = true;
-					}
-				}
-				else
-				{
-					// already saturated, go one step at a time
-					location++;
-				}				
+	/**
+	 * Returns all samples with the given sync time
+	 * @param time the time to look for
+	 * @return array of samples for given sync time
+	 */
+	public GenericSample[] getSamplesForTime(long time)	{
+		List<GenericSample> resList = new ArrayList<GenericSample>();
+		
+		//find the sample just before the search result
+		GenericSample sample = new MockGenericSample();
+		sample.sampleSynchTime = time-1;
+		int pos = Collections.binarySearch(samples, sample, new Comparator<GenericSample>(){
+			public int compare(GenericSample s1, GenericSample s2) {
+				return (int)(s1.sampleSynchTime - s2.sampleSynchTime);
 			}
-			// similarly, decrement the proposed location 
-			// if the value is smaller than the searched value
-			else if (s.sampleSynchTime > time)
-			{
-				if (!saturated)
-				{					
-					int change = this.samples.size() / div;
-					if (change >= 1)
-					{
-						location -= change;
-						div *= 2;
-					}
-					else 
-					{
-						saturated = true;
-					}
-				}
-				else
-				{
-					// already saturated, go one step at a time
-					location--;
+		});
+		
+		//go to the first match
+		pos = pos < 0  ? (-(pos)-1) : pos+1;
+		
+		if (pos < samples.size()){
+			//collect matches
+			for (int i = pos; i < samples.size(); i++) {
+				GenericSample found = samples.elementAt(i);
+				if (found.sampleSynchTime > time){
+					break;
+				} else if (found.sampleSynchTime == time){
+					resList.add(found);
 				}
 			}
-			else if (s.sampleSynchTime == time)
-			{
-				return this.getSamplesWithSameTimeFrom(location);
-			}
-			
-			// reached the end of the sample set without a match
-			if (location < 0 || location >= this.samples.size())
-				return null;
 		}
 		
-	}
+		return resList.toArray(new GenericSample[resList.size()]);
+	}	
 	
-	private GenericSample[] getSamplesWithSameTimeFrom(long location)
-	{
-		long sameTime = ((GenericSample)samples.elementAt((int)location)).sampleSynchTime;
-		int lowBound = (int)location;
-		int highBound = (int)location;
-		
-		if (lowBound-1 >=0)
-		{	
-			// go backwards as long as there are samples with the same samplenumber
-			while ( ((GenericSample)samples.elementAt(lowBound - 1)).sampleSynchTime == sameTime 
-					&& (lowBound - 1) >= 0)
-			{
-				lowBound--;
-			}
-		}
-		
-		if (highBound + 1 < this.samples.size())
-		{	
-			// go backwards as long as there are samples with the same samplenumber
-			while ( ((GenericSample)samples.elementAt(highBound + 1)).sampleSynchTime == sameTime 
-					&& (highBound + 1) < this.samples.size())
-			{
-				highBound++;
-			}
-		}
-		
-		GenericSample[] sa = new GenericSample[highBound - lowBound + 1];
-		for (int i = 0; i < sa.length; i++)
-		{
-			sa[i] = (GenericSample)samples.elementAt(lowBound + i);
-		}
-		
-		return sa;
-	}
-	
+	/**
+	 * Returns the overall number of samples
+	 * @return
+	 */
 	public int getSampleAmount()
 	{
 	  return this.samples.size();
 	}
 	
+	/**
+	 * Returns the sync time of the first sample, or 0.
+	 * @return
+	 */
 	public int getFirstSampleNumber()
 	{
 		if (this.samples.size() > 0)
@@ -228,6 +184,9 @@ public abstract class GenericSampledTrace extends GenericTrace
 		return (int)getLastSampleTime();
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString()
 	{
 		Enumeration<GenericSample> sEnum = this.getSamples();
@@ -259,4 +218,10 @@ public abstract class GenericSampledTrace extends GenericTrace
 	  	String total = new String(bytes);
 	  	return total;
 	  }
+	
+	// this class is only needed for binary search
+	@SuppressWarnings("serial")
+	class MockGenericSample extends GenericSample {
+	}
+	
 }

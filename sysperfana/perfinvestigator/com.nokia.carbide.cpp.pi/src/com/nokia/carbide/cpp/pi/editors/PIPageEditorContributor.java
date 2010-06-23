@@ -59,7 +59,7 @@ public class PIPageEditorContributor extends MultiPageEditorActionBarContributor
 		if (piManager != null) {
 			piManager.dispose();
 		}
-		piManager = new MenuManager(Messages.getString("PIPageEditorContributor.PerformanceInvestigator"), PIPageEditor.menuID); //$NON-NLS-1$
+		piManager = new MenuManager(Messages.getString("PIPageEditorContributor.PerformanceInvestigator"), PIPageEditor.MENU_ID); //$NON-NLS-1$
 		manager.prependToGroup(IWorkbenchActionConstants.MB_ADDITIONS, piManager);
 		PIPageEditor.setPIMenuManager(piManager);
 	}

@@ -77,7 +77,7 @@ public class BinaryReader122
 				parseAndProcessObyFile(fileName);
 			else if (fileName.toLowerCase().endsWith(".pkg")) //$NON-NLS-1$
 			{
-				addFilesInPkg(fileName);
+				addFilesInPkg(fileName, currentFile.epocRoot);
 			}
 			else
 			{
@@ -120,7 +120,7 @@ public class BinaryReader122
 		return this.getHostNameToBinary().get(s);
 	}
 	
-	  public void addFilesInPkg(String pkgName)
+	  public void addFilesInPkg(String pkgName, String epocRoot)
 	  {
 		  long lineNumber = 0;
 		  File pkgFile = new File(pkgName);
@@ -172,13 +172,19 @@ public class BinaryReader122
 						  Binary binary = null;
 						  
 						  localFile = line.substring(first+1,second);
+						  if(localFile.charAt(0) == '/'){
+							  localFile = localFile.replace('/', '\\');							  
+						  }
 						  String remoteFile = line.substring(third+3,fourth);
 						  
 						  // .PKG is referring everything as root relative,
 						  // sometime there is reference to $(EPOCROOT) too
 						  // let's try to guess what it was. I hate windows drive letter
 						  if (localFile.charAt(0) == '\\') {
-							  localFile = GuessAndFixPath.fixPath(localFile, "", pkgName);	//$NON-NLS-1$
+							  if(epocRoot == null){
+								  epocRoot = "";
+							  }
+							  localFile = GuessAndFixPath.fixPath(localFile, epocRoot, pkgName);	//$NON-NLS-1$
 						  } else if (localFile.charAt(1) != ':') {
 							  // not absolute drive, resolve relative to PKG file
 							  File relativeMapFile = new File(pkgFile.getParent(), localFile);
@@ -291,7 +297,7 @@ public class BinaryReader122
 									  }
 
 									  // if it is code binary...
-								      GeneralMessages.PiLog(myMessage, GeneralMessages.WARNING);
+								      GeneralMessages.piLog(myMessage, GeneralMessages.WARNING);
 								  }
 							}
 						}
@@ -310,7 +316,7 @@ public class BinaryReader122
 		} catch (EOFException e) {
 			// good, that's the end of file, bail out peacefully
 		} catch (IOException e) {
-			GeneralMessages.PiLog(Messages.getString("BinaryReader122.IOException.on") + obyFile, GeneralMessages.ERROR, e); //$NON-NLS-1$
+			GeneralMessages.piLog(Messages.getString("BinaryReader122.IOException.on") + obyFile, GeneralMessages.ERROR, e); //$NON-NLS-1$
 		}
 	}
 	

@@ -181,7 +181,7 @@ public class UndecidedPool
 			this.processedMostHits = 0;
 			this.processedUndecided = false;
 			
-			Object o = this.samplesForLocations.get(new Long(startAddress));
+			Object o = this.samplesForLocations.get(Long.valueOf(startAddress));
 			
 			if (o != null)
 			{
@@ -219,7 +219,7 @@ public class UndecidedPool
 				//System.out.println("Added unique sample "+sample.programCounter+" to "+this.binary.binaryName);
 				Vector sampleVec = new Vector();
 				sampleVec.add(sample);
-				samplesForLocations.put(new Long(startAddress),sampleVec);
+				samplesForLocations.put(Long.valueOf(startAddress),sampleVec);
 			}
 		}
 		

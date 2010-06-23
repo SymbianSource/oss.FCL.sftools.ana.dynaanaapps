@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>MIPS Counter and Graph</title>
+  <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>MIPS Counter and Graph</h2>
+
+<p>The Million Instructions Per Second (MIPS) graph gives you a general idea of
+CPU speed in a measured use case. The basic use case for the MIPS analysis
+would be to check any low areas in the graph since they may reveal unoptimized
+features, for example, in terms of memory access (reads and writes). The higher
+the MIPS values, the better and the faster the CPU is in executing
+instructions.</p>
+
+<p>A MIPS (Million Instructions Per Millisecond) graph is displayed in the
+Performance Counters view, when <b>Instructions executed</b> has been selected
+as one of the profiled counters. From PI Profiler version 2.2.1. onwards, CPU
+speed data is included when "Instructions executed" profiled. For files created
+with earlier PI Profiler versions, the dialog below is displayed during
+PIAnalyser file import:</p>
+
+<p align="center"><img src="images/MIPS_speed_dialog.png"></p>
+
+<p class="figure">Figure 1. MIPS Graph Generation</p>
+
+<p>The processor speed information is needed for calculating the data for the
+MIPS graph. The rest of the data for the calculation is always included in the
+<b>Instructions executed</b> and <b>CPU cycles</b> counters.</p>
+
+<p style="text-align:center"><img src="images/PEC_view_MIPS.png"></p>
+
+<p>The MIPS counter information is displayed in the graphs view and the legend
+table together with the other performance counters. Note, however, that for
+MIPS only <b>Average (1/ms)</b>, <b>Min (1/ms)</b>, and <b>Max (1/ms)</b>
+information is displayed in the legend table.</p>
+
+<p>When the CPU speed data is included in the imported Profiler data file, a
+CPU clock rate counter and graph are also displayed in the <a
+href="view_performance_counters.htm">Performance Counters View</a>.</p>
+
+<h4>Related references </h4>
+<ul>
+  <li><a href="view_performance_counters.htm">Performance Counters View</a></li>
+  <li><a href="traceable_events.htm">Traceable Event Types</a></li>
+  <li><a href="../profiler/Prof_counter_settings.htm">PIProfiler Performance
+    Counter Settings</a></li>
+  <li><a href="main_view.htm">Analyzer View</a></li>
+</ul>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. <br>
+License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

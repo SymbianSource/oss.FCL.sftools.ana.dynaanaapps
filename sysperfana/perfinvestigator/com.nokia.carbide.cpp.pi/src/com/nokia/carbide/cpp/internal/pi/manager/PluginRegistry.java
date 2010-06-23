@@ -25,7 +25,7 @@ import com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace;
 import com.nokia.carbide.cpp.pi.util.GeneralMessages;
 
 
-public class PluginRegistry 
+public final class PluginRegistry 
 {
 	private static PluginRegistry pluginRegistry = null;
 	private Vector<AbstractPiPlugin> plugins;

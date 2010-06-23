@@ -34,18 +34,19 @@ import org.eclipse.swt.widgets.Shell;
 public class TestTableColorPalette {
 	private Shell sShell = null;
 	
-	private Map<Button,CLabel> testColorsMap = new HashMap<Button,CLabel>();
-	private FunctionColorPalette palette = new FunctionColorPalette();
+	private final Map<Button,CLabel> testColorsMap = new HashMap<Button,CLabel>();
+	private final FunctionColorPalette palette = new FunctionColorPalette();
 	
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		Display display = Display.getDefault();
 		TestTableColorPalette thisClass = new TestTableColorPalette();
 		thisClass.createSShell();
 		thisClass.sShell.open();
 
 		while (!thisClass.sShell.isDisposed()) {
-			if (!display.readAndDispatch())
+			if (!display.readAndDispatch()){
 				display.sleep();
+			}
 		}
 		display.dispose();
 	}
@@ -69,7 +70,7 @@ public class TestTableColorPalette {
 			button.setText(i.toString());
 			button.setBackground(palette.getColor(i.toString()));
 			button.addSelectionListener(new SelectionAdapter() {
-            	public void widgetSelected(SelectionEvent e) {
+            	public void widgetSelected(final SelectionEvent e) {
             		if(palette.recolorEntryDialog(sShell, finalI))
             		{
             			Color myColor = palette.getColor(finalI);

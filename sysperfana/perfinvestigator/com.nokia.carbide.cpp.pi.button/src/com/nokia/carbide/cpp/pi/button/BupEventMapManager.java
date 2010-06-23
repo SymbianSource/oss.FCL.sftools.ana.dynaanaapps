@@ -172,7 +172,7 @@ public class BupEventMapManager {
 			profile = buttonProfile;
 			EList<MappingType> mappingList = buttonProfileType.getMapping();
 			for (MappingType mapping : mappingList) {
-				addMapping(new Long(mapping.getKeyCode()).intValue(), mapping.getEnumString(), mapping.getLabel());
+				addMapping(Long.valueOf(mapping.getKeyCode()).intValue(), mapping.getEnumString(), mapping.getLabel());
 			}
 		}
 		
@@ -240,12 +240,12 @@ public class BupEventMapManager {
 		}
 		
 		public ButtonEventProfileType toEmfModel() {
-			ButtonEventProfileType profile = PIConfigFactory.eINSTANCE.createButtonEventProfileType();
+			ButtonEventProfileType profile = PIConfigFactory.E_INSTANCE.createButtonEventProfileType();
 
 			profile.setProfileId(getProfileName());
 			EList<MappingType> mappingList = profile.getMapping();
 			for (Entry<Integer, MapEntry> entry : keyCodeMap.entrySet()) {
-				MappingType mappingType = PIConfigFactory.eINSTANCE.createMappingType();
+				MappingType mappingType = PIConfigFactory.E_INSTANCE.createMappingType();
 				mappingType.setKeyCode(entry.getKey().longValue());
 				mappingType.setEnumString(entry.getValue().enumString);
 				mappingType.setLabel(entry.getValue().label);
@@ -439,7 +439,7 @@ public class BupEventMapManager {
 			ButtonEventProfileListType workspace_settings = PIConfigXMLLoader.loadPiSettings(WORKSPACE_PREF_KEY_MAP_URI.toURL());
 			EList<ButtonEventProfileType> workspace_profileList = workspace_settings.getButtonEventProfile();
 			
-			ButtonEventProfileType buttonEventProfileType = PIConfigFactory.eINSTANCE.createButtonEventProfileType();
+			ButtonEventProfileType buttonEventProfileType = PIConfigFactory.E_INSTANCE.createButtonEventProfileType();
 			buttonEventProfileType.setProfileId(profileId);
 			buttonEventProfileType.getMapping().clear();
 			
@@ -545,7 +545,7 @@ public class BupEventMapManager {
 	}
 	
 	public void saveMap (URI uri, ArrayList<ButtonEventProfileType> mapList) {
-		ButtonEventProfileListType profileList = PIConfigFactory.eINSTANCE.createButtonEventProfileListType();
+		ButtonEventProfileListType profileList = PIConfigFactory.E_INSTANCE.createButtonEventProfileListType();
 		profileList.setButtonEventProfileVersion(new BigDecimal("1.0")); //$NON-NLS-1$
 		profileList.getButtonEventProfile().addAll(mapList);
 		try {

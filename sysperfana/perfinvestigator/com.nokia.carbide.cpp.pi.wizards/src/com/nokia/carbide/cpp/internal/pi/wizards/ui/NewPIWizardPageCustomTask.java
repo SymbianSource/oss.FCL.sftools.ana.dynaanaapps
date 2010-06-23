@@ -19,6 +19,7 @@ package com.nokia.carbide.cpp.internal.pi.wizards.ui;
 
 import java.io.File;
 
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -168,6 +169,19 @@ public void createControl(Composite parent) {
 	validatePage();
 	setControl(container);
 	PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), CarbidePiWizardHelpIds.PI_IMPORT_WIZARD_CUSTOM);
+}
+
+/* (non-Javadoc)
+ * @see org.eclipse.jface.dialogs.DialogPage#performHelp()
+ */
+@Override
+public void performHelp() {
+	WizardDialog wizardDialog = (WizardDialog)getContainer();	
+	if(wizardDialog.buttonBar != null){	
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(wizardDialog.buttonBar,
+				CarbidePiWizardHelpIds.PI_IMPORT_WIZARD_CUSTOM);
+	}
+	
 }
 
 public void validatePage() {

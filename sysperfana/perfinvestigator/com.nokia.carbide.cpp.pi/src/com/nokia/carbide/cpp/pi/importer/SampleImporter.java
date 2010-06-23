@@ -31,6 +31,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.ui.PlatformUI;
@@ -83,6 +84,9 @@ public class SampleImporter {
 	private String bupMapSymbianSDKId;
 	private boolean bupMapIsBuiltIn;
 	private boolean bupMapIsWorkspace;
+	
+	private boolean profilerActivator;
+	
 	
 	private SampleImporter() {
 		clear();
@@ -341,6 +345,7 @@ public class SampleImporter {
 		clearBupMapSymbianSDKId ();
 		clearBupMapIsBuiltIn ();
 		clearBupMapIsWorkspace ();
+		profilerActivator = false;
 	}
 	
 	public boolean validate () {
@@ -436,15 +441,30 @@ public class SampleImporter {
 				return;
 			}
 		}
-
-
-		// import the new project according to wizard
-		piFileName = new Path(getDatFileName()).removeFileExtension().addFileExtension("npi").lastSegment(); //$NON-NLS-1$
+		// allow to set specific npi file name that is used from the JUnit test cases
+		boolean piFileNameForced = false;
+		if(piFileName.length() == 0){
+			// import the new project according to wizard
+			piFileName = new Path(getDatFileName()).removeFileExtension().addFileExtension("npi").lastSegment(); //$NON-NLS-1$
+		}else{
+			piFileNameForced = true;
+		}
 		piFile = piContainer.getFile(new Path(piFileName));
 
+	
 		if (piFile.exists())
 		{
-			piFile = piContainer.getFile(new Path(generateNpiFileName(piContainer, piFileName)));
+			if(piFileNameForced){
+				try {
+					piFile.delete(true, null);
+				} catch (CoreException e) {
+					GeneralMessages.showErrorMessage(com.nokia.carbide.cpp.pi.importer.Messages.getString("SampleImporter.importerInternalError"));  //$NON-NLS-1$
+					GeneralMessages.piLog(com.nokia.carbide.cpp.pi.importer.Messages.getString("SampleImporter.importerCoreException"), GeneralMessages.ERROR);  //$NON-NLS-1$
+					return;
+				}
+			}else{
+				piFile = piContainer.getFile(new Path(generateNpiFileName(piContainer, piFileName)));
+			}			
 		}
 
 		// import and save the file as npi
@@ -453,7 +473,15 @@ public class SampleImporter {
 		}else{				
 			AnalyserDataProcessor.getInstance().importSave(piFile, pluginsInTraceFile, suffixTaskName, progressMonitor);				
 		}
-		
+		if(profilerActivator){
+			IPath datPath = new Path(getDatFileName());
+			IPath piPath = piFile.getLocation();
+			piPath = piPath.removeFileExtension().addFileExtension(datPath.getFileExtension());
+			if(!datPath.toFile().renameTo(piPath.toFile())){
+				GeneralMessages.piLog(Messages.getString("SampleImporter.failedToMoveProfilerDataFile"), GeneralMessages.INFO);  //$NON-NLS-1$
+			}
+
+		}
 		if (dummySymbol != null) {
 			if(getRomSymbolFile().equals(dummySymbol.toString())){
 				dummySymbol.delete();
@@ -468,7 +496,7 @@ public class SampleImporter {
 		initialFilename = new java.io.File(initialFilename).getName();
 		
 		String baseName;
-		Long suffixNumber = new Long(0);
+		Long suffixNumber = Long.valueOf(0);
 		
 		int dot = initialFilename.lastIndexOf("."); //$NON-NLS-1$
 		if (dot > 1) {
@@ -556,4 +584,10 @@ public class SampleImporter {
 		setStripTimeStampDone();
 	}
 		
+	public void setProfilerActivator(boolean profilerActivator){
+		this.profilerActivator = profilerActivator;
+	}
+	public boolean isProfilerActivator(){
+		return profilerActivator;
+	}
 }

@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Graphics Memory Usage View</title>
+  <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Graphics Memory Usage View</h2>
+
+<p>Use the <strong>Graphics Memory Usage</strong> view to display the private,
+shared, or total graphics memory usage of processes running on a device. The
+graph portion of the Graphics Memory Usage view shows the amount of graphics
+memory used by the processes, and, if selected, the total amount of graphics
+memory used at the time intervals selected for the GPU sampler in PI Profiler.
+A list of processes appears at the bottom of the view showing the private,
+shared and total memory usage for each process.</p>
+
+<p>Data in the Graphics Memory Usage view is layered with the shared memory
+usage data overlaying the private memory usage data. Private memory usage is
+represented by light blue color, while shared memory usage is represented by
+light green. You can select to view either private or shared graphics memory
+usage, or both of them combined, by using the view options available in the
+Title bar drop-down menu, shown in Figure 1, or in the
+<strong>Investigator</strong> &gt; <a
+href="menu_graphics_memory_graph.htm">Graphics Memory Graph Menu</a> . </p>
+
+<p align="center"><img src="images/graphics_memory_graph_drop_down.png"></p>
+
+<p class="figure">Figure 1. Graphics Memory Usage Title bar drop-down menu</p>
+
+<p>According to the selection, the graph displays the following (Figure 2):</p>
+<ul>
+  <li>Private Usage — light blue box only</li>
+  <li>Shared Usage — light green box only </li>
+  <li>Private and Shared Usage (Figure 2) — light blue box (private memory
+    usage) and a light green line (shared memory usage) </li>
+</ul>
+
+<p>Additionally, a black line indicating the total graphics memory usage is
+available. The line is always displayed by default, but you can choose to hide
+or show the line by either right-clicking on the graph and selecting
+<strong>Show Total Graphics Memory Usage</strong>, or by selecting
+<strong>Investigator</strong> -&gt; <strong>Graphics Memory Graph</strong>
+-&gt; <strong>Show Total Graphics Memory Usage</strong>. </p>
+
+<p class="note">NOTE The difference between the cumulative (combined shared and
+private usage) and total memory consumption (provided by the internal API) is
+explained by the graphic acceleration system component itself: it cannot be
+tracked by the GPU sampler of PI Profiler and therefore it is not visible in
+the cumulative graph. In addition, if some graphics memory has been reserved
+bypassing the graphic accelerator, for example using ARM interfaces (e.g.
+camera application), the difference is even bigger. </p>
+
+<p>You can also move the mouse pointer on top of the graph to see the amount of
+graphics memory used at that time as a tooltip, as shown in Figure 2 below.</p>
+
+<p align="center"><img src="images/view_graphics_memory_usage.png"></p>
+
+<p class="figure">Figure 2. Graphics Memory Usage graph and thread list </p>
+
+<p>Description of table columns (Figure 2):</p>
+<ul>
+  <li>The <b>Process</b> column lists the processes using graphics memory.</li>
+  <li>The <b>Private</b> column displays the amount of private graphics memory
+    used by each process for the selected time period (selection area on the
+    graph).</li>
+  <li>The <b>Shared</b> column displays the amount of shared memory used by the
+    process for the selected time period (selection area on the graph)</li>
+  <li>The <b>Memory Total</b> column displays the sum of the private and shared
+    graphics memory usage for the selected time period (selection area on the
+    graph).</li>
+</ul>
+
+<p>Columns may be reordered, resized, and sorted by clicking or dragging column
+headers.</p>
+
+<p>Information on the graphics memory usage is also available in a separate <a
+href="wnd_graphics_memory_usage_statistics.htm">Graphics Memory Usage
+Statistics</a> dialog. You can open the dialog from the <a
+href="context_menu.htm">context menu</a> by right-clicking on the Graphics
+Memory Usage graph and selecting <a
+href="wnd_graphics_memory_usage_statistics.htm">Graphics Memory Usage
+Statistics</a>; or by selecting <strong>Investigator</strong> -&gt;
+<strong>Graphics Memory Graph</strong> -&gt; <strong><strong>Graphics Memory
+Usage Statistics</strong>.</strong></p>
+
+<p><strong>Related references </strong></p>
+<ul>
+  <li><a href="main_view.htm">Analyzer View</a></li>
+  <li><a href="menu_graphics_memory_graph.htm">Graphics Memory Graph Menu
+  </a></li>
+  <li><a href="wnd_graphics_memory_usage_statistics.htm">Graphics Memory Usage
+    Statistics</a> </li>
+  <li><a href="context_menu.htm">Context Menu Options</a></li>
+</ul>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. <br>
+License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

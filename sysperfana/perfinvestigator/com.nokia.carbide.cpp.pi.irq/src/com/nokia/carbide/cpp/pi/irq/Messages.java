@@ -19,7 +19,7 @@ package com.nokia.carbide.cpp.pi.irq;
 
 import org.eclipse.osgi.util.NLS;
 
-public class Messages extends NLS {
+public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.nokia.carbide.cpp.pi.irq.messages"; //$NON-NLS-1$
 	public static String IrqLineTable_0;
 	public static String IrqLineTable_1;

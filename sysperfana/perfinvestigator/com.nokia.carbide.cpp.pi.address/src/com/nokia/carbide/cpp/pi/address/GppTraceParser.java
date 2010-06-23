@@ -232,8 +232,8 @@ public class GppTraceParser extends Parser
     {
         try
         {
-        	int separatorIndex = data.indexOf("#"); //$NON-NLS-1$
-	        this.traceVersion = data.substring(data.indexOf("_")+1,separatorIndex); //$NON-NLS-1$
+        	int separatorIndex = data.indexOf('#'); //$NON-NLS-1$
+	        this.traceVersion = data.substring(data.indexOf('_')+1,separatorIndex); //$NON-NLS-1$
 	    }
 	    catch (Exception e)
 	    {
@@ -399,11 +399,11 @@ public class GppTraceParser extends Parser
 	{
     	if (name.endsWith("]")) //$NON-NLS-1$
     	{
-    		String l = name.substring(name.lastIndexOf("[")+1,name.lastIndexOf("]")); //$NON-NLS-1$ //$NON-NLS-2$
+    		String l = name.substring(name.lastIndexOf('[')+1,name.lastIndexOf(']')); //$NON-NLS-1$ //$NON-NLS-2$
     		Long threadAddress = Long.decode("0x"+l); //$NON-NLS-1$
 //    		this.threadAddressToName.put(threadAddress,name);
     		this.threadAddressToName.put(threadAddress,p.name+"::"+name);
-    		name = name.substring(0,name.lastIndexOf("[")); //$NON-NLS-1$
+    		name = name.substring(0,name.lastIndexOf('[')); //$NON-NLS-1$
     	}
 	}
     catch (Exception e)

@@ -19,6 +19,7 @@ package com.nokia.carbide.cpp.pi.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import org.eclipse.cdt.core.CCorePlugin;
@@ -63,8 +64,9 @@ public class SourceLookup {
 	private static SourceLookup instance = null;
 	
 	public static SourceLookup getInstance() {
-		if (instance == null)
+		if (instance == null){
 			instance = new SourceLookup();
+		}
 		return instance;
 	}
 	
@@ -72,8 +74,8 @@ public class SourceLookup {
 		// singleton
 	}
 	
-	public void lookupAndopenEditorWithHighlight(String symbolName, String binaryName) {
-		IASTFileLocation[] locations = lookupLocations(symbolName, binaryName);
+	public void lookupAndopenEditorWithHighlight(final String symbolName, final String binaryName) {
+		final IASTFileLocation[] locations = lookupLocations(symbolName, binaryName);
 		final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 		if (locations.length <= 0) {
 			GeneralMessages.showErrorMessage(Messages.getString("SourceLookup.notfound") + "\n" + symbolName); //$NON-NLS-1$	//$NON-NLS-2$
@@ -81,7 +83,7 @@ public class SourceLookup {
 		}
 		
 		if (locations.length > 1) {
-			SourceLookupFileChooserDialog dialog = new SourceLookupFileChooserDialog(shell, locations);
+			final SourceLookupFileChooserDialog dialog = new SourceLookupFileChooserDialog(shell, locations);
 			if (dialog.open() == Window.OK && dialog.getLocation() != null) {
 				openEditorWithHighlight(dialog.getLocation());
 			}
@@ -90,9 +92,9 @@ public class SourceLookup {
 		}
 	}
 	
-	private void openEditorWithHighlight(IASTFileLocation location) {
-		IPath path = new Path(location.getFileName());
-		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(path);
+	private void openEditorWithHighlight(final IASTFileLocation location) {
+		final IPath path = new Path(location.getFileName());
+		final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(path);
 
 		if (file == null) {
 			return;
@@ -107,7 +109,7 @@ public class SourceLookup {
 		}
 
 		if (editor != null && editor instanceof ITextEditor) {
-			ITextEditor textEditor = (ITextEditor)editor;
+			final ITextEditor textEditor = (ITextEditor)editor;
 			int nodeOffset = location.getNodeOffset();
 			int nodeLength = location.getNodeLength();
 			int offset;
@@ -131,14 +133,14 @@ public class SourceLookup {
 		}
 	}
 	
-	private boolean typeEqual(String param, IType type) {
+	private boolean typeEqual(final String param, final IType type) {
 
 		class TypeAttribute {
-			boolean isSigned = true;	// Symbian still default to signed
-			boolean isConst = true;
-			String typeWithoutModifier = "";	//$NON-NLS-1$
+			private transient boolean isSigned = true;	// Symbian still default to signed
+			private transient boolean isConst = true;
+			private transient String typeWithoutModifier = "";	//$NON-NLS-1$
 			
-			TypeAttribute(String typeString) {
+			TypeAttribute(final String typeString) {
 				// In general we don't not have to care about too much, just trim out
 				// signed/unsigned/const modifier and take note. We take the rest of them
 				// and compare them after removing spaces
@@ -159,7 +161,7 @@ public class SourceLookup {
 				typeWithoutModifier = typeWithoutModifier.replaceAll("long int", "long"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			
-			boolean isSameType(TypeAttribute attribute) {
+			private boolean isSameType(TypeAttribute attribute) {
 				if (isSigned == attribute.isSigned &&
 						isConst == attribute.isConst &&
 						typeWithoutModifier != null &&
@@ -183,8 +185,8 @@ public class SourceLookup {
 		boolean needMatchingArg = true;
 		
 		// drop everything after )
-		if (Signature.indexOf(")") > 0 ) {	//$NON-NLS-1$
-			Signature = Signature.substring(0, Signature.indexOf(")"));	//$NON-NLS-1$
+		if (Signature.indexOf(')') > 0 ) {	//$NON-NLS-1$
+			Signature = Signature.substring(0, Signature.indexOf(')'));	//$NON-NLS-1$
 		}
 		
 		String[] signatureSplit = Signature.split("[(),]"); //$NON-NLS-1$
@@ -274,18 +276,20 @@ public class SourceLookup {
 			IProject[] projects= ResourcesPlugin.getWorkspace().getRoot().getProjects();
 			
 			for (IProject project: projects) {
-				if (CarbideBuilderPlugin.getBuildManager().isCarbideProject(project) == false) {
+				if (!CarbideBuilderPlugin.getBuildManager().isCarbideProject(project)) {
 					continue;
 				}
 				
 				ICarbideProjectInfo cpi = CarbideBuilderPlugin.getBuildManager().getProjectInfo(project);
-				if (cpi == null)
+				if (cpi == null){
 					continue;
+				}
 				
 				List<ICarbideBuildConfiguration> allConfig = cpi.getBuildConfigurations();
 				
-				if (allConfig == null)
+				if (allConfig == null){
 					continue;
+				}
 				
 				boolean isEligibleProject = false;
 				for (ICarbideBuildConfiguration config : allConfig) {
@@ -294,7 +298,7 @@ public class SourceLookup {
 						String projectFileName = new java.io.File(projectExePath).getName().toLowerCase();
 						String binaryFileName = new java.io.File(binaryName).getName().toLowerCase();
 
-						if (projectFileName.equals(binaryFileName) == true) {
+						if (projectFileName.equals(binaryFileName)) {
 							isEligibleProject = true;
 						}
 					}
@@ -344,7 +348,7 @@ public class SourceLookup {
 		return locations.toArray(new IASTFileLocation[0]);
 	}
 	
-	IASTFileLocation[] lookupLocationsFromIndex(String symbolName, IIndex index) {
+	private IASTFileLocation[] lookupLocationsFromIndex(String symbolName, IIndex index) {
 		IIndexBinding[] bindings = new IIndexBinding[0];
 		ArrayList<IASTFileLocation> locations = new ArrayList<IASTFileLocation>();
 		

@@ -1,125 +1,179 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-	<title>Using the Profiler</title>
-    <link href="../../../book.css" rel="stylesheet" type="text/css">
-    <style type="text/css">
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>Using the Profiler</title>
+  <link href="../../../book.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
 <!--
-.style1 {font-family: "Courier New", Courier, mono}
+ .style1 {font-family: "Courier New", Courier, mono}
 -->
-    </style>
+
+  </style>
 </head>
 
 <body>
 <h2>Using the Profiler</h2>
-<h4>Overview</h4>
-<p>After successfully <a href="../../tasks/profiler/prof_installation.htm">installing</a> the Profiler .SISX file on your target device, you will be able to access the user interface. Run the <b>CarbidePI</b> application located in the &#8220;Installed&#8221; applications (Figure 1).</p>
-<table width="600" border="1" align="center">
-  <tr align="center">
-    <td><b>S60</b></td>
-    <td><b>UIQ</b></td>
-  </tr>
-  <tr align="center">
-    <td width="50%"><div align="center"><img src="../profiler/images/SamplingProfilerMainWindow.png" width="264" height="312"></div></td>
-    <td><div align="center"><img src="images/uiq_using_the_profiler.png" width="240" height="320"></div></td>
-  </tr>
-</table>
-<p align="center" class="figure">Figure 1 - Profiler Main Window (S60 and UIQ) </p>
-<p>In Options, configure the necessary run-time options. Specify which traces you want enabled, where to place the generated .dat profiler data file, the profiler file prefix, and the trace priority sampling interval.</p>
-<p>In the Profiler, the Address/Thread trace is <strong>always</strong> active when profiling is performed. Other traces are synchronized with the Address/Thread trace.</p>
-<p>In addition to Address/Thread trace, you can enable additional trace options such as dynamic binary support, memory and power usage, and function calls.</p>
-<div class="step">
-  <h4>Profiling an Application</h4>
-  <ol>
-    <li>Open the Profiler options screen
-      <p>Select the Tracing options menu  from the Profiler menu (Figure 2)</p>
-    </li>
-    <blockquote>
-    <table width="600" border="1" align="center">
-          <tr align="center">
-            <td><b>S60</b></td>
-            <td><b>UIQ</b></td>
-          </tr>
-          <tr align="center">
-            <td width="50%"><div align="center"><img src="../profiler/images/TracingOptions.png" width="264" height="312"></div></td>
-            <td><div align="center"><img src="images/TracingOptions_uiq.png" width="240" height="320"></div></td>
-          </tr>
-      </table>
-    </blockquote>
-    <blockquote>
-      <p align="center" class="figure">Figure 2 - Tracing Options</p>
-    </blockquote>
-    <li>Enable or disable trace options</li>
 
-    <p>Specify On or Off for the available trace items - Dynamic binary support, Function call capture, and Thread priority capture.  (Figure 3).</p>
-    <blockquote>
-      <p align="left" class="note"><b>NOTE</b> If the executables you wish to analyze are not in a ROM image (.symbol file) of your target device, then you will need to turn on Dynamic binary support.</p>
-    </blockquote>
-    <table width="600" border="1" align="center">
-      <tr align="center">
-        <td><b>S60</b></td>
-        <td><b>UIQ</b></td>
-      </tr>
-      <tr align="center">
-        <td width="50%"><div align="center"><img src="../profiler/images/TracingOptionsList.png" width="264" height="312"><img src="images/TracingOptionsList2.png" width="264" height="312"></div></td>
-        <td><div align="center"><img src="images/uiq_setting_tracing_options.png" width="240" height="320"></div></td>
-      </tr>
-    </table>
-    <p align="center" class="figure">Figure 3 - List of Trace Items</p>
-    <li>Specify Output</li>
-    <p>Specify the output for the sampled data (Figure 4). The output method can be either the <span class="style1">File system</span> or <span class="style1">Debug port</span>. If you select File system, you can save the data file to a memory card or the target device C:\ drive. With the debug port output method, you will need hardware (such as the Nokia Musti box)  connected to the XTI/STI debug port to capture the profiler data. There is less profiler overhead if the debug port is used.</p>
-    <table width="600" border="1" align="center">
-      <tr align="center">
-        <td><b>S60</b></td>
-        <td><b>UIQ</b></td>
-      </tr>
-      <tr align="center">
-        <td width="50%"><div align="center"><img src="../profiler/images/OutputOptionsWindow_FileSystem.png" width="264" height="312"></div></td>
-        <td><div align="center"><img src="images/uiq_setting_output_settings.png" width="240" height="320"></div></td>
-      </tr>
-    </table>
-    <p align="center" class="figure">Figure 4 - Output Options</p>
-    <p>You can specify the file prefix for data files. The name of the profiler data file is formed from the prefix plus stream.dat. If you perform multiple traces and use the file output option, include a hash mark (#) in your file prefix. Subsequent traces will then be saved with different file names. The hash mark is automatically replaced with a number. For example, if you define the file prefix as <span class="style1">PI_#_</span>, multiple trace files will be named  <span class="style1">PI_1_STREAM.dat, PI_2_STREAM.dat, &hellip; PI_100_STREAM.dat</span>. Only one hash mark is needed to provide sequential numbering. 
-    If no hash mark is present,  the same file will be overwritten with the same name.</p>
-    <p class="note"><strong>NOTE</strong> Currently, files names should be 19 characters or less.</p>
-    <li>Specify Advanced Options</li>
-    <p>In Advanced options, specify the thread priority sample interval (Figure 5). The operating system is called automatically every millisecond to determine what   thread is currently executing. This interval setting indicates how often an   additional query to the operating system is made to determine the priority of   the currently executing thread. The interval is specified in milliseconds. The   default is 3000 milliseconds (3 seconds). You can get a thread priority as often   as you like but be aware that frequent sampling of the OS may skew the   performance measurement while making the call. There is a significant overhead   to obtaining the priorities of all threads.</p>
-    <p>You can choose an address/thread sampling interval between 1ms and 10000ms (10 seconds). For intervals greater than 1 ms, memory, power, priority and button events are sampled periodically; not every millisecond. Memory and button events are individual events. For memory and priority the current memory size and priority are recorded before entering the time interval, then changes during the interval are recorded and the final memory size and priority  when it exits the interval is recorded.</p>
-    <table width="600" border="1" align="center">
-      <tr align="center">
-        <td><b>S60</b></td>
-        <td><b>UIQ</b></td>
-      </tr>
-      <tr align="center">
-        <td width="50%"><div align="center"><img src="../profiler/images/AdvancedOptionsEditBox.png" width="240" height="320"></div></td>
-        <td><div align="center"><img src="images/uiq_setting_advanced_settings.png" width="240" height="320"></div></td>
-      </tr>
-    </table>
-    <p align="center" class="figure">Figure 5 - Priority sample interval</p>
-    <li>Profile your application</li>
-    <p>After establishing your desired options, select <strong>Options &gt; Profiler &gt; Start</strong> from the main window (Figure 6) to begin sampling. On UIQ devices you will see the state of the profiler change from &ldquo;Ready&rdquo; to &ldquo;Initializing&rdquo;, and then to &ldquo;Profiling&rdquo;. On S60 3.x devices the state will change from  &quot;Initializing&quot; to &quot;Sampling&quot; and then &quot;Finished&quot;. When the state has changed to &ldquo;Profiling&rdquo; or &quot;Sampling&quot;, the trace activity has begun. Note that none of the configurations can be changed when the tracing is active.</p>
-    <p class="note">  <b>IMPORTANT!</b> After the trace activity has started, leave the Profiler running in the background. Now you can proceed with the use case you wish to analyze. For example, run your application on the device.</p>
-    <table width="600" border="1" align="center">
-      <tr align="center">
-        <td><b>S60</b></td>
-        <td><b>UIQ</b></td>
-      </tr>
-      <tr align="center">
-        <td width="50%"><div align="center"><img src="images/profiler_start_profiler.png" width="264" height="312"></div></td>
-        <td><div align="center"><img src="images/profiler_start_profiler_uiq.png" width="240" height="320"></div></td>
-      </tr>
-    </table>
-    <p align="center" class="figure">Figure 6 - Starting a trace session </p>
-    <p>Stop the trace activity by switching back to the profiler and selecting <strong>Options &gt; Profiler &gt; Stop</strong>. Do not use the profiler while the trace data is being written to the data file. When the profiler is stopped, the profiler state shown in the main window will change from &ldquo;profiling&rdquo; to &ldquo;stopping profiler&rdquo;, and finally back to &ldquo;ready&rdquo;. The profiler data file is automatically written to the output previously selected. The actual amount of produced data depends on the length of time tracing was active and which trace options were selected. The Address/Thread trace alone produces approximately 1-4 Kbytes / second. Transfer the data file to your workstation to be analyzed with the analyzer.</p>
-  </ol>
+<h4>Overview</h4>
+
+<p>After successfully <a
+href="../../tasks/profiler/prof_installation.htm">installing</a> the Profiler
+.SISX file on your target device, you will be able to access the user
+interface. Run the <b>CarbidePI</b> application located in the
+&ldquo;Installed&rdquo; applications (Figure 1).</p>
+<p align="center"><img src="../profiler/images/SamplingProfilerMainWindow.png" ></p>
+     
+
+
+<p align="center" class="figure">Figure 1 - Profiler Main Window (S60) </p>
+
+<p>In Options, configure the necessary run-time options. Specify which traces
+you want enabled, where to place the generated .dat profiler data file, the
+profiler file prefix, and the trace priority sampling interval.</p>
+
+<p>In the Profiler, the Address/Thread trace is <strong>always</strong> active
+when profiling is performed. Other traces are synchronized with the
+Address/Thread trace.</p>
+
+<p>In addition to Address/Thread trace, you can enable additional trace options
+such as dynamic binary support, memory and power usage, and function calls.</p>
+
+<div class="step">
+<h4>Profiling an Application</h4>
+<ol>
+  <li>Open the Profiler options screen 
+    <p>Select the Tracing options menu from the Profiler menu (Figure 2) </p>
+    <p align="center"><img src="images/TracingOptions.png"></p>
+  </li>
+
+  <p class="figure">Figure 2 - Tracing Options</p>
+  <li>Enable or disable trace options</li>
+
+  <p>Specify On or Off for the available trace items - Dynamic binary support,
+  Function call capture, and Thread priority capture. (Figure 3).</p>
+
+  <blockquote>
+    <p align="left" class="note"><b>NOTE</b> If the executables you wish to
+    analyze are not in a ROM image (.symbol file) of your target device, then
+    you will need to turn on Dynamic binary support.</p>
+  
+
+    
+<p align="center"><img src="../profiler/images/TracingOptionsList.png" ></p>
+          
+<p align="center"><img src="../profiler/images/TracingOptionsList2.png" ></p>
+          
+
+  <p align="center" class="figure">Figure 3 - List of Trace Items</p>
+  <li>Specify Output</li>
+
+  <p>Specify the output for the sampled data (Figure 4). The output method can
+  be either the <span class="style1">File system</span> or <span
+  class="style1">Debug port</span>. If you select File system, you can save the
+  data file to a memory card or the target device C:\ drive. With the debug
+  port output method, you will need hardware (such as the Nokia Musti box)
+  connected to the XTI/STI debug port to capture the profiler data. There is
+  less profiler overhead if the debug port is used.</p>
+          <p align="center">
+          <img src="../profiler/images/OutputOptionsWindow_FileSystem.png"
+       ></p>
+     
+
+
+  <p align="center" class="figure">Figure 4 - Output Options</p>
+
+  <p>You can specify the file prefix for data files. The name of the profiler
+  data file is formed from the prefix plus stream.dat. If you perform multiple
+  traces and use the file output option, include a hash mark (#) in your file
+  prefix. Subsequent traces will then be saved with different file names. The
+  hash mark is automatically replaced with a number. For example, if you define
+  the file prefix as <span class="style1">PI_#_</span>, multiple trace files
+  will be named <span class="style1">PI_1_STREAM.dat, PI_2_STREAM.dat, &hellip;
+  PI_100_STREAM.dat</span>. Only one hash mark is needed to provide sequential
+  numbering. If no hash mark is present, the same file will be overwritten with
+  the same name.</p>
+
+  <p class="note"><strong>NOTE</strong> Currently, files names should be 19
+  characters or less.</p>
+  <li>Specify Advanced Options</li>
+
+  <p>In Advanced options, specify the thread priority sample interval (Figure
+  5). The operating system is called automatically every millisecond to
+  determine what thread is currently executing. This interval setting indicates
+  how often an additional query to the operating system is made to determine
+  the priority of the currently executing thread. The interval is specified in
+  milliseconds. The default is 3000 milliseconds (3 seconds). You can get a
+  thread priority as often as you like but be aware that frequent sampling of
+  the OS may skew the performance measurement while making the call. There is a
+  significant overhead to obtaining the priorities of all threads.</p>
+
+  <p>You can choose an address/thread sampling interval between 1ms and 10000ms
+  (10 seconds). For intervals greater than 1 ms, memory, power, priority and
+  button events are sampled periodically; not every millisecond. Memory and
+  button events are individual events. For memory and priority the current
+  memory size and priority are recorded before entering the time interval, then
+  changes during the interval are recorded and the final memory size and
+  priority when it exits the interval is recorded.</p>
+
+  
+
+          <p align="center">
+          <img src="../profiler/images/AdvancedOptionsEditBox.png"
+></p>
+     
+
+
+  <p align="center" class="figure">Figure 5 - Priority sample interval</p>
+  <li>Profile your application</li>
+
+  <p>After establishing your desired options, select <strong>Options &gt;
+  Profiler &gt; Start</strong> from the main window (Figure 6) to begin
+  sampling.The state will change from "Initializing" to "Sampling" and then
+  "Finished". When the state has changed to &ldquo;Profiling&rdquo; or
+  "Sampling", the trace activity has begun. Note that none of the
+  configurations can be changed when the tracing is active.</p>
+
+  <p class="note"><b>IMPORTANT!</b> After the trace activity has started, leave
+  the Profiler running in the background. Now you can proceed with the use case
+  you wish to analyze. For example, run your application on the device.</p>
+
+  
+
+          <p align="center">
+          <img src="images/profiler_start_profiler.png" 
+></p>
+       
+
+
+  <p align="center" class="figure">Figure 6 - Starting a trace session </p>
+
+  <p>Stop the trace activity by switching back to the profiler and selecting
+  <strong>Options &gt; Profiler &gt; Stop</strong>. Do not use the profiler
+  while the trace data is being written to the data file. When the profiler is
+  stopped, the profiler state shown in the main window will change from
+  &ldquo;profiling&rdquo; to &ldquo;stopping profiler&rdquo;, and finally back
+  to &ldquo;ready&rdquo;. The profiler data file is automatically written to
+  the output previously selected. The actual amount of produced data depends on
+  the length of time tracing was active and which trace options were selected.
+  The Address/Thread trace alone produces approximately 1-4 Kbytes / second.
+  Transfer the data file to your workstation to be analyzed with the
+  analyzer.</p>
+</ol>
 </div>
+
 <p><strong>Related references </strong></p>
 <ul>
-  <li><a href="../../tasks/profiler/prof_installation.htm">Installing the Profiler on the Target Device</a></li>
-  <li><a href="../../tasks/analyser/an_load_trace_files.htm">Importing Profiler Data File for Analysis </a></li>
+  <li><a href="../../tasks/profiler/prof_installation.htm">Installing the
+    Profiler on the Target Device</a></li>
+  <li><a href="../../tasks/analyser/an_load_trace_files.htm">Importing Profiler
+    Data File for Analysis </a></li>
 </ul>
-<div id="footer">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. <br>
+License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
 </body>
 </html>

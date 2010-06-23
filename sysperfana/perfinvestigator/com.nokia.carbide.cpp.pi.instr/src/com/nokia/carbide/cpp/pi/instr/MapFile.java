@@ -42,20 +42,20 @@ public class MapFile
 	private long referenceLineNumber;
 	private LinkedList<Function> functionData;
 	private ArrayList<Function> sortedFunctionData;
-	private Long currentGccLibEndingOffset = new Long(0);
+	private Long currentGccLibEndingOffset = Long.valueOf(0);
 	private Function lastGccFunction = null;
 	
 	// RVCT/RVDS map file line
-	private static final Pattern rvctLinePattern = Pattern.compile("^\\p{Blank}*((?!\\d)\\S.+)\\p{Blank}+(0[x|X]\\p{XDigit}+|\\d+)\\p{Blank}+(?:ARM Code|Thumb Code)\\p{Blank}+(0x\\p{XDigit}+|\\d+)\\p{Blank}.*\\(\\.text\\)$");	//$NON-NLS-1$
+	private static final Pattern RVCT_LINE_PATTERN = Pattern.compile("^\\p{Blank}*((?!\\d)\\S.+)\\p{Blank}+(0[x|X]\\p{XDigit}+|\\d+)\\p{Blank}+(?:ARM Code|Thumb Code)\\p{Blank}+(0x\\p{XDigit}+|\\d+)\\p{Blank}.*\\(\\.text\\)$");	//$NON-NLS-1$
 
 	// a GCC map file line looks like this:
 	// <%x|%d> <symbol name> for function symbols
 	// symbol name cannot be number (e.g. first non space is not a digit)
-	private static final Pattern gccFuncLinePattern  = Pattern.compile("\\p{Blank}*(0[x|X]\\p{XDigit}+|\\d+)\\p{Blank}+((?!\\d)\\S.+)");	//$NON-NLS-1$
+	private static final Pattern GCC_FUNC_LINE_PATTERN  = Pattern.compile("\\p{Blank}*(0[x|X]\\p{XDigit}+|\\d+)\\p{Blank}+((?!\\d)\\S.+)");	//$NON-NLS-1$
 
 	// <section> <%x|%d> <%x|%d> <symbol name>	for whole library
 	// *fill* <%x|%d> <%x|%d> 00000000 for filler
-	private static final Pattern gccLibOrFillerLinePattern = Pattern.compile("\\p{Blank}*(?:\\S*)\\p{Blank}*(0[x|X]\\p{XDigit}+|\\d+)\\p{Blank}+(0[x|X]\\p{XDigit}+|\\d+)\\p{Blank}+(\\S.+)"); //$NON-NLS-1$
+	private static final Pattern GCC_LIB_OR_FILLER_LINE_PATTERN = Pattern.compile("\\p{Blank}*(?:\\S*)\\p{Blank}*(0[x|X]\\p{XDigit}+|\\d+)\\p{Blank}+(0[x|X]\\p{XDigit}+|\\d+)\\p{Blank}+(\\S.+)"); //$NON-NLS-1$
 
 	private static final String EXPORTED = " (EXPORTED)";
 
@@ -195,7 +195,7 @@ public class MapFile
 		return -1;
 	}
 	
-	private Function FunctionFromTokens(String funcNameToken, String funcOffsetToken, String funcLengthToken)
+	private Function functionFromTokens(String funcNameToken, String funcOffsetToken, String funcLengthToken)
 	{	
 		Function f = new Function(funcNameToken,Long.valueOf(0),null);
 		// look for length, set it tentatively
@@ -289,7 +289,7 @@ public class MapFile
 		// a RVCT symbol line looks like this:
 		// <symbol name> <%x|%d> <ARM Code|Thumb Code> <%x|%d> <object>
 		// symbol name cannot be number (e.g. first non space is not a digit)
-		Matcher rvctLineMatcher = rvctLinePattern.matcher(line);
+		Matcher rvctLineMatcher = RVCT_LINE_PATTERN.matcher(line);
 		
 		if (rvctLineMatcher.matches())
 		{
@@ -308,7 +308,7 @@ public class MapFile
 			
 			String funcLengthToken = rvctLineMatcher.group(3).trim();
 			
-			Function f = FunctionFromTokens(funcNameToken, funcOffsetToken, funcLengthToken);
+			Function f = functionFromTokens(funcNameToken, funcOffsetToken, funcLengthToken);
 			
 			this.insertToFunctionData(f);
 		}
@@ -350,10 +350,10 @@ public class MapFile
 		// a GCC symbol line looks like this:
 		// <%x|%d> <symbol name> for function symbols
 		// symbol name cannot be number (e.g. first non space is not a digit)
-		Matcher gccFuncLineMatcher  = gccFuncLinePattern.matcher(line);	//$NON-NLS-1$
+		Matcher gccFuncLineMatcher  = GCC_FUNC_LINE_PATTERN.matcher(line);	//$NON-NLS-1$
 		// <section> <%x|%d> <%x|%d> <symbol name>	for whole library
 		// *fill* <%x|%d> <%x|%d> 00000000 for filler
-		Matcher gccLibOrFillerLineMatcher = gccLibOrFillerLinePattern.matcher(line); //$NON-NLS-1$
+		Matcher gccLibOrFillerLineMatcher = GCC_LIB_OR_FILLER_LINE_PATTERN.matcher(line); //$NON-NLS-1$
 		
 		Function f = null;
 		Long currentLineOffset = currentGccLibEndingOffset;
@@ -365,7 +365,7 @@ public class MapFile
 			String funcOffsetToken = gccFuncLineMatcher.group(1).trim();
 			String funcLengthToken = Messages.getString("MapFile.zero"); //$NON-NLS-1$
 			
-			f = FunctionFromTokens(funcNameToken, funcOffsetToken, funcLengthToken);
+			f = functionFromTokens(funcNameToken, funcOffsetToken, funcLengthToken);
 			
 			// Some GCC symbol may be bogus
 			if (qualifyGCCSymbol(f.getOffsetFromBinaryStart(), funcNameToken)) {
@@ -387,7 +387,7 @@ public class MapFile
 			currentGccLibEndingOffset = Long.decode(libLengthToken) + Long.decode(libOffsetToken);				
 		} else {
 			// next time around we will use the new library offset
-			currentGccLibEndingOffset = new Long(0);
+			currentGccLibEndingOffset = Long.valueOf(0);
 		}
 		
 		// update last function's size if needed
@@ -508,7 +508,7 @@ public class MapFile
 			  myMessage += Messages.getString("MapFile.line.number") + referenceLineNumber; //$NON-NLS-1$
 		  }
 		  
-    	  GeneralMessages.PiLog(myMessage, GeneralMessages.WARNING);
+    	  GeneralMessages.piLog(myMessage, GeneralMessages.WARNING);
 	}
 
 	private void flagIOException(File file, String referencePath, long referenceLineNumber) {
@@ -521,6 +521,6 @@ public class MapFile
 		  }
 
 		  GeneralMessages.showErrorMessage(myMessage);
-		  GeneralMessages.PiLog(myMessage, GeneralMessages.ERROR);
+		  GeneralMessages.piLog(myMessage, GeneralMessages.ERROR);
 	}
 }

@@ -33,12 +33,12 @@ public class IrqTraceParser extends Parser
 //  private String profilerVersion;
   private Vector completeIrqTrace;
   private int firstSample,lastSample;
-  private long old_1 = 0;
-  private long old_2 = 0;
-  private long old_3 = 0;
+  private long old1 = 0;
+  private long old2 = 0;
+  private long old3 = 0;
   private int sampleNum = 0;
-  private int old_irq_lev1 = 0;
-  private int old_irq_lev2 = 0;
+  private int oldIrqLev1 = 0;
+  private int oldIrqLev2 = 0;
     
   public IrqTraceParser(/*File irqFile, ProgressBar progressBar*/) throws Exception
   {
@@ -268,8 +268,8 @@ public class IrqTraceParser extends Parser
   	  			
   	  			if(length > 0)
   	  			{
-  	  				this.old_irq_lev1 = dis.readUnsignedByte();
-  	  				this.old_irq_lev2 = dis.readUnsignedByte();
+  	  				this.oldIrqLev1 = dis.readUnsignedByte();
+  	  				this.oldIrqLev2 = dis.readUnsignedByte();
   	  				length-=2; read-=2;
 
   	  				this.addIrqSample();
@@ -277,8 +277,8 @@ public class IrqTraceParser extends Parser
   	  		}
   	  		else
   	  		{
-  	  			this.old_irq_lev1 = firstByte;
-  	  			this.old_irq_lev2 = dis.readUnsignedByte();
+  	  			this.oldIrqLev1 = firstByte;
+  	  			this.oldIrqLev2 = dis.readUnsignedByte();
   	  			length--;read++;
 
   	  			this.addIrqSample();
@@ -339,7 +339,7 @@ public class IrqTraceParser extends Parser
 		}
 	}
 	//if(fValue == -1) System.out.println("1:"+fValue); 	
-	this.old_1 += fValue;
+	this.old1 += fValue;
 
 	value = 0;
 	fValue = 0;
@@ -365,7 +365,7 @@ public class IrqTraceParser extends Parser
 		}
 	}
 	//if(fValue == -1) System.out.println("2:"+fValue); 	
-	this.old_2 += fValue;
+	this.old2 += fValue;
 	
 	value = 0;
 	fValue = 0;
@@ -391,7 +391,7 @@ public class IrqTraceParser extends Parser
 		}
 	}
 	//if(fValue == -1) System.out.println("3:"+fValue); 	
-	this.old_3 += fValue;
+	this.old3 += fValue;
 	
 	this.addSwiSample();
 	/*
@@ -404,9 +404,9 @@ public class IrqTraceParser extends Parser
   
   private void addSwiSample()
   {
-	  long temp_1 = ((this.old_1 << 32) >>> 32);
-	  long temp_2 = ((this.old_2 << 32) >>> 32);
-	  long temp_3 = ((this.old_3 << 32) >>> 32)-4;
+	  long temp_1 = ((this.old1 << 32) >>> 32);
+	  long temp_2 = ((this.old2 << 32) >>> 32);
+	  long temp_3 = ((this.old3 << 32) >>> 32)-4;
 	  
 	  IrqSample sample = new IrqSample(this.sampleNum, temp_1, temp_2, temp_3);
 	  /*
@@ -433,9 +433,9 @@ public class IrqTraceParser extends Parser
   
   private void addSwiRepeat(int amount)
   {
-	  long temp_1 = ((this.old_1 << 32) >>> 32);
-	  long temp_2 = ((this.old_2 << 32) >>> 32);
-	  long temp_3 = ((this.old_3 << 32) >>> 32)-4;
+	  long temp_1 = ((this.old1 << 32) >>> 32);
+	  long temp_2 = ((this.old2 << 32) >>> 32);
+	  long temp_3 = ((this.old3 << 32) >>> 32)-4;
 	  
 	  /*
 	  String n1 = sfp.getFunctionNameForAddress(temp_3);
@@ -464,13 +464,13 @@ public class IrqTraceParser extends Parser
 
   private void addIrqSample()
   {
-  	IrqSample sample = new IrqSample(this.sampleNum,this.old_irq_lev1,this.old_irq_lev2);
+  	IrqSample sample = new IrqSample(this.sampleNum,this.oldIrqLev1,this.oldIrqLev2);
   	this.completeIrqTrace.add(sample);
   }
   
   private void addIrqRepeat(int amount)
   {
-  	  	IrqSample sample = new IrqSample(this.sampleNum,this.old_irq_lev1,this.old_irq_lev2);
+  	  	IrqSample sample = new IrqSample(this.sampleNum,this.oldIrqLev1,this.oldIrqLev2);
   	  	sample.repeatCount = amount; 
  	  	this.completeIrqTrace.add(sample);
   }

@@ -171,7 +171,7 @@ public class CallVisualiser extends GenericTable
 	protected Action saveTableAction;
 	protected Action functionSaveFunctionAction;
 	
-	protected static int SAMPLES_AT_ONE_TIME = 1000;
+	protected final static int SAMPLES_AT_ONE_TIME = 1000;
 	private Job setTimeframeJob = null;
 	
 	// class to pass sample data to the save wizard

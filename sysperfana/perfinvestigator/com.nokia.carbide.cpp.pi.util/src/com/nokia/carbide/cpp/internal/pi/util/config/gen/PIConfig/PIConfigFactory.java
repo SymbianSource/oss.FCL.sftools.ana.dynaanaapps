@@ -34,7 +34,7 @@ public interface PIConfigFactory extends EFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	PIConfigFactory eINSTANCE = com.nokia.carbide.cpp.internal.pi.util.config.gen.PIConfig.impl.PIConfigFactoryImpl.init();
+	PIConfigFactory E_INSTANCE = com.nokia.carbide.cpp.internal.pi.util.config.gen.PIConfig.impl.PIConfigFactoryImpl.init();
 
 	/**
 	 * Returns a new object of class '<em>Button Event Profile List Type</em>'.

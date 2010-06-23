@@ -8,4 +8,15 @@
       </plugin>
    </extension>
 
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="com.nokia.carbide.cpp.internal.pi.model.ICPUScaleAdapter"
+            class="com.nokia.carbide.cpp.pi.internal.perfcounters.PecTraceAdapterFactory">
+         <adapter
+               type="com.nokia.carbide.cpp.internal.pi.model.ICPUScale">
+         </adapter>
+      </factory>
+   </extension>
+
 </plugin>

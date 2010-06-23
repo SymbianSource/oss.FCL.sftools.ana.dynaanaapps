@@ -304,4 +304,20 @@ public class PriorityPlugin extends AbstractPiPlugin
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return AbstractPiPlugin.imageDescriptorFromPlugin("com.nokia.carbide.cpp.pi.priority", path); //$NON-NLS-1$
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#isMandatory()
+	 */
+	public boolean isMandatory() {
+		return false;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#getTraceDescription()
+	 */
+	public String getTraceDescription() {
+		return getTraceTitle();
+	}
 }

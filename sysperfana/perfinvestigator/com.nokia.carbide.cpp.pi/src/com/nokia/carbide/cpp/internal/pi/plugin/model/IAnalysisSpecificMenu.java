@@ -17,7 +17,7 @@
 
 package com.nokia.carbide.cpp.internal.pi.plugin.model;
 
-public abstract interface IAnalysisSpecificMenu extends IMenu 
+public interface IAnalysisSpecificMenu extends IMenu 
 {
 	
 }

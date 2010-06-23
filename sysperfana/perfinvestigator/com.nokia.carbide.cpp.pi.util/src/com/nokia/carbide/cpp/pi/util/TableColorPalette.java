@@ -29,19 +29,17 @@ import org.eclipse.swt.widgets.Shell;
 
 abstract public class TableColorPalette implements ITableColorPalette {
 
-	private final int channelValue[] = { 0x00, 0x33, 0x66, 0x99, 0xCC, 0xFF };
+	private transient final int channelValue[] = { 0x00, 0x33, 0x66, 0x99, 0xCC, 0xFF };
 	
-	private Map<Object, Color> palette = new HashMap<Object, Color>();
-	private int currentColorIndex = 0;
+	private transient Map<Object, Color> palette = new HashMap<Object, Color>();
+	private transient int currentColorIndex = 0;
 	
 	abstract public RGB getConstantRGB(Object entry);
 
-	public TableColorPalette() {
-	}
 	
 	// Windows palette default from here
 	//http://www.mozilla.org/docs/refList/user-interface/visual/colorpalette/
-	int defaultPalette[][] = {{255,255,0}, {0,255,255}, {255,102,51},
+	private transient int defaultPalette[][] = {{255,255,0}, {0,255,255}, {255,102,51},
 								{128,128,0}, {0,0,128}, {0,255,0},
 								{0,128,0}, {128,0,0}, {0,128,128},
 								{0,55,60}, {204,153,102}, {0,153,255},

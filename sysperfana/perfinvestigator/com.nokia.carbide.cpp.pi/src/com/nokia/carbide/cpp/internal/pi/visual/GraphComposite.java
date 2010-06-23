@@ -547,6 +547,10 @@ public class GraphComposite extends Composite implements SelectionListener,
 	public void widgetDefaultSelected(SelectionEvent e) {
 		// No actions needed here
 	}
+	
+	public Combo getTitleBarCombo(){
+		return comboGraphType;
+	}
 
 	/*
 	 * (non-Javadoc)

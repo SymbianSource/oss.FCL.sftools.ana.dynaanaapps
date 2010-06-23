@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<!-- Define help for Debug Perspective default views -->
+<!-- plugin="com.nokia.carbide.cpp.pi.view" -->
+
+<contexts>
+   <context id="pi_view_context">
+      <description>Performance Investigator View provides a list of imported PI Profiler data files. Double click on an item to open it for viewing in PI Analyser.</description>
+      <topic href="html/reference/analyzer/PI_view.htm" label="PI View description and instructions"/>
+   </context>
+</contexts>

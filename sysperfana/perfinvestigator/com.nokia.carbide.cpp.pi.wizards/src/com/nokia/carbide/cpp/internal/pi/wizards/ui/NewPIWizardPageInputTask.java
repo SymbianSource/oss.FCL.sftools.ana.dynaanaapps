@@ -17,22 +17,39 @@
 
 package com.nokia.carbide.cpp.internal.pi.wizards.ui;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IViewReference;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import com.nokia.carbide.cpp.internal.pi.wizards.ui.util.CarbidePiWizardHelpIds;
+import com.nokia.carbide.cpp.pi.PiPlugin;
 
 public class NewPIWizardPageInputTask extends NewPIWizardPage implements
 		INewPIWizardSettings {
 	private FileSelectionGroup fileSelectionGroup;
-	private TraceSelectionGroup traceSelectionGroup;
+	private ProfilerActivatorGroup profilerActivatorGroup;
+	private Button fileRadioButton;
+	private Button deviceRadioButton;
+	
+	/**
+	 *  TraceViewers ID com.nokia.traceviewer.view.TraceViewerView
+	 */
+	private static final String TRACE_VIEWER_VIEW_ID = "com.nokia.traceviewer.view.TraceViewerView"; //$NON-NLS-1$
+	
 
 	protected NewPIWizardPageInputTask(final NewPIWizard wizard) {
 		super(Messages.getString("NewPIWizardPageSampleFile.title")); //$NON-NLS-1$
@@ -48,14 +65,30 @@ public class NewPIWizardPageInputTask extends NewPIWizardPage implements
 		container.setLayout(layout);
 		layout.numColumns = 1;
 
-		//createRadioButtonGroup(container); // not implemented yet
-		fileSelectionGroup = new FileSelectionGroup(container, this);
-		fileSelectionGroup.setVisible(true);
-
-		traceSelectionGroup = new TraceSelectionGroup(container,this);
+		createRadioButtonGroup(container);
+		fileSelectionGroup = new FileSelectionGroup(container, this);	
+		if(PiPlugin.isTraceProviderAvailable()){
+			profilerActivatorGroup = new ProfilerActivatorGroup(container, this, this, getContainer());
+			fileSelectionGroup.setVisible(profilerActivatorGroup);
+		}
+		
 		setControl(container);
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(),
 				CarbidePiWizardHelpIds.PI_IMPORT_WIZARD_INPUT);
+	}
+	
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.dialogs.DialogPage#performHelp()
+	 */
+	@Override
+	public void performHelp() {
+		WizardDialog wizardDialog = (WizardDialog)getContainer();			
+		if(wizardDialog.buttonBar != null){			
+			PlatformUI.getWorkbench().getHelpSystem().setHelp(wizardDialog.buttonBar,
+					CarbidePiWizardHelpIds.PI_IMPORT_WIZARD_INPUT);
+		}
+	
 	}
 
 	private void createRadioButtonGroup(Composite parent) {
@@ -69,60 +102,70 @@ public class NewPIWizardPageInputTask extends NewPIWizardPage implements
 		radioButtonGridData.horizontalSpan = 2;
 
 		// File radio button
-		final Button fileRadioButton = new Button(radioButtonGroup, SWT.RADIO);
+		fileRadioButton = new Button(radioButtonGroup, SWT.RADIO);
 		fileRadioButton.setText(Messages.getString("NewPIWizardPageInputTask.fromFileSystem")); //$NON-NLS-1$
 		fileRadioButton.setLayoutData(radioButtonGridData);
-		fileRadioButton.addSelectionListener(new SelectionListener() {
-
-			public void widgetSelected(SelectionEvent e) {
-				if (fileRadioButton.getSelection()) {
-					fileSelectionGroup.setVisible(true);
+		fileRadioButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {					
+				if(e.widget == fileRadioButton){
+					if(!fileSelectionGroup.isVisible()){
+						setErrorMessage(null);
+						NewPIWizardSettings.getInstance().profilerActivator = false;
+						fileSelectionGroup.setVisible(profilerActivatorGroup);
+					}
 				}
-
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
 		fileRadioButton.setSelection(true);
 
 		// From Device via TraceViewer radio button
-		final Button deviceRadioButton = new Button(radioButtonGroup, SWT.RADIO);
+		deviceRadioButton = new Button(radioButtonGroup, SWT.RADIO);
 		deviceRadioButton
 				.setText(Messages.getString("NewPIWizardPageInputTask.fromDevice")); //$NON-NLS-1$
 		deviceRadioButton.setLayoutData(radioButtonGridData);
-		deviceRadioButton.addSelectionListener(new SelectionListener() {
+		deviceRadioButton.addSelectionListener(new SelectionAdapter() {
 
-			public void widgetSelected(SelectionEvent e) {
-				if (deviceRadioButton.getSelection()) {
+			public void widgetSelected(SelectionEvent e) {			
+				if(e.widget == deviceRadioButton){
+					if(!profilerActivatorGroup.isVisible()){
+						setErrorMessage(null);
+						
+						NewPIWizardSettings.getInstance().profilerActivator = true;
+						profilerActivatorGroup.setVisible(fileSelectionGroup);
+					}
 				}
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
 		deviceRadioButton.setSelection(false);
-
-		// not implemented yet
-		deviceRadioButton.setEnabled(false);
+		
+		// In case trace plugin is not available, disabling profiler activator part
+		if(!PiPlugin.isTraceProviderAvailable()){
+			deviceRadioButton.setEnabled(false);
+		}
 	}
 
-	public void validatePage() {
-		if(traceSelectionGroup != null){
-			traceSelectionGroup.updateTraceIds(fileSelectionGroup.getSelectedItem());					
-			((NewPIWizard)getWizard()).setProfilerDataFiles(fileSelectionGroup.getProfilerDataFiles()); 
-		}
-		if(fileSelectionGroup.getProfilerDataFiles().size() > 1){
-			setMessage(Messages.getString("NewPIWizardPageInputTask.noteImportMayTakeSeveralMinutes")); //$NON-NLS-1$
+	public void validatePage(){
+		IStatus status = null;
+
+		if(fileRadioButton.getSelection()){
+			status = fileSelectionGroup.validateContent((NewPIWizard)getWizard());		
 		}else{
-			setMessage(Messages.getString("NewPIWizardPageSampleFile.description"));
+			status = profilerActivatorGroup.validateContent((NewPIWizard)getWizard());
+		}	
+		setErrorMessage(null);
+		if(status.getSeverity() == Status.OK){
+			updateStatus(null);		
+		}else if(status.getSeverity() == Status.INFO){		
+			setMessage(status.getMessage());
+			setPageComplete(false);			
+		}else if(status.getSeverity() == Status.WARNING){
+			setMessage(status.getMessage());			
+			setPageComplete(true);		
+		}else{
+			updateStatus(status.getMessage());		
 		}
-		if(fileSelectionGroup.getProfilerDataFiles().isEmpty()){
-			setPageComplete(false);
-		} else {	
-			setPageComplete(true);
-			updateStatus(null);
-		}
+
+		
 
 	}
 
@@ -135,11 +178,91 @@ public class NewPIWizardPageInputTask extends NewPIWizardPage implements
 	public void setVisible(boolean visable) {
 		super.setVisible(visable);
 		if (visable) {
+			showTraceViewer();
 			validatePage();
 		}
 	}
 
 	public void setupPageFromFromNewPIWizardSettings() {		
 		// do nothing
+	}
+
+	/**
+	 * Shows trace viewer plugin's view
+	 */
+	public void showTraceViewer() {
+    	try {
+    		IWorkbenchWindow workbenchWindow = PiPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow();
+    		if (workbenchWindow == null)
+    			return;
+    		IWorkbenchPage page = workbenchWindow.getActivePage();
+    		// Checking if view is already open
+    		IViewReference[] viewRefs = page.getViewReferences();
+    		for (int i = 0; i < viewRefs.length; i++) {
+				IViewReference reference = viewRefs[i];
+				String id = reference.getId();
+				if(id.equalsIgnoreCase(TRACE_VIEWER_VIEW_ID)){
+					// Found, restoring the view
+					IViewPart viewPart = reference.getView(true);
+					page.activate(viewPart);
+					return;
+				}
+			}
+    		
+    		// View was not found, opening it up as a new view.
+    		page.showView(TRACE_VIEWER_VIEW_ID);
+    	} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.wizard.WizardPage#getNextPage()
+	 */
+	@Override
+	public IWizardPage getNextPage() {
+		if(PiPlugin.isTraceProviderAvailable() && PiPlugin.getTraceProvider().isListening()){
+			((NewPIWizard)getWizard()).showInformationDialog();
+			return this;
+		}
+		return super.getNextPage();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.wizard.WizardPage#getPreviousPage()
+	 */
+	@Override
+	public IWizardPage getPreviousPage() {
+		if(PiPlugin.isTraceProviderAvailable() && PiPlugin.getTraceProvider().isListening()){
+			((NewPIWizard)getWizard()).showInformationDialog();
+			return this;
+		}
+		return super.getPreviousPage();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.swt.widgets.Widget#dispose()
+	 */
+	@Override
+	public void dispose() {	
+		if(!getWizard().canFinish()){
+			handleTemporaryProfilerDataFiles(false);
+		}else if(!NewPIWizardSettings.getInstance().profilerActivator){
+			handleTemporaryProfilerDataFiles(true);
+		}
+		
+	
+		super.dispose();
+	}	
+		
+	public void setButtonGroupEnabled(boolean enabled){
+		deviceRadioButton.setEnabled(enabled);
+		fileRadioButton.setEnabled(enabled);
+	}	
+	
+	public void handleTemporaryProfilerDataFiles(boolean forceRemove){
+		if(PiPlugin.isTraceProviderAvailable()){
+			profilerActivatorGroup.handleTemporaryProfilerDataFiles(forceRemove);
+		}
 	}
 }

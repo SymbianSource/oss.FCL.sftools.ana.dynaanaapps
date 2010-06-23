@@ -182,11 +182,11 @@ public class SymbolFileFunctionResolver extends CachedFunctionResolver {
 		    if (br != null)
 		    	br.close();
 		} catch (FileNotFoundException e) {
-			GeneralMessages.PiLog(Messages.getString("SymbolFileFunctionResolver.symbol.file1") +  symbolFile + Messages.getString("SymbolFileFunctionResolver.not.found"), GeneralMessages.ERROR); //$NON-NLS-1$ //$NON-NLS-2$
+			GeneralMessages.piLog(Messages.getString("SymbolFileFunctionResolver.symbol.file1") +  symbolFile + Messages.getString("SymbolFileFunctionResolver.not.found"), GeneralMessages.ERROR); //$NON-NLS-1$ //$NON-NLS-2$
 		} catch (IOException e) {
 			String myMessage = Messages.getString("SymbolFileFunctionResolver.symbol.file2") +  symbolFile + Messages.getString("SymbolFileFunctionResolver.ioexception"); //$NON-NLS-1$ //$NON-NLS-2$
 			GeneralMessages.showErrorMessage(myMessage);
-			GeneralMessages.PiLog(myMessage, GeneralMessages.ERROR);
+			GeneralMessages.piLog(myMessage, GeneralMessages.ERROR);
 		}
 
 	    // this breaks the symbol file parser, use for testing itt trace

@@ -18,6 +18,7 @@
 package com.nokia.carbide.cpp.pi.memory;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -56,6 +57,7 @@ public class MemoryPlugin extends AbstractPiPlugin
 {
 	private static final String HELP_CONTEXT_ID = PIPageEditor.PI_ID + ".memory";  //$NON-NLS-1$
 	public static final String HELP_CONTEXT_ID_MAIN_PAGE = HELP_CONTEXT_ID + ".memoryPageContext";  //$NON-NLS-1$
+	public static final String PLUGIN_ID = "com.nokia.carbide.cpp.pi.memory";
 
 	// There will be 1 graph for editor page 0
 	// This code may assume that page 0 has the threads graph
@@ -118,7 +120,7 @@ public class MemoryPlugin extends AbstractPiPlugin
 	 * @return the image descriptor
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
-		return AbstractPiPlugin.imageDescriptorFromPlugin("com.nokia.carbide.cpp.pi.memory", path); //$NON-NLS-1$
+		return AbstractPiPlugin.imageDescriptorFromPlugin(PLUGIN_ID, path); //$NON-NLS-1$
 	}
 
 	public Class getTraceClass() 
@@ -128,28 +130,28 @@ public class MemoryPlugin extends AbstractPiPlugin
 
 	public Class getReplacedClass(String className)
 	{
-		if (   className.indexOf("com.nokia.carbide.cpp.pi.memory.MemTrace") != -1 //$NON-NLS-1$
+		if (   className.indexOf(PLUGIN_ID+".MemTrace") != -1 //$NON-NLS-1$
 			|| className.indexOf("com.nokia.carbide.pi.memory.MemTrace") != -1 //$NON-NLS-1$
 			|| className.indexOf("fi.vtt.bappea.model.MemTrace") != -1 //$NON-NLS-1$
 			|| className.indexOf("fi.vtt.bappea.memTracePlugin.MemTrace") != -1) //$NON-NLS-1$
 		{
 			return MemTrace.class;
 		}
-		else if (   className.indexOf("com.nokia.carbide.cpp.pi.memory.MemSample") != -1 //$NON-NLS-1$
+		else if (   className.indexOf(PLUGIN_ID+".MemSample") != -1 //$NON-NLS-1$
 				 || className.indexOf("com.nokia.carbide.pi.memory.MemSample") != -1 //$NON-NLS-1$
 				 || className.indexOf("fi.vtt.bappea.model.MemSample") != -1 //$NON-NLS-1$
 				 || className.indexOf("fi.vtt.bappea.memTracePlugin.MemSample") != -1) //$NON-NLS-1$
 		{
 			return MemSample.class;
 		}
-		else if (   className.indexOf("[Lcom.nokia.carbide.cpp.pi.memory.MemThread") != -1 //$NON-NLS-1$
+		else if (   className.indexOf("[L"+PLUGIN_ID+".MemThread") != -1 //$NON-NLS-1$
 				 || className.indexOf("[Lcom.nokia.carbide.pi.memory.MemThread") != -1 //$NON-NLS-1$
 				 || className.indexOf("[Lfi.vtt.bappea.model.MemThread;") != -1 //$NON-NLS-1$
 				 || className.indexOf("[Lfi.vtt.bappea.memTracePlugin.MemThread") != -1) //$NON-NLS-1$
 		{
 			return MemThread[].class;
 		}
-		else if (   className.indexOf("com.nokia.carbide.cpp.pi.memory.MemThread") != -1 //$NON-NLS-1$
+		else if (   className.indexOf(PLUGIN_ID+".MemThread") != -1 //$NON-NLS-1$
 				 || className.indexOf("com.nokia.carbide.pi.memory.MemThread") != -1 //$NON-NLS-1$
 				 || className.indexOf("fi.vtt.bappea.model.MemThread") != -1 //$NON-NLS-1$
 				 || className.indexOf("fi.vtt.bappea.memTracePlugin.MemThread") != -1) //$NON-NLS-1$
@@ -174,7 +176,7 @@ public class MemoryPlugin extends AbstractPiPlugin
 			memTrace.setVersion(versionNumber);
 		} */
 		
-		NpiInstanceRepository.getInstance().activeUidAddTrace("com.nokia.carbide.cpp.pi.memory", trace); //$NON-NLS-1$
+		NpiInstanceRepository.getInstance().activeUidAddTrace(PLUGIN_ID, trace); //$NON-NLS-1$
 
 		memTrace.gatherDrawData();
 		
@@ -215,7 +217,7 @@ public class MemoryPlugin extends AbstractPiPlugin
             //profilerVersion = memParser.getProfilerVersion();
            
             return traceData;
-        } catch (Exception e)
+        } catch (IOException e)
         {
             e.printStackTrace();
             throw e;
@@ -223,7 +225,7 @@ public class MemoryPlugin extends AbstractPiPlugin
 	}
 
 	public MenuManager getViewOptionManager() {
-		if (NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.memory") == null) //$NON-NLS-1$
+		if (NpiInstanceRepository.getInstance().activeUidGetTrace(PLUGIN_ID) == null) //$NON-NLS-1$
 			return null;	// no trace, so no MenuManager
 		
 		boolean showChunk  = true;
@@ -231,22 +233,22 @@ public class MemoryPlugin extends AbstractPiPlugin
 		
 		// if there is a showChunk value associated with the current Analyser tab, then use it
 		Object obj;
-		obj = NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.memory.showChunk");	//$NON-NLS-1$
+		obj = NpiInstanceRepository.getInstance().activeUidGetPersistState(PLUGIN_ID+".showChunk");	//$NON-NLS-1$
 		if ((obj != null) && (obj instanceof Boolean))
 			// retrieve the current value
 			showChunk = (Boolean)obj;
 		else
 			// set the initial value
-			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.memory.showChunk", showChunk);	//$NON-NLS-1$
+			NpiInstanceRepository.getInstance().activeUidSetPersistState(PLUGIN_ID+".showChunk", showChunk);	//$NON-NLS-1$
 		
 		// if there is a showHeapStack value associated with the current Analyser tab, then use it
-		obj = NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.memory.showHeapStack"); //$NON-NLS-1$
+		obj = NpiInstanceRepository.getInstance().activeUidGetPersistState(PLUGIN_ID+".showHeapStack"); //$NON-NLS-1$
 		if ((obj != null) && (obj instanceof Boolean))
 			// retrieve the current value
 			showHeapStack = (Boolean)obj;
 		else
 			// set the initial value
-			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.memory.showHeapStack", showHeapStack); //$NON-NLS-1$
+			NpiInstanceRepository.getInstance().activeUidSetPersistState(PLUGIN_ID+".showHeapStack", showHeapStack); //$NON-NLS-1$
 	
 		Action action;
 		
@@ -298,13 +300,13 @@ public class MemoryPlugin extends AbstractPiPlugin
 		boolean rescale = false;
 		
 		// if there is a rescale value associated with the current Analyser tab, then use it
-		obj = NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.memory.rescale"); //$NON-NLS-1$
+		obj = NpiInstanceRepository.getInstance().activeUidGetPersistState(PLUGIN_ID+".rescale"); //$NON-NLS-1$
 		if ((obj != null) && (obj instanceof Boolean))
 			// retrieve the current value
 			rescale = (Boolean)obj;
 		else
 			// set the initial value
-			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.memory.rescale", rescale); //$NON-NLS-1$
+			NpiInstanceRepository.getInstance().activeUidSetPersistState(PLUGIN_ID+".rescale", rescale); //$NON-NLS-1$
 		
 		action = new Action(Messages.getString("MemoryPlugin.dynamicRescale"), Action.AS_CHECK_BOX) { //$NON-NLS-1$
 			public void run() {
@@ -321,13 +323,13 @@ public class MemoryPlugin extends AbstractPiPlugin
 		
 		boolean showMemoryUsageLine = true;
 		// if there is a show memory usage value associated with the current Analyser tab, then use it		
-		obj = NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.memory.showMemoryUsage");	//$NON-NLS-1$
+		obj = NpiInstanceRepository.getInstance().activeUidGetPersistState(PLUGIN_ID+".showMemoryUsage");	//$NON-NLS-1$
 		if ((obj != null) && (obj instanceof Boolean))
 			// retrieve the current value
 			showMemoryUsageLine = (Boolean)obj;
 		else
 			// set the initial value
-			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.memory.showMemoryUsage", showMemoryUsageLine);	//$NON-NLS-1$
+			NpiInstanceRepository.getInstance().activeUidSetPersistState(PLUGIN_ID+".showMemoryUsage", showMemoryUsageLine);	//$NON-NLS-1$
 		
 		action = new Action(Messages.getString("MemTraceGraph.showTotalMemoryUsage"), Action.AS_CHECK_BOX) { //$NON-NLS-1$
 			public void run() {
@@ -346,7 +348,7 @@ public class MemoryPlugin extends AbstractPiPlugin
 	
 
 	public void receiveEvent(String actionString, Event event) {
-		MemTrace trace = (MemTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.memory"); //$NON-NLS-1$
+		MemTrace trace = (MemTrace)NpiInstanceRepository.getInstance().activeUidGetTrace(PLUGIN_ID); //$NON-NLS-1$
 
 		if (trace == null)
 			return;
@@ -376,22 +378,22 @@ public class MemoryPlugin extends AbstractPiPlugin
 			return;
 
 		if (actionString.equals("chunk_on")) { //$NON-NLS-1$
-			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.memory.showChunk", true); //$NON-NLS-1$
-			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.memory.showHeapStack", false); //$NON-NLS-1$
+			NpiInstanceRepository.getInstance().activeUidSetPersistState(PLUGIN_ID+".showChunk", true); //$NON-NLS-1$
+			NpiInstanceRepository.getInstance().activeUidSetPersistState(PLUGIN_ID+".showHeapStack", false); //$NON-NLS-1$
 		} else if (actionString.equals("heapstack_on")) { //$NON-NLS-1$
-			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.memory.showChunk", false); //$NON-NLS-1$
-			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.memory.showHeapStack", true); //$NON-NLS-1$
+			NpiInstanceRepository.getInstance().activeUidSetPersistState(PLUGIN_ID+".showChunk", false); //$NON-NLS-1$
+			NpiInstanceRepository.getInstance().activeUidSetPersistState(PLUGIN_ID+".showHeapStack", true); //$NON-NLS-1$
 		} else if (actionString.equals("chunk_heapstack_on")) { //$NON-NLS-1$
-			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.memory.showChunk", true); //$NON-NLS-1$
-			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.memory.showHeapStack", true); //$NON-NLS-1$
+			NpiInstanceRepository.getInstance().activeUidSetPersistState(PLUGIN_ID+".showChunk", true); //$NON-NLS-1$
+			NpiInstanceRepository.getInstance().activeUidSetPersistState(PLUGIN_ID+".showHeapStack", true); //$NON-NLS-1$
 		} else if (actionString.equals("rescale_on")) { //$NON-NLS-1$
-			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.memory.rescale", true); //$NON-NLS-1$
+			NpiInstanceRepository.getInstance().activeUidSetPersistState(PLUGIN_ID+".rescale", true); //$NON-NLS-1$
 		} else if (actionString.equals("rescale_off")) { //$NON-NLS-1$
-			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.memory.rescale", false); //$NON-NLS-1$
+			NpiInstanceRepository.getInstance().activeUidSetPersistState(PLUGIN_ID+".rescale", false); //$NON-NLS-1$
 		} else if (actionString.equals("memory_usage_line_on")) { //$NON-NLS-1$
-			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.memory.showMemoryUsage", true); //$NON-NLS-1$
+			NpiInstanceRepository.getInstance().activeUidSetPersistState(PLUGIN_ID+".showMemoryUsage", true); //$NON-NLS-1$
 		} else if (actionString.equals("memory_usage_line_off")) { //$NON-NLS-1$
-			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.memory.showMemoryUsage", false); //$NON-NLS-1$
+			NpiInstanceRepository.getInstance().activeUidSetPersistState(PLUGIN_ID+".showMemoryUsage", false); //$NON-NLS-1$
 		}else {
 			return;
 		}
@@ -411,7 +413,7 @@ public class MemoryPlugin extends AbstractPiPlugin
 //	}
 
 	public GenericTraceGraph getTraceGraph(int graphIndex) {
-		MemTrace trace = (MemTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.memory"); //$NON-NLS-1$
+		MemTrace trace = (MemTrace)NpiInstanceRepository.getInstance().activeUidGetTrace(PLUGIN_ID); //$NON-NLS-1$
 
 		if (trace != null)
 			return trace.getTraceGraph(graphIndex);
@@ -420,7 +422,7 @@ public class MemoryPlugin extends AbstractPiPlugin
 	}
 
 	public Integer getLastSample(int graphIndex) {
-		MemTrace trace = (MemTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.memory"); //$NON-NLS-1$
+		MemTrace trace = (MemTrace)NpiInstanceRepository.getInstance().activeUidGetTrace(PLUGIN_ID); //$NON-NLS-1$
 
 		if (trace != null)
 			return Integer.valueOf(trace.getLastSampleNumber());
@@ -510,5 +512,21 @@ public class MemoryPlugin extends AbstractPiPlugin
 
 	public void setPageIndex(int index, int pageIndex) {
 		return;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#isMandatory()
+	 */
+	public boolean isMandatory() {
+		return false;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#getTraceDescription()
+	 */
+	public String getTraceDescription() {
+		return getTraceTitle();
 	}
 }

@@ -40,11 +40,10 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.PlatformUI;
 
 import com.nokia.carbide.cpp.pi.button.BupEventMapManager;
+import com.nokia.carbide.cpp.pi.button.ButtonPlugin;
 import com.nokia.carbide.cpp.pi.button.ComNokiaCarbidePiButtonHelpIDs;
 import com.nokia.carbide.cpp.pi.button.IBupEventMap;
 import com.nokia.carbide.cpp.pi.button.IBupEventMapProfile;
-import com.nokia.carbide.cpp.ui.CarbideUIPlugin;
-import com.nokia.carbide.cpp.ui.ICarbideSharedImages;
 
 public class BupProfileEditDialog extends TitleAreaDialog {
 	
@@ -81,7 +80,7 @@ public class BupProfileEditDialog extends TitleAreaDialog {
 	
 	public Control createDialogArea(Composite parent) {
 		getShell().setText(Messages.getString("BupProfileEditDialog.editingProfile") + profileForThisEdit.getProfileId()); //$NON-NLS-1$
-		setTitleImage(CarbideUIPlugin.getSharedImages().getImageDescriptor(ICarbideSharedImages.IMG_PI_METER_20_20).createImage());
+		setTitleImage(ButtonPlugin.getImageDescriptor("icons/PI_Meter_20x20.png").createImage()); //$NON-NLS-1$
 		setTitle(Messages.getString("BupProfileEditDialog.profile") + profileForThisEdit.getProfileId()); //$NON-NLS-1$
 				
 		GridLayoutFactory layoutExpandBoth = GridLayoutFactory.fillDefaults();

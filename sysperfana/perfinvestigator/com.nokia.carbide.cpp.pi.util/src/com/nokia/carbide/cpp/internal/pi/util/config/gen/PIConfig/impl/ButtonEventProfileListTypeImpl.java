@@ -138,9 +138,8 @@ public class ButtonEventProfileListTypeImpl extends EObjectImpl implements Butto
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case PIConfigPackage.BUTTON_EVENT_PROFILE_LIST_TYPE__BUTTON_EVENT_PROFILE:
-				return ((InternalEList<?>)getButtonEventProfile()).basicRemove(otherEnd, msgs);
+		if(featureID == PIConfigPackage.BUTTON_EVENT_PROFILE_LIST_TYPE__BUTTON_EVENT_PROFILE){
+			return ((InternalEList<?>)getButtonEventProfile()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -152,13 +151,14 @@ public class ButtonEventProfileListTypeImpl extends EObjectImpl implements Butto
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-			case PIConfigPackage.BUTTON_EVENT_PROFILE_LIST_TYPE__BUTTON_EVENT_PROFILE:
-				return getButtonEventProfile();
-			case PIConfigPackage.BUTTON_EVENT_PROFILE_LIST_TYPE__BUTTON_EVENT_PROFILE_VERSION:
-				return getButtonEventProfileVersion();
+		if(featureID == PIConfigPackage.BUTTON_EVENT_PROFILE_LIST_TYPE__BUTTON_EVENT_PROFILE){
+			return getButtonEventProfile();
+		}else if(featureID == PIConfigPackage.BUTTON_EVENT_PROFILE_LIST_TYPE__BUTTON_EVENT_PROFILE_VERSION){
+			return getButtonEventProfileVersion();
+		}else{					
+			return super.eGet(featureID, resolve, coreType);		
 		}
-		return super.eGet(featureID, resolve, coreType);
+		
 	}
 
 	/**
@@ -169,16 +169,14 @@ public class ButtonEventProfileListTypeImpl extends EObjectImpl implements Butto
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
-			case PIConfigPackage.BUTTON_EVENT_PROFILE_LIST_TYPE__BUTTON_EVENT_PROFILE:
-				getButtonEventProfile().clear();
-				getButtonEventProfile().addAll((Collection<? extends ButtonEventProfileType>)newValue);
-				return;
-			case PIConfigPackage.BUTTON_EVENT_PROFILE_LIST_TYPE__BUTTON_EVENT_PROFILE_VERSION:
-				setButtonEventProfileVersion((BigDecimal)newValue);
-				return;
+		if(featureID == PIConfigPackage.BUTTON_EVENT_PROFILE_LIST_TYPE__BUTTON_EVENT_PROFILE){
+			getButtonEventProfile().clear();
+			getButtonEventProfile().addAll((Collection<? extends ButtonEventProfileType>)newValue);		
+		}else if(featureID == PIConfigPackage.BUTTON_EVENT_PROFILE_LIST_TYPE__BUTTON_EVENT_PROFILE_VERSION){
+			setButtonEventProfileVersion((BigDecimal)newValue);
+		}else{					
+			super.eSet(featureID, newValue);		
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -188,15 +186,13 @@ public class ButtonEventProfileListTypeImpl extends EObjectImpl implements Butto
 	 */
 	@Override
 	public void eUnset(int featureID) {
-		switch (featureID) {
-			case PIConfigPackage.BUTTON_EVENT_PROFILE_LIST_TYPE__BUTTON_EVENT_PROFILE:
-				getButtonEventProfile().clear();
-				return;
-			case PIConfigPackage.BUTTON_EVENT_PROFILE_LIST_TYPE__BUTTON_EVENT_PROFILE_VERSION:
-				setButtonEventProfileVersion(BUTTON_EVENT_PROFILE_VERSION_EDEFAULT);
-				return;
+		if(featureID == PIConfigPackage.BUTTON_EVENT_PROFILE_LIST_TYPE__BUTTON_EVENT_PROFILE){
+			getButtonEventProfile().clear();	
+		}else if(featureID == PIConfigPackage.BUTTON_EVENT_PROFILE_LIST_TYPE__BUTTON_EVENT_PROFILE_VERSION){
+			setButtonEventProfileVersion(BUTTON_EVENT_PROFILE_VERSION_EDEFAULT);
+		}else{					
+			super.eUnset(featureID);		
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -206,13 +202,13 @@ public class ButtonEventProfileListTypeImpl extends EObjectImpl implements Butto
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case PIConfigPackage.BUTTON_EVENT_PROFILE_LIST_TYPE__BUTTON_EVENT_PROFILE:
-				return buttonEventProfile != null && !buttonEventProfile.isEmpty();
-			case PIConfigPackage.BUTTON_EVENT_PROFILE_LIST_TYPE__BUTTON_EVENT_PROFILE_VERSION:
-				return BUTTON_EVENT_PROFILE_VERSION_EDEFAULT == null ? buttonEventProfileVersion != null : !BUTTON_EVENT_PROFILE_VERSION_EDEFAULT.equals(buttonEventProfileVersion);
+		if(featureID == PIConfigPackage.BUTTON_EVENT_PROFILE_LIST_TYPE__BUTTON_EVENT_PROFILE){
+			return buttonEventProfile != null && !buttonEventProfile.isEmpty();	
+		}else if(featureID == PIConfigPackage.BUTTON_EVENT_PROFILE_LIST_TYPE__BUTTON_EVENT_PROFILE_VERSION){
+			return BUTTON_EVENT_PROFILE_VERSION_EDEFAULT == null ? buttonEventProfileVersion != null : !BUTTON_EVENT_PROFILE_VERSION_EDEFAULT.equals(buttonEventProfileVersion);
+		}else{					
+			return super.eIsSet(featureID);		
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

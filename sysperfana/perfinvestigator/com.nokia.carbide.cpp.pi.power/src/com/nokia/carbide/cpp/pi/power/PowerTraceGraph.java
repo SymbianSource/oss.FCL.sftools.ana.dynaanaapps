@@ -21,9 +21,14 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
+import java.text.MessageFormat;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
+import java.util.Map.Entry;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.FigureCanvas;
@@ -98,6 +103,11 @@ public class PowerTraceGraph extends GenericTraceGraph implements ActionListener
 	private double minAmps = Integer.MAX_VALUE;
 	private double maxPower = 0.0;
     private boolean mSelecting = false;
+    
+	private static final int EVENT_TOPOFLINE    = 50;
+	private static final int EVENT_BOTTOMOFLINE = 30;
+	private static final int EVENT_RECTWIDTH    = 5;
+	private static final int EVENT_RECTHEIGHT   = 5;
 	
 	// used when determining when to draw the text over the power bar.
 	private int leftBorder = 0;
@@ -111,8 +121,9 @@ public class PowerTraceGraph extends GenericTraceGraph implements ActionListener
 	
 	private int uid;
 	
-	protected static int SAMPLES_AT_ONE_TIME = 1000;
+	protected final static int SAMPLES_AT_ONE_TIME = 1000;
 	protected int stringTime;
+	private boolean backlightEnabled;
 
 	
 	// class to pass sample data to the save wizard
@@ -152,7 +163,11 @@ public class PowerTraceGraph extends GenericTraceGraph implements ActionListener
 		String returnString = null;
 		
 		if (this.stringTime == startTime) {
-			returnString = Messages.getString("PowerTraceGraph.saveSamplesHeading"); //$NON-NLS-1$
+			if(backlightEnabled){
+				returnString = Messages.getString("PowerTraceGraph.saveBacklightSamplesHeading"); //$NON-NLS-1$
+			}else{
+				returnString = Messages.getString("PowerTraceGraph.saveSamplesHeading"); //$NON-NLS-1$
+			}	
 		}
 
 		this.stringTime++;
@@ -166,6 +181,7 @@ public class PowerTraceGraph extends GenericTraceGraph implements ActionListener
 		double oldCurrent  = -1;
 		double oldVoltage  = -1;
 		double oldCapacity = -1;
+		int oldBacklight = -1;
 		String string = ""; //$NON-NLS-1$
 
 		if (this.trace.isComplete()) {
@@ -176,12 +192,18 @@ public class PowerTraceGraph extends GenericTraceGraph implements ActionListener
 				double current  = sample.current;
 				double voltage  = sample.voltage;
 				double capacity = sample.capacity;
+				int backlight = sample.backlight;
 				
-				if ((oldCurrent != current) || (oldVoltage != voltage) || (oldCapacity != capacity)) {
-					string = Messages.getString("PowerTraceGraph.comma") + (int) current + Messages.getString("PowerTraceGraph.comma")  + (int) voltage + Messages.getString("PowerTraceGraph.comma") + (int) capacity + "\n"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				if ((oldCurrent != current) || (oldVoltage != voltage) || (oldCapacity != capacity)|| (oldBacklight != backlight)) {
+					if(backlightEnabled){
+						string = Messages.getString("PowerTraceGraph.comma") + (int) current + Messages.getString("PowerTraceGraph.comma")  + (int) voltage + Messages.getString("PowerTraceGraph.comma") + (int) capacity + Messages.getString("PowerTraceGraph.comma") + PwrSample.getBacklightInformation(backlight) +"\n"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+					}else{
+						string = Messages.getString("PowerTraceGraph.comma") + (int) current + Messages.getString("PowerTraceGraph.comma")  + (int) voltage + Messages.getString("PowerTraceGraph.comma") + (int) capacity + "\n"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+					}					
 					oldCurrent  = current;
 					oldVoltage  = voltage;
 					oldCapacity = capacity;
+					oldBacklight = backlight;
 				}
 	
 				returnString += sample.sampleSynchTime + string;
@@ -209,8 +231,14 @@ public class PowerTraceGraph extends GenericTraceGraph implements ActionListener
 				double current  = sample.current;
 				double voltage  = sample.voltage;
 				double capacity = sample.capacity;
+				int backlight = sample.backlight;
 				
-				returnString += sample.sampleSynchTime + Messages.getString("PowerTraceGraph.comma") + (int) current + Messages.getString("PowerTraceGraph.comma")  + (int) voltage + Messages.getString("PowerTraceGraph.comma") + (int) capacity + "\n"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				if(backlightEnabled){
+					returnString += sample.sampleSynchTime + Messages.getString("PowerTraceGraph.comma") + (int) current + Messages.getString("PowerTraceGraph.comma")  + (int) voltage + Messages.getString("PowerTraceGraph.comma") + (int) capacity + Messages.getString("PowerTraceGraph.comma") + PwrSample.getBacklightInformation(backlight) +"\n"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+				}else{
+					returnString += sample.sampleSynchTime + Messages.getString("PowerTraceGraph.comma") + (int) current + Messages.getString("PowerTraceGraph.comma")  + (int) voltage + Messages.getString("PowerTraceGraph.comma") + (int) capacity + "\n"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				}
+				
 				count--;
 			}
 		}
@@ -270,6 +298,10 @@ public class PowerTraceGraph extends GenericTraceGraph implements ActionListener
 			this.maxAmps  = this.trace.getMaxAmps();
 			this.minAmps  = this.trace.getMinAmps();
 			this.maxPower = this.trace.getMaxPower();
+        }
+        backlightEnabled = trace.isBacklightEnabled();
+        if(backlightEnabled){
+        	xLegendHeight = 50;
         }
     }
     
@@ -446,9 +478,53 @@ public class PowerTraceGraph extends GenericTraceGraph implements ActionListener
 		this.drawSelectionSection(graphics, PowerTraceGraph.xLegendHeight);
 
 		if (mShowPowerLine)
-			this.drawPowerLine(graphics);		
+			this.drawPowerLine(graphics);	
+		
+		if(backlightEnabled){
+			drawBacklightEvents(graphics);
+		}		
 	}
+	
+	private void drawBacklightEvents(Graphics graphics){
+		Map<Long, Integer> backLightChangePoints = ((PwrTrace)getTrace()).getBacklightChangePoints();
+		Set<Entry<Long, Integer>> entrySet = backLightChangePoints.entrySet();
+		Iterator<Entry<Long, Integer>> iterator = entrySet.iterator();
+		int lastXLabelEnd = -1; //the x coordinate at which the last drawn label ended
+		int height = this.getVisualSize().height;
+		String eventName = ""; //$NON-NLS-1$
+		while(iterator.hasNext()){
+			Entry<Long, Integer> entry = iterator.next();
+			double scale = this.getScale();
+			int x = (int)(entry.getKey()/scale);				
+			graphics.setForegroundColor(ColorConstants.red);
+			graphics.drawLine(x, height - EVENT_TOPOFLINE, x, height - EVENT_BOTTOMOFLINE);
 
+			eventName = Messages.getString("PowerTraceGraph.backlightGraphItem") + PwrSample.getBacklightInformation(entry.getValue()); //$NON-NLS-1$
+						
+			graphics.setFont(PIPageEditor.helvetica_8);
+
+			GC gc = new GC(PIPageEditor.currentPageEditor().getSite().getShell());
+			Point point = gc.stringExtent(eventName);
+			gc.dispose();
+
+			int xLabelStart = x - (point.x / 2);
+			if(xLabelStart < 0){
+				xLabelStart = 0;
+			}
+			if (xLabelStart > lastXLabelEnd){ //only draw label if it doesn't overlap with previous
+				graphics.setForegroundColor(ColorConstants.red);				
+				graphics.drawString(eventName, xLabelStart, height - EVENT_BOTTOMOFLINE + 3 + EVENT_RECTHEIGHT);
+				lastXLabelEnd = x + (point.x / 2);				
+			}
+
+			graphics.setBackgroundColor(ColorConstants.red);
+			
+			graphics.drawLine(x , height - EVENT_BOTTOMOFLINE + 1, x, height - EVENT_BOTTOMOFLINE + 2);
+			graphics.fillRectangle(x - (EVENT_RECTWIDTH / 2), height - EVENT_BOTTOMOFLINE + 3,
+									EVENT_RECTWIDTH, EVENT_RECTHEIGHT);
+		}
+	}
+	
     public void repaint()
 	{   
 	    this.parentComponent.repaintComponent();
@@ -457,7 +533,7 @@ public class PowerTraceGraph extends GenericTraceGraph implements ActionListener
 	private void showPowerValueAtX(MouseEvent me)
 	{
 		if (me.y > this.getVisualSizeY() - PowerTraceGraph.xLegendHeight) {
-			this.setToolTipText(null);
+			handleBacklightMouseEvents(me);
 			return;
 		}
 		
@@ -465,7 +541,7 @@ public class PowerTraceGraph extends GenericTraceGraph implements ActionListener
 		int x = (int) (me.x * this.getScale() + 0.5);
 		
 		if (x > (int) (PIPageEditor.currentPageEditor().getMaxEndTime() * 1000 + 0.0005)) {
-			this.setToolTipText(null);
+			handleBacklightMouseEvents(me);
 			return;
 		}
 		
@@ -520,7 +596,7 @@ public class PowerTraceGraph extends GenericTraceGraph implements ActionListener
 	}
 	
 	public int timeIndex(int time) {
-		if (time < sampleTimes[0])
+		if (sampleTimes.length <= 0 || time < sampleTimes[0])
 			return -1;
 		
 		if (time >= sampleTimes[sampleTimes.length - 1])
@@ -963,6 +1039,9 @@ public class PowerTraceGraph extends GenericTraceGraph implements ActionListener
         
         // find the first sample greater than or equal to selStart
         int index = timeIndex(selStart);
+        if(index == -1){
+        	return;
+        }
 
         // count time before the first sample as a bunch of zeros
         if (selStart < trace.getFirstSampleNumber()) {
@@ -1173,5 +1252,54 @@ public class PowerTraceGraph extends GenericTraceGraph implements ActionListener
 	 */
 	public String getContextHelpId() {
 		return PowerPlugin.HELP_CONTEXT_ID_MAIN_PAGE;
+	}
+
+	private void handleBacklightMouseEvents(MouseEvent me) {
+		if (!backlightEnabled){
+			setToolTipText(null);
+			return;
+		}
+		long x = me.x;
+		long y = me.y;
+
+		int height = this.getVisualSize().height;
+
+		// make sure we're in the right area of the graph window
+		if ((y < height - EVENT_BOTTOMOFLINE) || (y > height - EVENT_BOTTOMOFLINE + EVENT_RECTHEIGHT + 2))
+			return;
+
+		double scale = this.getScale();
+		
+		String tooltip = ""; //$NON-NLS-1$
+
+		Map<Long, Integer> backLightChangePoints = ((PwrTrace)getTrace()).getBacklightChangePoints();
+		Set<Entry<Long, Integer>> entrySet = backLightChangePoints.entrySet();
+		Iterator<Entry<Long, Integer>> iterator = entrySet.iterator();
+
+		while(iterator.hasNext()){
+			Entry<Long, Integer> entry = iterator.next();
+		
+			long xSample = (long)(entry.getKey()/scale + 0.5);
+			
+			// samples are in timestamp order, so stop when xSample + EVENT_RECTWIDTH is too high
+			if (x < xSample - EVENT_RECTWIDTH)
+				break;
+			
+			if ((x >= xSample - EVENT_RECTWIDTH) && (x <= xSample + EVENT_RECTWIDTH))
+			{				
+				String parsedName = PwrSample.getBacklightInformation(entry.getValue());
+				if (tooltip.length() > 0){
+					tooltip += Messages.getString("PowerTraceGraph.newLine");  //$NON-NLS-1$
+				}					
+				tooltip += MessageFormat.format(Messages.getString("PowerTraceGraph.backlightTooltip"), parsedName,entry.getKey()/1000.0 ); //$NON-NLS-1$
+
+			}
+		}	
+		if (tooltip.length() > 0) {
+			setToolTipText(tooltip);
+		}			
+		else{
+			setToolTipText(null);
+		}
 	}
 }

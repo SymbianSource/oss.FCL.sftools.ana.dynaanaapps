@@ -264,6 +264,9 @@ public class PowerStatisticsDialog {
 			PowerTraceGraph graph = trace.getPowerGraph(0, NpiInstanceRepository.getInstance().activeUid()); // since graphs are in lockstep, any will do
 
 			int index = graph.timeIndex(selStart);
+		    if(index == -1){
+		     	return;
+		    }
 
 	        // count time before the first sample as a bunch of zeros
 	        if (selStart < trace.getFirstSampleNumber()) {

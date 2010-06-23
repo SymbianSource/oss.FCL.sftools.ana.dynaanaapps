@@ -101,12 +101,12 @@ public class IttTraceParser extends Parser
             		if (symbolFileParser.findBinaryNameForAddress(
                 				itts.programCounter).endsWith(Messages.getString("IttTraceParser.binaryNotFound"))) //$NON-NLS-1$
             		{
-            			amm.InsertSample(itts);
+            			amm.insertSample(itts);
             		}
             	}
             	else
             	{
-            		amm.InsertSample(itts);
+            		amm.insertSample(itts);
             	}
                 i++;
                 

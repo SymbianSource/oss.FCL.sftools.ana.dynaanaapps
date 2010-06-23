@@ -17,6 +17,7 @@
 
 package com.nokia.carbide.cpp.pi.wizards;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -43,14 +44,14 @@ public class WizardsPlugin extends AbstractUIPlugin {
 	/**
 	 * This method is called upon plug-in activation
 	 */
-	public void start(BundleContext context) throws Exception {
+	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 	}
 
 	/**
 	 * This method is called when the plug-in is stopped
 	 */
-	public void stop(BundleContext context) throws Exception {
+	public void stop(final BundleContext context) throws Exception {
 		super.stop(context);
 		plugin = null;
 	}
@@ -60,5 +61,24 @@ public class WizardsPlugin extends AbstractUIPlugin {
 	 */
 	public static WizardsPlugin getDefault() {
 		return plugin;
+	}
+	
+	/**
+	 * Returns an image descriptor for the image file at the given plug-in
+	 * relative path.
+	 * 
+	 * @param path
+	 *            the path
+	 * @return the image descriptor
+	 */
+	public static ImageDescriptor getImageDescriptor(final String path) {
+		ImageDescriptor descriptor = getDefault().getImageRegistry()
+				.getDescriptor(path);
+		if (descriptor == null) {
+			descriptor = ImageDescriptor.createFromURL(getDefault().getBundle()
+					.getEntry(path));
+			getDefault().getImageRegistry().put(path, descriptor);
+		}
+		return descriptor;
 	}
  }

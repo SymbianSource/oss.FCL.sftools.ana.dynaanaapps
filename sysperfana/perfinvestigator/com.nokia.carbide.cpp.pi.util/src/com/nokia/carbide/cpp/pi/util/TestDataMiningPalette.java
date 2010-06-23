@@ -20,6 +20,7 @@ package com.nokia.carbide.cpp.pi.util;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
@@ -48,24 +49,25 @@ public class TestDataMiningPalette {
 
 	private Shell sShell = null;
 
-	private Map<Button,CLabel> dataMiningColors = new HashMap<Button,CLabel>();
-	private DataMiningPalette palette = new DataMiningPalette();
-	private ArrayList<Integer> sosThreadlist = new ArrayList<Integer>();
-	private ArrayList<Integer> threadlist = new ArrayList<Integer>();
+	private final Map<Button,CLabel> dataMiningColors = new HashMap<Button,CLabel>();
+	private final DataMiningPalette palette = new DataMiningPalette();
+	private final List<Integer> sosThreadlist = new ArrayList<Integer>();
+	private final List<Integer> threadlist = new ArrayList<Integer>();
 
 	
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		Display display = Display.getDefault();
 		TestDataMiningPalette thisClass = new TestDataMiningPalette();
 		thisClass.createSShell();
 		thisClass.sShell.open();
 
 		while (!thisClass.sShell.isDisposed()) {
-			if (!display.readAndDispatch())
+			if (!display.readAndDispatch()){
 				display.sleep();
+			}
 		}
 		display.dispose();
 	}
@@ -102,7 +104,7 @@ public class TestDataMiningPalette {
 			button.setText(entry.toString());
 			button.setBackground(new Color(Display.getCurrent(), palette.getRGB(entry)));
 			button.addSelectionListener(new SelectionAdapter() {
-            	public void widgetSelected(SelectionEvent e) {
+            	public void widgetSelected(final SelectionEvent e) {
             		Integer index = Integer.valueOf(button.getText());
             		if(palette.recolorEntryDialog(sShell, index))
             		{

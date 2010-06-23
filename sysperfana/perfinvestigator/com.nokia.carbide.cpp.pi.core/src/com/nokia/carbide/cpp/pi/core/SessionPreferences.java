@@ -17,7 +17,7 @@
 
 package com.nokia.carbide.cpp.pi.core;
 
-public class SessionPreferences {
+public final class SessionPreferences {
 	private static SessionPreferences instance;
 
 	private static final int WINDOW_DEFAULT_HEIGHT = 778;

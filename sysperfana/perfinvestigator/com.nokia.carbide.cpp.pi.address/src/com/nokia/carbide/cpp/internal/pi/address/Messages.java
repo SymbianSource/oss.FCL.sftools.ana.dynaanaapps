@@ -2,7 +2,7 @@ package com.nokia.carbide.cpp.internal.pi.address;
 
 import org.eclipse.osgi.util.NLS;
 
-public class Messages extends NLS {
+public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.nokia.carbide.cpp.internal.pi.address.messages"; //$NON-NLS-1$
 	public static String GppTraceGraphSMP_0;
 	public static String GppTraceGraphSMP_1;

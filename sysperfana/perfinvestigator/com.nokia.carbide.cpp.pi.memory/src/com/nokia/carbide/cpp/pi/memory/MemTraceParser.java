@@ -22,6 +22,7 @@ import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -61,20 +62,20 @@ public class MemTraceParser extends Parser
 	private int readCount = 0;
 
 	// constants
-	public static int SAMPLE_CODE_INITIAL_CHUNK = 0;
-	public static int SAMPLE_CODE_NEW_CHUNK = 1;
-	public static int SAMPLE_CODE_UPDATE_CHUNK = 2;
-	public static int SAMPLE_CODE_DELETE_CHUNK = 3;
+	public final static int SAMPLE_CODE_INITIAL_CHUNK = 0;
+	public final static int SAMPLE_CODE_NEW_CHUNK = 1;
+	public final static int SAMPLE_CODE_UPDATE_CHUNK = 2;
+	public final static int SAMPLE_CODE_DELETE_CHUNK = 3;
 	
 	public MemTraceParser() //throws Exception
 	{
 	}
 	
-	public ParsedTraceData parse(File file) throws Exception 
+	public ParsedTraceData parse(File file) throws IOException 
 	{
 		if (!file.exists() || file.isDirectory())
 	    {
-	      throw new Exception(Messages.getString("MemTraceParser.cannotOpenTraceFile")); //$NON-NLS-1$
+	      throw new IOException(Messages.getString("MemTraceParser.cannotOpenTraceFile")); //$NON-NLS-1$
 	    }
 		if (debug)
 			System.out.println(Messages.getString("MemTraceParser.traceFileLength") + file.length()); //$NON-NLS-1$
@@ -105,17 +106,17 @@ public class MemTraceParser extends Parser
 		return ptd;
 	}
 	
-	private void parseNewMemFile(String version,DataInputStream dis) throws Exception
+	private void parseNewMemFile(String version,DataInputStream dis) throws IOException
 	{
 		if (version.equals("0.85") || version.equals("0.91") || version.equals("1.00")||version.equals("1.10")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		{
 			parseV085MemFile(dis);
 		}
-		else throw new Exception(Messages.getString("MemTraceParser.traceVersionException1") + version //$NON-NLS-1$
+		else throw new IOException(Messages.getString("MemTraceParser.traceVersionException1") + version //$NON-NLS-1$
 				                 + Messages.getString("MemTraceParser.traceVersionException2")); //$NON-NLS-1$
 	}
 	
-	private void parseV085MemFile(DataInputStream dis) throws Exception
+	private void parseV085MemFile(DataInputStream dis) throws IOException
 	{
 		// read the version again
 		byte[] version = readElementWithLength(dis);
@@ -125,7 +126,7 @@ public class MemTraceParser extends Parser
 		this.readV085MemSample(dis);
 	}
 	
-	private void parseV110MemFile(DataInputStream dis) throws Exception
+	private void parseV110MemFile(DataInputStream dis) throws IOException
 	{
 		// read the version again
 		byte[] version = readElementWithLength(dis);
@@ -135,7 +136,7 @@ public class MemTraceParser extends Parser
 		this.readV110MemSample(dis);
 	}
 
-	private void parseV155MemFile(DataInputStream dis) throws Exception
+	private void parseV155MemFile(DataInputStream dis) throws IOException
 	{
 		// read the version again
 		byte[] version = readElementWithLength(dis);
@@ -145,7 +146,7 @@ public class MemTraceParser extends Parser
 		this.readV155MemSample(dis);
 	}
 	
-	private void parseV157MemFile(DataInputStream dis) throws Exception
+	private void parseV157MemFile(DataInputStream dis) throws IOException
 	{
 		// read the version again
 		byte[] version = readElementWithLength(dis);
@@ -155,7 +156,7 @@ public class MemTraceParser extends Parser
 		this.readV157MemSample(dis);
 	}
 	
-	private void parseV110PriFile(DataInputStream dis) throws Exception
+	private void parseV110PriFile(DataInputStream dis) throws IOException
 	{
 		// read the version again
 		byte[] version = readElementWithLength(dis);
@@ -170,7 +171,7 @@ public class MemTraceParser extends Parser
 	    return version;
 	}
 	
-	private void readV085MemSample(DataInputStream dis) throws Exception
+	private void readV085MemSample(DataInputStream dis) throws IOException
 	{
 	    Vector<long[]> rawV085Samples = new Vector<long[]>();
 	    Vector<long[]> lastSampleRaw = new Vector<long[]>();
@@ -184,7 +185,7 @@ public class MemTraceParser extends Parser
 		// then read if there is thread name data
 		int length = dis.readUnsignedByte();readCount++;
 		if (length != 1)
-			throw new Exception(Messages.getString("MemTraceParser.parseErrorTypeMissing")); //$NON-NLS-1$
+			throw new IOException(Messages.getString("MemTraceParser.parseErrorTypeMissing")); //$NON-NLS-1$
 		
 		int mode = dis.readUnsignedByte(); readCount++;
 
@@ -216,7 +217,7 @@ public class MemTraceParser extends Parser
 					}
 					else if (length != 1)
 					{
-						throw new Exception(Messages.getString("MemTraceParser.parseErrorWrongLength") + length); //$NON-NLS-1$
+						throw new IOException(Messages.getString("MemTraceParser.parseErrorWrongLength") + length); //$NON-NLS-1$
 					}
 					else
 					{
@@ -298,7 +299,7 @@ public class MemTraceParser extends Parser
 				}
 				else
 				{
-					throw new Exception(Messages.getString("MemTraceParser.parseErrorWrongMode") + mode); //$NON-NLS-1$
+					throw new IOException(Messages.getString("MemTraceParser.parseErrorWrongMode") + mode); //$NON-NLS-1$
 				}
 			}
 		}
@@ -309,7 +310,7 @@ public class MemTraceParser extends Parser
 		}
 	}
 
-	private void readV110MemSample(DataInputStream dis) throws Exception
+	private void readV110MemSample(DataInputStream dis) throws IOException
 	{
 	    Vector<long[]> rawV110MemSamples = new Vector<long[]>();
 	    Vector<long[]> lastSampleRaw = new Vector<long[]>();
@@ -322,7 +323,7 @@ public class MemTraceParser extends Parser
 		// then read if there is thread name data
 		int length = dis.readUnsignedByte(); readCount++;
 		if (length != 1)
-			throw new Exception(Messages.getString("MemTraceParser.parseErrorTypeMissing")); //$NON-NLS-1$
+			throw new IOException(Messages.getString("MemTraceParser.parseErrorTypeMissing")); //$NON-NLS-1$
 		
 		int mode = dis.readUnsignedByte(); readCount++;
 
@@ -350,7 +351,7 @@ public class MemTraceParser extends Parser
 					}
 					else if (length != 1)
 					{
-						throw new Exception(Messages.getString("MemTraceParser.parseErrorWrongLength") + length); //$NON-NLS-1$
+						throw new IOException(Messages.getString("MemTraceParser.parseErrorWrongLength") + length); //$NON-NLS-1$
 					}
 					else
 					{
@@ -430,7 +431,7 @@ public class MemTraceParser extends Parser
 				}
 				else
 				{
-					throw new Exception(Messages.getString("MemTraceParser.parseErrorWrongMode")+mode); //$NON-NLS-1$
+					throw new IOException(Messages.getString("MemTraceParser.parseErrorWrongMode")+mode); //$NON-NLS-1$
 				}
 			}
 		}
@@ -441,7 +442,7 @@ public class MemTraceParser extends Parser
 		}
 	}
 
-	private void readV155MemSample(DataInputStream dis) throws Exception
+	private void readV155MemSample(DataInputStream dis) throws IOException
 	{
 	    Vector<long[]> rawV155MemSamples = new Vector<long[]>();
 	    Vector<long[]> lastSampleRaw = new Vector<long[]>();
@@ -453,7 +454,7 @@ public class MemTraceParser extends Parser
 				
 		// then read if there is thread name data
 		int length = dis.readUnsignedByte();readCount++;
-		if (length != 1) throw new Exception(Messages.getString("MemTraceParser.missingType")); //$NON-NLS-1$
+		if (length != 1) throw new IOException(Messages.getString("MemTraceParser.missingType")); //$NON-NLS-1$
 		
 		int mode = dis.readUnsignedByte();readCount++;
 
@@ -482,7 +483,7 @@ public class MemTraceParser extends Parser
 					}
 					else if (length != 1)
 					{
-						throw new Exception(Messages.getString("MemTraceParser.wrongLength")+length); //$NON-NLS-1$
+						throw new IOException(Messages.getString("MemTraceParser.wrongLength")+length); //$NON-NLS-1$
 					}
 					else
 					{
@@ -570,7 +571,7 @@ public class MemTraceParser extends Parser
 				}
 				else
 				{
-					throw new Exception(Messages.getString("MemTraceParser.wrongMode")+mode); //$NON-NLS-1$
+					throw new IOException(Messages.getString("MemTraceParser.wrongMode")+mode); //$NON-NLS-1$
 				}
 			}
 		}
@@ -582,7 +583,7 @@ public class MemTraceParser extends Parser
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void readV157MemSample(DataInputStream dis) throws Exception {
+	private void readV157MemSample(DataInputStream dis) throws IOException {
 	    Vector rawV157MemSamples = new Vector();
 	    int counter = 0;
 	    String createdThread = "";
@@ -596,7 +597,7 @@ public class MemTraceParser extends Parser
 				
 		// then read if there is thread name data
 		int length = dis.readUnsignedByte();readCount++;
-		if(length != 1) throw new Exception("Parse error, type after sample missing");
+		if(length != 1) throw new IOException("Parse error, type after sample missing");
 		
 		int mode = dis.readUnsignedByte();readCount++;
 
@@ -620,7 +621,7 @@ public class MemTraceParser extends Parser
 						mode = 0x00;
 					}
 					else if(length != 1) {
-						throw new Exception("Parse error, wrong length "+length+", readCount: "+readCount);
+						throw new IOException("Parse error, wrong length "+length+", readCount: "+readCount);
 					}
 //					else {
 //						lastSampleRaw.clear();
@@ -740,7 +741,7 @@ public class MemTraceParser extends Parser
 				}
 				else
 				{
-					throw new Exception("Parse error, wrong mode "+mode);
+					throw new IOException("Parse error, wrong mode "+mode);
 				}
 			}
 		}
@@ -970,7 +971,7 @@ public class MemTraceParser extends Parser
 	    return time;
 	}
 
-	private void addRawV155MemSamples(Vector<long[]> rawV155MemSamples) throws Exception
+	private void addRawV155MemSamples(Vector<long[]> rawV155MemSamples) throws IOException
 	{
 		//int largest = 0;
 	    MemThread[] memTreads = new MemThread[memSamples.size()];
@@ -1015,7 +1016,7 @@ public class MemTraceParser extends Parser
 		    	
 			    	if (sampleTime % (samplingTime*2) != samplingTime) {
 			    		System.out.println(Messages.getString("MemTraceParser.invalidSampleNum") + sampleTime); //$NON-NLS-1$
-			    		throw new Exception(Messages.getString("MemTraceParser.invalidSample")); //$NON-NLS-1$
+			    		throw new IOException(Messages.getString("MemTraceParser.invalidSample")); //$NON-NLS-1$
 			    	}
 	    		}
 	    	}
@@ -1097,7 +1098,7 @@ public class MemTraceParser extends Parser
 	    if (debug) System.out.println(Messages.getString("MemTraceParser.parsingDone")); //$NON-NLS-1$
 	}
 
-	private void readV110PriSample(DataInputStream dis) throws Exception
+	private void readV110PriSample(DataInputStream dis) throws IOException
 	{
 	    Vector<long[]> rawV110PriSamples = new Vector<long[]>();
 	    Vector<long[]> lastSampleRaw = new Vector<long[]>();
@@ -1111,7 +1112,7 @@ public class MemTraceParser extends Parser
 		// then read if there is thread name data
 		int length = dis.readUnsignedByte(); readCount++;
 		if (length != 1)
-			throw new Exception(Messages.getString("MemTraceParser.parseErrorTypeMissing")); //$NON-NLS-1$
+			throw new IOException(Messages.getString("MemTraceParser.parseErrorTypeMissing")); //$NON-NLS-1$
 		
 		int mode = dis.readUnsignedByte(); readCount++;
 
@@ -1142,7 +1143,7 @@ public class MemTraceParser extends Parser
 					}
 					else if (length != 1)
 					{
-						throw new Exception(Messages.getString("MemTraceParser.parseErrorWrongLength") + length); //$NON-NLS-1$
+						throw new IOException(Messages.getString("MemTraceParser.parseErrorWrongLength") + length); //$NON-NLS-1$
 					}
 					else
 					{
@@ -1222,7 +1223,7 @@ public class MemTraceParser extends Parser
 				}
 				else
 				{
-					throw new Exception(Messages.getString("MemTraceParser.parseErrorWrongMode") + mode); //$NON-NLS-1$
+					throw new IOException(Messages.getString("MemTraceParser.parseErrorWrongMode") + mode); //$NON-NLS-1$
 				}
 			}
 		}
@@ -1268,7 +1269,7 @@ public class MemTraceParser extends Parser
 	    if (debug) System.out.println(Messages.getString("MemTraceParser.parsingDone")); //$NON-NLS-1$
 	}
 
-	private long[] readDataElements085Mem(DataInputStream dis,int length,long sampleTime) throws Exception
+	private long[] readDataElements085Mem(DataInputStream dis,int length,long sampleTime) throws IOException
 	{
 		if (length != 0)
 		{
@@ -1290,7 +1291,7 @@ public class MemTraceParser extends Parser
 		}
 	}
 
-	private long[] readDataElements110Mem(DataInputStream dis,int length,long sampleTime) throws Exception
+	private long[] readDataElements110Mem(DataInputStream dis,int length,long sampleTime) throws IOException
 	{
 		if (length != 0)
 		{
@@ -1314,7 +1315,7 @@ public class MemTraceParser extends Parser
 		}
 	}
 
-	private long[] readDataElements110Pri(DataInputStream dis, int length, long sampleTime) throws Exception
+	private long[] readDataElements110Pri(DataInputStream dis, int length, long sampleTime) throws IOException
 	{
 		if (length != 0)
 		{
@@ -1332,7 +1333,7 @@ public class MemTraceParser extends Parser
 		}
 	}
 	
-	private String readThreadName(DataInputStream dis, int length) throws Exception
+	private String readThreadName(DataInputStream dis, int length) throws IOException
 	{
 		if (length != 0)
 		{
@@ -1347,7 +1348,7 @@ public class MemTraceParser extends Parser
 			return null;
 	}
 	
-	private byte[] readElementWithLength(DataInputStream dis) throws Exception
+	private byte[] readElementWithLength(DataInputStream dis) throws IOException
 	{
 		byte length = dis.readByte(); readCount++;
 		if (length != 0)
@@ -1361,7 +1362,7 @@ public class MemTraceParser extends Parser
 		else return null;
 	}
 	
-	private long readShort(DataInputStream dis) throws Exception
+	private long readShort(DataInputStream dis) throws IOException
 	{
 		long result = dis.readUnsignedByte();
 		readCount++;
@@ -1370,7 +1371,7 @@ public class MemTraceParser extends Parser
 		return result;
 	}
 	
-	private long readTUint(DataInputStream dis) throws Exception
+	private long readTUint(DataInputStream dis) throws IOException
 	{
 		long result = dis.readUnsignedByte();
 		readCount++;
@@ -1383,14 +1384,14 @@ public class MemTraceParser extends Parser
 		return result;
 	}
 
-	private long readTUintWithLength(DataInputStream dis) throws Exception
+	private long readTUintWithLength(DataInputStream dis) throws IOException
 	{
 		byte length = (byte)dis.readUnsignedByte();
 		readCount++;
 
 		if (length != 4) 
 		{
-			throw new Exception(Messages.getString("MemTraceParser.parseErrorTUint1") + length + Messages.getString("MemTraceParser.parseErrorTUint2")); //$NON-NLS-1$ //$NON-NLS-2$
+			throw new IOException(Messages.getString("MemTraceParser.parseErrorTUint1") + length + Messages.getString("MemTraceParser.parseErrorTUint2")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		long result = dis.readUnsignedByte();
 		readCount++;
@@ -1404,7 +1405,7 @@ public class MemTraceParser extends Parser
 		return result;
 	}
 
-	private void parseMemTrace(File file) throws Exception
+	private void parseMemTrace(File file) throws IOException 
 	{
 		DataInputStream dis = new DataInputStream(new FileInputStream(file));		
 	    byte[] traceArray = new byte[(int)file.length()];
@@ -1440,7 +1441,7 @@ public class MemTraceParser extends Parser
 	    		if (!traceType.equals("MEM")) //$NON-NLS-1$
 	    		{
 	    			GeneralMessages.showErrorMessage(Messages.getString("MemTraceParser.wrongTraceType1") + traceType + Messages.getString("MemTraceParser.wrongTraceType2")); //$NON-NLS-1$ //$NON-NLS-2$
-	    			throw new Exception(Messages.getString("MemTraceParser.wrongTraceType1") + traceType + Messages.getString("MemTraceParser.wrongTraceType2")); //$NON-NLS-1$ //$NON-NLS-2$
+	    			throw new IOException(Messages.getString("MemTraceParser.wrongTraceType1") + traceType + Messages.getString("MemTraceParser.wrongTraceType2")); //$NON-NLS-1$ //$NON-NLS-2$
 	    		}
 	    		else
 	    		{
@@ -1468,7 +1469,7 @@ public class MemTraceParser extends Parser
 	    {
 	    	GeneralMessages.showErrorMessage(Messages.getString("MemTraceParser.invalidTraceFileOverflow")); //$NON-NLS-1$
 	    	System.out.println(Messages.getString("MemTraceParser.invalidTraceFile")); //$NON-NLS-1$
-	    	throw new Exception(Messages.getString("MemTraceParser.invalidTraceFile")); //$NON-NLS-1$
+	    	throw new IOException(Messages.getString("MemTraceParser.invalidTraceFile")); //$NON-NLS-1$
 	    }
 	    memTrace = new MemTrace();
 	    priTrace = new PriTrace();
@@ -1578,7 +1579,7 @@ public class MemTraceParser extends Parser
 	    
 	}
 	
-	private void parseVersion110Trace(byte[] traceArray, String version_data) throws Exception
+	private void parseVersion110Trace(byte[] traceArray, String version_data) throws IOException
 	{
 	    
 		String version = version_data.substring(8, 12);
@@ -1599,7 +1600,7 @@ public class MemTraceParser extends Parser
     	}
 	}
 	
-	private void parseVersion155Trace(byte[] traceArray, String version_data) throws Exception
+	private void parseVersion155Trace(byte[] traceArray, String version_data) throws IOException
 	{
     	if (version_data.indexOf("MEM")>0) //version 1.55 or newer //$NON-NLS-1$
     	{
@@ -1610,7 +1611,7 @@ public class MemTraceParser extends Parser
     	}
 	}
 
-	private void parseVersion157Trace(byte[] traceArray, String version_data) throws Exception
+	private void parseVersion157Trace(byte[] traceArray, String version_data) throws IOException
 	{
 	    
 //		String version = version_data.substring(8,12);
@@ -1716,7 +1717,7 @@ public class MemTraceParser extends Parser
 		}
 	}
 
-	private int findThreadListLength(DataInputStream dis, int traceLength) throws Exception
+	private int findThreadListLength(DataInputStream dis, int traceLength) throws IOException
 	{
 		char[] buf = new char[8];
 		for (int i = 0; i < traceLength / 8; i++)

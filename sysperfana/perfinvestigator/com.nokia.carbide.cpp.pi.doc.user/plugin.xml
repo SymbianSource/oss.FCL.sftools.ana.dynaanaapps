@@ -32,19 +32,19 @@
    <extension
          point="org.eclipse.ui.cheatsheets.cheatSheetContent">
       <category
-            id="com.nokia.carbide.cpp.pi.cheatsheets"
-            name="Carbide.c++ Performance Investigator" />
+            id="com.nokia.carbide.cpp.tools.cheatsheets"
+            name="Carbide.c++ Tools" />
       <cheatsheet
-            category="com.nokia.carbide.cpp.pi.cheatsheets"
-            contentFile="html/cheatsheets/getStarted_pi_cs.xml"
+            category="com.nokia.carbide.cpp.tools.cheatsheets"
+            contentFile="html/cheatsheets/getStarted_pi2_cs.xml"
             id="com.nokia.carbide.cpp.pi.doc.user.getStarted"
-            name="Performance Investigator Setup"/>
+            name="Performance Investigator Setup for Remote Profiling"/>
       <cheatsheet
-            category="com.nokia.carbide.cpp.pi.cheatsheets"
+            category="com.nokia.carbide.cpp.tools.cheatsheets"
             composite="false"
-            contentFile="$nl$/html/cheatsheets/getStarted_pi_cs.xml"
+            contentFile="$nl$/html/cheatsheets/getStarted_pi1_cs.xml"
             id="com.nokia.carbide.cpp.pi.help.cheatsheet919016247"
-            name="Performance Investigator Setup">
+            name="Performance Investigator Setup for On-device profing">
       </cheatsheet>
    </extension>
 
@@ -62,13 +62,13 @@
 			configId="org.eclipse.ui.intro.universalConfig"
 			content="intro/whatsnewProfilerExtContent.xml" /> 
 		 
-<!--		<configExtension
-			configId="com.nokia.carbide.cpp.introConfig"
+		<configExtension
+			configId="org.eclipse.ui.intro.universalConfig"
 			content="intro/tutorialsProfilerExtContent.xml" /> 
--->
+		
+
 	</extension>
 
-	
 	<!-- CONTEXT IDs for CONTEXTUAL HELP in windows, dialogs, and views -->
 	
 	<extension point="org.eclipse.help.contexts" >
@@ -88,6 +88,11 @@
        <!-- PI IMPORT WIZARD -->
        <contexts file="html/context_help/com_nokia_carbide_pi_wizards.xml" 
        		plugin="com.nokia.carbide.cpp.pi.wizards" />
+       		
+      <!-- PI VIEW -->		
+       <contexts
+             file="html/context_help/com_nokia_carbide_pi_view.xml"
+             plugin="com.nokia.carbide.cpp.pi.view" />
 
        <!-- ECLIPSE NEW/IMPORT/EXPORT WIZARDS and PREF PANELS HELP  -->
        <contexts file="html/context_help/org_eclipse_ui.xml"
@@ -95,6 +100,10 @@
        <contexts
              file="html/context_help/com_nokia_carbide_pi_memory.xml"
              plugin="com.nokia.carbide.cpp.pi.memory">
+       </contexts>
+       <contexts
+             file="html/context_help/com_nokia_carbide_pi_graphicsmemory.xml"
+             plugin="com.nokia.carbide.cpp.pi.graphicsmemory">
        </contexts>
        <contexts
              file="html/context_help/com_nokia_carbide_pi_pec.xml"

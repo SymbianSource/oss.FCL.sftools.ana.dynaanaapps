@@ -93,6 +93,9 @@ public class PecCommonTraceGraph extends GenericTraceGraph implements
 	
 	/** GUI manager has knowledge off all IpcTraceGraphs; can broadcast some of the events */
 	private PecCommonGuiManager guiManager;
+
+	private int lastEdgeX;
+	private int paintCount;
 	
 	/**
 	 * Constructor
@@ -210,6 +213,15 @@ public class PecCommonTraceGraph extends GenericTraceGraph implements
 		if (sectionHeight > 60f){ //only draw the label if the section has a decent height
 			
 			int edgeX = ((Viewport) panel.getParent()).getViewLocation().x;
+			if (lastEdgeX != edgeX && paintCount < 1 && guiManager != null) {
+				paintCount++;
+				guiManager.selectionAreaChanged(PIPageEditor
+						.currentPageEditor().getStartTime(), PIPageEditor
+						.currentPageEditor().getEndTime());
+			} else {
+				paintCount = 0;
+			}
+			lastEdgeX = edgeX;
 
 			for (int i = 0; i < drawSeries.size(); i++) {
 				int seriesIdx = drawSeries.get(i);

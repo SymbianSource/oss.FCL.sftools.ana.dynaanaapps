@@ -10,18 +10,31 @@
 <body>
 <h2>Thread Load</h2>
 
-<p>Select the Threads tab to display the Thread Load. The Thread Load graph and
-related table show information about threads that were active during the
-selected time period. The graph and table show the CPU load separated according
-to the executed thread, independent of the binary or function in which
-execution took place. Figure 1 shows an example graph with the Threads tab
-selected.</p>
+<p>Select the Threads tab to display the Thread Load. The thread load data in
+the main analysis view is built from the address/thread trace. The Thread Load
+graph and related table show information about threads that were active during
+the selected time period. The graph and table show the CPU load separated
+according to the executed thread, independent of the binary or function in
+which execution took place. Figure 1 shows an example graph with the Threads
+tab selected.</p>
+
+<p>The address/thread trace graph is the most generic and perhaps most
+informative visual of the sampled data. The different colors represent
+different items. Time is represented on the horizontal axis of the graph and
+share of CPU use is represented on the vertical axis.</p>
+
+<p></p>
 
 <p align="center"><img src="images/thread_mode_graph.png" width="710"
 height="728"> </p>
 
 <p align="center" class="figure">Figure 1. Thread Load Graph displaying
 combined CPU graph</p>
+
+<p>Each of the lines in the thread table represents a single thread. The color
+codes in the thread list correspond to the colors in the thread load graphs.
+Therefore, each color in the thread load graph represents the load of its
+corresponding thread.</p>
 
 <p>Description of table columns:</p>
 <ul>
@@ -57,6 +70,16 @@ threshold row is not affected by sorting, it is always the last row.</p>
 <p>You can check or uncheck items to be displayed in the graph or right-click
 to display a context menu of various options. The color next to a checkbox
 corresponds to that item’s color in the graph.</p>
+
+<h4>Scaling the Graph and Table According to CPU Clock Speed</h4>
+
+<p>When CPU clock rate counter is included in the sampled Performance Counter
+data, there is a <strong>Scale to CPU Clock Speed</strong> option available in
+the graph context menu. When the option is selected, both the graph and the
+<strong>% Load</strong> column of the legend table are scaled according to the
+CPU clock speed. </p>
+
+<h3>CPU Thread Load graphs in SMP systems</h3>
 
 <p>For SMP systems with more than one CPU it is also possible to select to</p>
 <ul>

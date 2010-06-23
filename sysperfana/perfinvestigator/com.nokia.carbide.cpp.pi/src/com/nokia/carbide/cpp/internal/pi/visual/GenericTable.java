@@ -102,6 +102,9 @@ public abstract class GenericTable
 	protected static final String COLUMN_HEAD_LIBRARY_NAME   = Messages.getString("GenericTable.libraryName"); //$NON-NLS-1$
 	protected static final String COLUMN_HEAD_LIBRARY_LOAD_SIZE = Messages.getString("GenericTable.libraryLoadSize"); //$NON-NLS-1$
 	protected static final String COLUMN_HEAD_LIBRARY_SELECTION_LOAD_COUNT = Messages.getString("GenericTable.librarySelectionLoadCount"); //$NON-NLS-1$
+	protected static final String COLUMN_HEAD_GRAPHICS_MEMORY_NAME   = Messages.getString("GenericTable.process"); //$NON-NLS-1$
+	protected static final String COLUMN_HEAD_GRAPHICS_MEMORY_PRIVATE = Messages.getString("GenericTable.private"); //$NON-NLS-1$
+	protected static final String COLUMN_HEAD_GRAPHICS_MEMORY_SHARED  = Messages.getString("GenericTable.shared"); //$NON-NLS-1$
 	
 	// table column widths
 	protected static final int COLUMN_WIDTH_SHOW           =  40;
@@ -122,8 +125,11 @@ public abstract class GenericTable
     protected static final int COLUMN_WIDTH_8_DIGIT_HEX    = 100;
 	protected static final int COLUMN_WIDTH_MEMORY_CHUNKS  =  80;
 	protected static final int COLUMN_WIDTH_MEMORY_STACK   =  80;
+	protected static final int COLUMN_WIDTH_GRAPHICS_MEMORY_PRIVATE  =  80;
+	protected static final int COLUMN_WIDTH_GRAPHICS_MEMORY_SHARED   =  80;
 	protected static final int COLUMN_WIDTH_MEMORY_TOTAL   =  80;
 	protected static final int COLUMN_WIDTH_MEMORY_NAME    	= 300;
+	protected static final int COLUMN_WIDTH_GRAPHICS_MEMORY_NAME    	= 300;
 	protected static final int COLUMN_WIDTH_THREAD_IRQ_LINE = 300;
 	protected static final int COLUMN_WIDTH_LIBRARY_LOAD_SIZE  =  80;
 	protected static final int COLUMN_WIDTH_LIBRARY_NAME    = 250;

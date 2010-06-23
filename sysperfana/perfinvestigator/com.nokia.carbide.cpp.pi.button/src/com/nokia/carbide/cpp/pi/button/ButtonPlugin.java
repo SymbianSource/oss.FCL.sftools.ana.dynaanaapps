@@ -420,8 +420,8 @@ public class ButtonPlugin extends AbstractPiPlugin
 			result.setSize(maxSize + 1);
 			result.setElementAt(profile.getProfileId(), BUP_MAP_PROFILE_ID);
 			result.setElementAt(profile.getSDK() != null ? profile.getSDK().getUniqueId() : "", BUP_MAP_SYMBIAN_SDK_ID); //$NON-NLS-1$
-			result.setElementAt(new Boolean(profile.getURI().equals(BupEventMapManager.WORKSPACE_PREF_KEY_MAP_URI)), BUP_MAP_IS_WORSPACE);
-			result.setElementAt(new Boolean(profile.getURI().equals(BupEventMapManager.DEFAULT_PROFILE_URI)), BUP_MAP_IS_BUILTIN);
+			result.setElementAt(Boolean.valueOf(profile.getURI().equals(BupEventMapManager.WORKSPACE_PREF_KEY_MAP_URI)), BUP_MAP_IS_WORSPACE);
+			result.setElementAt(Boolean.valueOf(profile.getURI().equals(BupEventMapManager.DEFAULT_PROFILE_URI)), BUP_MAP_IS_BUILTIN);
 			
 			return result;
 		}
@@ -543,5 +543,21 @@ public class ButtonPlugin extends AbstractPiPlugin
 		}
 		GeneralMessages.showWarningMessage(Messages.getString("ButtonPlugin.keyMapRemoved")); //$NON-NLS-1$
 		return BupEventMapManager.getInstance().getPrefSelectedProfile();
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#isMandatory()
+	 */
+	public boolean isMandatory() {
+		return false;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#getTraceDescription()
+	 */
+	public String getTraceDescription() {
+		return getTraceTitle();
 	}
 }

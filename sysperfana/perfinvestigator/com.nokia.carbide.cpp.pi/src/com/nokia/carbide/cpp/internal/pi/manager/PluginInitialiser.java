@@ -27,7 +27,7 @@ import com.nokia.carbide.cpp.internal.pi.utils.PluginClassLoader;
 import com.nokia.carbide.cpp.pi.PiPlugin;
 
 
-public class PluginInitialiser 
+public final class PluginInitialiser 
 {
 	/*
 	 * contains vectors which are each mapped to hashcodes of analysis instances

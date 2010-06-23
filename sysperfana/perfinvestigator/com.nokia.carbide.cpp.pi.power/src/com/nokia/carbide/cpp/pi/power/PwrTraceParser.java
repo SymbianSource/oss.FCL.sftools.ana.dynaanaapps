@@ -34,6 +34,7 @@ public class PwrTraceParser extends Parser
 {
 	private boolean debug = false;
 	private PwrSample[] traceData;	
+	private boolean backlightEnabled;
 
 	public PwrTraceParser() throws Exception
 	{
@@ -75,7 +76,7 @@ public class PwrTraceParser extends Parser
 			
 			this.traceVersion = this.getVersion(data);
 			System.out.println(Messages.getString("PwrTraceParser.powerVersion") + this.traceVersion); //$NON-NLS-1$
-			if (traceVersion.indexOf("V1.57") == -1) //$NON-NLS-1$
+			if (traceVersion.indexOf("V1.57") == -1 && traceVersion.indexOf("V1.58") == -1) //$NON-NLS-1$
 			{
 			    System.out.println(Messages.getString("PwrTraceParser.unsupportedVersion") + this.traceVersion); //$NON-NLS-1$
 			    fis.close();
@@ -95,7 +96,11 @@ public class PwrTraceParser extends Parser
 			long current = 0;
 			long capacity = 0;
 			long sampleTime = 0;
-
+			long backlight = 0;
+			backlightEnabled = false;
+			if(traceVersion.indexOf("V1.58") != -1){
+				backlightEnabled = true;
+			}
 			try
 			{
 				while(true)
@@ -103,10 +108,16 @@ public class PwrTraceParser extends Parser
 					capacity = readTUint16(dis);
 					voltage = readTUint16(dis);
 					current = readTUint(dis);
+					if(backlightEnabled){
+						backlight = dis.readUnsignedByte();;
+					}
 					sampleTime = readTUint(dis);
-
-					PwrSample sample = new PwrSample(sampleTime, current, voltage, capacity);
-
+					PwrSample sample = null;
+					if(backlightEnabled){				
+						sample = new PwrSample(sampleTime, current, voltage, capacity, (int)backlight);					
+					}else{
+						sample = new PwrSample(sampleTime, current, voltage, capacity);
+					}
 					intermediateTraceData.add(sample);
 				}
 			}
@@ -178,6 +189,7 @@ public class PwrTraceParser extends Parser
 	private GenericTrace getTrace()
 	{
 		PwrTrace trace = new PwrTrace();
+		trace.setBacklightEnabled(backlightEnabled);
 		for (int i = 0; i < traceData.length; i++)
 		{
 			trace.addSample(this.traceData[i]);

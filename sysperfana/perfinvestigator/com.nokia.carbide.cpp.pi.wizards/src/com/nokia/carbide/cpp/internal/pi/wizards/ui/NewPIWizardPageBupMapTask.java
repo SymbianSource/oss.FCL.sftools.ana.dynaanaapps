@@ -29,6 +29,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -100,6 +101,18 @@ public class NewPIWizardPageBupMapTask extends NewPIWizardPage implements
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), CarbidePiWizardHelpIds.PI_IMPORT_WIZARD_BUP_MAP);
 		
 		validatePage();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.dialogs.DialogPage#performHelp()
+	 */
+	@Override
+	public void performHelp() {
+		WizardDialog wizardDialog = (WizardDialog)getContainer();	
+		if(wizardDialog.buttonBar != null){		
+			PlatformUI.getWorkbench().getHelpSystem().setHelp(wizardDialog.buttonBar,
+					CarbidePiWizardHelpIds.PI_IMPORT_WIZARD_BUP_MAP);
+		}
 	}
 
 	/* (non-Javadoc)

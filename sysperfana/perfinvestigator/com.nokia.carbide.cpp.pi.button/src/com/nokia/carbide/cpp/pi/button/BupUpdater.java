@@ -26,7 +26,7 @@ import com.nokia.carbide.cpp.internal.pi.test.AnalysisInfoHandler;
 import com.nokia.carbide.cpp.internal.pi.test.PIAnalyser;
 
 
-public class BupUpdater {
+public final class BupUpdater {
 	
 	static private BupUpdater instance = null;
 	private static TreeMap<String, Integer> OneOneHexToStringMap = new TreeMap<String, Integer>();

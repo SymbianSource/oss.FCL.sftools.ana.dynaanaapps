@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Display;
  * 
  */
 
-public class ColorPalette {
+public final  class ColorPalette {
 
 	private static CacheMap<RGB, Color> palette = new CacheMap<RGB, Color>();
 	

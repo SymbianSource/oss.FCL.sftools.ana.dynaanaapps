@@ -56,7 +56,7 @@ public class PecPlugin extends AbstractPiPlugin implements ITrace, IEventListene
 	// The shared instance
 	private static PecPlugin plugin;
 	
-	private static final Map<Integer, PecGuiManager> guiManagerMap = new HashMap<Integer, PecGuiManager>();
+	private static final Map<Integer, PecGuiManager> GUI_MANAGER_MAP = new HashMap<Integer, PecGuiManager>();
 
 	/**
 	 * The constructor
@@ -122,7 +122,7 @@ public class PecPlugin extends AbstractPiPlugin implements ITrace, IEventListene
 		
 		//create the GUI class which manages the graphs
 		int uid = NpiInstanceRepository.getInstance().activeUid();
-		guiManagerMap.put(uid, new PecGuiManager(uid, parsedTrace, GRAPH_COUNT, Messages.PecPlugin_0));
+		GUI_MANAGER_MAP.put(uid, new PecGuiManager(uid, parsedTrace, GRAPH_COUNT, Messages.PecPlugin_0));
 	}
 
 	/* (non-Javadoc)
@@ -245,7 +245,7 @@ public class PecPlugin extends AbstractPiPlugin implements ITrace, IEventListene
 	 */
 	public IGenericTraceGraph getTraceGraph(int graphIndex) {
 		int uid = NpiInstanceRepository.getInstance().activeUid();
-		PecGuiManager guiManager = guiManagerMap.get(uid);
+		PecGuiManager guiManager = GUI_MANAGER_MAP.get(uid);
 		
 		if (guiManager != null){
 			return guiManager.getTraceGraph(graphIndex, HELP_CONTEXT_ID_MAIN_PAGE);			
@@ -294,7 +294,7 @@ public class PecPlugin extends AbstractPiPlugin implements ITrace, IEventListene
 		
 		// Do any cleanup work here when the editor closes
 		int uid = NpiInstanceRepository.getInstance().activeUid();
-		guiManagerMap.remove(uid);
+		GUI_MANAGER_MAP.remove(uid);
 	}
 
 	/* (non-Javadoc)
@@ -315,5 +315,20 @@ public class PecPlugin extends AbstractPiPlugin implements ITrace, IEventListene
 		}
 		return null;
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#isMandatory()
+	 */
+	public boolean isMandatory() {
+		return false;
+	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#getTraceDescription()
+	 */
+	public String getTraceDescription() {
+		return getTraceTitle();
+	}
 }

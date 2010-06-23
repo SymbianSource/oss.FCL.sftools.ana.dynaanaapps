@@ -30,29 +30,30 @@ import org.eclipse.swt.widgets.Shell;
 
 public class DataMiningPalette {
 
-	private Map<Object, RGB> palette = new HashMap<Object, RGB>();
+	private transient final Map<Object, RGB> palette = new HashMap<Object, RGB>();
 
 	private boolean haveEntry(Object entry) {
 		return palette.containsKey(entry);
 	}
 
-	private boolean haveColor(RGB color) {
+	private boolean haveColor(final RGB color) {
 		return palette.containsValue(color);
 	}
 
-	private void add(Object entry, RGB color) {
+	private void add(final Object entry, final RGB color) {
 		palette.put(entry, color);
 	}
 
-	private void update(Object entry, RGB color) {
+	private void update(final Object entry, final RGB color) {
 		palette.remove(entry);
 		palette.put(entry, color);
 	}
 
 	private RGB hsv2rgb(int hue, double saturation, double value) {
 
-		if (hue >= 360)
+		if (hue >= 360){
 			hue %= 360;
+		}
 		int Hi = (hue / 60) % 6;
 		double f = (double) hue / (double) 60 - Hi;
 
@@ -141,9 +142,9 @@ public class DataMiningPalette {
 			
 			RGB myRGB = new RGB(channelValue[indexR], channelValue[indexG], channelValue[indexB]);
 
-			if (haveColor(myRGB))
+			if (haveColor(myRGB)){
 				continue;
-
+			}
 			add(entry, myRGB);
 			
 			if (!entryListItr.hasNext())
@@ -182,9 +183,9 @@ public class DataMiningPalette {
 
 				RGB myRGB = hsv2rgb(hueEntry[i], saturation, saturation);
 
-				if (haveColor(myRGB))
+				if (haveColor(myRGB)){
 					continue;
-
+				}
 				add(entry, myRGB);
 				--remain;
 

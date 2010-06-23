@@ -17,6 +17,7 @@
 
 package com.nokia.carbide.cpp.internal.pi.wizards.ui;
 
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 
@@ -39,5 +40,18 @@ public class NewPIWizardPageRomSdkSubTask extends NewPIWizardPage
 		composite = sdkCommon.layout (parent);
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(composite, CarbidePiWizardHelpIds.PI_IMPORT_WIZARD_ROM_SDK);
 		setControl(composite);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.dialogs.DialogPage#performHelp()
+	 */
+	@Override
+	public void performHelp() {
+		WizardDialog wizardDialog = (WizardDialog)getContainer();	
+		if(wizardDialog.buttonBar != null){	
+			PlatformUI.getWorkbench().getHelpSystem().setHelp(wizardDialog.buttonBar,
+					CarbidePiWizardHelpIds.PI_IMPORT_WIZARD_ROM_SDK);	
+		}
+
 	}
 }

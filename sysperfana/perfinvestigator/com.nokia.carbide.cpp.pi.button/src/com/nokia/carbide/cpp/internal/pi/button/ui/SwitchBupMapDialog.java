@@ -38,12 +38,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
+import com.nokia.carbide.cpp.pi.button.ButtonPlugin;
 import com.nokia.carbide.cpp.pi.button.ComNokiaCarbidePiButtonHelpIDs;
 import com.nokia.carbide.cpp.pi.button.IBupEventMapProfile;
 import com.nokia.carbide.cpp.sdk.core.ISymbianSDK;
 import com.nokia.carbide.cpp.sdk.core.SDKCorePlugin;
-import com.nokia.carbide.cpp.ui.CarbideUIPlugin;
-import com.nokia.carbide.cpp.ui.ICarbideSharedImages;
 
 
 public class SwitchBupMapDialog extends TitleAreaDialog {
@@ -68,7 +67,7 @@ public class SwitchBupMapDialog extends TitleAreaDialog {
 		composite = new Composite(parent, SWT.NONE);
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(composite, ComNokiaCarbidePiButtonHelpIDs.PI_KEY_MAP_SWITCH_DIALOG);
 		getShell().setText(Messages.getString("SwitchBupMapDialog.switchKeyPressProfile")); //$NON-NLS-1$
-		setTitleImage(CarbideUIPlugin.getSharedImages().getImageDescriptor(ICarbideSharedImages.IMG_PI_METER_20_20).createImage());
+		setTitleImage(ButtonPlugin.getImageDescriptor("icons/PI_Meter_20x20.png").createImage()); //$NON-NLS-1$
 		setTitle(Messages.getString("SwitchBupMapDialog.remapMessage")); //$NON-NLS-1$
 		
 		GridLayoutFactory layoutExpandBoth = GridLayoutFactory.fillDefaults();

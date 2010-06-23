@@ -24,7 +24,7 @@ import org.eclipse.swt.graphics.RGB;
  * 
  */
 
-public class AWTColorPalette {
+public final  class AWTColorPalette {
 
 	private static CacheMap<RGB, java.awt.Color> palette = new CacheMap<RGB, java.awt.Color>();
 	

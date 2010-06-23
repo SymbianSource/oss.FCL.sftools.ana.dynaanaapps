@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Carbide.c++ Performance Counters Common PI Plugin
 Bundle-SymbolicName: com.nokia.carbide.cpp.pi.peccommon;singleton:=true
-Bundle-Version: 2.3.0.qualifier
+Bundle-Version: 2.4.0.qualifier
 Bundle-Activator: com.nokia.carbide.cpp.pi.peccommon.PecCommonPlugin
 Bundle-Vendor: Nokia
 Require-Bundle: org.eclipse.ui,

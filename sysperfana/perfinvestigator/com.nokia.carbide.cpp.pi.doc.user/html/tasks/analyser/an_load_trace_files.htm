@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
-  <title>Loading Sample Trace File for Analysis</title>
+  <title>Importing Profiler Data Files</title>
   <link href="../../../book.css" rel="stylesheet" type="text/css">
 </head>
 
@@ -15,10 +15,11 @@ you must then import the profiler data (.dat) file. Importing the data file
 converts the file into a format that can be displayed by the analyzer (a .NPI
 file).</p>
 
-<p class="note"><strong>NOTE</strong> If a large .dat file is imported, the
-graph and table response time will slow down until the large NPI file is saved.
-Saving the NPI file will be performed in the background and cannot be
-canceled.</p>
+<p class="note"><strong>NOTE</strong> You do not necessarily need to collect
+the performance data by using PI Profiler on the device, but you can also do
+profiling remotely, directly from the PI Wizard in Carbide.c++. For more
+information, see <a href="collect_prof_data_remotely.htm">Collecting Profiler
+Data Remotely</a>.</p>
 
 <p>Importing a profiler data file will vary depending on if your application
 was built by Carbide.c++ or is a standalone application. To find the binaries
@@ -34,32 +35,41 @@ is part of the flashed phone image), enable dynamic binary support in the
 Profiler application when capturing your application data in a profiler data
 file.</p>
 
+<p class="note"><strong>NOTE</strong> If a large .dat file is imported, the
+graph and table response time will slow down until the large NPI file is saved.
+Saving the NPI file will be performed in the background and cannot be
+canceled.</p>
+
 <p>To import your profiler data file, perform the following steps.</p>
 
 <div class="step">
 <h4>Importing a Profiler Data File</h4>
 <ol>
-  <li><a name="Select_Performance_Investigator_Data"></a>Select Performance
-    Investigator Data</li>
-
-  <p>Select <strong>File &gt; Import...</strong> from Carbide.c++ to display
-  Import dialog box (Figure 1), and select Performance Investigator Data and
-  click <strong>Next</strong>.</p>
-
-  <p align="center"><img src="images/importdatfile_step1.png"></p>
-
-  <p align="center" class="figure">Figure 1. Carbide.c++ Import window </p>
+  <li><a name="Select_Performance_Investigator_Data"></a>Start the import
+    wizard form the Carbice.c++ toolbat by selecting <strong>Carbide</strong>
+    &gt; <strong>Performance Investigator</strong></li>
   <li><a name="Select_Profiler_Data_File"
     id="Select_Profiler_Data_File"></a>Select Profiler Data File(s) 
+    <p>First use the radio buttons and select to get profiler data <strong>From
+    File System</strong>. </p>
+    <p class="note"><strong>NOTE</strong> Use the <strong>From Device via
+    TraceViewer</strong> option if you want to collect new profiler data
+    remotely from the device. For more information, see <a
+    href="collect_prof_data_remotely.htm">Collecting Profiler Data
+    Remotely</a>.</p>
     <p>Select .dat file(s) to the <strong>From File System</strong> list by
     selecting either</p>
     <ul>
       <li><strong>Add File</strong> and browsing to the file, or</li>
       <li><strong>Add Directory</strong> and browsing to the directory you want
         to import files from.</li>
-      <li>The .dat file(s) will be converted to a format displayable by the
-        Carbide.c++ analyzer and assigned the .npi extension. </li>
+      <li>Use the <strong>Remove</strong> button to remove one file from the
+        list, or</li>
+      <li>Use the <strong>Remove All</strong> button to clear all files from
+        the list.</li>
     </ul>
+    <p>The .dat file(s) will be converted to a format displayable by the
+    Carbide.c++ analyzer and assigned the .npi extension. </p>
     <p>After selecting the file, the <strong>PI views included in the
     analysis</strong><strong>for <em>filename</em>.dat</strong> table will
     display a list of available views, according to the trace types available
@@ -69,9 +79,11 @@ file.</p>
         you can de-select the types you do not wish to include in the analysis.
         The CPU load view is a mandatory analysis and cannot be
       de-selected.</li>
+      <li>The trace types/views are selected separately for each .dat file.</li>
     </ul>
-    <p>Click Next to continue. </p>
-    <p align="center"><img src="images/CB_import_step2.PNG" alt=""></p>
+    <p>After selecting the files and views, click <strong>Next</strong> to
+    continue. </p>
+    <p align="center"><img src="images/CB_import_step2.png"></p>
     <p align="center" class="figure">Figure 2. Select Profiler Data File</p>
   </li>
   <li><a name="Select_Known_Available_Information"></a>Select Known Available
@@ -98,9 +110,8 @@ file.</p>
     in remaining pages, since there is no previous import related to the new
     workspace. For a new imported .dat file, a new output file name will be
     generated based on this input file name (+ (digit) + .npi).</p>
-    <p align="center"><img src="images/import_dat_file_step3.png"></p>
-    <p align="center" class="figure">Figure 3. Enter known Available
-    Information</p>
+    <p align="center"><img src="images/importdatfile_step3.png"> </p>
+    <p class="figure">Figure 3. Enter known Available Information</p>
   </li>
   <li><a name="ROM_files"></a>If <strong>Both</strong> or <strong>the ROM image
     symbol file</strong> option is selected, the <strong>Select build files
@@ -148,31 +159,60 @@ file.</p>
   <li><a name="Select_Output_File_and_Project"></a>Select Output File and
     Project </li>
 
-  <p>Use the Output File and Project page to import the .dat file into an
+  <p>Use the Output File and Project page to import the *.npi file into an
   existing project or create a new empty project. </p>
+
+  <p class="note">NOTE If you used remote profiling for collecting profiler
+  data from the device, the original *.dat file will also be included in the
+  selected project.</p>
 
   <p align="center"><img src="images/import_dat_file_step5.png"></p>
 
   <p align="center" class="figure">Figure 7. Enter Output File and Project
   Information</p>
-  <li>Click Finish to create the *.npi file.</li>
+  <li>Click Finish to create the *.npi file. 
+    <p class="note">NOTE Carbide.c++ reserves a large block of memory for the
+    Java Virtual Machine (JVM) to run the whole IDE. However, in some cases,
+    where Profiler trace log is too long in time and/or CPU load has been
+    extensively high over the use case, the trace import process may fail due
+    to out-of-memory situation. The out-of-menory may also lead to instability
+    issues with Carbide itself, but an error message will be always be shown:
+    <strong>Multiple problems have occurred</strong>. Jave heap space.<br>
+    This problem can be avoided by keeping the profiled use cases shorter (the
+    recommendation is maximum 5 minutes), and by selecting only those Profiler
+    plug-ins that are needed for analysing the use case. Shorter use cases (in
+    time) and smaller amount of selected profiler plug-ins also ease up the
+    analysis phase, since it is easier to a browse shorter set of data and to
+    pinpoint the possible performance issues within the trace.<br>
+    If you need to analyse longer use cases, there are also other tools
+    available for long-period-testing (LPT). For example, you can run the Nokia
+    Energy Profiler (NEP) directly on target and it can be used for LPT type of
+    use cases.</p>
+  </li>
   <li>If <b>Instructions executed</b> has been selected as one of the trace, a
     the dialog below is displayed during PIAnalyser file import (once for each
     file f several are imported): 
     <p align="center"><img
-    src="../../reference/analyzer/images/MIPS_speed_dialog.png"></p>
+    src="../../reference/analyzer/images/MIPS_speed_dialog.png" alt=""></p>
   </li>
-  <li>If you imported only one file, PIAnalyser will open showing the views
-    selected for that file. 
-    <p>If you imported several files, a project will be opened to the
-    <strong>Carbide Project Explorer</strong> where you can choose the file to
-    be viewed with PIAnalyser.</p>
+  <li><strong>Performance Investigator</strong> view will open with the
+    imported files listed in it. A project will also be opened to the
+    <strong>Carbide Project Explorer</strong> including the imported files. 
+    <p>If you imported only one file, PIAnalyser will also open showing the
+    views selected for that file. If you imported several files, you can open
+    any one of them by double-clicking the file name in the Performance
+    Investigator view or in the Project Explorer.</p>
   </li>
 </ol>
 </div>
 
 <p align="left"><strong>Related references</strong></p>
 <ul>
+  <li><a href="collect_prof_data_remotely.htm"></a><a
+    href="../../reference/analyzer/import_rom_build_files.htm">Select build
+    files from ROM</a></li>
+  <li><a href="collect_prof_data_remotely.htm">Collecting Profiler Data
+    Remotely</a></li>
   <li><a href="../../reference/analyzer/main_view.htm">Analyzer View</a></li>
   <li><a href="key_profile_pref.htm">Key Press Profile</a> </li>
 </ul>

@@ -717,7 +717,7 @@ public class AddrFunctionTable extends GenericAddrTable
 		}
 
 		PIVisualSharedData shared = myGraph.getSharedDataInstance();
-		shared.GPP_SelectedFunctionNames = nameList;
+		shared.gppSelectedFunctionNames = nameList;
 
   		if (   (totalSamples != 0)
       		|| (myGraph.getDrawMode() == Defines.FUNCTIONS))
@@ -757,7 +757,7 @@ public class AddrFunctionTable extends GenericAddrTable
         // this table's set of checkbox-selected rows has changed,
 		// so propagate that information
 		PIVisualSharedData shared = myGraph.getSharedDataInstance();
-		shared.GPP_SelectedFunctionNames = nameList;
+		shared.gppSelectedFunctionNames = nameList;
 
 			selectionChangeNotify();
   		this.table.deselectAll();
@@ -1483,7 +1483,7 @@ public class AddrFunctionTable extends GenericAddrTable
 		}
 
         PIVisualSharedData shared = myGraph.getSharedDataInstance();
-		shared.GPP_SelectedFunctionNames = functionNames;
+		shared.gppSelectedFunctionNames = functionNames;
 	}
 
 	private class SharedCheckHandler implements ICheckStateListener

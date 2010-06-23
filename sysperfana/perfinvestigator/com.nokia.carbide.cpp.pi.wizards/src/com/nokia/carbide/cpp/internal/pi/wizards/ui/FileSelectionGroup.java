@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
 import com.nokia.carbide.cpp.pi.PiPlugin;
+import com.nokia.carbide.cpp.pi.wizards.WizardsPlugin;
 
 /**
  * Provides content of the profile data file selection from file system group
@@ -49,6 +50,7 @@ import com.nokia.carbide.cpp.pi.PiPlugin;
 public class FileSelectionGroup extends AbstractBaseGroup {
 	
 	private TableViewer profileDataTable;
+	private PluginSelectionGroup pluginSelectionGroup;
 	
 	/**
 	 * Constructor 
@@ -58,7 +60,7 @@ public class FileSelectionGroup extends AbstractBaseGroup {
 	 */
 	public FileSelectionGroup(Composite parent,
 			INewPIWizardSettings wizardSettings) {
-		super(parent, wizardSettings);
+		super(parent, wizardSettings, false);
 	}
 
 	/*
@@ -129,6 +131,7 @@ public class FileSelectionGroup extends AbstractBaseGroup {
 		profileDataTable.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
 				if(profileDataTable.getTable().getSelectionCount() == 1){
+					pluginSelectionGroup.updateTraceIds(getSelectedItem());
 					wizardSettings.validatePage();				
 					
 				}				
@@ -200,7 +203,7 @@ public class FileSelectionGroup extends AbstractBaseGroup {
 					IPath folder = new Path(path).removeLastSegments(1);					
 					for(String fileName: dialog.getFileNames()){
 						try {
-							addProfileDataFile(folder.append(fileName));						
+							addProfilerDataFile(folder.append(fileName),0,0);						
 						} catch (IllegalArgumentException iae) {
 							IStatus status = new Status(Status.ERROR,
 									PiPlugin.PLUGIN_ID, iae.getMessage());
@@ -208,7 +211,7 @@ public class FileSelectionGroup extends AbstractBaseGroup {
 									Messages.getString("FileSelectionGroup.performanceInvestigator"), null, status); //$NON-NLS-1$
 						}					
 					}
-					refreshTable(profileDataTable);
+					refreshTable(profileDataTable, true);
 				}			
 			}
 		});
@@ -230,7 +233,7 @@ public class FileSelectionGroup extends AbstractBaseGroup {
 				if (result != null) {
 					try {
 						addDirectory(new Path(result));			
-						refreshTable(profileDataTable);
+						refreshTable(profileDataTable, true);
 						
 					} catch (IllegalArgumentException iae) {
 						IStatus status = new Status(Status.ERROR,
@@ -250,7 +253,7 @@ public class FileSelectionGroup extends AbstractBaseGroup {
 		removeOneButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				removeSelectedItem(profileDataTable);
-				refreshTable(profileDataTable);
+				refreshTable(profileDataTable, true);
 			}
 
 		});
@@ -263,10 +266,11 @@ public class FileSelectionGroup extends AbstractBaseGroup {
 		removeAllButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				removeAll();
-				refreshTable(profileDataTable);
+				refreshTable(profileDataTable, true);
 			}
 
 		});
+		pluginSelectionGroup = new PluginSelectionGroup(this,wizardSettings, false);
 	}
 
 	/*
@@ -276,5 +280,24 @@ public class FileSelectionGroup extends AbstractBaseGroup {
 	@Override
 	public Table getTable() {
 		return profileDataTable.getTable();
+	}
+
+
+	@Override
+	public IStatus validateContent(NewPIWizard wizardPage) {
+		IStatus status = Status.OK_STATUS;
+		if(pluginSelectionGroup != null){
+			pluginSelectionGroup.updateTraceIds(getSelectedItem());					
+			wizardPage.setProfilerDataFiles(getProfilerDataFiles()); 
+		}
+		int count = getProfilerDataFiles().size();
+		if( count > 1){
+			status = new Status(Status.WARNING, WizardsPlugin.PLUGIN_ID, Messages.getString("NewPIWizardPageInputTask.noteImportMayTakeSeveralMinutes")); //$NON-NLS-1$
+		}else if(count == 1){
+			status = new Status(Status.OK, WizardsPlugin.PLUGIN_ID,Messages.getString("NewPIWizardPageSampleFile.description")); //$NON-NLS-1$
+		}else{
+			status = new Status(Status.INFO, WizardsPlugin.PLUGIN_ID,Messages.getString("NewPIWizardPageSampleFile.description")); //$NON-NLS-1$
+		}
+		return status;
 	}
 }

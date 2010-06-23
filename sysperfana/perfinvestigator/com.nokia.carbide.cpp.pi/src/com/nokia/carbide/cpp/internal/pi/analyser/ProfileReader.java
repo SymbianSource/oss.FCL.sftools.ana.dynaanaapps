@@ -80,7 +80,7 @@ import com.nokia.carbide.cpp.pi.util.PIExceptionRuntime;
  * Class for reading a processed profile data file and setting up the
  * editor pages, initial graphs, and initial tables
  */
-public class ProfileReader
+public final class ProfileReader
 {
 	// objects (mainly traces) read, it's lifetime exist between loadAnalysisFile for last usage in loadAnalysisFile
 	static private ArrayList<Object> readObjects = new ArrayList<Object>();

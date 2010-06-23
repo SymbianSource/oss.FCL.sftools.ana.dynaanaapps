@@ -149,6 +149,19 @@ public class NewPIWizardPageOutputTask extends NewPIWizardPage implements INewPI
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), CarbidePiWizardHelpIds.PI_IMPORT_WIZARD_OUTPUT);		
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.dialogs.DialogPage#performHelp()
+	 */
+	@Override
+	public void performHelp() {
+		WizardDialog wizardDialog = (WizardDialog)getContainer();	
+		if(wizardDialog.buttonBar != null){	
+			PlatformUI.getWorkbench().getHelpSystem().setHelp(wizardDialog.buttonBar,
+					CarbidePiWizardHelpIds.PI_IMPORT_WIZARD_OUTPUT);
+		}
+	
+	}
+	
 	/**
 	 * This method initializes projectComposite	
 	 *

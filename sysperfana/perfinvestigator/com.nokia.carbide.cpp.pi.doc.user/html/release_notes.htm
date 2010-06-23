@@ -16,9 +16,9 @@
 <h2>Release Notes</h2>
 
 <h4>Performance Investigator Analyser Carbide.c++ Extension &ndash; Version
-2.3.0</h4>
+2.4.0</h4>
 
-<p>Released 21st April 2010</p>
+<p>Released June 20th, 2010</p>
 <ul>
   <li><a href="#whatsNew">What's new </a></li>
   <li><a href="#agent">Target Performance Investigator Agent</a></li>
@@ -27,25 +27,22 @@
 </ul>
 
 <h3><a name="whatsNew" id="whatsNew"></a>What's New </h3>
-
-<p><strong>2.3.0</strong></p>
 <ul>
-  <li><b>Performance improvements</b> &mdash; Improved overall memory
-    consumption. </li>
-  <li><b>Version numbers harmonized</b> &mdash; Version numbers of Performance
-    Investigator plug-ins and feature increased to 2.3.0.</li>
-  <li><b>Instruction trace (ITT) support</b> &mdash; Support for the RVCT 4.0
-    map file format.</li>
-  <li><b>Library event support</b> &mdash; Memory plug-in supports
-    investigating memory usage by a library from the application developer's
-    point of view. </li>
-  <li><b>Performance Investigator Import Wizard</b> &mdash; Support for
-    importing multiple profiler data files with the same configuration from a
-    file system, and a new possibility to select the desired views from the
-    available trace types for each imported file. </li>
+  <li><b>Graphics Memory Usage data support</b>&mdash; Support for viewing
+    graphics memory usage. Both private and shared graphics memory usage can be
+    displayed in the graph.</li>
+  <li><b>Performance Investigator Wizard </b>&mdash; Support for tracing
+    Profiler data remotely from the device.</li>
+  <li><b>Performance Investigator View </b>&mdash; Support for handling
+    imported Profiler data files on the view.</li>
+  <li><b>Performance Counters Graph and Table</b> &mdash; Support for viewing
+    and analyzing the CPU clock rate.</li>
+  <li><b>CPU Thread Load Graph and Table </b>&mdash; Support for scaling the
+    thread load to the CPU Clock Speed.</li>
 </ul>
 
-<h3><a name="agent"></a>Target Performance Investigator Profiler </h3>
+<h3><a name="agent" id="agent"></a>Target Performance Investigator Profiler
+</h3>
 <ul>
   <li>To produce a Profiler data file, you need to install one of these
     profiler agents: 
@@ -162,6 +159,23 @@
 
 <h3>Version history</h3>
 
+<p><strong>2.3.0</strong></p>
+<ul>
+  <li><b>Performance improvements</b> &mdash; Improved overall memory
+    consumption. </li>
+  <li><b>Version numbers harmonized</b> &mdash; Version numbers of Performance
+    Investigator plug-ins and feature increased to 2.3.0.</li>
+  <li><b>Instruction trace (ITT) support</b> &mdash; Support for the RVCT 4.0
+    map file format.</li>
+  <li><b>Library event support</b> &mdash; Memory plug-in supports
+    investigating memory usage by a library from the application developer's
+    point of view. </li>
+  <li><b>Performance Investigator Import Wizard</b> &mdash; Support for
+    importing multiple profiler data files with the same configuration from a
+    file system, and a new possibility to select the desired views from the
+    available trace types for each imported file. </li>
+</ul>
+
 <p><strong>2.2.0</strong></p>
 <ul>
   <li><b>Interrupt support</b> &mdash; Support for viewing software and
@@ -177,7 +191,8 @@
     viewing interconnect performance counter traces. This feature has been
     ported from Bappea to Performance Investigator.</li>
   <li><b>SMP support for CPU Profiler</b> &mdash; The Threads view can now be
-    broken down into separate graphs, one per available CPU on SMP systems.</li>
+    broken down into separate graphs, one per each available CPU on SMP
+  systems.</li>
   <li><b>Usability enhancements for graphs</b> &mdash; Title bar added for each
     graph for manipulating the location and size of a single graph.</li>
   <li><b>Version numbers harmonized</b> &mdash; Version numbers of Performance

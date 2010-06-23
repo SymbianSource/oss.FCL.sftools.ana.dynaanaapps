@@ -21,7 +21,7 @@ import com.nokia.carbide.cpp.internal.pi.analyser.PIChangeEvent;
 
 
 
-public class PiManager {
+public final class PiManager {
 	private static PiManager manager;
 	
 	private PiManager() {

@@ -351,4 +351,20 @@ public class CallPlugin extends AbstractPiPlugin
 	public ParsedTraceData parseTraceFiles(File[] files) throws Exception {
 		throw new UnsupportedOperationException();
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#isMandatory()
+	 */
+	public boolean isMandatory() {
+		return false;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#getTraceDescription()
+	 */
+	public String getTraceDescription() {
+		return getTraceTitle();
+	}
 }

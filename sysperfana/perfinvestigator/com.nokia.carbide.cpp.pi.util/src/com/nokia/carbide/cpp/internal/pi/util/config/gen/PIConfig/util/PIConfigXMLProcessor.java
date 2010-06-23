@@ -42,7 +42,7 @@ public class PIConfigXMLProcessor extends XMLProcessor {
 	 */
 	public PIConfigXMLProcessor() {
 		super(new EPackageRegistryImpl(EPackage.Registry.INSTANCE));
-		extendedMetaData.putPackage(null, PIConfigPackage.eINSTANCE);
+		extendedMetaData.putPackage(null, PIConfigPackage.E_INSTANCE);
 	}
 	
 	/**

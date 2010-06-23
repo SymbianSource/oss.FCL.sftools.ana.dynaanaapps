@@ -212,14 +212,14 @@ public class GfcTrace extends GenericSampledTraceWithFunctions
 			caller.functionName = gSam.getCallerFunctionItt().getFunctionName();
     		caller.startAdress  = gSam.getCallerFunctionItt().getStartAddress();
 			caller.binaryName   = gSam.getCallerFunctionItt().getFunctionBinary().getBinaryName();
-			caller.symbolParsed = false;
+			caller.symbolParsed = Boolean.FALSE;
 		}
 		else
 		{
 			caller.functionName = gSam.getCallerFunctionSym().getFunctionName();
 			caller.startAdress  = gSam.getCallerFunctionSym().getStartAddress();
 			caller.binaryName   = gSam.getCallerFunctionSym().getFunctionBinary().getBinaryName();
-			caller.symbolParsed = Boolean.valueOf(true);
+			caller.symbolParsed = Boolean.TRUE;
 		}
 		
 		if (   (gSam.getCurrentFunctionSym() == null || gSam.getCurrentFunctionSym().getFunctionName().endsWith(Messages.getString("GfcTrace.functionNotFound"))) //$NON-NLS-1$
@@ -228,14 +228,14 @@ public class GfcTrace extends GenericSampledTraceWithFunctions
 			callee.functionName = gSam.getCurrentFunctionItt().getFunctionName();
     		callee.startAdress  = gSam.getCurrentFunctionItt().getStartAddress();
 			callee.binaryName   = gSam.getCurrentFunctionItt().getFunctionBinary().getBinaryName();
-			callee.symbolParsed = Boolean.valueOf(false);
+			callee.symbolParsed = Boolean.FALSE;
 		}
 		else
 		{
 			callee.functionName = gSam.getCurrentFunctionSym().getFunctionName();
     		callee.startAdress  = gSam.getCurrentFunctionSym().getStartAddress();
 			callee.binaryName   = gSam.getCurrentFunctionSym().getFunctionBinary().getBinaryName();
-			callee.symbolParsed = Boolean.valueOf(true);
+			callee.symbolParsed = Boolean.TRUE;
 		}
 
 		this.updateEntryLists(sample, programCounter, linkRegister, caller, callee);

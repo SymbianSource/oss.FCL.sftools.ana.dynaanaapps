@@ -22,14 +22,14 @@ import org.eclipse.swt.graphics.RGB;
 public class ThreadColorPalette extends TableColorPalette {
 
 	@Override
-	public RGB getConstantRGB(Object entry) {
+	public RGB getConstantRGB(final Object entry) {
 		
 		assert (entry instanceof String);
 		//threadName   = sample.thread.process.name + "::" + sample.thread.threadName + "_" + sample.thread.threadId;
 
 		String string = (String)entry;
 		
-		int lastIndexOf = string.lastIndexOf("_");
+		int lastIndexOf = string.lastIndexOf('_');
 		
 		
 		String threadName[] = string.substring(0, lastIndexOf).split("::"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -48,13 +48,13 @@ public class ThreadColorPalette extends TableColorPalette {
 		String pro_string = threadName[0];
 		String thr_string = threadName[1];
 		int mark;
-		if (pro_string.indexOf(".") != -1) //$NON-NLS-1$
-		    mark = pro_string.indexOf(".");  //EKA2 //$NON-NLS-1$
-		else if (pro_string.indexOf('[') != -1)
+		if (pro_string.indexOf('.') != -1){ //$NON-NLS-1$
+		    mark = pro_string.indexOf('.');  //EKA2 //$NON-NLS-1$
+		}else if (pro_string.indexOf('[') != -1){
 		    mark = pro_string.indexOf('[');  //EKA1
-		else
+		}else{
 			return null;
-		
+		}
 		pro_string = pro_string.substring(0, mark);
 		
 	    if (pro_string.equalsIgnoreCase("EKern") && thr_string.toUpperCase().startsWith("NULL")) { //$NON-NLS-1$ //$NON-NLS-2$

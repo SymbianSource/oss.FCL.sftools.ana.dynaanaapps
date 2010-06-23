@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet title="Performance Investigator Setup for Remote Profiling">
+
+<intro>
+<description>
+Follow these steps to enable and start remote profiling on a target device. 
+To open a related help page for more specific information, click the question mark icon at the end of the task title row.
+</description>
+</intro>
+
+<item
+      dialog="true"
+      skip="false"
+      title="Install Nokia PC Suite on the PC.">
+<description>
+Install the latest <b>Nokia PC Suite</b> on your PC and launch Carbide.c++ IDE.
+</description>
+</item>
+
+
+
+<item
+      dialog="true"
+      skip="false"
+      title="Connect a USB cable.">
+<description>
+Connect a USB cable to the PC and then to the target device.
+</description>
+</item>
+<item
+      title="Start the Performance Investigator Import Wizard">
+   <description>
+      Start the Import Wizard in Carbide.c++ by selecting <b>Carbide &gt; Performance Investigator</b>
+   </description>
+</item>
+<item
+      href="/com.nokia.carbide.cpp.pi.doc.user/html/tasks/analyser/collect_prof_data_remotely.htm#First"
+      title="Import data from device by tracing">
+   <description>
+      On the <b>Select Profiler Data Files</b> page, select to get profiler data <b>From Device via TraceViewer</b>.
+   </description>
+</item>
+
+
+
+<item title="Check connection settings" dialog="true" skip="false" href="/com.nokia.traceviewer.help/html/reference/preferencesconnection.htm">
+<description>
+Before you start tracing, check the connections settings. Select <b>Connection settings</b> to open the TraceViewer Connections Setting dialog.
+After checking and saving the connection settings, click <b>Refresh Plug-ins List</b>. If the connection to the target device is working correctly, a list of the available plug-ins appears.
+</description>
+</item>
+
+<item
+      dialog="true"
+      href="/com.nokia.carbide.cpp.pi.doc.user/html/tasks/analyser/collect_prof_data_remotely.htm#Select"
+      skip="false"
+      title="Set plug-ins for tracing and prefix for created file.">
+<description>
+Select the plug-ins you want to trace from <b>Select Plug-ins for Tracing list</b>
+Enter the file prefix to be used for the trace data file.
+</description>
+</item>
+
+<item
+      dialog="true"
+      href="/com.nokia.carbide.cpp.pi.doc.user/html/tasks/analyser/collect_prof_data_remotely.htm#Stop"
+      skip="false"
+      title="Run the trace.">
+<description>
+Click <b>Start Tracing</b> to begin and carry out the use case with your application. When you are finished with the use case, click <b>Stop Tracing</b>. A new trace file name appears in the <b>Created Profiler Data Files</b>list.
+If you wish you can run another trace. Just enter a new prefix for the second file and change the setting if you wish.
+</description>
+</item>
+
+
+
+<item
+      dialog="true"
+      href="/com.nokia.carbide.cpp.pi.doc.user/html/tasks/analyser/an_load_trace_files.htm#Select_Known_Available_Information"
+      skip="false"
+      title="Finish the import">
+<description>
+Click <b>Next</b> to continue with the import. 
+For detailed instructions, click the question mark icon to open the Help.
+</description>
+</item>
+
+<item title="Open the file for analysis" dialog="true" skip="false" href="/com.nokia.carbide.cpp.pi.doc.user/html/reference/analyzer/PI_view.htm">
+<description>
+   If you imported only one file, the data will open directly to the PI Analyser view.
+ If you imported several files, they will be listed in the PI view and you can double click on an item to view and analyse it in PI Analyzer.
+</description>
+</item>
+
+</cheatsheet>

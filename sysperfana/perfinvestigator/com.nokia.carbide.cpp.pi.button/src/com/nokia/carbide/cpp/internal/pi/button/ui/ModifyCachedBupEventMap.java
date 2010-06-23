@@ -165,12 +165,12 @@ public class ModifyCachedBupEventMap implements IBupEventMap,  IBupEventMapEdita
 	 * @see com.nokia.carbide.cpp.pi.button.IBupEventMap#toEmfModel()
 	 */
 	public ButtonEventProfileType toEmfModel() {
-		ButtonEventProfileType profile = PIConfigFactory.eINSTANCE.createButtonEventProfileType();
+		ButtonEventProfileType profile = PIConfigFactory.E_INSTANCE.createButtonEventProfileType();
 
 		profile.setProfileId(getProfile().getProfileId());
 		EList<MappingType> mappingList = profile.getMapping();
 		for (Entry<Integer, TableEntry> entry : cachedMap.entrySet()) {
-			MappingType mappingType = PIConfigFactory.eINSTANCE.createMappingType();
+			MappingType mappingType = PIConfigFactory.E_INSTANCE.createMappingType();
 			mappingType.setKeyCode(entry.getKey().longValue());
 			mappingType.setEnumString(entry.getValue().enumString);
 			mappingType.setLabel(entry.getValue().label);

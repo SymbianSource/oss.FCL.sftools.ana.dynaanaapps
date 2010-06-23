@@ -25,4 +25,43 @@
             name="Performance Investigator">
       </category>
 	</extension>
+	
+	   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="Carbide Extensions"
+            id="com.nokia.s60tools">
+      </category>
+      <view
+            name="Performance Investigator"
+            icon="icons/PI_Meter_16x16.png"
+            category="com.nokia.s60tools"
+            class="com.nokia.carbide.cpp.internal.pi.wizards.ui.views.PIView"
+            id="com.nokia.carbide.cpp.internal.pi.wizards.ui.views.PIView">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            description="Performance Investigator"
+            id="com.nokia.carbide.cpp.pi.wizards.actionSet"
+            label="Performance Investigator"
+            visible="true">
+         <menu
+               id="com.nokia.carbide.cpp.ui.CarbideMenu"
+               label="&amp;Carbide">
+            <separator
+                  name="com.nokia.s60tools.ToolsMenuGroup">
+            </separator>
+         </menu>
+         <action
+               class="com.nokia.carbide.cpp.internal.pi.wizards.ui.actions.ToolbarShortcutAction"
+               icon="icons/PI_Meter_16x16.png"
+               id="com.nokia.carbide.cpp.internal.pi.wizards.ui.actions.ToolbarShortcutAction"
+               label="Performance Investigator"
+               menubarPath="com.nokia.carbide.cpp.ui.CarbideMenu/CarbideExtensions"
+               tooltip="Performance Investigator">
+         </action>         
+      </actionSet>
+   </extension>
 </plugin>

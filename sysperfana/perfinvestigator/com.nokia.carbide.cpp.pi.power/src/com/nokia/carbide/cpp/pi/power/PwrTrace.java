@@ -18,6 +18,8 @@
 package com.nokia.carbide.cpp.pi.power;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 import com.nokia.carbide.cpp.internal.pi.analyser.NpiInstanceRepository;
 import com.nokia.carbide.cpp.internal.pi.model.GenericSampledTrace;
@@ -33,6 +35,7 @@ public class PwrTrace extends GenericSampledTrace
 	transient private boolean complete = false;
 	transient private ArrayList<PwrSample> powerChangePoints;	// times when power samples change
 	transient private long maxEndTime;
+	transient private TreeMap<Long, Integer> backlightChangePoints;
 	
     private float voltage = 3.7f;
 	
@@ -45,7 +48,8 @@ public class PwrTrace extends GenericSampledTrace
 	private double min = 0.0;
 	private double max = 0.0;
 	private double synchValue = 0.0;
-	
+	private boolean backlightEnabled;	 
+	 
 	transient private int[] sampleTimes;
     transient private int[] ampValues;
     transient private int[] voltValues;
@@ -53,6 +57,7 @@ public class PwrTrace extends GenericSampledTrace
     transient private double maxAmps = Double.MIN_VALUE;
 	transient private double minAmps = Double.MAX_VALUE;
 	transient private double maxPower = 0.0;
+	
 
     public GenericTraceGraph getTraceGraph(int graphIndex, int uid)
 	{		
@@ -197,12 +202,19 @@ public class PwrTrace extends GenericSampledTrace
 	public void initData()
 	{
 		ArrayList<PwrSample> powerChangePoints = new ArrayList<PwrSample>();
+		if(backlightEnabled){
+			backlightChangePoints = new TreeMap<Long, Integer>();
+		}
 		PwrSample sample = (PwrSample) this.samples.get(0);
 			
 		long   currentTime     = sample.sampleSynchTime;
 		double currentCurrent  = sample.current;
 		double currentVoltage  = sample.voltage;
 		double currentCapacity = sample.capacity;
+		int currentBacklight = sample.backlight;
+		if(backlightEnabled){
+			backlightChangePoints.put(currentTime, currentBacklight);
+		}
 				
 		for (int i = 1; i < this.samples.size(); i++) {
 			sample = (PwrSample) this.samples.get(i);
@@ -216,13 +228,22 @@ public class PwrTrace extends GenericSampledTrace
 				currentVoltage  = sample.voltage;
 				currentCapacity = sample.capacity;
 			}
+			if(backlightEnabled){
+				if(sample.backlight != currentBacklight){
+					backlightChangePoints.put(sample.sampleSynchTime, sample.backlight);
+					currentBacklight = sample.backlight;
+				}
+			}
+		
 		}
 		
-		sample = powerChangePoints.get(powerChangePoints.size() - 1);
-		if (   sample.current  != currentCurrent
-			|| sample.voltage  != currentVoltage
-			|| sample.capacity != currentCapacity) {
-			powerChangePoints.add(new PwrSample(currentTime, currentCurrent, currentVoltage, currentCapacity));
+		if(powerChangePoints.size() > 0){
+			sample = powerChangePoints.get(powerChangePoints.size() - 1);
+			if (   sample.current  != currentCurrent
+				|| sample.voltage  != currentVoltage
+				|| sample.capacity != currentCapacity) {
+				powerChangePoints.add(new PwrSample(currentTime, currentCurrent, currentVoltage, currentCapacity));
+			}	
 		}
 
 		this.powerChangePoints = powerChangePoints;
@@ -319,4 +340,18 @@ public class PwrTrace extends GenericSampledTrace
   	public boolean isComplete() {
   		return this.complete;
   	}
+  	
+  	public boolean isBacklightEnabled(){
+  		//TODO remove this for enabling backlight visualization
+  		return false;
+  		//return backlightEnabled;
+  	}
+  	
+	public void setBacklightEnabled(boolean backlightEnabled){
+  		this.backlightEnabled = backlightEnabled;
+  	}
+	
+	public Map<Long, Integer> getBacklightChangePoints(){
+		return backlightChangePoints;
+	}
 }

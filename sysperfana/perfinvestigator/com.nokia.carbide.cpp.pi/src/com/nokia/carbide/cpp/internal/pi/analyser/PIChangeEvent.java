@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 import com.nokia.carbide.cpp.pi.editors.PIPageEditor;
 
-public class PIChangeEvent {
+public final class PIChangeEvent {
 
 	private PIChangeEvent() {
 		/* this class can only have static method */

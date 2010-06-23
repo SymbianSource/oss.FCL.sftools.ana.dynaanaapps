@@ -53,7 +53,7 @@ public class PIConfigAdapterFactory extends AdapterFactoryImpl {
 	 */
 	public PIConfigAdapterFactory() {
 		if (modelPackage == null) {
-			modelPackage = PIConfigPackage.eINSTANCE;
+			modelPackage = PIConfigPackage.E_INSTANCE;
 		}
 	}
 

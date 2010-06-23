@@ -2,46 +2,90 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Function Calls</title>
-    <link href="../../../book.css" rel="stylesheet" type="text/css">
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Function Calls</title>
+  <link href="../../../book.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
 <h2>Function Calls</h2>
-<p>If the profiler data file contained function call information, select the Function Calls tab to show information about the function call relationships during the selected time period.  Figure 1 shows an example set of tables that provide information about function calls.</p>
-<p align="center"><img src="images/function_call_info.png" width="764" height="609"></p>
+
+<p>If the profiler data file contained function call information, select the
+Function Calls tab to show information about the function call relationships
+during the selected time period. Figure 1 shows an example set of tables that
+provide information about function calls.</p>
+
+<p align="center"><img src="images/function_call_info.png" width="764"
+height="609"></p>
+
 <p class="figure">Figure 1. Function Call Information</p>
-<p>Only one function can be selected at a time. For the selected function, you can see the functions that have been found calling it and the functions that it has called. Additional columns provide more information, such as the percentage of each functions activity based on 100 percent of all calls to and from the selected function, Function's starting address (in hex), binary where function exists, and the path of the binary.</p>
+
+<p>Only one function can be selected at a time. For the selected function, you
+can see the functions that have been found calling it and the functions that it
+has called. Additional columns provide more information, such as the percentage
+of each functions activity based on 100 percent of all calls to and from the
+selected function, Function's starting address (in hex), binary where function
+exists, and the path of the binary.</p>
+
 <p>Description of table columns:<br>
-  (for all tables)</p>
+(for all tables)</p>
 <ul>
-  <li>The <strong>Function Start</strong> column displays the hexadecimal start address of each function.</li>
-<li>The <strong>In Binary</strong> column tells(s) the binary containing each function.</li>
-<li>The <strong>Path of Binary</strong> column shows the PC folder containing each function’s binary.</li>
-<li>The<strong> Is Caller %</strong> column shows the percentage of time that this function was the caller of the function that was executing.</li>
-<li>The <strong>Is Called %</strong> column shows the percentage of time in the selected time period that this function was executing.</li>
+  <li>The <strong>Function Start</strong> column displays the hexadecimal start
+    address of each function.</li>
+  <li>The <strong>In Binary</strong> column tells(s) the binary containing each
+    function.</li>
+  <li>The <strong>Path of Binary</strong> column shows the PC folder containing
+    each function’s binary.</li>
+  <li>The<strong>Is Caller %</strong> column shows the percentage of time that
+    this function was the caller of the function that was executing.</li>
+  <li>The <strong>Is Called %</strong> column shows the percentage of time in
+    the selected time period that this function was executing.</li>
 </ul>
+
 <p>(in the <strong>Select One Function</strong> table)</p>
 <ul>
-  <li>The <strong>Called Samples</strong> column shows the number of samples in which this function was executing.</li>
-<li>The <strong>Caller Samples</strong> column displays the number of samples in which this function was the caller of the function that was executing.</li>
+  <li>The <strong>Called Samples</strong> column shows the number of samples in
+    which this function was executing.</li>
+  <li>The <strong>Caller Samples</strong> column displays the number of samples
+    in which this function was the caller of the function that was
+  executing.</li>
 </ul>
-<p>The selected function may have been called from one or more functions. In the <strong>Functions calling the selected function</strong> table, the <strong>% of Calls</strong> column shows what percentage of the time the selected function was called by each function in the table. For each function in this table, the <strong>Is Caller %</strong> column indicates the percentage of samples that the function was the caller of the executing function.</p>
-<p>The selected function may have called one or more functions. In the <strong>Functions called by the selected function</strong> table, the <strong>% of Calls</strong> column shows what percent of the time the selected function called each function in the table. For each function in this table, the <strong>Is Called %</strong> column indicates in what percentage of samples the function was executing.</p>
-<p class="note"><strong>NOTE</strong>
-On the target device, the link register usually contains the return address of the caller function.
-However, a called function may temporarily use the link register to hold a constant or variable.
-Performance Investigator uses link register values in the profiler data file to determine the names
-of caller functions.
-When PI cannot determine the name of a caller function, it may be because the link register held a constant
-or variable. For example, if the link register held a constant 0x0, PI would display the caller's name as &quot;Function at 0x0 not found&quot;. </p>
+
+<p>The selected function may have been called from one or more functions. In
+the <strong>Functions calling the selected function</strong> table, the
+<strong>% of Calls</strong> column shows what percentage of the time the
+selected function was called by each function in the table. For each function
+in this table, the <strong>Is Caller %</strong> column indicates the percentage
+of samples that the function was the caller of the executing function.</p>
+
+<p>The selected function may have called one or more functions. In the
+<strong>Functions called by the selected function</strong> table, the <strong>%
+of Calls</strong> column shows what percent of the time the selected function
+called each function in the table. For each function in this table, the
+<strong>Is Called %</strong> column indicates in what percentage of samples the
+function was executing.</p>
+
+<p class="note"><strong>NOTE</strong> On the target device, the link register
+usually contains the return address of the caller function. However, a called
+function may temporarily use the link register to hold a constant or variable.
+Performance Investigator uses link register values in the profiler data file to
+determine the names of caller functions. When PI cannot determine the name of a
+caller function, it may be because the link register held a constant or
+variable. For example, if the link register held a constant 0x0, PI would
+display the caller's name as "Function at 0x0 not found". </p>
+
 <p><strong>Related references</strong></p>
 <ul>
+  <li><a href="main_view.htm">Analyzer View</a></li>
   <li><a href="binary_load.htm">Binary Load</a></li>
   <li><a href="function_load.htm">Function Load</a></li>
   <li><a href="thread_load.htm">Thread Load</a></li>
 </ul>
-<div id="footer">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. <br>
+License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
 </body>
 </html>

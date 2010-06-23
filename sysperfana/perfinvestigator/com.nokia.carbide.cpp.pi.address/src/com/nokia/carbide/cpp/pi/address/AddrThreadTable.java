@@ -61,8 +61,8 @@ import org.eclipse.swt.widgets.TableItem;
 
 import com.nokia.carbide.cpp.internal.pi.address.GppModelAdapter;
 import com.nokia.carbide.cpp.internal.pi.analyser.NpiInstanceRepository;
-import com.nokia.carbide.cpp.internal.pi.analyser.ProfileVisualiser;
 import com.nokia.carbide.cpp.internal.pi.interfaces.ISaveSamples;
+import com.nokia.carbide.cpp.internal.pi.model.ICPUScale;
 import com.nokia.carbide.cpp.internal.pi.model.ProfiledGeneric;
 import com.nokia.carbide.cpp.internal.pi.model.ProfiledThread;
 import com.nokia.carbide.cpp.internal.pi.model.ProfiledThreshold;
@@ -406,6 +406,30 @@ public class AddrThreadTable extends GenericAddrTable
 				case COLUMN_ID_PERCENT_LOAD:
 				{
 					// Percent load string
+					Object object = profiledItem.getAdapter(ICPUScale.class);
+					if(object != null && profiledItem.isScaledCpu()){
+						String avgLoad = profiledItem.getAverageLoadValueString(graphIndex);
+						if (avgLoad != null && avgLoad.length() > 0) {
+							if(avgLoad.indexOf(',') != -1){ //$NON-NLS-1$
+								avgLoad = avgLoad.replace(',', '.');
+							}
+							float value = Float.valueOf(avgLoad);
+							if (value > 0.0) {
+								ICPUScale cpuScale = (ICPUScale) object;
+								value = value / 100;
+								int startTime = (int) (PIPageEditor
+										.currentPageEditor().getStartTime() * 1000);
+								int endTime = (int) (PIPageEditor
+										.currentPageEditor().getEndTime() * 1000);
+								value = value
+										* cpuScale.calculateScale(startTime,
+												endTime) * 100;
+								DecimalFormat decimalFormat = new DecimalFormat(
+										"#0.00"); //$NON-NLS-1$
+								return decimalFormat.format(value);
+							}
+						}									
+					}
 					return profiledItem.getAverageLoadValueString(graphIndex);
 				}
 				case COLUMN_ID_THREAD:
@@ -682,7 +706,7 @@ public class AddrThreadTable extends GenericAddrTable
 		}
 
 		PIVisualSharedData shared = myGraph.getSharedDataInstance();
-		shared.GPP_SelectedThreadNames = nameList;
+		shared.gppSelectedThreadNames = nameList;
 
   		if (   (totalSamples != 0)
       		|| (myGraph.getDrawMode() == Defines.THREADS))
@@ -722,7 +746,7 @@ public class AddrThreadTable extends GenericAddrTable
         // this table's set of checkbox-selected rows has changed,
 		// so propagate that information
 		PIVisualSharedData shared = myGraph.getSharedDataInstance();
-		shared.GPP_SelectedThreadNames = nameList;
+		shared.gppSelectedThreadNames = nameList;
 
 			selectionChangeNotify();
   		this.table.deselectAll();
@@ -1435,7 +1459,7 @@ public class AddrThreadTable extends GenericAddrTable
 		}
 
         PIVisualSharedData shared = myGraph.getSharedDataInstance();
-		shared.GPP_SelectedThreadNames = threadNames;
+		shared.gppSelectedThreadNames = threadNames;
 	}
 
 	private class SharedCheckHandler implements ICheckStateListener

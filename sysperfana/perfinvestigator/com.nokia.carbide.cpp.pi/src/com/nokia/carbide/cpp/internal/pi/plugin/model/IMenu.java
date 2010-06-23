@@ -17,7 +17,7 @@
 
 package com.nokia.carbide.cpp.internal.pi.plugin.model;
 
-public abstract interface IMenu 
+public interface IMenu 
 {
 
 }

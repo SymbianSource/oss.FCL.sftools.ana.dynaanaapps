@@ -43,19 +43,19 @@ import com.nokia.carbide.cpp.ui.ICarbideSharedImages;
 
 public class SourceLookupFileChooserDialog extends TitleAreaDialog {
 
-	IASTFileLocation[] locations = null;
-	IASTFileLocation selectedLocation = null;
+	private IASTFileLocation[] locations = null;
+	private IASTFileLocation selectedLocation = null;
 	
 	// control
 	private Composite composite = null;
 	private Table table = null;
 
-	protected SourceLookupFileChooserDialog(Shell arg0, IASTFileLocation[] locs) {
+	protected SourceLookupFileChooserDialog(final Shell arg0, final IASTFileLocation[] locs) {
 		super(arg0);
 		locations = locs;
 	}
 	
-	public Control createDialogArea(Composite parent) {
+	public Control createDialogArea(final Composite parent) {
 		// use image from support plugin
 		setDefaultImage(CarbideUIPlugin.getSharedImages().getImageDescriptor(ICarbideSharedImages.IMG_CARBIDE_C_ICON_16_16).createImage());
 		getShell().setText(Messages.getString("SourceLookupFileChooserDialog.text")); //$NON-NLS-1$
@@ -71,25 +71,25 @@ public class SourceLookupFileChooserDialog extends TitleAreaDialog {
 	    table = new Table(composite, SWT.SINGLE);
 	    table.addSelectionListener(new SelectionListener() {
 
-			public void widgetDefaultSelected(SelectionEvent arg0) {
+			public void widgetDefaultSelected(final SelectionEvent arg0) {
 			}
 
-			public void widgetSelected(SelectionEvent arg0) {
+			public void widgetSelected(final SelectionEvent arg0) {
 				selectedLocation = (IASTFileLocation)table.getSelection()[0].getData();
 			}
 	    	
 	    });
 	    table.addMouseListener(new MouseListener(){
 	    	// allow double click instead of OK
-			public void mouseDoubleClick(MouseEvent arg0) {
+			public void mouseDoubleClick(final MouseEvent arg0) {
 				selectedLocation = (IASTFileLocation)table.getSelection()[0].getData();
 				okPressed();
 			}
 
-			public void mouseDown(MouseEvent arg0) {
+			public void mouseDown(final MouseEvent arg0) {
 			}
 
-			public void mouseUp(MouseEvent arg0) {
+			public void mouseUp(final MouseEvent arg0) {
 			}
 	    	
 	    });

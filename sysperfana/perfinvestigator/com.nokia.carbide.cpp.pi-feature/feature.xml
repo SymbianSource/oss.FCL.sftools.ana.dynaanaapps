@@ -2,7 +2,7 @@
 <feature
       id="com.nokia.carbide.cpp.pi"
       label="%featureName"
-      version="2.3.0.qualifier"
+      version="2.4.0.qualifier"
       provider-name="Nokia"
       plugin="com.nokia.carbide.cpp"
       image="Carbide_Image.png">
@@ -408,6 +408,13 @@ three (3) years from the date of the distribution of this product by Nokia.
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+   
+   <plugin
+         id="com.nokia.carbide.cpp.pi.graphicsmemory"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="com.nokia.carbide.cpp.pi.power"
@@ -485,5 +492,6 @@ three (3) years from the date of the distribution of this product by Nokia.
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+         
 
 </feature>

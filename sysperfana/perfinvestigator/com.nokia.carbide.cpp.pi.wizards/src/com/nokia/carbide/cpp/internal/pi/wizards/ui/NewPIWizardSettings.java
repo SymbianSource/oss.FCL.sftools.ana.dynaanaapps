@@ -41,7 +41,7 @@ import com.nokia.carbide.cpp.sdk.core.SDKCorePlugin;
  *  Handles all import wizard's persist data
  */
 
-public class NewPIWizardSettings {
+public final class NewPIWizardSettings {
 	static NewPIWizardSettings instance = null;
 	
 	static final int COMBO_MAX_ITEM_VALUES = 5;
@@ -74,7 +74,8 @@ public class NewPIWizardSettings {
 	static final String OUTPUT_NPI_KEY = "piFileName";								//$NON-NLS-1$
 	static final String KEY_PROFILE_KEY = "keyProfile";								//$NON-NLS-1$
 	static final String SAMPLEFILENAMES_KEY = "sampleFileName";						//$NON-NLS-1$
-
+	private static final String DEFAULT_TRACE_PLUGINS = "defaultTracePlugins";      //$NON-NLS-1$
+	
 	boolean haveAppOnly = false;
 	boolean haveRomOnly = false;
 	boolean haveAppRom = false;
@@ -93,6 +94,7 @@ public class NewPIWizardSettings {
 	boolean custNameBased;
 	String custSeparator;	
 	IContainer outputContainer;
+	boolean profilerActivator;
 //	end version 2
 //	start version 3
 	String piFileName;
@@ -104,6 +106,7 @@ public class NewPIWizardSettings {
 	long sampleFileNameModifiedNanoTime;	// timestamp java.lang.System.nanoTime()
 	long piFileNameModifiedNanoTime;		// timestamp java.lang.System.nanoTime()
 //	end internal states not saved
+	public int[] defaultPlugins;
 	
 	public void clear() {
 		haveAppOnly = false;
@@ -128,6 +131,8 @@ public class NewPIWizardSettings {
 		keyMapProfile = null;
 		sampleFileNameModifiedNanoTime = 0;
 		piFileNameModifiedNanoTime = 0;
+		profilerActivator = false;
+		defaultPlugins = null; 
 	}
 	
 	private NewPIWizardSettings() {
@@ -201,6 +206,12 @@ public class NewPIWizardSettings {
 			dialogSettings.put(OUTPUT_PROJECT_KEY, outProject);
 			dialogSettings.put(OUTPUT_NPI_KEY, piFileName);
 			dialogSettings.put(KEY_PROFILE_KEY, keyMapProfile != null ? keyMapProfile.toString() : "");	//$NON-NLS-1$
+			
+			String[] plugins = convertIntegerArrayToStringArray(defaultPlugins);
+			if(plugins != null){
+				dialogSettings.put(DEFAULT_TRACE_PLUGINS, plugins);
+			}
+			
 //			 newer members go here
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -327,9 +338,38 @@ public class NewPIWizardSettings {
 						keyMapProfile = profile;
 					}
 				}
+				
+				String[] plugins = dialogSettings.getArray(DEFAULT_TRACE_PLUGINS);
+				if(plugins != null){
+					defaultPlugins = convertStringArrayToIntegerArray(plugins);
+					
+				}
+				
 			} // if (dialogSettings.getInt(IMPORTER_SETTING_VERSION) == CURRENT_VERSION)
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}	
+	
+	private int[] convertStringArrayToIntegerArray(String[] strings){
+		if(strings == null){
+			return null;
+		}
+		int[] integers = new int[strings.length];
+		for(int i=0;i<strings.length;i++){
+			integers[i] = Integer.valueOf(strings[i]);
+		}
+		return integers;
+	}
+	
+	private String[] convertIntegerArrayToStringArray(int[] integers){
+		if(integers == null){
+			return null;
+		}
+		String[] strings = new String[integers.length];
+		for(int i=0;i<integers.length;i++){
+			strings[i] = String.valueOf(integers[i]);
+		}
+		return strings;
+	}
 }

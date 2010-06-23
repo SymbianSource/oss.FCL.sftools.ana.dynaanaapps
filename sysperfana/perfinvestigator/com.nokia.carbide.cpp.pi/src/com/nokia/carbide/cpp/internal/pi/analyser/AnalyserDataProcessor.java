@@ -31,15 +31,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.IJobChangeListener;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
@@ -63,7 +57,6 @@ import com.nokia.carbide.cpp.internal.pi.test.AnalysisInfoHandler;
 import com.nokia.carbide.cpp.internal.pi.test.IProvideTraceAdditionalInfo;
 import com.nokia.carbide.cpp.internal.pi.visual.GraphDrawRequest;
 import com.nokia.carbide.cpp.internal.pi.visual.PICompositePanel;
-import com.nokia.carbide.cpp.pi.PiPlugin;
 import com.nokia.carbide.cpp.pi.editors.PIPageEditor;
 import com.nokia.carbide.cpp.pi.importer.SampleImporter;
 import com.nokia.carbide.cpp.pi.util.GeneralMessages;
@@ -78,13 +71,13 @@ import com.nokia.carbide.cpp.pi.visual.IGenericTraceGraph;
 public class AnalyserDataProcessor {
 	protected static final int MAX_CPU = 4;
 	// whether the profile file was read correctly
-	public static int STATE_OK				= 0;
-	public static int STATE_IMPORTING		= 1;
-	public static int STATE_OPENING			= 2;
-	public static int STATE_TIMESTAMP		= 3;
-	public static int STATE_CANCELED		= 4;
-	public static int STATE_INVALID			= 5;
-	public static int TOTAL_PROGRESS_COUNT	= 10000;
+	public final static int STATE_OK				= 0;
+	public final static int STATE_IMPORTING		= 1;
+	public final static int STATE_OPENING			= 2;
+	public final static int STATE_TIMESTAMP		= 3;
+	public final static int STATE_CANCELED		= 4;
+	public final static int STATE_INVALID			= 5;
+	public final static int TOTAL_PROGRESS_COUNT	= 10000;
 
 	static AnalyserDataProcessor instance = null;
 
@@ -385,68 +378,25 @@ public class AnalyserDataProcessor {
 			
 		};
 		
-		
-		
 		try {
 			progressService.busyCursorWhile(runnableImportAndSave);
-		
-			final WorkspaceJob saveNpi = new WorkspaceJob (Messages.getString("AnalyserDataProcessor.savingImportedFile")) { //$NON-NLS-1$
+			final IRunnableWithProgress saveNpi = new IRunnableWithProgress() {
+				public void run(IProgressMonitor monitor)
+						throws InvocationTargetException, InterruptedException {
+					ProfileReader.getInstance().writeAnalysisFile(
+							analysisFile.getLocation().toString(), monitor,
+							null, uid);
 
-				public IStatus runInWorkspace(IProgressMonitor monitor)
-						throws CoreException {
-					try {
-						ProfileReader.getInstance().writeAnalysisFile(analysisFile.getLocation().toString(), monitor, null, uid);
-					} catch (InvocationTargetException e) {
-						return new Status(IStatus.ERROR, PiPlugin.PLUGIN_ID, Messages.getString("AnalyserDataProcessor.invocationTargetException"), e); //$NON-NLS-1$ //$NON-NLS-2$
-					} catch (InterruptedException e) {
-						return new Status(IStatus.CANCEL, PiPlugin.PLUGIN_ID, Messages.getString("AnalyserDataProcessor.interruptedException"), e); //$NON-NLS-1$ //$NON-NLS-2$
-					}
-					return new Status(IStatus.OK, PiPlugin.PLUGIN_ID, Messages.getString("AnalyserDataProcessor.ok"), null); //$NON-NLS-1$ //$NON-NLS-2$
 				}
-				
+
 			};
-		
+			progressService.busyCursorWhile(saveNpi);
 			progressService.busyCursorWhile(runnableOpen);
-
-			saveNpi.setPriority(Job.DECORATE);
-			saveNpi.addJobChangeListener(new IJobChangeListener () {
-				
-				public void aboutToRun(IJobChangeEvent event) {
-				}
-
-				public void awake(IJobChangeEvent event) {
-				}
-
-				public void done(IJobChangeEvent event) {
-					if (saveNpi.getResult().getSeverity()  != IStatus.OK) {
-						handleRunnableException (saveNpi.getResult().getException(), uid, analysisFile);
-					}
-				}
-
-				public void running(IJobChangeEvent event) {
-				}
-
-				public void scheduled(IJobChangeEvent event) {
-				}
-
-				public void sleeping(IJobChangeEvent event) {
-				}
-				
-			});
-			
-			saveNpi.schedule();
-			
-			if (pollTillNpiSaved) {
-				while (saveNpi.getState() != Job.NONE) {
-					// until it's done
-				}
-			}
-			
 		} catch (InvocationTargetException e) {
 			handleRunnableException(e, uid, analysisFile);
 		} catch (InterruptedException e) {
 			handleRunnableException(e, uid, analysisFile);
-		}							
+		}						
 	}
 	
 	public void importSave(final IFile analysisFile, final List<ITrace> pluginsToUse, String suffixTaskName, IProgressMonitor monitor) {

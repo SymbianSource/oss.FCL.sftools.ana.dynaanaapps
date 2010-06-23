@@ -17,7 +17,7 @@
 package com.nokia.carbide.cpp.pi.internal.perfcounters;
 
 import org.eclipse.osgi.util.NLS;
-public class Messages extends NLS {
+public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.nokia.carbide.cpp.pi.internal.perfcounters.messages"; //$NON-NLS-1$
 	public static String PecLegend_6;
 	public static String PecLegend_7;
@@ -43,6 +43,7 @@ public class Messages extends NLS {
 	public static String PecTraceParser_20;
 	public static String PecTraceParser_21;
 	public static String PecTraceParser_22;
+	public static String PecTraceParser_23;
 	public static String PecTraceParser_3;
 	public static String PecTraceParser_4;
 	public static String PecTraceParser_5;

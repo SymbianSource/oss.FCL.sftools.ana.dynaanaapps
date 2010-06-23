@@ -140,7 +140,7 @@ public class PIConfigFactoryImpl extends EFactoryImpl implements PIConfigFactory
 	 */
 	@Deprecated
 	public static PIConfigPackage getPackage() {
-		return PIConfigPackage.eINSTANCE;
+		return PIConfigPackage.E_INSTANCE;
 	}
 
 } //PIConfigFactoryImpl

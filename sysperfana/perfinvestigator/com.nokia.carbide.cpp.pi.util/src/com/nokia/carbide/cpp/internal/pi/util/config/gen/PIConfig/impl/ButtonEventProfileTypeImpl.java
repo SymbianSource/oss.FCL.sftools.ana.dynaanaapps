@@ -137,11 +137,11 @@ public class ButtonEventProfileTypeImpl extends EObjectImpl implements ButtonEve
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case PIConfigPackage.BUTTON_EVENT_PROFILE_TYPE__MAPPING:
-				return ((InternalEList<?>)getMapping()).basicRemove(otherEnd, msgs);
+		if(featureID == PIConfigPackage.BUTTON_EVENT_PROFILE_TYPE__MAPPING){
+			return ((InternalEList<?>)getMapping()).basicRemove(otherEnd, msgs);
+		}else{					
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -151,13 +151,13 @@ public class ButtonEventProfileTypeImpl extends EObjectImpl implements ButtonEve
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-			case PIConfigPackage.BUTTON_EVENT_PROFILE_TYPE__MAPPING:
-				return getMapping();
-			case PIConfigPackage.BUTTON_EVENT_PROFILE_TYPE__PROFILE_ID:
-				return getProfileId();
+		if(featureID == PIConfigPackage.BUTTON_EVENT_PROFILE_TYPE__MAPPING){
+			return getMapping();
+		}else if(featureID == PIConfigPackage.BUTTON_EVENT_PROFILE_TYPE__PROFILE_ID){
+			return getProfileId();
+		}else{					
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -168,16 +168,14 @@ public class ButtonEventProfileTypeImpl extends EObjectImpl implements ButtonEve
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
-			case PIConfigPackage.BUTTON_EVENT_PROFILE_TYPE__MAPPING:
-				getMapping().clear();
-				getMapping().addAll((Collection<? extends MappingType>)newValue);
-				return;
-			case PIConfigPackage.BUTTON_EVENT_PROFILE_TYPE__PROFILE_ID:
-				setProfileId((String)newValue);
-				return;
+		if(featureID == PIConfigPackage.BUTTON_EVENT_PROFILE_TYPE__MAPPING){
+			getMapping().clear();
+			getMapping().addAll((Collection<? extends MappingType>)newValue);
+		}else if(featureID == PIConfigPackage.BUTTON_EVENT_PROFILE_TYPE__PROFILE_ID){
+			setProfileId((String)newValue);
+		}else{					
+			super.eSet(featureID, newValue);
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -187,15 +185,13 @@ public class ButtonEventProfileTypeImpl extends EObjectImpl implements ButtonEve
 	 */
 	@Override
 	public void eUnset(int featureID) {
-		switch (featureID) {
-			case PIConfigPackage.BUTTON_EVENT_PROFILE_TYPE__MAPPING:
-				getMapping().clear();
-				return;
-			case PIConfigPackage.BUTTON_EVENT_PROFILE_TYPE__PROFILE_ID:
-				setProfileId(PROFILE_ID_EDEFAULT);
-				return;
+		if(featureID == PIConfigPackage.BUTTON_EVENT_PROFILE_TYPE__MAPPING){
+			getMapping().clear();
+		}if(featureID == PIConfigPackage.BUTTON_EVENT_PROFILE_TYPE__PROFILE_ID){
+			setProfileId(PROFILE_ID_EDEFAULT);
+		}else{					
+			super.eUnset(featureID);
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -205,13 +201,13 @@ public class ButtonEventProfileTypeImpl extends EObjectImpl implements ButtonEve
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case PIConfigPackage.BUTTON_EVENT_PROFILE_TYPE__MAPPING:
-				return mapping != null && !mapping.isEmpty();
-			case PIConfigPackage.BUTTON_EVENT_PROFILE_TYPE__PROFILE_ID:
-				return PROFILE_ID_EDEFAULT == null ? profileId != null : !PROFILE_ID_EDEFAULT.equals(profileId);
+		if(featureID == PIConfigPackage.BUTTON_EVENT_PROFILE_TYPE__MAPPING){
+			return mapping != null && !mapping.isEmpty();
+		}else if(featureID == PIConfigPackage.BUTTON_EVENT_PROFILE_TYPE__PROFILE_ID){
+			return PROFILE_ID_EDEFAULT == null ? profileId != null : !PROFILE_ID_EDEFAULT.equals(profileId);
+		}else{					
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

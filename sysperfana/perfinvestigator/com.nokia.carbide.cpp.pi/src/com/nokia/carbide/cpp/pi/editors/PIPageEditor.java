@@ -94,14 +94,14 @@ public class PIPageEditor extends MultiPageEditorPart implements IResourceChange
 	public static final String PI_ID = "com.nokia.carbide.cpp.pi"; //$NON-NLS-1$
 
 	// PI menu groups for adding plug-in specific actions/menu items
-	public static final String includeFilesGroup = "includeFile";	//$NON-NLS-1$
-	public static final String reportsGroup      = "reports";		//$NON-NLS-1$
-	public static final String viewOptionsGroup  = "viewOptions";	//$NON-NLS-1$
-	public static final String exportsGroup      = "exports";		//$NON-NLS-1$
-	public static final String additionsGroup    = "additions";		//$NON-NLS-1$
+	public static final String INCLUDE_FILES_GROUP = "includeFile";	//$NON-NLS-1$
+	public static final String REPORTS_GROUP      = "reports";		//$NON-NLS-1$
+	public static final String VIEW_OPTIONS_GROUP  = "viewOptions";	//$NON-NLS-1$
+	public static final String EXPORTS_GROUP      = "exports";		//$NON-NLS-1$
+	public static final String ADDITIONS_GROUP    = "additions";		//$NON-NLS-1$
 	
 	// PI menu identifier
-	public static final String menuID = "com.nokia.carbide.cpp.pi.menuID"; //$NON-NLS-1$
+	public static final String MENU_ID = "com.nokia.carbide.cpp.pi.menuID"; //$NON-NLS-1$
 	
 	// indices of the three standard pages that have graphs
 	public static final int THREADS_PAGE   = 0;
@@ -457,11 +457,11 @@ public class PIPageEditor extends MultiPageEditorPart implements IResourceChange
 				 *		CPU Load Graph			   ->
 				 *		-----------------------------
 				 */
-				currentManager.add(new Separator(PIPageEditor.includeFilesGroup));
-				currentManager.add(new Separator(PIPageEditor.reportsGroup));
-				currentManager.add(new Separator(PIPageEditor.viewOptionsGroup));
-				currentManager.add(new Separator(PIPageEditor.exportsGroup));
-				currentManager.add(new Separator(PIPageEditor.additionsGroup));
+				currentManager.add(new Separator(PIPageEditor.INCLUDE_FILES_GROUP));
+				currentManager.add(new Separator(PIPageEditor.REPORTS_GROUP));
+				currentManager.add(new Separator(PIPageEditor.VIEW_OPTIONS_GROUP));
+				currentManager.add(new Separator(PIPageEditor.EXPORTS_GROUP));
+				currentManager.add(new Separator(PIPageEditor.ADDITIONS_GROUP));
 
 			}			
 		});
@@ -471,15 +471,15 @@ public class PIPageEditor extends MultiPageEditorPart implements IResourceChange
 		if (action == null)
 			return;
 		
-		currentManager.appendToGroup(PIPageEditor.exportsGroup, action);
+		currentManager.appendToGroup(PIPageEditor.EXPORTS_GROUP, action);
 	}
 
 	public static void addIncludeAction(IAction action) {
 		if (action == null)
 			return;
 		
-		if (currentManager.find(menuID + Messages.getString("PIPageEditor.includeActionEnding")) == null) { //$NON-NLS-1$
-			includeManager = new MenuManager(Messages.getString("PIPageEditor.includeOtherFile"), menuID + Messages.getString("PIPageEditor.includeActionEnding")); //$NON-NLS-1$ //$NON-NLS-2$
+		if (currentManager.find(MENU_ID + Messages.getString("PIPageEditor.includeActionEnding")) == null) { //$NON-NLS-1$
+			includeManager = new MenuManager(Messages.getString("PIPageEditor.includeOtherFile"), MENU_ID + Messages.getString("PIPageEditor.includeActionEnding")); //$NON-NLS-1$ //$NON-NLS-2$
 			currentManager.add(includeManager);
 		}
 			
@@ -490,14 +490,14 @@ public class PIPageEditor extends MultiPageEditorPart implements IResourceChange
 		if (action == null)
 			return;
 		
-		currentManager.appendToGroup(PIPageEditor.reportsGroup, action);
+		currentManager.appendToGroup(PIPageEditor.REPORTS_GROUP, action);
 	}
 
 	public static void addReportManager(IMenuManager menuManager) {
 		if (menuManager == null)
 			return;
 		
-		currentManager.appendToGroup(PIPageEditor.reportsGroup, menuManager);
+		currentManager.appendToGroup(PIPageEditor.REPORTS_GROUP, menuManager);
 	}
 
 	public static void addViewOptionManager(IMenuManager menuManager) {
@@ -507,7 +507,7 @@ public class PIPageEditor extends MultiPageEditorPart implements IResourceChange
 		if (menuManager == currentManager)
 			return;
 		
-		currentManager.appendToGroup(PIPageEditor.viewOptionsGroup, menuManager);
+		currentManager.appendToGroup(PIPageEditor.VIEW_OPTIONS_GROUP, menuManager);
 	}
 
 	/**
@@ -916,16 +916,13 @@ public class PIPageEditor extends MultiPageEditorPart implements IResourceChange
 			delta = delta.findMember(editorPath);
 			if (delta != null) {
 				int deltaKind = delta.getKind();
-				switch(deltaKind) {
-				case IResourceDelta.REMOVED:
-				case IResourceDelta.REMOVED_PHANTOM:
+				if(deltaKind == IResourceDelta.REMOVED || deltaKind == IResourceDelta.REMOVED_PHANTOM){
 					Display.getDefault().syncExec(new Runnable() {
 						public void run() {
 								PIPageEditor.this.getSite().getPage().closeEditor(PIPageEditor.this, false);
 						}
-					});
-					break;
-				}
+					});			
+				}			
 			}
 		}
 	}

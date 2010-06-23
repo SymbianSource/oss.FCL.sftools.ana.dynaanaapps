@@ -46,6 +46,7 @@ public class StreamFileParser
 		streamData = new byte[(int)streamFile.length()];
 		FileInputStream fis = new FileInputStream(streamFile);
 		fis.read(streamData);
+		fis.close();
 		
 		readLoop();
 	}
@@ -160,7 +161,21 @@ public class StreamFileParser
 			dataBlocks.put(typeInt, baos);
 		}
 
-		baos.write(streamData,readOffset,currentLength);
+		
+		try {
+			baos.write(streamData,readOffset,currentLength);
+			baos.flush();
+		} catch (IOException e) {		
+			e.printStackTrace();
+		}finally{
+			if(baos != null){
+				try {
+					baos.close();
+				} catch (IOException e) {					
+					e.printStackTrace();
+				}
+			}
+		}		
 		readOffset += currentLength;
 	}
 	

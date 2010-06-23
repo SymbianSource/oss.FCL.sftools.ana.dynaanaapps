@@ -11,6 +11,7 @@
 		<description>Use the Threads view to display the Threads Load.</description>
 		<topic label="Thread Load"    					href="html/reference/analyzer/thread_load.htm" />
 		<topic label="Analyzer view" 					href="html/reference/analyzer/main_view.htm" />
+  <topic href="html/reference/analyzer/view_CPU.htm" label="CPU Views"/>
 		<topic label="Using the Analyzer"  				href="html/reference/analyzer/an_use_case_features.htm" />
 		<topic label="Examining a Profiling Project"  	href="html/Getting_Started/example_project.htm" />
 		<topic label="Setting Time Interval"  			href="html/tasks/analyser/time_interval.htm" />
@@ -23,6 +24,7 @@
 		<description>Use the Binaries view to display the Binary Load.</description>
 		<topic label="Binary Load"    					href="html/reference/analyzer/binary_load.htm" />
 		<topic label="Analyzer view" 					href="html/reference/analyzer/main_view.htm" />
+  <topic href="html/reference/analyzer/view_CPU.htm" label="CPU Views"/>
 		<topic label="Using the Analyzer"  				href="html/reference/analyzer/an_use_case_features.htm" />
 		<topic label="Examining a Profiling Project"  	href="html/Getting_Started/example_project.htm" />
 		<topic label="Setting Time Interval"  			href="html/tasks/analyser/time_interval.htm" />
@@ -40,6 +42,7 @@
 		<topic label="Setting Time Interval"  			href="html/tasks/analyser/time_interval.htm" />
 		<topic label="Setting Thresholds" 				href="html/tasks/analyser/set_thresholds.htm" />
 		<topic label="Changing Graph Colors" 			href="html/tasks/analyser/chng_graphcolor.htm" />
+  <topic href="html/reference/analyzer/view_CPU.htm" label="CPU Views"/>
 	</context>
 
 </contexts>

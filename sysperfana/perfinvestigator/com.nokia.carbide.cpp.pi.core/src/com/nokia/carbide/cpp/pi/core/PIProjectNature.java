@@ -31,7 +31,7 @@ public class PIProjectNature implements IProjectNature {
 
 	public static final String PI_NATURE_ID = PICorePlugin.PLUGIN_ID + ".pinature";  //$NON-NLS-1$
 	
-	private IProject fProject;
+	private transient IProject fProject;
 	
 	public void configure() throws CoreException {
 	}
@@ -42,7 +42,7 @@ public class PIProjectNature implements IProjectNature {
 	public PIProjectNature() {
 	}
 	
-	public PIProjectNature(IProject project) {
+	public PIProjectNature(final IProject project) {
 		setProject(project);
 	}
 
@@ -50,21 +50,21 @@ public class PIProjectNature implements IProjectNature {
 		return fProject;
 	}
 
-	public void setProject(IProject project) {
+	public void setProject(final IProject project) {
 		fProject = project;
 	}
 
-	public static void addPINature(IProject project, IProgressMonitor mon) throws CoreException {
+	public static void addPINature(final IProject project, final IProgressMonitor mon) throws CoreException {
 		addNature(project, PI_NATURE_ID, mon);
 	}
 
-	public static void removePINature(IProject project, IProgressMonitor mon) throws CoreException {
+	public static void removePINature(final IProject project, final IProgressMonitor mon) throws CoreException {
 		removeNature(project, PI_NATURE_ID, mon);
 	}
 
 	private static void addNature(IProject project, String natureId, IProgressMonitor monitor) throws CoreException {
-		IProjectDescription description = project.getDescription();
-		String[] prevNatures = description.getNatureIds();
+		final IProjectDescription description = project.getDescription();
+		final String[] prevNatures = description.getNatureIds();
 		for (String prevNature : prevNatures) {
 			if (natureId.equals(prevNature)) {
 				return;
@@ -78,9 +78,9 @@ public class PIProjectNature implements IProjectNature {
 	}
 
 	private static void removeNature(IProject project, String natureId, IProgressMonitor monitor) throws CoreException {
-		IProjectDescription description = project.getDescription();
-		String[] prevNatures = description.getNatureIds();
-		List<String> newNatures = new ArrayList<String>(Arrays.asList(prevNatures));
+		final IProjectDescription description = project.getDescription();
+		final String[] prevNatures = description.getNatureIds();
+		final List<String> newNatures = new ArrayList<String>(Arrays.asList(prevNatures));
 		newNatures.remove(natureId);
 		description.setNatureIds((String[]) newNatures.toArray(new String[newNatures.size()]));
 		project.setDescription(description, monitor);

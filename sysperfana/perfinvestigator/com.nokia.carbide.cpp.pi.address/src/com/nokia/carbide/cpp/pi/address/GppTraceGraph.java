@@ -54,6 +54,7 @@ import com.nokia.carbide.cpp.internal.pi.address.GppModelAdapter;
 import com.nokia.carbide.cpp.internal.pi.address.GppTraceGraphSMP;
 import com.nokia.carbide.cpp.internal.pi.analyser.NpiInstanceRepository;
 import com.nokia.carbide.cpp.internal.pi.analyser.ProfileVisualiser;
+import com.nokia.carbide.cpp.internal.pi.model.ICPUScale;
 import com.nokia.carbide.cpp.internal.pi.model.ProfiledBinary;
 import com.nokia.carbide.cpp.internal.pi.model.ProfiledFunction;
 import com.nokia.carbide.cpp.internal.pi.model.ProfiledGeneric;
@@ -66,6 +67,7 @@ import com.nokia.carbide.cpp.internal.pi.visual.GenericTable;
 import com.nokia.carbide.cpp.internal.pi.visual.GenericTraceGraph;
 import com.nokia.carbide.cpp.internal.pi.visual.GraphComposite;
 import com.nokia.carbide.cpp.internal.pi.visual.PIEvent;
+import com.nokia.carbide.cpp.pi.PiPlugin;
 import com.nokia.carbide.cpp.pi.editors.PIPageEditor;
 import com.nokia.carbide.cpp.pi.util.ColorPalette;
 import com.nokia.carbide.cpp.pi.visual.IGenericTraceGraph;
@@ -2360,9 +2362,39 @@ public class GppTraceGraph extends GenericTraceGraph implements IGppTraceGraph,
 				public void widgetSelected(SelectionEvent e) {
 					AddressPlugin.getDefault().receiveSelectionEvent(isSeparate ? AddressPlugin.ACTION_COMBINED_CPU_VIEW : AddressPlugin.ACTION_SEPARATE_CPU_VIEW);
 				}
-			});			
+			});	
+			
 		}
 		
+		ProfiledThread profiledThread = (ProfiledThread)getProfiledThreads().firstElement();
+		if(profiledThread != null){
+			Object object =  profiledThread.getAdapter(ICPUScale.class);
+			if(object != null){
+				ICPUScale cpuScale = (ICPUScale)object;
+				if(cpuScale.isCpuScaleSupported()){
+					boolean scaleCPU = profiledThread.isScaledCpu();
+					new MenuItem(menu, SWT.SEPARATOR);
+					MenuItem scaleCPUMenuItem = new MenuItem(menu, SWT.CHECK);
+					scaleCPUMenuItem.setText(Messages.getString("GppTraceGraph.scaleCPUClockSpeed")); //$NON-NLS-1$
+					final boolean scaleCPUFinal = scaleCPU;
+				
+					scaleCPUMenuItem.addSelectionListener(new SelectionAdapter() {
+						public void widgetSelected(SelectionEvent e) {
+							NpiInstanceRepository
+									.getInstance()
+									.activeUidSetPersistState(
+											PiPlugin.ACTION_SCALE_CPU, !scaleCPUFinal); //$NON-NLS-1$
+
+							for (int i = 0; i < 3; i++) {
+								GppTraceGraph graph = (GppTraceGraph) ((GppTrace)getTrace()).getTraceGraph(i);				
+								graph.action(IGppTraceGraph.ACTION_CHANGE_THRESHOLD_THREAD);
+								graph.updateSelectionArea(PIPageEditor.currentPageEditor().getStartTime(), PIPageEditor.currentPageEditor().getEndTime());
+							}
+						}
+					});
+					scaleCPUMenuItem.setSelection(scaleCPUFinal);	
+				}
+			}
+		}	
 	}
-	
 }

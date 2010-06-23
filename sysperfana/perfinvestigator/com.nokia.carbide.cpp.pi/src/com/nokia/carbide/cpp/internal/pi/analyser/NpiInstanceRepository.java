@@ -303,7 +303,7 @@ public class NpiInstanceRepository {
 	
 	private void assertLog(boolean cond, String message) {
 		if (!cond) {
-			GeneralMessages.PiLog(message, IStatus.ERROR);
+			GeneralMessages.piLog(message, IStatus.ERROR);
 		}
 	}
 }

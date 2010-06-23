@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -34,6 +35,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jface.dialogs.DialogSettings;
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -42,7 +44,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.INewWizard;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 
@@ -51,15 +57,26 @@ import com.nokia.carbide.cdt.builder.project.ICarbideBuildConfiguration;
 import com.nokia.carbide.cdt.builder.project.ISISBuilderInfo;
 import com.nokia.carbide.cpp.internal.api.sdk.SymbianBuildContext;
 import com.nokia.carbide.cpp.internal.pi.analyser.AnalyserDataProcessor;
+import com.nokia.carbide.cpp.internal.pi.analyser.NpiInstanceRepository;
+import com.nokia.carbide.cpp.internal.pi.model.GenericSampledTrace;
+import com.nokia.carbide.cpp.internal.pi.model.GenericTrace;
+import com.nokia.carbide.cpp.internal.pi.model.ParsedTraceData;
+import com.nokia.carbide.cpp.internal.pi.model.TraceDataRepository;
+import com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace;
 import com.nokia.carbide.cpp.internal.pi.utils.PIUtilities;
+import com.nokia.carbide.cpp.internal.pi.wizards.model.SessionHandler;
+import com.nokia.carbide.cpp.internal.pi.wizards.model.TraceFile;
 import com.nokia.carbide.cpp.internal.pi.wizards.ui.util.IPkgEntry;
 import com.nokia.carbide.cpp.internal.pi.wizards.ui.util.RofsObySymbolPair;
+import com.nokia.carbide.cpp.internal.pi.wizards.ui.views.PIView;
+import com.nokia.carbide.cpp.pi.PiPlugin;
 import com.nokia.carbide.cpp.pi.button.BupEventMapManager;
 import com.nokia.carbide.cpp.pi.button.ButtonPlugin;
 import com.nokia.carbide.cpp.pi.importer.SampleImporter;
 import com.nokia.carbide.cpp.pi.util.GeneralMessages;
 import com.nokia.carbide.cpp.pi.wizards.WizardsPlugin;
 import com.nokia.carbide.cpp.sdk.core.ISymbianBuildContext;
+import com.nokia.carbide.cpp.sdk.core.ISymbianSDK;
 import com.nokia.carbide.cpp.ui.CarbideUIPlugin;
 import com.nokia.carbide.cpp.ui.ICarbideSharedImages;
 import com.nokia.cpp.internal.api.utils.core.Check;
@@ -224,7 +241,6 @@ public class NewPIWizard extends Wizard implements IImportWizard, INewWizard{
 		if (container.startsWith("/")) //$NON-NLS-1$
 			container = container.substring(1, container.length());
 		sampleImporter.setProjectName(container);
-		sampleImporter.setPiFileName(wizardSettings.piFileName);
 		if (wizardSettings.haveRomOnly || wizardSettings.haveAppRom) {
 			if (wizardSettings.romSdk != null && wizardSettings.romSdk.getEPOCROOT() != null) {
 				sampleImporter.setRomEpocroot(wizardSettings.romSdk.getEPOCROOT());
@@ -314,13 +330,16 @@ public class NewPIWizard extends Wizard implements IImportWizard, INewWizard{
 			}			
 		}
 		
+		sampleImporter.setProfilerActivator(wizardSettings.profilerActivator);
 
 		if(profilerDataPlugins.size() <= 1){
 			for(ProfilerDataPlugins pdp : profilerDataPlugins){
 				sampleImporter.setDatFileName(pdp.getProfilerDataPath().toString());	
 				// due to PI shortcomings (i.e. plugins that create pages have to come first)
 				// the plugins have to be sorted by trace id
+				sampleImporter.setPiFileName(""); //$NON-NLS-1$
 				sampleImporter.importSamples(false, PIUtilities.sortPlugins(pdp.getSelectedPlugins()), true, null, null);						
+				logImportedFile(pdp);
 				break;
 			}
 		}	
@@ -339,9 +358,11 @@ public class NewPIWizard extends Wizard implements IImportWizard, INewWizard{
 						}						
 						suffixTaskName = MessageFormat.format(Messages.getString("NewPIWizard.suffixTaskName"), i[0]++, count);						 //$NON-NLS-1$
 						sampleImporter.setDatFileName(pdp.getProfilerDataPath().toString());	
+						sampleImporter.setPiFileName(""); //$NON-NLS-1$
 						sampleImporter.importSamples(false, PIUtilities
 								.sortPlugins(pdp.getSelectedPlugins()), false, suffixTaskName,
 								new SubProgressMonitor(progressMonitor, AnalyserDataProcessor.TOTAL_PROGRESS_COUNT));
+						logImportedFile(pdp);
 					}		
 				}
 
@@ -352,7 +373,51 @@ public class NewPIWizard extends Wizard implements IImportWizard, INewWizard{
 				GeneralMessages.showErrorMessage(e.getMessage());
 			}
 		}
-		cleanTempPkgFile();
+		cleanTempPkgFile();	
+		showPIViewer();
+	}
+	
+	/**
+	 * Log given imported file to show it on the PI view
+	 * 
+	 * @param pdp instance of the ProfilerDataPlugins
+	 */
+	private void logImportedFile(ProfilerDataPlugins pdp){
+		SampleImporter sampleImporter = SampleImporter.getInstance();
+		ISymbianSDK sdk = NewPIWizardSettings.getInstance().romSdk;
+		String sdkName = "";
+		if(sdk != null && (NewPIWizardSettings.getInstance().haveRomOnly || NewPIWizardSettings.getInstance().haveAppRom)){
+			sdkName = NewPIWizardSettings.getInstance().romSdk.getUniqueId();
+		}
+		long sampleTime = -1;
+
+		Iterator<ParsedTraceData> traces = TraceDataRepository.getInstance().getTraceCollectionIter(NpiInstanceRepository.getInstance().activeUid());
+		while(traces.hasNext()){
+			ParsedTraceData ptd = traces.next();
+			GenericTrace gt = ptd.traceData;
+			if(gt instanceof GenericSampledTrace){
+				GenericSampledTrace gst = (GenericSampledTrace)gt;
+				long lastSampleTime = gst.getLastSampleTime();
+				if(sampleTime < lastSampleTime){
+					sampleTime = lastSampleTime;
+				}
+			}
+		}
+		List<ITrace> plugins = pdp.getSelectedPlugins();
+		int[] pluginIds = new int[plugins.size()];
+		int i=0;
+		for(ITrace plugin : plugins){
+			pluginIds[i++] = plugin.getTraceId();
+		}
+		IPath filePath = sampleImporter.getPiFile().getFullPath();
+		SessionHandler.getInstance().addTraceFile(new TraceFile(filePath, sampleImporter.getProjectName(), sdkName, filePath.toFile().length(), sampleTime, pluginIds));
+		Display.getDefault().asyncExec(new Runnable() {
+			
+			public void run() {
+				showPIViewer();
+				
+			}
+		});
 	}
 	
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
@@ -427,4 +492,65 @@ public class NewPIWizard extends Wizard implements IImportWizard, INewWizard{
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.wizard.Wizard#performCancel()
+	 */
+	@Override
+	public boolean performCancel() {
+		if(PiPlugin.isTraceProviderAvailable() && PiPlugin.getTraceProvider().isListening()){
+			showInformationDialog();
+			return false;
+		}
+		pageInput.handleTemporaryProfilerDataFiles(false);
+		return super.performCancel();
+	}
+	
+	/**
+	 * Show information dialog about to stop tracing in order to go back or
+	 * close the wizard page
+	 */
+	public void showInformationDialog(){
+		MessageDialog.openInformation(getShell(), Messages.getString("NewPIWizard.informationDialogTitle"), Messages.getString("NewPIWizard.informationDialogMessage")); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+	
+	/**
+	 * Show PI view
+	 */
+	private void showPIViewer(){
+	   	try {
+    		IWorkbenchWindow workbenchWindow = PiPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow();
+    		if (workbenchWindow == null)
+    			return;
+    		IWorkbenchPage page = workbenchWindow.getActivePage();
+    		// Checking if view is already open
+    		IViewReference[] viewRefs = page.getViewReferences();
+    		for (int i = 0; i < viewRefs.length; i++) {
+				IViewReference reference = viewRefs[i];
+				String id = reference.getId();
+				if(PIView.ID.equalsIgnoreCase(id)){
+					// Found, restoring the view
+					IViewPart viewPart = reference.getView(true);
+					page.activate(viewPart);			
+					((PIView)viewPart).updateView();
+					return;
+				}
+			}
+    		
+    		// View was not found, opening it up as a new view.
+    		IViewPart viewPart = page.showView(PIView.ID);
+    		((PIView)viewPart).updateView();
+    	} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.wizard.Wizard#dispose()
+	 */
+	@Override
+	public void dispose() {
+		showPIViewer();
+		super.dispose();
+	}
+	
 }

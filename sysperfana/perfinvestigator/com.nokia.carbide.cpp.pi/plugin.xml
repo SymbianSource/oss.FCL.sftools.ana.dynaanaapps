@@ -2,7 +2,7 @@
 <?eclipse version="3.0"?>
 <plugin>
    <extension-point id="piPluginData" name="piPluginData" schema="schema/piPluginData.exsd"/>
-
+   <extension-point id="traceprovider" name="Trace Data Provider" schema="schema/traceprovider.exsd"/>
    <extension
          point="org.eclipse.ui.propertyPages">
       <page

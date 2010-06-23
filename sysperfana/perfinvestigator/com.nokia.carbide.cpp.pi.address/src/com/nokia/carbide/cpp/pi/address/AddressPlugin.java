@@ -94,6 +94,7 @@ public class AddressPlugin extends AbstractPiPlugin
 	public static final String ACTION_COMBINED_CPU_VIEW = "combined_cpu_view";//$NON-NLS-1$
 	public static final String ACTION_SEPARATE_CPU_VIEW = "separate_cpu_view";//$NON-NLS-1$
 	public static final int[] TRACE_IDS_SMP = new int[]{1, 21, 41, 62};
+	public static final String PLUGIN_ID = "com.nokia.carbide.cpp.pi.address";
 
 	
 //	private static HashMap<Integer,Long> uidToAddrThreadPeriod = new HashMap<Integer,Long>();
@@ -141,28 +142,28 @@ public class AddressPlugin extends AbstractPiPlugin
 	 */
 	public Class getReplacedClass(String className)
 	{
-		if (   className.indexOf("com.nokia.carbide.cpp.pi.address.GppTrace") != -1 //$NON-NLS-1$
+		if (   className.indexOf(PLUGIN_ID+".GppTrace") != -1 //$NON-NLS-1$
 			|| className.indexOf("fi.vtt.bappea.model.GppTrace") != -1 //$NON-NLS-1$
 			|| className.indexOf("com.nokia.carbide.pi.address.GppTrace") != -1 //$NON-NLS-1$
 			|| className.indexOf("fi.vtt.bappea.gppTracePlugin.GppTrace") != -1) //$NON-NLS-1$
 		{
 			return GppTrace.class;
 		}
-		else if (   className.indexOf("com.nokia.carbide.cpp.pi.address.GppSample") != -1 //$NON-NLS-1$
+		else if (   className.indexOf(PLUGIN_ID+".GppSample") != -1 //$NON-NLS-1$
 				 || className.indexOf("com.nokia.carbide.pi.address.GppSample") != -1 //$NON-NLS-1$
 				 || className.indexOf("fi.vtt.bappea.model.GppSample") != -1 //$NON-NLS-1$
 				 || className.indexOf("fi.vtt.bappea.gppTracePlugin.GppSample") != -1) //$NON-NLS-1$
 		{
 			return GppSample.class;
 		}
-		else if (   className.indexOf("com.nokia.carbide.cpp.pi.address.GppThread") != -1 //$NON-NLS-1$
+		else if (   className.indexOf(PLUGIN_ID+".GppThread") != -1 //$NON-NLS-1$
 				 || className.indexOf("com.nokia.carbide.pi.address.GppThread") != -1 //$NON-NLS-1$
 				 || className.indexOf("fi.vtt.bappea.model.GppThread") != -1 //$NON-NLS-1$
 				 || className.indexOf("fi.vtt.bappea.gppTracePlugin.GppThread") != -1) //$NON-NLS-1$
 		{
 			return GppThread.class;
 		}
-		else if (   className.indexOf("com.nokia.carbide.cpp.pi.address.GppProcess") != -1 //$NON-NLS-1$
+		else if (   className.indexOf(PLUGIN_ID+".GppProcess") != -1 //$NON-NLS-1$
 				 || className.indexOf("com.nokia.carbide.pi.address.GppProcess") != -1 //$NON-NLS-1$
 				 || className.indexOf("fi.vtt.bappea.model.GppProcess") != -1 //$NON-NLS-1$
 				 || className.indexOf("fi.vtt.bappea.gppTracePlugin.GppProcess") != -1) //$NON-NLS-1$
@@ -182,7 +183,7 @@ public class AddressPlugin extends AbstractPiPlugin
 
 		GppTrace trace = (GppTrace)genericTrace;
 		
-		NpiInstanceRepository.getInstance().activeUidAddTrace("com.nokia.carbide.cpp.pi.address", trace); //$NON-NLS-1$
+		NpiInstanceRepository.getInstance().activeUidAddTrace(PLUGIN_ID, trace); //$NON-NLS-1$
 		
 		// initialize the address/thread base sampling rate
 		int samplingInterval = 1;
@@ -191,7 +192,7 @@ public class AddressPlugin extends AbstractPiPlugin
 			samplingInterval = (int) (((GppSample) trace.samples.get(1)).sampleSynchTime - ((GppSample) trace.samples.get(0)).sampleSynchTime); 
 		}
 			
-		NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.samplingInterval", Integer.valueOf(samplingInterval)); //$NON-NLS-1$
+		NpiInstanceRepository.getInstance().activeUidSetPersistState(PLUGIN_ID+".samplingInterval", Integer.valueOf(samplingInterval)); //$NON-NLS-1$
 		
 		// make sure that the sorted samples array exists
 		if (trace.getSortedGppSamples() == null)
@@ -205,12 +206,12 @@ public class AddressPlugin extends AbstractPiPlugin
 
 	public GppTrace getTrace()
 	{
-		return (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.address"); //$NON-NLS-1$
+		return (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace(PLUGIN_ID); //$NON-NLS-1$
 	}
 
 	public IGppTraceGraph getTraceGraph(int graphIndex)
 	{
-		GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.address"); //$NON-NLS-1$
+		GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace(PLUGIN_ID); //$NON-NLS-1$
 		
 		if (trace != null) {
 			int uid = NpiInstanceRepository.getInstance().activeUid();
@@ -221,12 +222,12 @@ public class AddressPlugin extends AbstractPiPlugin
 
 	public GenericTrace getTrace(int graphIndex)
 	{	
-		return (GenericTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.address"); //$NON-NLS-1$
+		return (GenericTrace)NpiInstanceRepository.getInstance().activeUidGetTrace(PLUGIN_ID); //$NON-NLS-1$
 	}
 	
 	public Integer getLastSample(int graphIndex)
 	{
-		GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.address"); //$NON-NLS-1$
+		GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace(PLUGIN_ID); //$NON-NLS-1$
 
 		if (trace == null)
 			return null;
@@ -257,7 +258,7 @@ public class AddressPlugin extends AbstractPiPlugin
 			&& (currentPage != PIPageEditor.FUNCTIONS_PAGE))
 			  return;
 		
-		GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.address"); //$NON-NLS-1$
+		GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace(PLUGIN_ID); //$NON-NLS-1$
 		
 		if (eventString.equals("fillSelected")) //$NON-NLS-1$
 	    {
@@ -266,7 +267,7 @@ public class AddressPlugin extends AbstractPiPlugin
 		    	trace.getTraceGraph(i).piEventReceived(be);				
 			}
 	    	
-	    	NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.fillAll", Boolean.FALSE); //$NON-NLS-1$
+	    	NpiInstanceRepository.getInstance().activeUidSetPersistState(PLUGIN_ID+".fillAll", Boolean.FALSE); //$NON-NLS-1$
 	    }
 		else if (eventString.equals("fillAll")) //$NON-NLS-1$
 		{
@@ -275,7 +276,7 @@ public class AddressPlugin extends AbstractPiPlugin
 		    	trace.getTraceGraph(i).piEventReceived(be);				
 			}
 	    	
-	    	NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.fillAll", Boolean.TRUE); //$NON-NLS-1$
+	    	NpiInstanceRepository.getInstance().activeUidSetPersistState(PLUGIN_ID+".fillAll", Boolean.TRUE); //$NON-NLS-1$
 		}
 		else if (eventString.equals("fillNone")) //$NON-NLS-1$
 		{
@@ -284,7 +285,7 @@ public class AddressPlugin extends AbstractPiPlugin
 		    	trace.getTraceGraph(i).piEventReceived(be);				
 			}
 	    	
-	    	NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.fillAll", Boolean.FALSE); //$NON-NLS-1$
+	    	NpiInstanceRepository.getInstance().activeUidSetPersistState(PLUGIN_ID+".fillAll", Boolean.FALSE); //$NON-NLS-1$
 		}
 		else if (eventString.equals("setBarOn")) //$NON-NLS-1$
 		{
@@ -293,7 +294,7 @@ public class AddressPlugin extends AbstractPiPlugin
 		    	trace.getTraceGraph(i).piEventReceived(be);				
 			}
 	    	
-	    	NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.bar", Boolean.TRUE); //$NON-NLS-1$
+	    	NpiInstanceRepository.getInstance().activeUidSetPersistState(PLUGIN_ID+".bar", Boolean.TRUE); //$NON-NLS-1$
 		}
 		else if (eventString.equals("setBarOff")) //$NON-NLS-1$
 		{
@@ -302,7 +303,7 @@ public class AddressPlugin extends AbstractPiPlugin
 		    	trace.getTraceGraph(i).piEventReceived(be);				
 			}
 	    	
-	    	NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.bar", Boolean.FALSE); //$NON-NLS-1$
+	    	NpiInstanceRepository.getInstance().activeUidSetPersistState(PLUGIN_ID+".bar", Boolean.FALSE); //$NON-NLS-1$
 		}
 	  	else if (eventString.equals("resetToCurrentMode")) //$NON-NLS-1$
 	  	{
@@ -397,7 +398,7 @@ public class AddressPlugin extends AbstractPiPlugin
 			&& (currentPage != PIPageEditor.FUNCTIONS_PAGE))
 			  return null;
 
-		GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.address"); //$NON-NLS-1$
+		GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace(PLUGIN_ID); //$NON-NLS-1$
 
 		Hashtable<Integer,Object> summary = new Hashtable<Integer,Object>();
 		Enumeration<ProfiledGeneric> e = trace.getSortedThreadsElements();
@@ -450,7 +451,7 @@ public class AddressPlugin extends AbstractPiPlugin
 			threadName = (String)((Vector<Object>)tmpTable.get(key)).elementAt(0);
 		}
 
-		GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.address"); //$NON-NLS-1$
+		GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace(PLUGIN_ID); //$NON-NLS-1$
 
 		Vector<GenericSample> samples = trace.getSamplesInsideTimePeriod((long)startTime, (long)endTime);
 		Hashtable<String,Integer> functionLoad = new Hashtable<String,Integer>();
@@ -653,13 +654,13 @@ public class AddressPlugin extends AbstractPiPlugin
 		Boolean bar = SessionPreferences.getInstance().getBarMode();		// default value to session preference
 
 		Object obj;
-		obj = NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.address.bar"); //$NON-NLS-1$
+		obj = NpiInstanceRepository.getInstance().activeUidGetPersistState(PLUGIN_ID+".bar"); //$NON-NLS-1$
 		if ((obj != null) && (obj instanceof Boolean))
 			// retrieve the current value
 			bar = (Boolean)obj;
 		else
 			// set the initial value
-			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.bar", bar); //$NON-NLS-1$
+			NpiInstanceRepository.getInstance().activeUidSetPersistState(PLUGIN_ID+".bar", bar); //$NON-NLS-1$
 
 		action.setChecked(bar);
 		action.setToolTipText("Show graph as vertical bars"); //$NON-NLS-1$
@@ -670,13 +671,13 @@ public class AddressPlugin extends AbstractPiPlugin
 		Boolean fillAll = SessionPreferences.getInstance().getFillAllEnabled();		// default value to session preference
 		
 		// if there is a value associated with the current Analyser tab, then use it
-		obj = NpiInstanceRepository.getInstance().activeUidGetPersistState("com.nokia.carbide.cpp.pi.address.fillAll"); //$NON-NLS-1$
+		obj = NpiInstanceRepository.getInstance().activeUidGetPersistState(PLUGIN_ID+".fillAll"); //$NON-NLS-1$
 		if ((obj != null) && (obj instanceof Boolean))
 			// retrieve the current value
 			fillAll = (Boolean)obj;
 		else
 			// set the initial value
-			NpiInstanceRepository.getInstance().activeUidSetPersistState("com.nokia.carbide.cpp.pi.address.fillAll", fillAll); //$NON-NLS-1$
+			NpiInstanceRepository.getInstance().activeUidSetPersistState(PLUGIN_ID+".fillAll", fillAll); //$NON-NLS-1$
 
 		action = new Action(Messages.getString("AddressPlugin.9"), IAction.AS_CHECK_BOX) {  //$NON-NLS-1$
 			@Override
@@ -716,7 +717,7 @@ public class AddressPlugin extends AbstractPiPlugin
 		manager.add(new Separator());	
 		
 		
-		GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.address"); //$NON-NLS-1$
+		GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace(PLUGIN_ID); //$NON-NLS-1$
 		
 		if (trace != null && trace.getCPUCount() > 1){
 			//the following are SMP-related view options
@@ -763,7 +764,7 @@ public class AddressPlugin extends AbstractPiPlugin
 		if (plugin == null)
 			return null;
 
-		GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.address"); //$NON-NLS-1$
+		GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace(PLUGIN_ID); //$NON-NLS-1$
 		
 		if (trace == null)
 			return null;
@@ -813,7 +814,7 @@ public class AddressPlugin extends AbstractPiPlugin
 			return;
 		
 		try {
-			final GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.address"); //$NON-NLS-1$
+			final GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace(PLUGIN_ID); //$NON-NLS-1$
 			int uid = NpiInstanceRepository.getInstance().activeUid();
 			trace.setAdditionalData((Vector<Object>)data);
 			
@@ -853,14 +854,14 @@ public class AddressPlugin extends AbstractPiPlugin
 	 * @return the image descriptor
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
-		return AbstractPiPlugin.imageDescriptorFromPlugin("com.nokia.carbide.cpp.pi.address", path); //$NON-NLS-1$
+		return AbstractPiPlugin.imageDescriptorFromPlugin(PLUGIN_ID, path); //$NON-NLS-1$
 	}
 
 	/**
 	 *  number of graphs supplied by this plugin
 	 */
 	public int getGraphCount() {
-		final GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.address"); //$NON-NLS-1$
+		final GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace(PLUGIN_ID); //$NON-NLS-1$
 		int graphCount = trace.getCPUCount() > 1 ? PAGE_COUNT + trace.getCPUCount() : PAGE_COUNT;
 		return graphCount;
 	}
@@ -1035,7 +1036,7 @@ public class AddressPlugin extends AbstractPiPlugin
 	 */
 	public void runOnPartOpened() {
 		//execute the initial action; since it affects the GIU, execute in UI thread
-		GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace("com.nokia.carbide.cpp.pi.address"); //$NON-NLS-1$
+		GppTrace trace = (GppTrace)NpiInstanceRepository.getInstance().activeUidGetTrace(PLUGIN_ID); //$NON-NLS-1$
 		
 		if (trace != null && trace.getCPUCount() > 1){
 			boolean showCombinedCPUView  = true;
@@ -1053,6 +1054,22 @@ public class AddressPlugin extends AbstractPiPlugin
 			});
 		}		
 		
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#isMandatory()
+	 */
+	public boolean isMandatory() {
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#getTraceDescription()
+	 */
+	public String getTraceDescription() {
+		return getTraceTitle();
 	}
 	
 }

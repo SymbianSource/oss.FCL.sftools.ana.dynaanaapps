@@ -52,7 +52,7 @@ public class PIConfigResourceFactoryImpl extends ResourceFactoryImpl {
 	public PIConfigResourceFactoryImpl() {
 		super();
 		extendedMetaData = new BasicExtendedMetaData(new EPackageRegistryImpl(EPackage.Registry.INSTANCE));
-		extendedMetaData.putPackage(null, PIConfigPackage.eINSTANCE);
+		extendedMetaData.putPackage(null, PIConfigPackage.E_INSTANCE);
 	}
 
 	/**

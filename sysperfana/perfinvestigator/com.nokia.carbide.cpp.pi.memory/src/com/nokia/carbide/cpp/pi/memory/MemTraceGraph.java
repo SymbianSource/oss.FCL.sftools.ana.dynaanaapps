@@ -52,6 +52,7 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -399,10 +400,24 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 			// calculate new x coord's value and round it to integer
 			int xCoord = (int) ((msbt.getTime()/getScale()) + 0.5);
 			int maxBytes;
-			if (dynamicMemoryVisualisation)
-				maxBytes = maxChunks;
-			else
-				maxBytes = memTrace.getTraceMaxChunks();
+			if (dynamicMemoryVisualisation) {
+				if (paintMode == UsageType.CHUNKS) {
+					maxBytes = maxChunks;
+				} else if (paintMode == UsageType.HEAPSTACK) {
+					maxBytes = maxStack;
+				} else {
+					maxBytes = maxStackHeap;
+				}
+			} else {
+				if (paintMode == UsageType.CHUNKS) {				
+					maxBytes = memTrace.getTraceMaxChunks();					
+				} else if (paintMode == UsageType.HEAPSTACK) {
+					maxBytes = memTrace.getTraceMaxStackHeap();
+				} else {
+					maxBytes = memTrace.getTraceMaxTotal();		
+				}
+			}
+				
 			int yMultiplier = prettyMaxBytes(maxBytes) / height;
 			// calculate new y-coord's value and round it to integer
 			int yCoord = (int) (((double) height - (double) msbt.getUsedMemory()
@@ -1262,6 +1277,9 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 
 		Rectangle rect = ((GraphComposite) figureCanvas.getParent()).figureCanvas
 				.getClientArea();
+		
+		Combo titleCombo = ((GraphComposite) figureCanvas.getParent())
+			.getTitleBarCombo();
 
 		double visY = rect.height - MemTraceGraph.xLegendHeight;
 
@@ -1275,11 +1293,13 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 				maxBytes = maxChunks;
 			else
 				maxBytes = memTrace.getTraceMaxChunks();
+			titleCombo.select(0);
 		} else if (paintMode == UsageType.HEAPSTACK) {
 			if (dynamicMemoryVisualisation)
 				maxBytes = maxStack;
 			else
 				maxBytes = memTrace.getTraceMaxStackHeap();
+			titleCombo.select(1);
 		} else {
 			if (dynamicMemoryVisualisation)
 				maxBytes = maxChunks > maxStack ? maxChunks : maxStack;
@@ -1287,6 +1307,7 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 				maxBytes = memTrace.getTraceMaxChunks() > memTrace
 						.getTraceMaxStackHeap() ? memTrace.getTraceMaxChunks()
 						: memTrace.getTraceMaxStackHeap();
+			titleCombo.select(2);
 		}
 
 		double multiplier = 0;
@@ -1625,6 +1646,7 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 							.getTraceGraph(i);
 					graph.action("chunk_on"); //$NON-NLS-1$
 				}
+				MemoryPlugin.getDefault().updateMenuItems();
 			}
 		};
 		actionShowChunk.setText(Messages.getString("MemoryPlugin.showChunks")); //$NON-NLS-1$
@@ -1642,6 +1664,7 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 							.getTraceGraph(i);
 					graph.action("heapstack_on"); //$NON-NLS-1$
 				}
+				MemoryPlugin.getDefault().updateMenuItems();
 			}
 		};
 		actionShowHeap
@@ -1660,6 +1683,7 @@ public class MemTraceGraph extends GenericTraceGraph implements FocusListener,
 							.getTraceGraph(i);
 					graph.action("chunk_heapstack_on"); //$NON-NLS-1$
 				}
+				MemoryPlugin.getDefault().updateMenuItems();
 			}
 		};
 		actionShowBothItem.setText(Messages.getString("MemoryPlugin.showAll")); //$NON-NLS-1$

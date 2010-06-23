@@ -17,6 +17,8 @@
 package com.nokia.carbide.cpp.internal.pi.wizards.ui;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
@@ -40,14 +42,18 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 
 import com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace;
 
-public class TraceSelectionGroup extends AbstractBaseGroup {
+public class PluginSelectionGroup extends Composite {
 
 	private CheckboxTableViewer viewerTraceSelection;
 	private ProfilerDataPlugins profilerDataPlugins;
+	private Label tableTitleLabel;
+	private boolean profilerActivator;	
+	private int[] defaultPlugins;
 
 	/**
 	 * Constructor
@@ -57,10 +63,22 @@ public class TraceSelectionGroup extends AbstractBaseGroup {
 	 * @param wizardSettings
 	 *            instance of the INewPIWizardSettings
 	 */
-	public TraceSelectionGroup(Composite parent,
-			INewPIWizardSettings wizardSettings) {
-		super(parent, wizardSettings);
+	public PluginSelectionGroup(Composite parent,
+			INewPIWizardSettings wizardSettings, boolean profilerActivator) {
+		super(parent, SWT.NONE);
+		this.profilerActivator = profilerActivator;
+		if(profilerActivator){
+			this.defaultPlugins = NewPIWizardSettings.getInstance().defaultPlugins;
+		}
+		
+		createContent();
 	}
+
+	
+	@Override
+	protected void checkSubclass() {
+	}
+
 
 	/*
 	 * (non-Javadoc)
@@ -71,15 +89,24 @@ public class TraceSelectionGroup extends AbstractBaseGroup {
 	 */
 	public void createContent() {
 		GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 2;
+		gridLayout.numColumns = 1;
+		gridLayout.marginWidth = 0;
+		gridLayout.marginHeight = 0;
+	
 		this.setLayout(gridLayout);
+	
 		this.setLayoutData(new GridData(GridData.FILL_BOTH));
-		this.setText(Messages.getString("TraceSelectionGroup.groupTitle")); //$NON-NLS-1$
-
+			
+		tableTitleLabel = new Label(this, SWT.NONE);
 		final Composite tablePanel = new Composite(this, SWT.NONE);
 		final GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		tablePanel.setLayout(gridLayout);
 		tablePanel.setLayoutData(layoutData);
-
+		if(profilerActivator){
+			tableTitleLabel.setText(Messages.getString("TraceSelectionGroup.profilerActivatorTitle")); //$NON-NLS-1$
+		}else{
+			tableTitleLabel.setText(Messages.getString("TraceSelectionGroup.groupTitle")); //$NON-NLS-1$
+		}	
 		viewerTraceSelection = CheckboxTableViewer.newCheckList(tablePanel,
 				SWT.BORDER | SWT.FULL_SELECTION);
 		viewerTraceSelection
@@ -110,14 +137,15 @@ public class TraceSelectionGroup extends AbstractBaseGroup {
 				ITrace trace1 = (ITrace) e1;
 				ITrace trace2 = (ITrace) e2;
 				int returnCode = 0;
-				if (profilerDataPlugins.isMandatory(trace1) == true
-						&& profilerDataPlugins.isMandatory(trace2) == true) {
-					returnCode = 0;
-				} else if (profilerDataPlugins.isMandatory(trace1) == true
-						&& profilerDataPlugins.isMandatory(trace2) == false) {
+				if (trace1.isMandatory() == true
+						&& trace2.isMandatory() == true) {
+					returnCode = trace1.getTraceTitle().compareTo(
+							trace2.getTraceTitle());
+				} else if (trace1.isMandatory() == true
+						&& trace2.isMandatory() == false) {
 					returnCode = -1;
-				} else if (profilerDataPlugins.isMandatory(trace1) == false
-						&& profilerDataPlugins.isMandatory(trace2) == true) {
+				} else if (trace1.isMandatory() == false
+						&& trace2.isMandatory() == true) {
 					returnCode = 1;
 				} else {
 					returnCode = trace1.getTraceTitle().compareTo(
@@ -127,9 +155,9 @@ public class TraceSelectionGroup extends AbstractBaseGroup {
 			}
 
 		});
+		
 		Table table = viewerTraceSelection.getTable();
-		table.setLinesVisible(true);
-		table.setHeaderVisible(true);
+		table.setLinesVisible(true);	
 		addActions();
 
 		ColumnViewerToolTipSupport.enableFor(viewerTraceSelection,
@@ -149,7 +177,7 @@ public class TraceSelectionGroup extends AbstractBaseGroup {
 			@Override
 			public String getToolTipText(Object element) {
 				StringBuilder sb = new StringBuilder(((ITrace) element)
-						.getTraceTitle());
+						.getTraceDescription());
 				if (((ITrace) element).getTraceId() == 1) {
 					sb.append(Messages.getString("TraceSelectionGroup.mandatory")); //$NON-NLS-1$
 				}
@@ -176,7 +204,12 @@ public class TraceSelectionGroup extends AbstractBaseGroup {
 			}
 		});
 
-		column.getColumn().setText(Messages.getString("TraceSelectionGroup.piView")); //$NON-NLS-1$
+		if(profilerActivator){
+			column.getColumn().setText(Messages.getString("TraceSelectionGroup.profilerActivatorTableColumn")); //$NON-NLS-1$
+		}else{
+			column.getColumn().setText(Messages.getString("TraceSelectionGroup.piView")); //$NON-NLS-1$
+		}
+		
 
 		TableColumnLayout tableColumnLayout = new TableColumnLayout();
 		tablePanel.setLayout(tableColumnLayout);
@@ -213,12 +246,14 @@ public class TraceSelectionGroup extends AbstractBaseGroup {
 	 * @param fileName for the group title
 	 */
 	private void updateTitle(String fileName){
-		if(fileName == null){
-			this.setText(Messages.getString("TraceSelectionGroup.groupTitle"));
-		}else{
-			this.setText(MessageFormat.format(Messages.getString("TraceSelectionGroup.groupTitleFor"), fileName));
-		}
-		
+		if(!profilerActivator){
+			if(fileName == null){
+				tableTitleLabel.setText(Messages.getString("TraceSelectionGroup.groupTitle")); //$NON-NLS-1$
+			}else{
+				tableTitleLabel.setText(MessageFormat.format(Messages.getString("TraceSelectionGroup.groupTitleFor"), fileName)); //$NON-NLS-1$
+			}
+			this.layout();
+		}	
 	}
 	
 	/**
@@ -243,7 +278,7 @@ public class TraceSelectionGroup extends AbstractBaseGroup {
 				if (profilerDataPlugins != null) {
 					profilerDataPlugins.unCheckAll();	
 					for(ITrace trace : profilerDataPlugins.getPlugins()){
-						viewerTraceSelection.setChecked(trace, profilerDataPlugins.isChecked(trace));
+						viewerTraceSelection.setChecked(trace, trace.isMandatory());
 					}
 				}
 			}
@@ -262,27 +297,60 @@ public class TraceSelectionGroup extends AbstractBaseGroup {
 	 */
 	public void updateTraceIds(ProfilerDataPlugins profilerDataPlugins) {
 		this.profilerDataPlugins = profilerDataPlugins;
-		if(profilerDataPlugins == null){
+		if(profilerDataPlugins == null || profilerDataPlugins.getPlugins() == null){
 			viewerTraceSelection.setInput(null);
 			updateTitle(null);
 		}else{			
 			viewerTraceSelection.setInput(profilerDataPlugins.getPlugins());
 			viewerTraceSelection.setAllChecked(true);
 			for (ITrace trace : profilerDataPlugins.getPlugins()) {
-				if (profilerDataPlugins.isMandatory(trace)) {
+				if (trace.isMandatory()) {
 					viewerTraceSelection.setGrayed(trace, true);
 				} else {
-					viewerTraceSelection.setChecked(trace, profilerDataPlugins
-							.isChecked(trace));
+					if(profilerActivator){
+						boolean checked = false;
+						if(defaultPlugins != null){							
+							for(int id : defaultPlugins){
+								if(trace.getTraceId() == id){
+									profilerDataPlugins.setChecked(trace, true);
+									viewerTraceSelection.setChecked(trace, true);
+									checked = true;
+									break;
+								}
+							}
+						}if(!checked){
+							profilerDataPlugins.setChecked(trace, false);
+							viewerTraceSelection.setChecked(trace, false);
+						}
+					}else{
+						viewerTraceSelection.setChecked(trace, profilerDataPlugins
+								.isChecked(trace));
+					}				
 				}
 			}			
 			updateTitle(profilerDataPlugins.getProfilerDataPath().lastSegment());
 		}
 
-	}
-
-	@Override
-	public Table getTable() {
-		return viewerTraceSelection.getTable();
+	}	
+	
+	/**
+	 * Get traceids from the selected plug-ins
+	 * 
+	 * @return array of the traceids
+	 */
+	public int[] getSelectedPluginIds(){
+		if(profilerDataPlugins == null){
+			return new int[0];
+		}
+		List<ITrace> plugins = profilerDataPlugins.getSelectedPlugins();
+		Iterator<ITrace> traces = plugins.iterator();
+		int[] traceIds = new int[plugins.size()];
+		int i = 0;
+		while(traces.hasNext()){
+			traceIds[i++] = traces.next().getTraceId();
+		}
+		Arrays.sort(traceIds);
+		NewPIWizardSettings.getInstance().defaultPlugins = traceIds;
+		return traceIds;
 	}
 }

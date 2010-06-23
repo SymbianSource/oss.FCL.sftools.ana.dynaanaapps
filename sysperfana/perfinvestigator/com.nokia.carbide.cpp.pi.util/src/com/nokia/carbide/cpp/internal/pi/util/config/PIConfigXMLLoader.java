@@ -40,7 +40,7 @@ public class PIConfigXMLLoader {
 
 		// blank file could cause IOException, which is unnecessary. Just return blank model
 		if (url.openStream().available() == 0) {
-			return PIConfigFactory.eINSTANCE.createButtonEventProfileListType();
+			return PIConfigFactory.E_INSTANCE.createButtonEventProfileListType();
 		}
 
 		URI xmlURI = URI.createURI(url.toString());
@@ -67,7 +67,7 @@ public class PIConfigXMLLoader {
 		Resource r = resFactory.createResource(xmlURI);
 		EList<EObject> contents = r.getContents();
 	
-		PIConfigFactory factory = PIConfigPackage.eINSTANCE.getPIConfigFactory();
+		PIConfigFactory factory = PIConfigPackage.E_INSTANCE.getPIConfigFactory();
 		DocumentRoot root = factory.createDocumentRoot();
 		root.setButtonEventProfileList(list);
 		contents.add(root);

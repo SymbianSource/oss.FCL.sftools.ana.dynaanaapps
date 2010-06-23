@@ -19,6 +19,7 @@
 	<context id="import_wizard_input_page_context" >
 		<description>Profiler data files contain run-time performance information of your test runs.</description>
 		<topic label="Select Profiler Data File"		href="html/tasks/analyser/an_load_trace_files.htm#Select_Profiler_Data_File" />
+  <topic href="html/tasks/analyser/collect_prof_data_remotely.htm" label="Collecting Profiler Data Remotely"/>
 	</context>
 
 	<context id="import_wizard_output_page_context" >
@@ -55,5 +56,7 @@
         <description>Import Key Map Profile</description>
         <topic label="Import key press mapping" href="html/tasks/profiler/key_profile_imp.htm" />
 	</context>
+ <context id="Help_Context">
+ </context>
 
 </contexts>

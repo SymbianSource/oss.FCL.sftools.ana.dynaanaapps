@@ -1339,20 +1339,20 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 		if ((this.symbolPrimary || this.ittTrace == null) && 
 				!s.getCurrentFunctionSym().getFunctionBinary().getBinaryName().endsWith(Messages.getString("NewFunctionAnalyse.notFound")) ) //$NON-NLS-1$
 		{
-			return new Long(s.programCounter-s.getCurrentFunctionSym().getStartAddress().longValue());
+			return Long.valueOf(s.programCounter-s.getCurrentFunctionSym().getStartAddress().longValue());
 		}
 		if (s.getCurrentFunctionItt() != null && !s.getCurrentFunctionItt().getFunctionName().endsWith(Messages.getString("NewFunctionAnalyse.notFound"))) //$NON-NLS-1$
 		{
 			//System.out.println("OFF:"+(s.programCounter-s.currentFunctionItt.startAddress.longValue())+" PC: "+Long.toHexString(s.programCounter)+" start"+Long.toHexString(s.currentFunctionItt.startAddress.longValue()));
-			return new Long(s.programCounter-s.getCurrentFunctionItt().getStartAddress().longValue());
+			return Long.valueOf(s.programCounter-s.getCurrentFunctionItt().getStartAddress().longValue());
 		}
 		else if (s.getCurrentFunctionSym() != null)
 		{
-			return new Long(s.programCounter-s.getCurrentFunctionSym().getStartAddress().longValue());
+			return Long.valueOf(s.programCounter-s.getCurrentFunctionSym().getStartAddress().longValue());
 		}
 		else
 		{
-			return new Long(666666);
+			return Long.valueOf(666666);
 		}		
 	}
 	
@@ -1489,8 +1489,8 @@ public NewFunctionAnalyse(PICompositePanel compositePanel,
 			while(finalEnum.hasMoreElements())
 			{
 				IndexElement ie = (IndexElement)finalEnum.nextElement();
-				functionOffsets.add(new Long(ie.offset));
-				functionOffsets.add(new Long(ie.count));
+				functionOffsets.add(Long.valueOf(ie.offset));
+				functionOffsets.add(Long.valueOf(ie.count));
 			}
 			//System.out.print(" new count: "+functionOffsets.size()+"\n");
 			/*

@@ -28,8 +28,10 @@ import com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace;
 
 
 public class ProfilerDataPlugins {
-	private Map<ITrace, Boolean> pluginsSelectionMap;
+	private Map<ITrace, Boolean> pluginsSelectionMap = new HashMap<ITrace, Boolean>();
 	private final IPath profilerDataPath;
+	private long time;
+	private long size;
 	
 	/**
 	 * Constructor
@@ -39,7 +41,9 @@ public class ProfilerDataPlugins {
 	 */
 	public ProfilerDataPlugins(IPath profilerDataPath, List<ITrace> plugins){
 		this.profilerDataPath = profilerDataPath;
-		initPlugins(plugins);
+		if(plugins != null){
+			initPlugins(plugins);
+		}		
 	}
 	
 	/**
@@ -48,11 +52,21 @@ public class ProfilerDataPlugins {
 	 * @param plugins list of the plugins
 	 */
 	public void initPlugins(List<ITrace> plugins){
-		pluginsSelectionMap = new HashMap<ITrace, Boolean>();
 		removeDuplicatePriorityPlugin(plugins);
 		for(ITrace trace : plugins){
 			pluginsSelectionMap.put(trace, true);
 		}
+	}
+	
+	/**
+	 * Update both time and size
+	 * 
+	 * @param time
+	 * @param size
+	 */
+	public void updateTimeAndSize(long time, long size){
+		this.time += time;
+		this.size = size;
 	}
 	
 	/**
@@ -107,7 +121,7 @@ public class ProfilerDataPlugins {
 	 */
 	public void setChecked(ITrace trace, boolean checked){
 		if(pluginsSelectionMap.containsKey(trace)){
-			pluginsSelectionMap.put(trace, new Boolean(checked));
+			pluginsSelectionMap.put(trace, Boolean.valueOf(checked));
 		}
 	}
 	
@@ -127,25 +141,12 @@ public class ProfilerDataPlugins {
 	 */
 	public void unCheckAll(){
 		for(ITrace trace : getPlugins()){
-			if(!isMandatory(trace)){
+			if(!trace.isMandatory()){
 				setChecked(trace, false);
-			}
+			}		
 		}
 	}
 	
-	/**
-	 * Check whether given trace mandatory or not
-	 * @param trace
-	 * @return
-	 */
-	public boolean isMandatory(ITrace trace){
-		if(pluginsSelectionMap.containsKey(trace)){
-			if(trace.getTraceId() == 1){
-				return true;
-			}		
-		}
-		return false;
-	}
 		
 	/**
 	 * Get profiler data file's path
@@ -173,4 +174,19 @@ public class ProfilerDataPlugins {
 			}
 		}
 	}
+	
+	/**
+	 * @return the time
+	 */
+	public long getTime() {
+		return time;
+	}
+
+	/**
+	 * @return the size
+	 */
+	public long getSize() {
+		return size;
+	}
 }
+

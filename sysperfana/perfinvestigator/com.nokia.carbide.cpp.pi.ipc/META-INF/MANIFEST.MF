@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Carbide.c++ Interconnect Performance Counters PI Plugin
 Bundle-SymbolicName: com.nokia.carbide.cpp.pi.ipc;singleton:=true
-Bundle-Version: 2.3.0.qualifier
+Bundle-Version: 2.4.0.qualifier
 Bundle-Activator: com.nokia.carbide.cpp.pi.ipc.IpcPlugin
 Bundle-Vendor: Nokia
 Require-Bundle: org.eclipse.ui,

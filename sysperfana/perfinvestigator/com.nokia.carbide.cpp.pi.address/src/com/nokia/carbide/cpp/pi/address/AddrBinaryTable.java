@@ -687,7 +687,7 @@ public class AddrBinaryTable extends GenericAddrTable
 		}
 
 		PIVisualSharedData shared = myGraph.getSharedDataInstance();
-		shared.GPP_SelectedBinaryNames = nameList;
+		shared.gppSelectedBinaryNames = nameList;
 
   		if (   (totalSamples != 0)
       		|| (myGraph.getDrawMode() == Defines.BINARIES))
@@ -727,7 +727,7 @@ public class AddrBinaryTable extends GenericAddrTable
         // this table's set of checkbox-selected rows has changed,
 		// so propagate that information
 		PIVisualSharedData shared = myGraph.getSharedDataInstance();
-		shared.GPP_SelectedBinaryNames = nameList;
+		shared.gppSelectedBinaryNames = nameList;
 
 			selectionChangeNotify();
   		this.table.deselectAll();
@@ -1553,7 +1553,7 @@ public class AddrBinaryTable extends GenericAddrTable
 		}
 
         PIVisualSharedData shared = myGraph.getSharedDataInstance();
-		shared.GPP_SelectedBinaryNames = binaryNames;
+		shared.gppSelectedBinaryNames = binaryNames;
 	}
 
 	private class SharedCheckHandler implements ICheckStateListener

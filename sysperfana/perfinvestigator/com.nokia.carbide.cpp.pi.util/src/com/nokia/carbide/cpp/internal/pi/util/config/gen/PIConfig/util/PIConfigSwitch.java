@@ -58,7 +58,7 @@ public class PIConfigSwitch<T> {
 	 */
 	public PIConfigSwitch() {
 		if (modelPackage == null) {
-			modelPackage = PIConfigPackage.eINSTANCE;
+			modelPackage = PIConfigPackage.E_INSTANCE;
 		}
 	}
 

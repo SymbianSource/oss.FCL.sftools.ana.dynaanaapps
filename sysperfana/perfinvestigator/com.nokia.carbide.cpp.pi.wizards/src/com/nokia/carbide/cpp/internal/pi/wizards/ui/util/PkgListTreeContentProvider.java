@@ -119,7 +119,7 @@ public class PkgListTreeContentProvider implements ITreeContentProvider {
 						}
 						if (haveConfigWithPKG == false){
 							if(logWarnings){						
-								GeneralMessages.PiLog(MessageFormat.format(Messages.getString("PkgListTreeContentProvider.warning.sisBuilderConfiguration.missing"),projects[i].getName()), GeneralMessages.WARNING); //$NON-NLS-1$
+								GeneralMessages.piLog(MessageFormat.format(Messages.getString("PkgListTreeContentProvider.warning.sisBuilderConfiguration.missing"),projects[i].getName()), GeneralMessages.WARNING); //$NON-NLS-1$
 							}
 							continue;	// must have buildconfig with good PKG to show up
 						}							

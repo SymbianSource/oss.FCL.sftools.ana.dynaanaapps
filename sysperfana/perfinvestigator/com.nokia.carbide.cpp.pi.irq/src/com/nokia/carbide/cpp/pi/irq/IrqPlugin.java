@@ -332,5 +332,21 @@ public class IrqPlugin extends AbstractPiPlugin implements ITrace,
 	public void setPagesCreated(boolean pagesCreated) {
 		return;
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#isMandatory()
+	 */
+	public boolean isMandatory() {
+		return false;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace#getTraceDescription()
+	 */
+	public String getTraceDescription() {
+		return getTraceTitle();
+	}
 
 }

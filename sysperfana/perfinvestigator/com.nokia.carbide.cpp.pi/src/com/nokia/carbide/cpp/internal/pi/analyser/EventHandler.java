@@ -26,7 +26,7 @@ import com.nokia.carbide.cpp.internal.pi.plugin.model.IEventListener;
 
 
 
-public class EventHandler
+public final class EventHandler
 {
 	private static EventHandler instance = null;
 	

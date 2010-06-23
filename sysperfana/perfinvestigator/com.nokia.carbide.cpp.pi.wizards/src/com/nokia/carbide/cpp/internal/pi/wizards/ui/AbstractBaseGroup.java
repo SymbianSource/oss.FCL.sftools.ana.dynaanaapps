@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -40,7 +41,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
-import com.nokia.carbide.cpp.internal.pi.analyser.StreamFileParser;
 import com.nokia.carbide.cpp.internal.pi.plugin.model.ITrace;
 import com.nokia.carbide.cpp.internal.pi.utils.PIUtilities;
 
@@ -87,6 +87,7 @@ public abstract class AbstractBaseGroup extends Group {
 
 	private List<ProfilerDataPlugins> profilerDataFiles = new ArrayList<ProfilerDataPlugins>();
 	protected INewPIWizardSettings wizardSettings;
+	private boolean timeAndSizeEnabled;
 
 	/**
 	 * Constructor
@@ -95,11 +96,13 @@ public abstract class AbstractBaseGroup extends Group {
 	 *            instance of parent Composite
 	 * @param wizardSettings
 	 *            instance of the INewPIWizardSettings
+	 * @param timeAndSizeEnabled is used to store trace data file during the tracing
 	 */
 	public AbstractBaseGroup(Composite parent,
-			INewPIWizardSettings wizardSettings) {
+			INewPIWizardSettings wizardSettings, boolean timeAndSizeEnabled) {
 		super(parent, SWT.NONE);
 		this.wizardSettings = wizardSettings;
+		this.timeAndSizeEnabled = timeAndSizeEnabled;
 		// set default layout
 		this.setLayout(new GridLayout(1, false));
 		this.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -116,6 +119,8 @@ public abstract class AbstractBaseGroup extends Group {
 	 */
 	protected abstract void createContent();
 
+	public abstract IStatus validateContent(NewPIWizard wizardPage);
+
 	protected abstract Table getTable();
 
 	/**
@@ -125,10 +130,17 @@ public abstract class AbstractBaseGroup extends Group {
 	 *            to hide
 	 */
 	public void setVisible(Composite hideComposite) {
-		setVisible(true);
+		if (hideComposite.getLayoutData() instanceof GridData) {
+			((GridData) hideComposite.getLayoutData()).exclude = true;
+		}
+		if (this.getLayoutData() instanceof GridData) {
+			((GridData) this.getLayoutData()).exclude = false;
+		}
 		setLocation(hideComposite.getLocation());
 		setSize(hideComposite.getSize());
+		setVisible(true);
 		hideComposite.setVisible(false);
+		wizardSettings.validatePage();
 	}
 
 	/**
@@ -136,10 +148,12 @@ public abstract class AbstractBaseGroup extends Group {
 	 * 
 	 * @param path
 	 *            selected profile data file
+	 * @param time of the used to trace
+	 * @param size of the trace data file
 	 * @throws IllegalArgumentException
-	 *             if given file is not valid profile data file
+	 *             if given file is not valid profile data file	        
 	 */
-	public void addProfileDataFile(IPath path) throws IllegalArgumentException {
+	public void addProfilerDataFile(IPath path, long time, long size) throws IllegalArgumentException {
 		boolean exists = false;
 		for (ProfilerDataPlugins pdp : profilerDataFiles) {
 			if (pdp.getProfilerDataPath().equals(path)) {
@@ -153,17 +167,58 @@ public abstract class AbstractBaseGroup extends Group {
 				if (!file.isFile() || file.length() <= 0) {
 					throw new IllegalArgumentException();
 				}
-				new StreamFileParser(file).allTraceType();
-				profilerDataFiles.add(new ProfilerDataPlugins(path,
-						getPluginsForTraceFile(path)));
+
+				ProfilerDataPlugins dataPlugins = new ProfilerDataPlugins(path,
+						getPluginsForTraceFile(path));
+				if(timeAndSizeEnabled){
+					dataPlugins.updateTimeAndSize(time, size);
+				}				
+				profilerDataFiles.add(dataPlugins);
 			} catch (Exception e) {
-				throw new IllegalArgumentException(MessageFormat.format(
-						Messages.getString("AbstractBaseGroup.isNotValidProfilerFile"), path //$NON-NLS-1$
-								.lastSegment()));
+				throw new IllegalArgumentException(
+						MessageFormat
+								.format(
+										Messages
+												.getString("AbstractBaseGroup.isNotValidProfilerFile"), path //$NON-NLS-1$
+												.lastSegment()));
 			}
 		} else {
-			throw new IllegalArgumentException(MessageFormat.format(
-					Messages.getString("AbstractBaseGroup.profilerFileIsExisted"), path.lastSegment())); //$NON-NLS-1$
+			throw new IllegalArgumentException(
+					MessageFormat
+							.format(
+									Messages
+											.getString("AbstractBaseGroup.profilerFileIsExisted"), path.lastSegment())); //$NON-NLS-1$
+		}
+	}
+
+	/**
+	 * Update trace data file during tracing
+	 * 
+	 * @param path of the profiler data file
+	 * @param time of the trace run
+	 * @param size of the trace data file
+	 * @throws IllegalArgumentException
+	 */
+	public void updateProfilerDataFile(IPath path, long time, long size)
+			throws IllegalArgumentException {
+		boolean exists = false;
+		for (ProfilerDataPlugins pdp : profilerDataFiles) {
+			if (pdp.getProfilerDataPath().equals(path)) {
+				pdp.updateTimeAndSize(time, size);
+				exists = true;
+				break;
+			}
+		}
+		if (!exists) {
+			profilerDataFiles.add(new ProfilerDataPlugins(path, null));
+
+		} else {
+			if (!timeAndSizeEnabled) {
+				throw new IllegalArgumentException(
+						MessageFormat
+								.format("Failed to update profiler data file", path.lastSegment())); //$NON-NLS-1$
+			}
+
 		}
 	}
 
@@ -195,7 +250,7 @@ public abstract class AbstractBaseGroup extends Group {
 
 				for (File file : fileArray) {
 					try {
-						addProfileDataFile(new Path(file.toString()));
+						addProfilerDataFile(new Path(file.toString()),0,0);
 						addedValidFile = true;
 					} catch (Exception e) {
 						// do nothing
@@ -203,14 +258,20 @@ public abstract class AbstractBaseGroup extends Group {
 				}
 
 			} catch (Exception e) {
-				throw new IllegalArgumentException(MessageFormat.format(
-						Messages.getString("AbstractBaseGroup.failedToImportFromFolder"), path //$NON-NLS-1$
-								.toOSString()));
+				throw new IllegalArgumentException(
+						MessageFormat
+								.format(
+										Messages
+												.getString("AbstractBaseGroup.failedToImportFromFolder"), path //$NON-NLS-1$
+												.toOSString()));
 			}
 			if (!addedValidFile) {
-				throw new IllegalArgumentException(MessageFormat.format(
-						Messages.getString("AbstractBaseGroup.notFoundProfilerDataFiles"), path //$NON-NLS-1$
-								.toOSString()));
+				throw new IllegalArgumentException(
+						MessageFormat
+								.format(
+										Messages
+												.getString("AbstractBaseGroup.notFoundProfilerDataFiles"), path //$NON-NLS-1$
+												.toOSString()));
 			}
 		}
 	}
@@ -233,6 +294,23 @@ public abstract class AbstractBaseGroup extends Group {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Remove ProfilerDataPlugins with given path
+	 * 
+	 * @param path
+	 * @return instance of the removed ProfilerDataPlugins
+	 */
+	public ProfilerDataPlugins removeWithPath(IPath path) {
+
+		for (ProfilerDataPlugins pdp : profilerDataFiles) {
+			if (pdp.getProfilerDataPath().equals(path)) {
+				profilerDataFiles.remove(pdp);
+				return pdp;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -272,23 +350,34 @@ public abstract class AbstractBaseGroup extends Group {
 	 * 
 	 * @param tableViewer
 	 *            instance of the TableViewer
+	 * @param validatePage is need to be validate
 	 */
-	public void refreshTable(TableViewer tableViewer) {
+	public void refreshTable(TableViewer tableViewer, boolean validatePage) {
 		Table table = tableViewer.getTable();
-		List<IPath> pathList = new ArrayList<IPath>();
-		for (ProfilerDataPlugins pdp : profilerDataFiles) {
-			pathList.add(pdp.getProfilerDataPath());
+		if (timeAndSizeEnabled) {
+			tableViewer.setInput(profilerDataFiles);
+		} else {
+			List<IPath> pathList = new ArrayList<IPath>();
+			for (ProfilerDataPlugins pdp : profilerDataFiles) {
+				pathList.add(pdp.getProfilerDataPath());
+			}
+			tableViewer.setInput(pathList);
+
 		}
-		tableViewer.setInput(pathList);
 		table.setSelection(0);
 		tableViewer.refresh();
-		wizardSettings.validatePage();
+		if(validatePage){
+			wizardSettings.validatePage();
+		}
+		
+
 	}
 
 	/**
 	 * Get plugins list from given file
 	 * 
-	 * @param profilerPath profiler data file
+	 * @param profilerPath
+	 *            profiler data file
 	 * @return available plugins list from given file
 	 * @throws IOException
 	 */
@@ -300,7 +389,7 @@ public abstract class AbstractBaseGroup extends Group {
 	/**
 	 * Get ProfilerDataPlugins by given profiler data file
 	 * 
-	 * @param path 
+	 * @param path
 	 * @return instance of the ProfilerDataPlugins if found otherwise null is
 	 *         returned
 	 */

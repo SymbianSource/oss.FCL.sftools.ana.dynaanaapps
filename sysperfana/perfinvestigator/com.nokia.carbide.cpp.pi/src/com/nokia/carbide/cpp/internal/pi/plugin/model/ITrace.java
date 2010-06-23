@@ -30,6 +30,8 @@ public interface ITrace
 	public String getTraceName();
 	/** like trace name but can be more descriptive */
 	public String getTraceTitle();
+	public boolean isMandatory();
+	public String getTraceDescription();
 	public int getTraceId();
 	public ParsedTraceData parseTraceFile(File file /*, ProgressBar progressBar*/) throws Exception;
 	

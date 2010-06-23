@@ -308,14 +308,8 @@ public abstract class ProfiledGeneric
   	 * @return
   	 */
   	public float[] getActivityList(){
-  		if (activityP != null){
-  			//Arrays.copyOf() is only supported from Java 6
-  			//return Arrays.copyOf(this.activityP, this.activityP.length);
-  			float[] ret = new float[activityP.length];
-  			for (int i = 0; i < ret.length; i++) {
-				ret[i] = activityP[i];
-			}
-  			return ret;
+  		if (activityP != null){  	
+  			return activityP.clone();
   		}
   		return null;
    	}

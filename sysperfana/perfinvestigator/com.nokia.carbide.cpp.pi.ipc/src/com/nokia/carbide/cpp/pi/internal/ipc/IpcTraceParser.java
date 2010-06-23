@@ -47,32 +47,32 @@ public class IpcTraceParser extends Parser {
 	
 	long time = 0;
 	
-	private static final Map<Integer, String> eventTypeTable = new HashMap<Integer, String>();
+	private static final Map<Integer, String> EVENT_TYPE_TABLE = new HashMap<Integer, String>();
 	static {
-		eventTypeTable.put(0x0,Messages.IpcTraceParser_1);
-		eventTypeTable.put(0x1,Messages.IpcTraceParser_2);
-		eventTypeTable.put(0x2,Messages.IpcTraceParser_3);
-		eventTypeTable.put(0x3,Messages.IpcTraceParser_4);
-		eventTypeTable.put(0x4,Messages.IpcTraceParser_5);
+		EVENT_TYPE_TABLE.put(0x0,Messages.IpcTraceParser_1);
+		EVENT_TYPE_TABLE.put(0x1,Messages.IpcTraceParser_2);
+		EVENT_TYPE_TABLE.put(0x2,Messages.IpcTraceParser_3);
+		EVENT_TYPE_TABLE.put(0x3,Messages.IpcTraceParser_4);
+		EVENT_TYPE_TABLE.put(0x4,Messages.IpcTraceParser_5);
 	}
-	private static final Map<Integer, String> counterTypeTable = new HashMap<Integer, String>();
+	private static final Map<Integer, String> COUNTER_TYPE_TABLE = new HashMap<Integer, String>();
 	static {
-		counterTypeTable.put(0x0,Messages.IpcTraceParser_6);
-		counterTypeTable.put(0x1,Messages.IpcTraceParser_7);
-		counterTypeTable.put(0x2,Messages.IpcTraceParser_8);
-		counterTypeTable.put(0x3,Messages.IpcTraceParser_9);
-		counterTypeTable.put(0x4,Messages.IpcTraceParser_10);
-		counterTypeTable.put(0x5,Messages.IpcTraceParser_11);
+		COUNTER_TYPE_TABLE.put(0x0,Messages.IpcTraceParser_6);
+		COUNTER_TYPE_TABLE.put(0x1,Messages.IpcTraceParser_7);
+		COUNTER_TYPE_TABLE.put(0x2,Messages.IpcTraceParser_8);
+		COUNTER_TYPE_TABLE.put(0x3,Messages.IpcTraceParser_9);
+		COUNTER_TYPE_TABLE.put(0x4,Messages.IpcTraceParser_10);
+		COUNTER_TYPE_TABLE.put(0x5,Messages.IpcTraceParser_11);
 	}	
-	private static final Map<Integer, String> l2EventTypeTable = new HashMap<Integer, String>();
+	private static final Map<Integer, String> L2_EVENT_TYPE_TABLE = new HashMap<Integer, String>();
 	static {
-		l2EventTypeTable.put(0x3,Messages.IpcTraceParser_12);
-		l2EventTypeTable.put(0x4,Messages.IpcTraceParser_13);
-		l2EventTypeTable.put(0x5,Messages.IpcTraceParser_14);
-		l2EventTypeTable.put(0x6,Messages.IpcTraceParser_15);
-		l2EventTypeTable.put(0x7,Messages.IpcTraceParser_16);
-		l2EventTypeTable.put(0xC,Messages.IpcTraceParser_17);
-		l2EventTypeTable.put(0xD,Messages.IpcTraceParser_18);
+		L2_EVENT_TYPE_TABLE.put(0x3,Messages.IpcTraceParser_12);
+		L2_EVENT_TYPE_TABLE.put(0x4,Messages.IpcTraceParser_13);
+		L2_EVENT_TYPE_TABLE.put(0x5,Messages.IpcTraceParser_14);
+		L2_EVENT_TYPE_TABLE.put(0x6,Messages.IpcTraceParser_15);
+		L2_EVENT_TYPE_TABLE.put(0x7,Messages.IpcTraceParser_16);
+		L2_EVENT_TYPE_TABLE.put(0xC,Messages.IpcTraceParser_17);
+		L2_EVENT_TYPE_TABLE.put(0xD,Messages.IpcTraceParser_18);
 	}			
 
 	/* (non-Javadoc)
@@ -346,10 +346,10 @@ public class IpcTraceParser extends Parser {
 	}
 		
 	private String[] parseValueTypes(List<Integer> counterTypes, List<Integer> counterL2Types){
-		String[] s = new String[counterTypes.size() * eventTypeTable.size() + (counterL2Types == null ? 0 : counterL2Types.size())];
+		String[] s = new String[counterTypes.size() * EVENT_TYPE_TABLE.size() + (counterL2Types == null ? 0 : counterL2Types.size())];
 		int k = 0;
-		for (int i = 0; i < eventTypeTable.size(); i++) {
-			String eventType =  eventTypeTable.get(i);
+		for (int i = 0; i < EVENT_TYPE_TABLE.size(); i++) {
+			String eventType =  EVENT_TYPE_TABLE.get(i);
 			for (Integer counterType : counterTypes) {
 				s[k] = String.format(Messages.IpcTraceParser_20, eventType, convertCounterType(counterType));
 				k++;
@@ -366,7 +366,7 @@ public class IpcTraceParser extends Parser {
 	}
 	
 	private String convertL2EventType(Integer value) {
-		String s = IpcTraceParser.l2EventTypeTable.get(value);
+		String s = IpcTraceParser.L2_EVENT_TYPE_TABLE.get(value);
 		if (s == null) {
 			s = String.format(IPC_EVENT_NOT_RECOGNISED, value);
 		}
@@ -374,7 +374,7 @@ public class IpcTraceParser extends Parser {
 	}
 	
 	private String convertCounterType(Integer value) {
-		String s = IpcTraceParser.counterTypeTable.get(value);
+		String s = IpcTraceParser.COUNTER_TYPE_TABLE.get(value);
 		if (s == null) {
 			s = String.format(IPC_EVENT_NOT_RECOGNISED, value);
 		}

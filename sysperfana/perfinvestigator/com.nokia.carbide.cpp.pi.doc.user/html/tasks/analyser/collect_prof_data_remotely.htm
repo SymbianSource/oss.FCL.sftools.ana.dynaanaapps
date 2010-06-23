@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>Collecting profiler data remotely</title>
+  <link href="../../../book.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Collecting Profiler Data Remotely</h2>
+
+<p>Instead of collecting performance data with PI Profiler on the device and
+importing it to Carbide.c++, you can also collect performance data directly
+from Carbide. The PI Import Wizard offers the option of collecting profiler
+data remotely from a device via a TraceViewer connection.</p>
+
+<p>To collect profiler data remotely, perform the following steps.</p>
+
+<div class="step">
+<h3>Importing a Profiler Data File</h3>
+
+<h5>Open Import Wizard</h5>
+
+<p>In Carbide.c++, select <strong>Carbide</strong> &gt; <strong>Performance
+Investigator</strong>.</p>
+
+<h5><a name="Select_Profiler_Data_File"
+id="Select_Profiler_Data_File"></a>Select Profiler Data File(s)</h5>
+<ol>
+  <li><a name="First" id="First">First use the radio buttons and select to get
+    profiler data <strong>From Device via TraceViewer</strong></a> . 
+    <p class="note"><strong>NOTE</strong> Use the <strong>From File
+    System</strong> option if you want to import existing PI Profiler data
+    files. For more information see <a href="an_load_trace_files.htm">Importing
+    Profiler Data files</a>.</p>
+    <p>The Wizard automatically tries to fetch information on supported plugins
+    from the connected device. If you already have set up a working connection,
+    the plugins are listed in the <strong>Select Plug-ins for Tracing</strong>
+    field. Otherwise you will get the below notice: </p>
+    <p align="center"><img src="images/Import_wizard_error.png" alt=""></p>
+    <p align="center" class="figure">Figure 2. Import wizard notice </p>
+    <p>In this case, or if you want to change the settings, follow the
+    instructions below:</p>
+    <ul>
+      <li>Select Connection settings to open the TraceViewer Connections
+        Setting dialog. Select the connection you want to use or create a new
+        one. For more information, see TraceViewer <a
+        href="../../../../com.nokia.traceviewer.help/html/reference/preferencesconnection.htm">Connection
+        Settings</a>. 
+        <p class="note"><strong>NOTE</strong> You can use a USB or a TCP/IP
+        Musti connection, but for profiling several samplers Musti is
+        recommended due the too high amount of data.</p>
+      </li>
+      <li>Click <strong>OK</strong> in the Connection Setting dialog to save
+        the settings and exit. 
+        <p>The selected connections is now shown below the <strong>Connections
+        Settings</strong> button.</p>
+      </li>
+      <li>Click <strong>Refresh Plug-ins List</strong> . 
+        <p>The Wizard fetches the information on supported plugins and updates
+        them to the <strong>Select Plug-ins for Tracing</strong> list.</p>
+        <p align="center"><img src="images/PI_Wizard_Trace.png"></p>
+        <p align="center" class="figure">Figure 3. Select Profiler Data File</p>
+      </li>
+    </ul>
+  </li>
+  <li><a name="Select" id="Select">Select the plug-ins you want to trace from
+    the list</a>.</li>
+  <li>Fill in the <strong>Profiler Data File Prefix</strong> you want to use as
+    the name of the Profiler .dat file created.</li>
+  <li>Click <strong>Start Tracing</strong>. 
+    <p>The wizard starts tracing. You can see the name of the created base64
+    encoded file (<em>*.base64</em>), the trace time (how long the trace has
+    been running), as well as the size of the file in the <strong>Created
+    Profiler Data File(s)</strong> list. </p>
+  </li>
+  <li id="Stop">Click <strong>Stop Tracing</strong> to finish tracing. 
+    <p>Tracing stops and the Wizard start converting the <em>*.base64</em> file
+    into a <em>*.dat</em> file. You can follow the progress of the conversion
+    from the progress bar. When the conversion is done, you can see the name of
+    the file in the <strong>Created Profiler Data File(s)</strong> list change
+    to <em>*.dat</em>.</p>
+  </li>
+</ol>
+
+<p>It is possible to import several Profiler data files, so after the tracing
+and file conversion, you can either</p>
+<ul>
+  <li>Run another trace, with or without changing the setting first, or</li>
+  <li>Click <strong>Next &gt;</strong> to continue importing the file(s). For
+    instructions, see step 3 in <a
+    href="an_load_trace_files.htm#Select_Known_Available_Information">Importing
+    Profiler Data Files</a>. </li>
+</ul>
+</div>
+
+<p align="left"><strong>Related references</strong></p>
+<ul>
+  <li><a href="an_load_trace_files.htm">Importing Profiler Data files</a></li>
+  <li><a href="../../reference/analyzer/main_view.htm">Analyzer View</a></li>
+  <li><a href="key_profile_pref.htm">Key Press Profile</a> </li>
+</ul>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. <br>
+License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+</body>
+</html>

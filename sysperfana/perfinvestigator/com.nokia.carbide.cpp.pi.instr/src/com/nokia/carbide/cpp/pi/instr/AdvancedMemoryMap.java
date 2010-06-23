@@ -67,7 +67,7 @@ public class AdvancedMemoryMap implements FunctionResolver
 		return this.binReader;
 	}
 	
-	public void InsertSample(IttSample sample)
+	public void insertSample(IttSample sample)
 	{
 		if (this.ittTrace122 == null)
 		{

@@ -37,7 +37,7 @@ import com.nokia.carbide.cpp.internal.pi.util.config.gen.PIConfig.PIConfigPackag
  * <!-- end-user-doc -->
  * @generated
  */
-public class PIConfigPackageImpl extends EPackageImpl implements PIConfigPackage {
+public final class PIConfigPackageImpl extends EPackageImpl implements PIConfigPackage {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -77,12 +77,12 @@ public class PIConfigPackageImpl extends EPackageImpl implements PIConfigPackage
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
-	 * @see com.nokia.carbide.cpp.pi.util.config.gen.PIConfig.PIConfigPackage#eNS_URI
+	 * @see com.nokia.carbide.cpp.pi.util.config.gen.PIConfig.PIConfigPackage#E_NS_URI
 	 * @see #init()
 	 * @generated
 	 */
 	private PIConfigPackageImpl() {
-		super(eNS_URI, PIConfigFactory.eINSTANCE);
+		super(E_NS_URI, PIConfigFactory.E_INSTANCE);
 	}
 
 	/**
@@ -109,16 +109,16 @@ public class PIConfigPackageImpl extends EPackageImpl implements PIConfigPackage
 	 * already been initialized.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #eNS_URI
+	 * @see #E_NS_URI
 	 * @see #createPackageContents()
 	 * @see #initializePackageContents()
 	 * @generated
 	 */
 	public static PIConfigPackage init() {
-		if (isInited) return (PIConfigPackage)EPackage.Registry.INSTANCE.getEPackage(PIConfigPackage.eNS_URI);
+		if (isInited) return (PIConfigPackage)EPackage.Registry.INSTANCE.getEPackage(PIConfigPackage.E_NS_URI);
 
 		// Obtain or create and register package
-		PIConfigPackageImpl thePIConfigPackage = (PIConfigPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(eNS_URI) instanceof PIConfigPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(eNS_URI) : new PIConfigPackageImpl());
+		PIConfigPackageImpl thePIConfigPackage = (PIConfigPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(E_NS_URI) instanceof PIConfigPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(E_NS_URI) : new PIConfigPackageImpl());
 
 		isInited = true;
 
@@ -339,9 +339,9 @@ public class PIConfigPackageImpl extends EPackageImpl implements PIConfigPackage
 		isInitialized = true;
 
 		// Initialize package
-		setName(eNAME);
-		setNsPrefix(eNS_PREFIX);
-		setNsURI(eNS_URI);
+		setName(E_NAME);
+		setNsPrefix(E_NS_PREFIX);
+		setNsURI(E_NS_URI);
 
 		// Obtain other dependent packages
 		XMLTypePackage theXMLTypePackage = (XMLTypePackage)EPackage.Registry.INSTANCE.getEPackage(XMLTypePackage.eNS_URI);
@@ -373,7 +373,7 @@ public class PIConfigPackageImpl extends EPackageImpl implements PIConfigPackage
 		initEAttribute(getMappingType_Label(), theXMLTypePackage.getString(), "label", null, 0, 1, MappingType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
-		createResource(eNS_URI);
+		createResource(E_NS_URI);
 
 		// Create annotations
 		// http:///org/eclipse/emf/ecore/util/ExtendedMetaData

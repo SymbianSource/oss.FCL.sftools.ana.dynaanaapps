@@ -99,6 +99,11 @@ public class ProfiledLibraryEvent extends ProfiledGeneric {
 	}
 		
 	public MemThread getLastMemThread(){
+		if(memSamples.isEmpty()){
+			MemThread mt = new MemThread(-1, "","");
+			mt.maxMemoryItem = new MaxMemoryItem();
+			return mt;
+		}
 		return memSamples.get(memSamples.lastKey()).thread;
 	}
 

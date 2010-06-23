@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Decorations;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
-public class TestGUI extends Frame {
+public final class TestGUI extends Frame {
 
 	private static final long serialVersionUID = -7535470144323980407L;
 

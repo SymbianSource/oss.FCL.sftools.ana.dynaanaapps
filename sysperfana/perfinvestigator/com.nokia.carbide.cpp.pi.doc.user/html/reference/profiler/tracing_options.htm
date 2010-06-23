@@ -2,83 +2,113 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Setting Tracing Options</title>
-    <link href="../../../book.css" rel="stylesheet" type="text/css">
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Setting Tracing Options</title>
+  <link href="../../../book.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
 <h2>Setting Tracing Options </h2>
-<p>Use the <b>Tracing</b> options menu in the Profiler to specify the types of tracing data to collect when profiling an application executing on a device.</p>
-<table width="650" border="1" align="center">
-  <tr>
-    <td width="33"><b>S60</b></td>
-    <td width="593"><div align="center"><img src="images/TracingOptionsList.png" width="264" height="312">&nbsp;<img src="images/TracingOptionsList2.png" width="264" height="312"></div></td>
-  </tr>
-  <tr>
-    <td><b>UIQ</b></td>
-    <td><div align="center"><img src="images/uiq_setting_tracing_options.png" width="240" height="320"></div></td>
-  </tr>
-</table>
-<p class="figure">Figure 1. Tracing options screen in Profiler (S60 and UIQ)</p>
-<p> The tracing options include:</p>
+
+<p>Use the <b>Tracing</b> options menu in the Profiler to specify the types of
+tracing data to collect when profiling an application executing on a device.</p>
+
+<p align="center"><img src="images/TracingOptionsList.png"> <img
+src="images/TracingOptionsList2.png"></p>
+
+<p class="figure">Figure 1. Tracing options screen in Profiler (S60)</p>
+
+<p>The tracing options include:</p>
+
 <h5>Table 1. <span class="figure">Profiler Tracing Options</span></h5>
-<table width="94%"  border="0" cellpadding="2" cellspacing="0">
-  <tr>
-    <th width="226" scope="col">Menu Option </th>
-    <th width="616" scope="col">Description</th>
-  </tr>
-  <tr>
-    <td><b>Dynamic binary support</b></td>
-    <td><p>Enable (On) or disable (Off) dynamic binary tracing in your profiling task. </p>
-    <p>If the executables you wish to analyze are not in a ROM image (.symbol file) of your target device, then you will need to turn on Dynamic binary support.</p></td>
-  </tr>
-  <tr>
-    <td><b>Function call capture </b></td>
-    <td>Enable (On) or disable (Off) function call information in your profiling task. If disabled, then <a href="../analyzer/function_calls.htm">Function call</a> information will not appear in the Analyzer.</td>
-  </tr>
-  <tr>
-    <td><b>Button press capture </b></td>
-    <td>Enable (On) or disable (Off) the gathering of button press information in your profiling task. If disabled, then Button Press information will not appear in the Analyzer.</td>
-  </tr>
-  <tr>
-    <td><b>Memory usage capture </b></td>
-    <td>Enable (On) or disable (Off) memory usage information in your profiling task. If disabled, then Memory usage information will not appear in the Analyzer.</td>
-  </tr>
-  <tr>
-    <td><b>Thread priority capture </b></td>
-    <td><p>Enable (On) or disable (Off) Thread priority information. If enabled, captured data will include the time and priority ranking of the currently executing thread when the operating system is called.</p>
-        <p>If disabled, then thread priority information is not included and a Priority List column will not be shown in the <a href="../analyzer/thread_load.htm">Thread Load</a> table in the Analyzer.</p></td>
-  </tr>
-  <tr>
-    <td><b>Power usage capture </b></td>
-    <td><p>Enable (On) or disable (Off) power usage information in your profiling task. If disabled, then Power usage information will not appear in the Analyzer.</p>
-    <p class="note"><b>NOTE</b> Power usage capture is not available in UIQ version. </span></p></td>
-  </tr>
+
+<table width="94%" border="0" cellpadding="2" cellspacing="0">
+  <tbody>
+    <tr>
+      <th width="226" scope="col">Menu Option </th>
+      <th width="616" scope="col">Description</th>
+    </tr>
+    <tr>
+      <td><b>Dynamic binary support</b></td>
+      <td><p>Enable (On) or disable (Off) dynamic binary tracing in your
+        profiling task. </p>
+
+        <p>If the executables you wish to analyze are not in a ROM image
+        (.symbol file) of your target device, then you will need to turn on
+        Dynamic binary support.</p>
+      </td>
+    </tr>
+    <tr>
+      <td><b>Function call capture </b></td>
+      <td>Enable (On) or disable (Off) function call information in your
+        profiling task. If disabled, then <a
+        href="../analyzer/function_calls.htm">Function call</a> information
+        will not appear in the Analyzer.</td>
+    </tr>
+    <tr>
+      <td><b>Button press capture </b></td>
+      <td>Enable (On) or disable (Off) the gathering of button press
+        information in your profiling task. If disabled, then Button Press
+        information will not appear in the Analyzer.</td>
+    </tr>
+    <tr>
+      <td><b>Memory usage capture </b></td>
+      <td>Enable (On) or disable (Off) memory usage information in your
+        profiling task. If disabled, then Memory usage information will not
+        appear in the Analyzer.</td>
+    </tr>
+    <tr>
+      <td><b>Thread priority capture </b></td>
+      <td><p>Enable (On) or disable (Off) Thread priority information. If
+        enabled, captured data will include the time and priority ranking of
+        the currently executing thread when the operating system is called.</p>
+
+        <p>If disabled, then thread priority information is not included and a
+        Priority List column will not be shown in the <a
+        href="../analyzer/thread_load.htm">Thread Load</a> table in the
+        Analyzer.</p>
+      </td>
+    </tr>
+    <tr>
+      <td><b>Power usage capture </b></td>
+      <td><p>Enable (On) or disable (Off) power usage information in your
+        profiling task. If disabled, then Power usage information will not
+        appear in the Analyzer.</p>
+      </td>
+    </tr>
+  </tbody>
 </table>
+
 <div class="step">
-  <h4>Setting a Tracing Option</h4>
-  <ol>
-    <li>Launch the Profiler application on the target device </li>
-<li>Open the Profiler options screen: </li>
-    <ul>
-  <li>S60 - Select the Tracing menu</li>
-  <li>UIQ - Select the Tracing Options menu</li>
-</ul>
+<h4>Setting a Tracing Option</h4>
+<ol>
+  <li>Launch the Profiler application on the target device </li>
+  <li>Open the Profiler options screen: </li>
+</ol>
+<ul>
+  <li>Select the Tracing menu</li>
   <li>Set the desired option on or off</li>
   <li>Exit the screen</li>
-  </ol>
+</ul>
+<ul>
+</ul>
 </div>
-<h5>Related references
-</h5>
+
+<h5>Related references </h5>
 <ul>
   <li><a href="prof_using.htm">Using the Profiler</a></li>
 </ul>
+
 <h5>Related tasks</h5>
 <ul>
   <li><a href="advanced_options.htm">Setting Advanced Options</a></li>
   <li><a href="output_settings.htm">Setting Output Settings </a> </li>
 </ul>
-<div id="footer">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. <br>License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. <br>
+License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a></div>
 </body>
 </html>

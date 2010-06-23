@@ -17,17 +17,20 @@
 
 package com.nokia.carbide.cpp.pi.peccommon;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Vector;
 
 import com.nokia.carbide.cpp.internal.pi.model.GenericSample;
 import com.nokia.carbide.cpp.internal.pi.model.GenericSampledTrace;
+import com.nokia.carbide.cpp.internal.pi.model.ICPUScale;
 
 /**
  * The model class for Performance Counter traces. This manages the data
  * for the IPC trace graphs, and is responsible for creating the graphs. 
  */
-public class PecCommonTrace extends GenericSampledTrace {
+public class PecCommonTrace extends GenericSampledTrace implements ICPUScale{
 	private static final long serialVersionUID = 4425739452429422333L;
 
 	private int samplingInterval;
@@ -44,6 +47,8 @@ public class PecCommonTrace extends GenericSampledTrace {
 	private double selectionStart;
 	private double selectionEnd;
 	private transient boolean needsRecalc;
+	
+	private int cpuClockRate;
 
 	private transient PecCommonLegendElement[] legendElements;
 	
@@ -186,4 +191,85 @@ public class PecCommonTrace extends GenericSampledTrace {
 		}
 		return les;
 	}
+	
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.model.ICPUScale#calculateScale(int)
+	 */
+	public float calculateScale(int sampleSynchTime) {
+		if (cpuClockRate <= 0) {
+			return 1;
+		}
+		GenericSample genericSample = null;
+		if((samples.size() - 1) >= sampleSynchTime){
+			genericSample = samples.get(sampleSynchTime);
+		}else{
+			genericSample = samples.lastElement();
+		}		
+		if (genericSample instanceof PecCommonSample) {
+			int[] values = ((PecCommonSample) genericSample).values;
+			return (float) values[4] / cpuClockRate;
+		} 
+		return 1;
+
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.model.ICPUScale#calculateScale(int, int)
+	 */
+	public float calculateScale(int startSynchTime, int endSynchTime) {
+		if (cpuClockRate <= 0) {
+			return 1;
+		}
+		if(startSynchTime > endSynchTime){
+			return 1;
+		}
+		List<Float> sampleList = new ArrayList<Float>();
+		while(startSynchTime <= endSynchTime ){
+			GenericSample genericSample = null;
+			if((samples.size() - 1) >= endSynchTime){
+				genericSample = samples.get(endSynchTime);
+			}else{
+				genericSample = samples.lastElement();
+			}				
+			if (genericSample instanceof PecCommonSample) {
+				int[] values = ((PecCommonSample) genericSample).values;
+				float cpuSampleClockRate = (float) values[4] / cpuClockRate;
+				sampleList.add(cpuSampleClockRate);
+			} 
+			startSynchTime  += 100;
+		}	
+		if(sampleList.size() > 0){
+			float sum = 0;
+			for(float value : sampleList){
+				sum += value;
+			}
+			return sum / sampleList.size();
+		}else{
+			return 1;
+		}
+	}
+
+	/**
+	 * @param cpuClockRate the cpuClockRate to set
+	 */
+	public void setCpuClockRate(int cpuClockRate) {
+		this.cpuClockRate = cpuClockRate;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.nokia.carbide.cpp.internal.pi.model.ICPUScale#isCpuScaleSupported()
+	 */
+	public boolean isCpuScaleSupported(){
+		if(cpuClockRate > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	
 }

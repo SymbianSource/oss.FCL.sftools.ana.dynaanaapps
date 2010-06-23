@@ -27,7 +27,7 @@ import java.util.Vector;
  *
  **/
 
-public class BackgroundLoader implements Runnable
+public final class BackgroundLoader implements Runnable
 {
 	/**
 	 * Thread used to load classes in the background

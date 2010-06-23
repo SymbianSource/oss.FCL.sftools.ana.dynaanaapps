@@ -233,7 +233,7 @@ public class BinaryReader
 
                           
                           // this is a checksum match
-                          checksumValues.add(Boolean.valueOf(true));
+                          checksumValues.add(Boolean.TRUE);
                         }
                         else
                         {
@@ -253,7 +253,7 @@ public class BinaryReader
                           //						" pos:"+i+"!! "+pf.file.getAbsolutePath());
                           
                           // this one is not a checksum match
-                          checksumValues.add(Boolean.valueOf(false));
+                          checksumValues.add(Boolean.FALSE);
                         }
                       }
                     }

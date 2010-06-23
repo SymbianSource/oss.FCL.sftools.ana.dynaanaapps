@@ -17,7 +17,9 @@
 
 package com.nokia.carbide.cpp.internal.pi.wizards.ui;
 
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -40,43 +42,43 @@ implements INewPIWizardSettings
 {
 
 	// control
-	private Composite composite = null;
-	private Group optionGroup = null;
-	private Composite appComposite = null;
-	private Composite appLabelComposite = null;
-	private Button buttonApp = null;
-	private Label labelAppTitle = null;
-	private Label labelApp2 = null;
-	private Composite romAppComposite = null;
-	private Composite romAppLabelComposite = null;
-	private Button buttonRomApp = null;
-	private Label labelRomAppTitle = null;
-	private Label labelRomApp2 = null;
-	private Label labelRomApp3 = null;
-	private Composite romComposite = null;
-	private Composite romLabelComposite = null;
-	private Button buttonRom = null;
-	private Label labelRomTitle = null;
-	private Label labelRom2 = null;
-	private Composite noneComposite = null;
-	private Composite noneLabelComposite = null;
-	private Button buttonNone = null;
-	private Label labelNoneTitle = null;
-	private Label labelNone2 = null;
-	private Label labelNone3 = null;
+	private transient Composite composite = null;
+	private transient Group optionGroup = null;
+	private transient Composite appComposite = null;
+	private transient Composite appLabelComposite = null;
+	private transient Button buttonApp = null;
+	private transient Label labelAppTitle = null;
+	private transient Label labelApp2 = null;
+	private transient Composite romAppComposite = null;
+	private transient Composite romAppLabelComposite = null;
+	private transient Button buttonRomApp = null;
+	private transient Label labelRomAppTitle = null;
+	private transient Label labelRomApp2 = null;
+	private transient Label labelRomApp3 = null;
+	private transient Composite romComposite = null;
+	private transient Composite romLabelComposite = null;
+	private transient Button buttonRom = null;
+	private transient Label labelRomTitle = null;
+	private transient Label labelRom2 = null;
+	private transient Composite noneComposite = null;
+	private transient Composite noneLabelComposite = null;
+	private transient Button buttonNone = null;
+	private transient Label labelNoneTitle = null;
+	private transient Label labelNone2 = null;
+	private transient Label labelNone3 = null;
 	@SuppressWarnings("unused") //$NON-NLS-1$
-	private Group customTraceGroup = null;
+	private transient Group customTraceGroup = null;
 	@SuppressWarnings("unused") //$NON-NLS-1$
-	private Button buttonCustomTrace = null;
+	private transient Button buttonCustomTrace = null;
 	@SuppressWarnings("unused") //$NON-NLS-1$
-	private Label labelCustomTrace = null;
+	private transient Label labelCustomTrace = null;
 
-	private ICarbideSharedImages carbideImages = CarbideUIPlugin.getSharedImages();
-	private Image phonensisImage = carbideImages.getImage(ICarbideSharedImages.IMG_PI_IMPORT_ROM_AND_APP_100_42);
-	private Image phoneImage = carbideImages.getImage(ICarbideSharedImages.IMG_PI_IMPORT_ROM_42_42);
-	private Image sisImage = carbideImages.getImage(ICarbideSharedImages.IMG_PI_IMPORT_APP_42_42);
-	private Image noneImage = carbideImages.getImage(ICarbideSharedImages.IMG_PI_IMPORT_NONE_100_42);
-	private Image cusTraceImage = carbideImages.getImage(ICarbideSharedImages.IMG_CUSTOM_TRACE_BADGE_24_24);
+	private transient final ICarbideSharedImages carbideImages = CarbideUIPlugin.getSharedImages();
+	private transient final Image phonensisImage = carbideImages.getImage(ICarbideSharedImages.IMG_PI_IMPORT_ROM_AND_APP_100_42);
+	private transient final Image phoneImage = carbideImages.getImage(ICarbideSharedImages.IMG_PI_IMPORT_ROM_42_42);
+	private transient final Image sisImage = carbideImages.getImage(ICarbideSharedImages.IMG_PI_IMPORT_APP_42_42);
+	private transient final Image noneImage = carbideImages.getImage(ICarbideSharedImages.IMG_PI_IMPORT_NONE_100_42);
+	private transient final Image cusTraceImage = carbideImages.getImage(ICarbideSharedImages.IMG_CUSTOM_TRACE_BADGE_24_24);
 
 	protected NewPIWizardPageConfigSelectorTask() {
 		super(Messages.getString("NewPIWizardPageConfigSelectorTask.title"));	//$NON-NLS-1$
@@ -84,13 +86,10 @@ implements INewPIWizardSettings
 	    setDescription(Messages.getString("NewPIWizardPageConfigSelectorTask.description")); //$NON-NLS-1$
 	}
 
-	SelectionListener buttonListener = new SelectionListener () {
+	private final transient SelectionListener buttonListener = new SelectionAdapter () {
 		// handle all buttons including radio behavior among toggle
-		
-		public void widgetDefaultSelected(SelectionEvent arg0) {
-		}
-
-		public void widgetSelected(SelectionEvent arg0) {
+	
+		public void widgetSelected(final SelectionEvent arg0) {
 			buttonApp.setSelection(false);
 			buttonRomApp.setSelection(false);
 			buttonRom.setSelection(false);
@@ -114,14 +113,14 @@ implements INewPIWizardSettings
 		}
 	};
 
-	public void createControl(Composite parent) {
+	public void createControl(final Composite parent) {
 		super.createControl(parent);
-		GridLayout gridLayout1 = new GridLayout();
+		final GridLayout gridLayout1 = new GridLayout();
 		gridLayout1.numColumns = 1;
 		composite = new Composite (parent, SWT.NONE);
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		composite.setLayout(gridLayout1);
-		GridLayout gridLayout2 = new GridLayout();
+		final GridLayout gridLayout2 = new GridLayout();
 		gridLayout2.numColumns = 1;
 		optionGroup = new Group(composite, SWT.NONE);
 		optionGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, true));
@@ -141,7 +140,7 @@ implements INewPIWizardSettings
 		createNoneComposite();
 //		createCustomComposite();
 		
-		GridData buttonWidthGridData = new GridData();
+		final GridData buttonWidthGridData = new GridData();
 		buttonWidthGridData.widthHint = Math.max(Math.max(Math.max(phonensisImage.getBounds().width, phoneImage.getBounds().width), sisImage.getBounds().width), noneImage.getBounds().width) + 30;
 		buttonWidthGridData.heightHint = Math.max(Math.max(Math.max(phonensisImage.getBounds().height, phoneImage.getBounds().height), sisImage.getBounds().height), noneImage.getBounds().height) + 30;
 		buttonRomApp.setLayoutData(buttonWidthGridData);
@@ -155,8 +154,21 @@ implements INewPIWizardSettings
 		validatePage();
 	}
 	
-	void createAppComposite() {
-		GridLayout gridLayout1 = new GridLayout();
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.dialogs.DialogPage#performHelp()
+	 */
+	@Override
+	public void performHelp() {
+		final WizardDialog wizardDialog = (WizardDialog)getContainer();	
+		if(wizardDialog.buttonBar != null){	
+			PlatformUI.getWorkbench().getHelpSystem().setHelp(wizardDialog.buttonBar,
+					CarbidePiWizardHelpIds.PI_IMPORT_WIZARD_CONFIG_SELECTOR);
+		}
+
+	}
+	
+	private void createAppComposite() {
+		final GridLayout gridLayout1 = new GridLayout();
 		gridLayout1.numColumns = 2;
 		appComposite = new Composite (optionGroup, SWT.NONE);
 		appComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, true));
@@ -164,7 +176,7 @@ implements INewPIWizardSettings
 		buttonApp = new Button(appComposite, SWT.TOGGLE);
 		buttonApp.setImage(sisImage);
 		buttonApp.addSelectionListener(buttonListener);
-		GridLayout gridLayout2 = new GridLayout();
+		final GridLayout gridLayout2 = new GridLayout();
 		gridLayout2.numColumns = 1;
 		appLabelComposite = new Composite (appComposite, SWT.NONE);
 		appLabelComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, true));
@@ -173,8 +185,8 @@ implements INewPIWizardSettings
 		labelApp2.setText(Messages.getString("NewPIWizardPageConfigSelectorTask.labelApp2")); //$NON-NLS-1$
 	}
 	
-	void createRomAppComposite() {
-		GridLayout gridLayout1 = new GridLayout();
+	private void createRomAppComposite() {
+		final GridLayout gridLayout1 = new GridLayout();
 		gridLayout1.numColumns = 2;
 		romAppComposite = new Composite (optionGroup, SWT.NONE);
 		romAppComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, true));
@@ -182,7 +194,7 @@ implements INewPIWizardSettings
 		buttonRomApp = new Button(romAppComposite, SWT.TOGGLE);
 		buttonRomApp.setImage(phonensisImage);
 		buttonRomApp.addSelectionListener(buttonListener);
-		GridLayout gridLayout2 = new GridLayout();
+		final GridLayout gridLayout2 = new GridLayout();
 		gridLayout2.numColumns = 1;
 		romAppLabelComposite = new Composite (romAppComposite, SWT.NONE);
 		romAppLabelComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, true));
@@ -193,8 +205,8 @@ implements INewPIWizardSettings
 		labelRomApp3.setText(Messages.getString("NewPIWizardPageConfigSelectorTask.labelRomApp3")); //$NON-NLS-1$		
 	}
 	
-	void createRomComposite() {
-		GridLayout gridLayout1 = new GridLayout();
+	private void createRomComposite() {
+		final GridLayout gridLayout1 = new GridLayout();
 		gridLayout1.numColumns = 2;
 		romComposite = new Composite (optionGroup, SWT.NONE);
 		romComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, true));
@@ -202,7 +214,7 @@ implements INewPIWizardSettings
 		buttonRom = new Button(romComposite, SWT.TOGGLE);
 		buttonRom.setImage(phoneImage);
 		buttonRom.addSelectionListener(buttonListener);
-		GridLayout gridLayout2 = new GridLayout();
+		final GridLayout gridLayout2 = new GridLayout();
 		gridLayout2.numColumns = 1;
 		romLabelComposite = new Composite (romComposite, SWT.NONE);
 		romLabelComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, true));
@@ -211,8 +223,8 @@ implements INewPIWizardSettings
 		labelRom2.setText(Messages.getString("NewPIWizardPageConfigSelectorTask.labelRom2")); //$NON-NLS-1$				
 	}
 	
-	void createNoneComposite() {
-		GridLayout gridLayout1 = new GridLayout();
+	private void createNoneComposite() {
+		final GridLayout gridLayout1 = new GridLayout();
 		gridLayout1.numColumns = 2;
 		noneComposite = new Composite (optionGroup, SWT.NONE);
 		noneComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, true));
@@ -220,7 +232,7 @@ implements INewPIWizardSettings
 		buttonNone = new Button(noneComposite, SWT.TOGGLE);
 		buttonNone.setImage(noneImage);
 		buttonNone.addSelectionListener(buttonListener);
-		GridLayout gridLayout2 = new GridLayout();
+		final GridLayout gridLayout2 = new GridLayout();
 		gridLayout2.numColumns = 1;
 		noneLabelComposite = new Composite (noneComposite, SWT.NONE);
 		noneLabelComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, true));
@@ -231,19 +243,6 @@ implements INewPIWizardSettings
 		labelNone3.setText(Messages.getString("NewPIWizardPageConfigSelectorTask.labelNone3")); //$NON-NLS-1$				
 	}
 
-	void createCustomComposite() {
-		GridLayout gridLayout3 = new GridLayout();
-		gridLayout3.numColumns = 2;
-		customTraceGroup = new Group(composite, SWT.NONE);
-		customTraceGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		customTraceGroup.setLayout(gridLayout3);
-		buttonCustomTrace = new Button(customTraceGroup, SWT.CHECK);
-		buttonCustomTrace.setImage(cusTraceImage);
-		buttonCustomTrace.addSelectionListener(buttonListener);
-		labelCustomTrace = new Label(customTraceGroup, SWT.WRAP);
-		labelCustomTrace.setText(Messages.getString("NewPIWizardPageConfigSelectorTask.labelCustomTrace")); //$NON-NLS-1$
-	}
-	
 	public void validatePage() {
 		if (buttonRomApp.getSelection() == false &&
 			buttonApp.getSelection() == false &&
@@ -259,19 +258,19 @@ implements INewPIWizardSettings
 	}
 
 	public void setupPageFromFromNewPIWizardSettings() {
-		if (NewPIWizardSettings.getInstance().haveAppRom == true) {
+		if (NewPIWizardSettings.getInstance().haveAppRom) {
 //			buttonApp.setSelection(false);
 //			buttonRomApp.setSelection(true);
 //			buttonRom.setSelection(false);
 			// set focus, and block them
 			buttonRomApp.setFocus();
-		} else if (NewPIWizardSettings.getInstance().haveAppOnly == true) {
+		} else if (NewPIWizardSettings.getInstance().haveAppOnly) {
 //			buttonApp.setSelection(true);
 //			buttonRomApp.setSelection(false);
 //			buttonRom.setSelection(false);
 			// set focus, and block them
 			buttonApp.setFocus();
-		} else if (NewPIWizardSettings.getInstance().haveRomOnly == true) {
+		} else if (NewPIWizardSettings.getInstance().haveRomOnly) {
 //			buttonApp.setSelection(false);
 //			buttonRomApp.setSelection(false);
 //			buttonRom.setSelection(true);

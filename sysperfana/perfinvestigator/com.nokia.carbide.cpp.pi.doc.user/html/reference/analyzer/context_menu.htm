@@ -3,7 +3,7 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <title></title>
+  <title>Context Menu Options</title>
   <link href="../../../book.css" rel="stylesheet" type="text/css">
   <style type="text/css">
 <!--
@@ -109,8 +109,14 @@ want the default file to be overwritten each time you save information. </p>
     </tr>
     <tr>
       <td><b>Dynamically Rescale Based on Selected Threads </b></td>
-      <td>Right-click in Memory Usage graph and select this option to rescale
-        the graph based on selected threads. </td>
+      <td>Right-click in the Memory Usage graph and select this option to
+        rescale the graph based on selected threads. </td>
+    </tr>
+    <tr>
+      <td><strong>Dynamically Rescale Based on Selected Process</strong> </td>
+      <td>Right-click in the Graphics Memory Usage graph and select this option
+        to rescale the graph based on the memory usage of the selected
+        process(es).</td>
     </tr>
     <tr>
       <td><b>Function Only </b></td>
@@ -127,10 +133,16 @@ want the default file to be overwritten each time you save information. </p>
         functions called.</td>
     </tr>
     <tr>
+      <td><b>Graphics Memory Usage Statistics </b></td>
+      <td>Right-click on the Graphic Memory Usage graph and select this menu
+        option to open a Graphics Memory Usage Statistics dialog box that
+        reports memory use for the selected time interval.</td>
+    </tr>
+    <tr>
       <td><b>Memory Usage Statistics </b></td>
-      <td>Right-click in Memory Usage graph and select this menu option to open
-        a Memory Usage Statistics dialog box that reports memory use for the
-        selected time interval.</td>
+      <td>Right-click on the Memory Usage graph and select this menu option to
+        open a Memory Usage Statistics dialog box that reports memory use for
+        the selected time interval.</td>
     </tr>
     <tr>
       <td><b>Open Source for Function </b></td>
@@ -141,7 +153,7 @@ want the default file to be overwritten each time you save information. </p>
       <td><b>Power Usage Settings...</b></td>
       <td>Right-click in the Power Usage graph and select this menu option to
         display a dialog box that reports the voltage and battery capacity. The
-        values can be modifed as mentioned in <a
+        values can be modified as mentioned in <a
         href="wnd_power_graph_settings.htm">Power Usage Settings</a>.</td>
     </tr>
     <tr>
@@ -238,6 +250,13 @@ want the default file to be overwritten each time you save information. </p>
         be selected for the table to be saved.</td>
     </tr>
     <tr>
+      <td><strong>Scale to CPU Clock Speed</strong></td>
+      <td>This option is available in the CPU Thread Load view when CPU clock
+        rate counter is available in the sampled performance counter data.
+        Select this option to scale both the graph and the % Load column of the
+        legend table according to the CPU clock speed. </td>
+    </tr>
+    <tr>
       <td><b>Select All</b></td>
       <td>Selects the entire table in the current pane.</td>
     </tr>
@@ -278,6 +297,11 @@ want the default file to be overwritten each time you save information. </p>
         graph.</td>
     </tr>
     <tr>
+      <td><b>Show Total Graphics Memory Usage</b></td>
+      <td>Displays or disables the Total Graphics Memory Usage line on the
+        Graphics Memory Usage graph.</td>
+    </tr>
+    <tr>
       <td><b>Sort by Binary Path, then Binary Name </b></td>
       <td>In the Binaries and Functions table views, this option will
         alphabetically sort the path of binaries, then alphabetically sort the
@@ -287,7 +311,7 @@ want the default file to be overwritten each time you save information. </p>
     </tr>
     <tr>
       <td><strong>Switch Key Press Profile</strong> </td>
-      <td>Opens a dialog that allows you to change the<a
+      <td>Opens a dialog that allows you to change the <a
         href="../../tasks/analyser/key_profile_switch.htm">key map profile</a>
         associated with the current NPI file.</td>
     </tr>

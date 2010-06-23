@@ -34,7 +34,7 @@ import com.nokia.carbide.cpp.pi.editors.PIPageEditor;
 
 public class PluginRegisterer
 {
-	private static final String extensionName = "com.nokia.carbide.cpp.pi.piPluginData"; //$NON-NLS-1$
+	private static final String EXTENSION_NAME = "com.nokia.carbide.cpp.pi.piPluginData"; //$NON-NLS-1$
 	
 	private static boolean alreadyRegistered = false;
 
@@ -66,7 +66,7 @@ public class PluginRegisterer
 		}
 
 		IExtensionRegistry registry    = Platform.getExtensionRegistry();
-        IExtensionPoint extensionPoint = registry.getExtensionPoint(extensionName);
+        IExtensionPoint extensionPoint = registry.getExtensionPoint(EXTENSION_NAME);
 
         if (extensionPoint == null)
         	return;

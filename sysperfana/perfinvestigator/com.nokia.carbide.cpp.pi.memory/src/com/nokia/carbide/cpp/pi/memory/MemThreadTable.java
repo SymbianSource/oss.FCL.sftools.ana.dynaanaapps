@@ -538,7 +538,7 @@ public class MemThreadTable extends GenericTable
 		
         private DecimalFormat decimalFormat = new DecimalFormat(Messages.getString("MemThreadTable.kbFormat")); //$NON-NLS-1$
 
-        Table table;
+        private Table table;
 
 		public SharedLabelProvider(Table table) {
 			super();

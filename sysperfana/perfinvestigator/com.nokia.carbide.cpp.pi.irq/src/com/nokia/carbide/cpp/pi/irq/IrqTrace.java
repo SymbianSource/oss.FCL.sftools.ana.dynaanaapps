@@ -144,7 +144,7 @@ public class IrqTrace extends GenericSampledTraceWithFunctions {
 
 			// Get that contains name for thread
 			ArrayList al = ptd.staticData.getColumnMatch(Messages.IrqTrace_1,
-					Messages.IrqTrace_2, new Long(sample.getThreadValue()));
+					Messages.IrqTrace_2, Long.valueOf(sample.getThreadValue()));
 			if (al.size() > 0) {
 				return (String) al.get(0);
 			} else {
@@ -264,20 +264,20 @@ public class IrqTrace extends GenericSampledTraceWithFunctions {
 					}
 				}				
 				// if thread is not yet found from threadToOffset
-				if (!this.threadToOffset.containsKey(new Long(sample
+				if (!this.threadToOffset.containsKey(Long.valueOf(sample
 						.getThreadValue()))) {
-					this.threadToOffset.put(new Long(sample.getThreadValue()),
+					this.threadToOffset.put(Long.valueOf(sample.getThreadValue()),
 							Integer.valueOf(swiOffset++));
 
 					// read thread names from trace if needed
 					if (readThreadNamesFromTrace) {
 						try {
-							this.threadToName.put(new Long(sample
+							this.threadToName.put(Long.valueOf(sample
 									.getThreadValue()), this
 									.getThreadName(sample));
 						} catch (NullPointerException e1) {
 							this.threadToName
-									.put(new Long(sample.getThreadValue()),
+									.put(Long.valueOf(sample.getThreadValue()),
 											Messages.IrqTrace_6
 													+ Long.toHexString(sample
 															.getThreadValue()));
@@ -286,7 +286,7 @@ public class IrqTrace extends GenericSampledTraceWithFunctions {
 
 					// create thread wrapper for the thread and add it to allThreadWrappers
 					SwiThreadWrapper wrapper = new SwiThreadWrapper();
-					wrapper.threadAddress = new Long(sample.getThreadValue());
+					wrapper.threadAddress = Long.valueOf(sample.getThreadValue());
 					wrapper.threadName = threadToName.get(sample
 							.getThreadValue());
 					this.allThreadWrappers.add(wrapper);
@@ -297,8 +297,8 @@ public class IrqTrace extends GenericSampledTraceWithFunctions {
 				val = sample.getIrqL1Value() + (sample.getIrqL2Value() << 8);
 				table = irqTable;
 
-				if (!this.irqToOffset.containsKey(new Long(val))) {
-					this.irqToOffset.put(new Long(val),
+				if (!this.irqToOffset.containsKey(Long.valueOf(val))) {
+					this.irqToOffset.put(Long.valueOf(val),
 							Integer.valueOf(irqOffset++));
 				}
 
@@ -330,7 +330,7 @@ public class IrqTrace extends GenericSampledTraceWithFunctions {
 			}
 
 			// Add interrupts into its sampleTypeWrapper or create one if needed
-			valL = new Long(val);
+			valL = Long.valueOf(val);
 			if (!table.containsKey(valL)) {
 				IrqSampleTypeWrapper w = new IrqSampleTypeWrapper(sample,
 						colorSet, colorsOfThreadsAndLines);

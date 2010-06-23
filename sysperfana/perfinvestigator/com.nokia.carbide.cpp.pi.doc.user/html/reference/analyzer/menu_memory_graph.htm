@@ -11,10 +11,9 @@
 <h2>Memory Graph Menu </h2>
 
 <p>The <strong>Memory Graph</strong> menu is available whenever a <span
-class="code">.npi</span> or <span class="code">.bap</span> data file is opened
-that contains memory usage trace data. Use it to modify how the graph is
-calculated, view memory statistics, and control how the memory information is
-displayed. </p>
+class="code">.npi</span> data file is opened that contains memory usage trace
+data. Use it to modify how the graph is calculated, view memory statistics, and
+control how the memory information is displayed. </p>
 
 <p align="center"><img src="images/menu_memory_usage.png"></p>
 
@@ -35,26 +34,27 @@ displayed. </p>
         dialog. </td>
     </tr>
     <tr valign="top">
-      <td class="Cell"><p><b>Show Chunk Usage </b></p>
+      <td class="Cell"><p><b>Chunk Usage </b></p>
       </td>
-      <td class="Cell"><p>Select<b>Show Chunk Usage</b> to show chunks
-        allocated to threads. Heap threads are not included. The graph
-        refreshes and scales the vertical axis to cover the maximum non-heap
-        chunk usage of the entire graph or the current selected threads. </p>
+      <td class="Cell"><p>Select <b>Chunk Usage</b> to show chunks allocated to
+        threads. Heap threads are not included. The graph refreshes and scales
+        the vertical axis to cover the maximum non-heap chunk usage of the
+        entire graph or the current selected threads. </p>
       </td>
     </tr>
     <tr valign="top">
-      <td class="Cell"><b>Show Stack/Heap Usage </b></td>
-      <td class="Cell">Select<b>Show Stack/Heap Usage</b> to show thread heap
+      <td class="Cell"><b>Stack/Heap Usage </b></td>
+      <td class="Cell">Select <b>Stack/Heap Usage</b> to show thread heap
         chunks.</td>
     </tr>
     <tr valign="top">
-      <td class="Cell"><b>Show Current and Stack/Heap Usage </b></td>
-      <td class="Cell">This is the default setting showing both the current and
+      <td class="Cell"><b>Chunk and Stack/Heap Usage </b></td>
+      <td class="Cell">This is the default setting showing both the chunk and
         stack/heap usage portions of the graph.</td>
     </tr>
     <tr valign="top">
-      <td class="Cell"><b>Dynamically Rescale to Selected Threads </b></td>
+      <td class="Cell"><b>Dynamically Rescale Based on Selected Threads
+      </b></td>
       <td class="Cell">Enable to rescale the vertical axis of the graph to the
         maximum memory usage in the entire graph by the threads currently
         checked in the CPU load table. When disabled, rescale the vertical axis

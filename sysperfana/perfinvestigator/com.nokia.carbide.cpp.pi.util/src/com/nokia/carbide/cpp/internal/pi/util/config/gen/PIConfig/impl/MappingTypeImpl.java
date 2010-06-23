@@ -228,7 +228,7 @@ public class MappingTypeImpl extends EObjectImpl implements MappingType {
 			case PIConfigPackage.MAPPING_TYPE__ENUM_STRING:
 				return getEnumString();
 			case PIConfigPackage.MAPPING_TYPE__KEY_CODE:
-				return new Long(getKeyCode());
+				return Long.valueOf(getKeyCode());
 			case PIConfigPackage.MAPPING_TYPE__LABEL:
 				return getLabel();
 		}

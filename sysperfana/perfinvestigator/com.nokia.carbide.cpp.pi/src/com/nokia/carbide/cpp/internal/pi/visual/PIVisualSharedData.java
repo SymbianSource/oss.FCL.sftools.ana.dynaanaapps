@@ -23,10 +23,10 @@ public class PIVisualSharedData
 	// String, Integer, Long, etc.
 	// Do not add instances of any application specific class
 	
-	public String[] GPP_SelectedThreadNames;
-	public String[] GPP_SelectedBinaryNames;
-	public String[] GPP_SelectedFunctionNames;
-	public int[] GPP_SelectedThreadIndicies;
-	public int[] GPP_SelectedBinariesIndicies;
-	public int[] GPP_SelectedFunctionIndicies;
+	public String[] gppSelectedThreadNames;
+	public String[] gppSelectedBinaryNames;
+	public String[] gppSelectedFunctionNames;
+	public int[] gppSelectedThreadIndicies;
+	public int[] gppSelectedBinariesIndicies;
+	public int[] gppSelectedFunctionIndicies;
 }
