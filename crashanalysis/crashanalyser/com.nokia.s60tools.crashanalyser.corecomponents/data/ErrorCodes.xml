@@ -262,13 +262,13 @@
     <error_name>KErrHardwareNotAvailable</error_name>
     <error_value>-44</error_value>
     <error_component>E32  (E32ERR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrSessionClosed</error_name>
     <error_value>-45</error_value>
     <error_component>E32  (E32ERR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrPermissionDenied</error_name>
@@ -715,6 +715,24 @@
     <error_text>Could not connect to internet. Please ensure the internet control panel Or equivalent description to internet control panel is closed</error_text>
   </error>
   <error>
+    <error_name>KImskErrorISPOrIAPRecordNotFound</error_name>
+    <error_value>-182</error_value>
+    <error_component>Email Socket Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KImskErrorActiveSettingIsDifferent</error_name>
+    <error_value>-183</error_value>
+    <error_component>Email Socket Errors</error_component>
+    <error_text>Unable to connect using the specified IAP, already connected to the Internet using a different IAP</error_text>
+  </error>
+  <error>
+    <error_name>KImskSecuritySettingsFailed</error_name>
+    <error_value>-184</error_value>
+    <error_component>Email Socket Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
     <error_name>KErrNetUnreach</error_name>
     <error_value>-190</error_value>
     <error_component>Sockets  (INSOCK.H)</error_component>
@@ -793,6 +811,114 @@
     <error_text>Could not select an IMAP4 folder</error_text>
   </error>
   <error>
+    <error_name>KErrImapServerNoSecurity</error_name>
+    <error_value>-209</error_value>
+    <error_component>Email IMAP Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrImapServerLoginDisabled</error_name>
+    <error_value>-210</error_value>
+    <error_component>Email IMAP Errors</error_component>
+    <error_text>Login for this IMAP4 server has been disabled</error_text>
+  </error>
+  <error>
+    <error_name>KErrImapTLSNegotiateFailed</error_name>
+    <error_value>-211</error_value>
+    <error_component>Email IMAP Errors</error_component>
+    <error_text>A secure connection cannot be made to this server</error_text>
+  </error>
+  <error>
+    <error_name>KErrImapCantDeleteFolder</error_name>
+    <error_value>-212</error_value>
+    <error_component>Email IMAP Errors</error_component>
+    <error_text>This folder cannot be deleted</error_text>
+  </error>
+  <error>
+    <error_name>KDmssUnknownErr</error_name>
+    <error_value>-221</error_value>
+    <error_component>Email IMAP Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KDmssMailboxUnavailableErr</error_name>
+    <error_value>-222</error_value>
+    <error_component>Email IMAP Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KDmssActionAbortedErr</error_name>
+    <error_value>-223</error_value>
+    <error_component>Email IMAP Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KDmssActionNotTakenErr</error_name>
+    <error_value>-224</error_value>
+    <error_component>Email IMAP Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KDmssCmdUnrecognisedErr</error_name>
+    <error_value>-225</error_value>
+    <error_component>Email IMAP Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KDmssSyntaxErrorErr</error_name>
+    <error_value>-226</error_value>
+    <error_component>Email IMAP Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KDmssCmdNotImplementedErr</error_name>
+    <error_value>-227</error_value>
+    <error_component>Email IMAP Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KDmssBadSequenceErr</error_name>
+    <error_value>-228</error_value>
+    <error_component>Email IMAP Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KDmssParamNotImplementedErr</error_name>
+    <error_value>-229</error_value>
+    <error_component>Email IMAP Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KDmssMailboxNoAccessErr</error_name>
+    <error_value>-230</error_value>
+    <error_component>Email IMAP Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KDmssExceededStorageErr</error_name>
+    <error_value>-231</error_value>
+    <error_component>Email IMAP Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KDmssMailboxNameErr</error_name>
+    <error_value>-232</error_value>
+    <error_component>Email IMAP Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KDmssTransactionFailedErr</error_name>
+    <error_value>-233</error_value>
+    <error_component>Email IMAP Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KDmssTimeOutErr</error_name>
+    <error_value>-234</error_value>
+    <error_component>Email IMAP Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
     <error_name>KSmtpNoMailFromErr</error_name>
     <error_value>-240</error_value>
     <error_component>Email SMTP  (MIUT_ERR.H)</error_component>
@@ -808,19 +934,127 @@
     <error_name>KSmtpBadMailFromAddress</error_name>
     <error_value>-242</error_value>
     <error_component>Email SMTP  (MIUT_ERR.H)</error_component>
-    <error_text>"Email message has an invalid ""From"" address"</error_text>
+    <error_text>Email message has an invalid "From" address</error_text>
   </error>
   <error>
     <error_name>KSmtpBadRcptToAddress</error_name>
     <error_value>-243</error_value>
     <error_component>Email SMTP  (MIUT_ERR.H)</error_component>
-    <error_text>"Email message has an invalid ""To"", ""Cc"" or ""Bcc"" address"</error_text>
+    <error_text>Email message has an invalid "To", "Cc" or "Bcc" address</error_text>
   </error>
   <error>
     <error_name>KSmtpLoginRefused</error_name>
     <error_value>-244</error_value>
     <error_component>Email SMTP  (MIUT_ERR.H)</error_component>
     <error_text>SMTP server refused to allow connection</error_text>
+  </error>
+    <error>
+    <error_name>KSmtpNoMsgsToSendWithActiveSettings</error_name>
+    <error_value>-245</error_value>
+    <error_component>Email SMTP Error</error_component>
+    <error_text>Could not send email. The messages are destined for an account different from the currently connected one.</error_text>
+  </error>
+  <error>
+    <error_name>KErrSmtpTLSNegotiateFailed</error_name>
+    <error_value>-246</error_value>
+    <error_component>Email SMTP Error</error_component>
+    <error_text>Secure connection failed. Server may not accept secure connections or certificates may be expired.</error_text>
+  </error>
+  <error>
+    <error_name>KImcmHTMLPartNotPopulated</error_name>
+    <error_value>-250</error_value>
+    <error_component>Email SMTP Error</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KImcmInvalidMessageStructure</error_name>
+    <error_value>-251</error_value>
+    <error_component>Email SMTP Error</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrPop3TLSNegotiateFailed</error_name>
+    <error_value>-260</error_value>
+    <error_component>Email SMTP Error</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrInvalidColumn</error_name>
+    <error_value>-300</error_value>
+    <error_component>Access Point Engine</error_component>
+    <error_text> Attempting to read or write a column which does not exists. </error_text>
+  </error>
+  <error>
+    <error_name>KErrInvalidBearer</error_name>
+    <error_value>-301</error_value>
+    <error_component>Access Point Engine</error_component>
+    <error_text> The given bearer is not valid. </error_text>
+  </error>
+  <error>
+    <error_name>KErrInvalidDatabaseType</error_name>
+    <error_value>-302</error_value>
+    <error_component>Access Point Engine</error_component>
+    <error_text> The type of the database is not valid </error_text>
+  </error>
+  <error>
+    <error_name>KErrInvalidName</error_name>
+    <error_value>-303</error_value>
+    <error_component>Access Point Engine</error_component>
+    <error_text> The name of the AP is not valid (length = 0) </error_text>
+  </error>
+  <error>
+    <error_name>KErrDescOverflow</error_name>
+    <error_value>-304</error_value>
+    <error_component>Access Point Engine</error_component>
+    <error_text>  </error_text>
+  </error>
+  <error>
+    <error_name>KErrNullPointerPassed</error_name>
+    <error_value>-305</error_value>
+    <error_component>Access Point Engine</error_component>
+    <error_text> The passed pointer was invalid = NULL </error_text>
+  </error>
+  <error>
+    <error_name>KErrInvalidFilterType</error_name>
+    <error_value>-310</error_value>
+    <error_component>Access Point Engine</error_component>
+    <error_text> The filter is not valid </error_text>
+  </error>
+  <error>
+    <error_name>KErrInvalidBearerType</error_name>
+    <error_value>-311</error_value>
+    <error_component>Access Point Engine</error_component>
+    <error_text> The bearer is not valid </error_text>
+  </error>
+  <error>
+    <error_name>KErrInvalidIspRequest</error_name>
+    <error_value>-312</error_value>
+    <error_component>Access Point Engine</error_component>
+    <error_text> The ISP type given is invalid </error_text>
+  </error>
+  <error>
+    <error_name>KErrValueUnspecified</error_name>
+    <error_value>-323</error_value>
+    <error_component>Access Point Engine</error_component>
+    <error_text> Used when the requested value was not specified in the database </error_text>
+  </error>
+  <error>
+    <error_name>KApSelectionCanceled</error_name>
+    <error_value>-350</error_value>
+    <error_component>Access Point Engine</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KTxtNotOverriden</error_name>
+    <error_value>-351</error_value>
+    <error_component>Access Point Engine</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrInvalidTextId</error_name>
+    <error_value>-355</error_value>
+    <error_component>Access Point Engine</error_component>
+    <error_text/>
   </error>
   <error>
     <error_name>KBspInvalidMessage</error_name>
@@ -912,6 +1146,252 @@
     <error_component>Bio Messaging   (IACPERR.H)</error_component>
     <error_text>Message script error.</error_text>
   </error>
+    <error>
+    <error_name>KWappErrXmlVer</error_name>
+    <error_value>-601</error_value>
+    <error_component>WAP</error_component>
+    <error_text>Wrong XML version</error_text>
+  </error>
+  <error>
+    <error_name>KWappErrOutbound</error_name>
+    <error_value>-602</error_value>
+    <error_component>WAP</error_component>
+    <error_text>Index in exceeds boundaries</error_text>
+  </error>
+  <error>
+    <error_name>KWappErrStringTable</error_name>
+    <error_value>-603</error_value>
+    <error_component>WAP</error_component>
+    <error_text>Bad String table reference</error_text>
+  </error>
+  <error>
+    <error_name>KWappErrEOS</error_name>
+    <error_value>-604</error_value>
+    <error_component>WAP</error_component>
+    <error_text>Reached the end of a key descriptor</error_text>
+  </error>
+  <error>
+    <error_name>KWappErrUnexpectedValue</error_name>
+    <error_value>-605</error_value>
+    <error_component>WAP</error_component>
+    <error_text>Expecting a different tag or content/attributes</error_text>
+  </error>
+  <error>
+    <error_name>KWappErrNoAttributes</error_name>
+    <error_value>-606</error_value>
+    <error_component>WAP</error_component>
+    <error_text>Expecting attributes- missing</error_text>
+  </error>
+  <error>
+    <error_name>KWappErrMandatoryTagMissing</error_name>
+    <error_value>-607</error_value>
+    <error_component>WAP</error_component>
+    <error_text>Search for a mandatory tag failed</error_text>
+  </error>
+  <error>
+    <error_name>KWappErrStoreNotFound</error_name>
+    <error_value>-608</error_value>
+    <error_component>WAP</error_component>
+    <error_text>No store attached to this entry</error_text>
+  </error>
+  <error>
+    <error_name>KWappErrMsgUnparsed</error_name>
+    <error_value>-609</error_value>
+    <error_component>WAP</error_component>
+    <error_text>Trying to process a message which is unparsed</error_text>
+  </error>
+  <error>
+    <error_name>KWappErrUnrecognised</error_name>
+    <error_value>-610</error_value>
+    <error_component>WAP</error_component>
+    <error_text>Token or string is not a recognised value</error_text>
+  </error>
+  <error>
+    <error_name>KWappErrNullValue</error_name>
+    <error_value>-611</error_value>
+    <error_component>WAP</error_component>
+    <error_text>Variable is null or has not been intialised</error_text>
+  </error>
+  <error>
+    <error_name>KWappErrContent</error_name>
+    <error_value>-612</error_value>
+    <error_component>WAP</error_component>
+    <error_text>Empty element, particularly a problem if it's an empty characteristic- has no PARMS</error_text>
+  </error>
+  <error>
+    <error_name>KWappErrNoDBRecords</error_name>
+    <error_value>-613</error_value>
+    <error_component>WAP</error_component>
+    <error_text>Could not find a first record in the COMMDB</error_text>
+  </error>
+  <error>
+    <error_name>KWappErrNotSupported</error_name>
+    <error_value>-614</error_value>
+    <error_component>WAP</error_component>
+    <error_text>Not Supported - WAP specific</error_text>
+  </error>
+  <error>
+    <error_name>KWappErrBadMessage</error_name>
+    <error_value>-615</error_value>
+    <error_component>WAP</error_component>
+    <error_text>Data content/format of message is invalid</error_text>
+  </error>
+  <error>
+    <error_name>KWappErrNoTermination</error_name>
+    <error_value>-616</error_value>
+    <error_component>WAP</error_component>
+    <error_text>Terminating byte missing from string or data element.</error_text>
+  </error>
+  <error>
+    <error_name>EXmlFeatureLockedWhileParsing</error_name>
+    <error_value>-974</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlDtdRequired</error_name>
+    <error_value>-975</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlEntityDeclInPe</error_name>
+    <error_value>-976</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlUnexpectedState</error_name>
+    <error_value>-977</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlNotStandalone</error_name>
+    <error_value>-978</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlExternalEntityHandling</error_name>
+    <error_value>-979</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlUnclosedCdata</error_name>
+    <error_value>-980</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlIncorrectEncoding</error_name>
+    <error_value>-981</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlUnknownEncoding</error_name>
+    <error_value>-982</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlMisplacedPi</error_name>
+    <error_value>-983</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlAttributeExternalEntityRef</error_name>
+    <error_value>-984</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlBinaryEntityRef</error_name>
+    <error_value>-985</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlBadCharRef</error_name>
+    <error_value>-986</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlAsyncEntity</error_name>
+    <error_value>-987</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlRecursiveEntity</error_name>
+    <error_value>-988</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlUndefinedEntity</error_name>
+    <error_value>-989</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlPeRef</error_name>
+    <error_value>-990</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlJunkAfterDocElement</error_name>
+    <error_value>-991</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlDuplicateAttribute</error_name>
+    <error_value>-992</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlTagMismatch</error_name>
+    <error_value>-993</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlPartialChar</error_name>
+    <error_value>-994</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlUnclosedToken</error_name>
+    <error_value>-995</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlInvalidToken</error_name>
+    <error_value>-996</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlNoElements</error_name>
+    <error_value>-997</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EXmlSyntax</error_name>
+    <error_value>-998</error_value>
+    <error_component>XML Parser</error_component>
+    <error_text/>
+  </error>
   <error>
     <error_name>KErrWouldBlock</error_name>
     <error_value>-1000</error_value>
@@ -922,25 +1402,109 @@
     <error_name>KErrExtended</error_name>
     <error_value>-1000</error_value>
     <error_component>BAFL  (BASCHED.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrExtendedWithText</error_name>
     <error_value>-1001</error_value>
     <error_component>BAFL  (BASCHED.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KLeaveWithoutAlert</error_name>
     <error_value>-1002</error_value>
     <error_component>BAFL  (BASCHED.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KLeaveExit</error_name>
     <error_value>-1003</error_value>
     <error_component>BAFL  (BASCHED.H)</error_component>
-    <error_text />
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrOcrBadImage</error_name>
+    <error_value>-1001</error_value>
+    <error_component>OCR</error_component>
+    <error_text>Bad image or unsupported format</error_text>
+  </error>
+  <error>
+    <error_name>KErrOcrBadLanguage</error_name>
+    <error_value>-1002</error_value>
+    <error_component>OCR</error_component>
+    <error_text>Unsupported language</error_text>
+  </error>
+  <error>
+    <error_name>KErrOcrBadRegion</error_name>
+    <error_value>-1003</error_value>
+    <error_component>OCR</error_component>
+    <error_text>Bad layout region</error_text>
+  </error>
+  <error>
+    <error_name>KErrOcrNotSetLanguage</error_name>
+    <error_value>-1004</error_value>
+    <error_component>OCR</error_component>
+    <error_text>Not set any language</error_text>
+  </error>
+  <error>
+    <error_name>KErrOcrBadDictFile</error_name>
+    <error_value>-1005</error_value>
+    <error_component>OCR</error_component>
+    <error_text>Not set any language packages</error_text>
+  </error>
+  <error>
+    <error_name>KErrNoActiveLanguage</error_name>
+    <error_value>-1001</error_value>
+    <error_component>Predictive Text Input</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrLanguageNotFound</error_name>
+    <error_value>-1002</error_value>
+    <error_component>Predictive Text Input</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrNoSuitableCore</error_name>
+    <error_value>-1003</error_value>
+    <error_component>Predictive Text Input</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrNotAllowed</error_name>
+    <error_value>-1004</error_value>
+    <error_component>Predictive Text Input</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrTooLongWord</error_name>
+    <error_value>-1005</error_value>
+    <error_component>Predictive Text Input</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrInvalidWord</error_name>
+    <error_value>-1006</error_value>
+    <error_component>Predictive Text Input</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrTooLongReading</error_name>
+    <error_value>-1007</error_value>
+    <error_component>Predictive Text Input</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrInvalidReading</error_name>
+    <error_value>-1008</error_value>
+    <error_component>Predictive Text Input</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrUserDic</error_name>
+    <error_value>-1009</error_value>
+    <error_component>Predictive Text Input</error_component>
+    <error_text/>
   </error>
   <error>
     <error_name>KErrEtelNotCallOwner</error_name>
@@ -1056,6 +1620,18 @@
     <error_component>Etel  (ETEL.H)</error_component>
     <error_text>Panic</error_text>
   </error>
+    <error>
+    <error_name>KErrEtelPortAlreadyLoaned</error_name>
+    <error_value>-2019</error_value>
+    <error_component>ETEL Errors</error_component>
+    <error_text>The Data port is in use by another call or application.</error_text>
+  </error>
+  <error>
+    <error_name>KErrEtelCallAlreadyActive</error_name>
+    <error_value>-2020</error_value>
+    <error_component>ETEL Errors</error_component>
+    <error_text>Another call active. Close it before opening a new one</error_text>
+  </error>
   <error>
     <error_name>KErrExitNoModem</error_name>
     <error_value>-3001</error_value>
@@ -1090,25 +1666,25 @@
     <error_name>KErrNetDialDatabaseDefaultUndefined</error_name>
     <error_value>-3006</error_value>
     <error_component>Networking  (ND_ERR.H)</error_component>
-    <error_text />
+    <error_text>No Internet Access Points are defined</error_text>
   </error>
   <error>
     <error_name>KErrNetDialDatabaseTypeUnknown</error_name>
     <error_value>-3007</error_value>
     <error_component>Networking  (ND_ERR.H)</error_component>
-    <error_text />
+    <error_text>No Internet Access Points are defined</error_text>
   </error>
   <error>
     <error_name>KErrNetDialDatabaseNotFound</error_name>
     <error_value>-3008</error_value>
     <error_component>Networking  (ND_ERR.H)</error_component>
-    <error_text />
+    <error_text>No Internet Access Points are defined</error_text>
   </error>
   <error>
     <error_name>KErrNetDialHscsdNotSupported</error_name>
     <error_value>-3009</error_value>
     <error_component>Networking  (ND_ERR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIfAuthenticationFailure</error_name>
@@ -1216,7 +1792,7 @@
     <error_name>KErrMMEtelNetworkNotResponding</error_name>
     <error_value>-3206</error_value>
     <error_component>Multimode Telephony  (ETELMMERR.H)</error_component>
-    <error_text>"Network has failed to respond to an MS initiated request e.g. ""flash info"""</error_text>
+    <error_text>Network has failed to respond to an MS initiated request e.g. "flash info"</error_text>
   </error>
   <error>
     <error_name>KErrMMEtelCallForbidden</error_name>
@@ -1554,6 +2130,30 @@
     <error_component>Generic Connection Agent  (GENCONNERROR.H)</error_component>
     <error_text>CommDb Error</error_text>
   </error>
+    <error>
+    <error_name>KErrGenConnNoGPRSNetwork</error_name>
+    <error_value>-3609</error_value>
+    <error_component>GenConn</error_component>
+    <error_text>No Packet network available </error_text>
+  </error>
+  <error>
+    <error_name>KErrGenConnIncorrectMSClass</error_name>
+    <error_value>-3610</error_value>
+    <error_component>GenConn</error_component>
+    <error_text>Phone capabilities insufficient for required services </error_text>
+  </error>
+  <error>
+    <error_name>KErrGenConnInadequateSignalStrengh</error_name>
+    <error_value>-3611</error_value>
+    <error_component>GenConn</error_component>
+    <error_text>Signal strength too low for connection, try again later </error_text>
+  </error>
+  <error>
+    <error_name>KErrGenConnStateMachineNotAvailable</error_name>
+    <error_value>-3612</error_value>
+    <error_component>GenConn</error_component>
+    <error_text>State Machine not available for connection </error_text>
+  </error>
   <error>
     <error_name>KErrGsmRRUnspecifedAbnormalRelease</error_name>
     <error_value>-4001</error_value>
@@ -1732,7 +2332,7 @@
     <error_name>KErrGprsMissingorUnknownAPN</error_name>
     <error_value>-4155</error_value>
     <error_component>GPRS  (ETELPCKT.H)</error_component>
-    <error_text>"""Could not connect to Internet service. Callback is not supported"""""""</error_text>
+    <error_text>Could not connect to Internet service. Callback is not supported.</error_text>
   </error>
   <error>
     <error_name>KErrGprsUnknownPDPAddress</error_name>
@@ -2562,6 +3162,18 @@
     <error_component>TelephonyGSMSms  (EXTERROR.H)</error_component>
     <error_text>Service centre failure. Try again later.</error_text>
   </error>
+    <error>
+    <error_name>KErrGsmSMSDestinationSMEBarred</error_name>
+    <error_value>-4708</error_value>
+    <error_component>Etel GSM Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrGsmSMSDuplicateSM</error_name>
+    <error_value>-4709</error_value>
+    <error_component>Etel GSM Errors</error_component>
+    <error_text/>
+  </error>
   <error>
     <error_name>KErrGsmSMSDestinationSMEBarred</error_name>
     <error_value>-4710</error_value>
@@ -3000,11 +3612,41 @@
     <error_component>TelephonyGSMTE-TAerrors  (EXTERROR.H)</error_component>
     <error_text>Temporary network failure. Try again later.</error_text>
   </error>
+    <error>
+    <error_name>tcpip6_error_NoDestination</error_name>
+    <error_value>-5100</error_value>
+    <error_component>TCP/IP (v6)</error_component>
+    <error_text>IPv6: flow has no destination address</error_text>
+  </error>
   <error>
-    <error_name>KErrGsm0707UnknownError</error_name>
-    <error_value>-5124</error_value>
-    <error_component>TelephonyGSMTE-TAerrors  (EXTERROR.H)</error_component>
-    <error_text>Temporary network failure. Try again later.</error_text>
+    <error_name>tcpip6_error_NoPathMtu</error_name>
+    <error_value>-5101</error_value>
+    <error_component>TCP/IP (v6)</error_component>
+    <error_text>IPv6: Misconfigured driver not giving proper MTU</error_text>
+  </error>
+  <error>
+    <error_name>tcpip6_error_ShortPacket</error_name>
+    <error_value>-5102</error_value>
+    <error_component>TCP/IP (v6)</error_component>
+    <error_text>IPv6: A packet in RMBUF is too short</error_text>
+  </error>
+  <error>
+    <error_name>tcpip6_error_DuplicateAddress</error_name>
+    <error_value>-5103</error_value>
+    <error_component>TCP/IP (v6)</error_component>
+    <error_text>IPv6: Duplicate address detected on a device</error_text>
+  </error>
+  <error>
+    <error_name>tcpip6_error_AddressExpired</error_name>
+    <error_value>-5104</error_value>
+    <error_component>TCP/IP (v6)</error_component>
+    <error_text>IPv6: Source Address used by connection has expired</error_text>
+  </error>
+  <error>
+    <error_name>tcpip6_error_NoRoute</error_name>
+    <error_value>-5105</error_value>
+    <error_component>TCP/IP (v6)</error_component>
+    <error_text>IPv6: No route available</error_text>
   </error>
   <error>
     <error_name>KErrDndNameNotFound</error_name>
@@ -3031,6 +3673,12 @@
     <error_text>Send timeout for the query (probably no route for server)</error_text>
   </error>
   <error>
+    <error_name>KErrGsm0707UnknownError</error_name>
+    <error_value>-5124</error_value>
+    <error_component>TelephonyGSMTE-TAerrors  (EXTERROR.H)</error_component>
+    <error_text>Temporary network failure. Try again later.</error_text>
+  </error>
+  <error>
     <error_name>KErrDndCache</error_name>
     <error_value>-5124</error_value>
     <error_component>Domain Name Daemon  (DND_ERR.H)</error_component>
@@ -3046,7 +3694,7 @@
     <error_name>KErrDndServerFailure</error_name>
     <error_value>-5126</error_value>
     <error_component>Domain Name Daemon  (DND_ERR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrDndBadName</error_name>
@@ -3058,7 +3706,7 @@
     <error_name>KErrDndNotImplemented</error_name>
     <error_value>-5128</error_value>
     <error_component>Domain Name Daemon  (DND_ERR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrDndRefused</error_name>
@@ -3546,6 +4194,534 @@
     <error_component>IPSEC  (IPSECERR.H)</error_component>
     <error_text>RMBUF operation failed unexpectedly</error_text>
   </error>
+    <error>
+    <error_name>RWAPConn::EMoreData</error_name>
+    <error_value>-5500</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWAPConn::EBearerError</error_name>
+    <error_value>-5499</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWAPConn::EPortAlreadyBound</error_name>
+    <error_value>-5498</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWAPConn::ECannotOpenPort</error_name>
+    <error_value>-5497</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWAPConn::ETooManyConnections</error_name>
+    <error_value>-5496</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWAPConn::EBadConnection</error_name>
+    <error_value>-5495</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWAPConn::EBufferTooSmall</error_name>
+    <error_value>-5494</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCOConn::EBufferTooSmall</error_name>
+    <error_value>-5475</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCOConn::EInvalidSession</error_name>
+    <error_value>-5474</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCOConn::EInvalidTransaction</error_name>
+    <error_value>-5473</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCOConn::EParameterError</error_name>
+    <error_value>-5472</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCOConn::ESessionNotConnected</error_name>
+    <error_value>-5471</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCOConn::ENotSupported</error_name>
+    <error_value>-5470</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCOConn::EInvalidState</error_name>
+    <error_value>-5469</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCOConn::ESessionClosed</error_name>
+    <error_value>-5468</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCOConn::EMRUExceeded</error_name>
+    <error_value>-5467</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCOConn::EInvalidBufferSize</error_name>
+    <error_value>-5466</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCOConn::EDataNotAvailable</error_name>
+    <error_value>-5465</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCOConn::EErrorTimeout</error_name>
+    <error_value>-5464</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCLConn::EBufferTooSmall</error_name>
+    <error_value>-5450</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCLConn::EInvalidSession</error_name>
+    <error_value>-5449</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCLConn::EParameterError</error_name>
+    <error_value>-5448</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCLConn::ESessionNotConnected</error_name>
+    <error_value>-5447</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCLConn::ENotSupported</error_name>
+    <error_value>-5446</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCLConn::EInvalidState</error_name>
+    <error_value>-5445</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCLConn::ESessionClosed</error_name>
+    <error_value>-5444</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCLConn::EMRUExceeded</error_name>
+    <error_value>-5443</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCLConn::EInvalidBufferSize</error_name>
+    <error_value>-5442</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCLConn::EDataNotAvailable</error_name>
+    <error_value>-5441</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWSPCLConn::EErrorTimeout</error_name>
+    <error_value>-5440</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTPConn::ENoMemory</error_name>
+    <error_value>-5425</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTPConn::EBadArgument</error_name>
+    <error_value>-5424</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTPConn::EProviderProtoErr</error_name>
+    <error_value>-5423</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTPConn::EProviderAbortInvalidTID</error_name>
+    <error_value>-5422</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTPConn::EProviderAbortNoClass2</error_name>
+    <error_value>-5421</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTPConn::EProviderAbortNoSAR</error_name>
+    <error_value>-5420</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTPConn::EProviderAbortNoUACK</error_name>
+    <error_value>-5419</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTPConn::EProviderAbortVers1</error_name>
+    <error_value>-5418</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTPConn::EProviderAbortNoResponse</error_name>
+    <error_value>-5417</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTPConn::EProviderAbortMsgTooLarge</error_name>
+    <error_value>-5416</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTPConn::EProviderAbortGeneral</error_name>
+    <error_value>-5415</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTPConn::EShutdownError</error_name>
+    <error_value>-5414</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWDPConn::EInvalidParameter</error_name>
+    <error_value>-5400</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EOutOfMemory</error_name>
+    <error_value>-5375</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::ESocketError</error_name>
+    <error_value>-5374</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EBadParameters</error_name>
+    <error_value>-5373</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::ESocketError2</error_name>
+    <error_value>-5372</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EResumeIDNotFound</error_name>
+    <error_value>-5371</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EResumeError</error_name>
+    <error_value>-5370</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::ERenegotiationRequest</error_name>
+    <error_value>-5369</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EIllegalCall</error_name>
+    <error_value>-5368</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EConnectionCloseNotify</error_name>
+    <error_value>-5367</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::ESessionCloseNotify</error_name>
+    <error_value>-5366</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::ENoConnection</error_name>
+    <error_value>-5365</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EUnexpectedMessage</error_name>
+    <error_value>-5364</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EBadRecordMac</error_name>
+    <error_value>-5363</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EDecryptionFailed</error_name>
+    <error_value>-5362</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::ERecordOverflow</error_name>
+    <error_value>-5361</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EHandshakeFailure</error_name>
+    <error_value>-5360</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EDecompressionFailure</error_name>
+    <error_value>-5359</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EBadCertificate</error_name>
+    <error_value>-5358</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EUnsupportedCertificate</error_name>
+    <error_value>-5357</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::ECertificateRevoked</error_name>
+    <error_value>-5356</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::ECertificateExpired</error_name>
+    <error_value>-5355</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::ECertificateUnknown</error_name>
+    <error_value>-5354</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EIllegalParameter</error_name>
+    <error_value>-5353</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EUnknownCA</error_name>
+    <error_value>-5352</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EAccessDenied</error_name>
+    <error_value>-5351</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EDecodeError</error_name>
+    <error_value>-5350</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EDecryptError</error_name>
+    <error_value>-5349</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EUnknownKeyId</error_name>
+    <error_value>-5348</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EDisableKeyId</error_name>
+    <error_value>-5347</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EKeyExchangeDisabled</error_name>
+    <error_value>-5346</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::ESessionNotReady</error_name>
+    <error_value>-5345</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EUnknownParameterIndex</error_name>
+    <error_value>-5344</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EDuplicateFinishedRecv</error_name>
+    <error_value>-5343</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EExportRestriction</error_name>
+    <error_value>-5342</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EProtocolVersion</error_name>
+    <error_value>-5341</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EInsufficientSecurity</error_name>
+    <error_value>-5340</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EInternalError</error_name>
+    <error_value>-5339</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EUserCanceled</error_name>
+    <error_value>-5338</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::ENoRenegotiation</error_name>
+    <error_value>-5337</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EErrGeneral</error_name>
+    <error_value>-5336</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EErrBulk</error_name>
+    <error_value>-5335</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EErrMac</error_name>
+    <error_value>-5334</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EErrSequenceNumberMode</error_name>
+    <error_value>-5333</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EErrKeyRefreshRate</error_name>
+    <error_value>-5332</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>RWTLS::EUnknownPolicy</error_name>
+    <error_value>-5331</error_value>
+    <error_component>WAP: WSP, WTP, WDP and WTLS Errors</error_component>
+    <error_text/>
+  </error>
   <error>
     <error_name>KErrIrObexClientNoDevicesFound</error_name>
     <error_value>-5501</error_value>
@@ -3577,280 +4753,286 @@
     <error_text>Cannot authorise the challenge so link dropped</error_text>
   </error>
   <error>
+    <error_name>KErrIrtranpPeerDoesNotHaveIrtranp</error_name>
+    <error_value>-5530</error_value>
+    <error_component>OBEX - IrTranP</error_component>
+    <error_text/>
+  </error>
+  <error>
     <error_name>KErrIrObexRespSuccess</error_name>
     <error_value>-5532</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespCreated</error_name>
     <error_value>-5533</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespAccepted</error_name>
     <error_value>-5534</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespNonAuthInfo</error_name>
     <error_value>-5535</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespNoContent</error_name>
     <error_value>-5536</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespResetContent</error_name>
     <error_value>-5537</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespPartialContent</error_name>
     <error_value>-5538</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespMultipleChoices</error_name>
     <error_value>-5548</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespMovedPerm</error_name>
     <error_value>-5549</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespMovedTemp</error_name>
     <error_value>-5550</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespSeeOther</error_name>
     <error_value>-5551</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespNotModified</error_name>
     <error_value>-5552</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespUseProxy</error_name>
     <error_value>-5553</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespBadRequest</error_name>
     <error_value>-5564</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespUnauthorized</error_name>
     <error_value>-5565</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespPaymentRequired</error_name>
     <error_value>-5566</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespForbidden</error_name>
     <error_value>-5567</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespNotFound</error_name>
     <error_value>-5568</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespMethodNotAllowed</error_name>
     <error_value>-5569</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespNotAcceptable</error_name>
     <error_value>-5570</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespProxyAuthenReqd</error_name>
     <error_value>-5571</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespTimedOut</error_name>
     <error_value>-5572</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespConflict</error_name>
     <error_value>-5573</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespGone</error_name>
     <error_value>-5574</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespLengthReqd</error_name>
     <error_value>-5575</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespPreCondFailed</error_name>
     <error_value>-5576</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespReqEntityTooLarge</error_name>
     <error_value>-5577</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespReqURLTooLarge</error_name>
     <error_value>-5578</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespUnsupMediaType</error_name>
     <error_value>-5579</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespInternalError</error_name>
     <error_value>-5580</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespNotImplemented</error_name>
     <error_value>-5581</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespBadGateway</error_name>
     <error_value>-5582</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespServiceUnavail</error_name>
     <error_value>-5583</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespGatewayTimeout</error_name>
     <error_value>-5584</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespHTTPVerNotSupp</error_name>
     <error_value>-5585</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespDatabaseFull</error_name>
     <error_value>-5596</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrIrObexRespDatabaseLocked</error_name>
     <error_value>-5597</error_value>
     <error_component>IR OBEX  (OBEX.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KVersitErrCodeBase</error_name>
     <error_value>-5750</error_value>
     <error_component>Versit (VERROR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KVersitErrBadDateTime</error_name>
     <error_value>-5751</error_value>
     <error_component>Versit (VERROR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KVersitErrRepeatTypeNotHandled</error_name>
     <error_value>-5752</error_value>
     <error_component>Versit (VERROR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KVersitErrBadRepeatValue</error_name>
     <error_value>-5753</error_value>
     <error_component>Versit (VERROR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KVersitErrBadTimeZone</error_name>
     <error_value>-5754</error_value>
     <error_component>Versit (VERROR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KVersitErrBadTimePeriod</error_name>
     <error_value>-5755</error_value>
     <error_component>Versit (VERROR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KVersitErrNumberExpected</error_name>
     <error_value>-5756</error_value>
     <error_component>Versit (VERROR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KVersitErrNestedVcardExpected</error_name>
     <error_value>-5757</error_value>
     <error_component>Versit (VERROR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KVersitErrNoPropertyName</error_name>
     <error_value>-5758</error_value>
     <error_component>Versit (VERROR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>EOK</error_name>
@@ -4108,13 +5290,13 @@
     <error_name>EDifferentTransactionCollision</error_name>
     <error_value>-6042</error_value>
     <error_component>Bluetooth HCI  (HCIERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>Reserved by Bluetooth Spec</error_name>
     <error_value>-6043</error_value>
     <error_component>Bluetooth HCI  (HCIERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>EQoSUnacceptableParameter</error_name>
@@ -4150,7 +5332,7 @@
     <error_name>Reserved by Bluetooth Spec</error_name>
     <error_value>-6049</error_value>
     <error_component>Bluetooth HCI  (HCIERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>ERoleSwitchPending</error_name>
@@ -4162,7 +5344,7 @@
     <error_name>Reserved by Bluetooth Spec</error_name>
     <error_value>-6051</error_value>
     <error_component>Bluetooth HCI  (HCIERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>EReservedSlotViolation</error_name>
@@ -4519,6 +5701,120 @@
     <error_text>Reflexive BT link error value</error_text>
   </error>
   <error>
+    <error_name>KErrBluetoothRegistryCorrupt</error_name>
+    <error_value>-6501</error_value>
+    <error_component>Bluetooth Errors</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrBtEskError</error_name>
+    <error_value>-6999</error_value>
+    <error_component>Bluetooth Errors</error_component>
+    <error_text>BT ESK error code</error_text>
+  </error>
+  <error>
+    <error_name>KErrLocalRoleNotSelected</error_name>
+    <error_value>-6551</error_value>
+    <error_component>PAN Agent Errors</error_component>
+    <error_text>The role state machine did not select a valid pair of roles</error_text>
+  </error>
+  <error>
+    <error_name>KErrWaitingForBasebandRoleSwitch</error_name>
+    <error_value>-6552</error_value>
+    <error_component>PAN Agent Errors</error_component>
+    <error_text>Indicates that the roles selected require a baseband role switch</error_text>
+  </error>
+  <error>
+    <error_name>KErrRoleChanged</error_name>
+    <error_value>-6553</error_value>
+    <error_component>PAN Agent Errors</error_component>
+    <error_text>A PAN profile role (U, GN, NAP) has changed from the requested value. This may require renegotiation of roles, a disconnection of the device, or may just be part of normal operation (eg. selecting an actual role when EPanRoleUnknown was provided as an argument)</error_text>
+  </error>
+  <error>
+    <error_name>KErrCouldNotSetCoDDuringStartup</error_name>
+    <error_value>-6554</error_value>
+    <error_component>PAN Agent Errors</error_component>
+    <error_text>Could not set the Class of Device (CoD) when starting the PAN agent</error_text>
+  </error>
+  <error>
+    <error_name>KErrLocallyInitiatedDisconnect</error_name>
+    <error_value>-6555</error_value>
+    <error_component>PAN Agent Errors</error_component>
+    <error_text>The local device has requested a disconnect</error_text>
+  </error>
+  <error>
+    <error_name>KErrInvalidDestinationServiceUuid</error_name>
+    <error_value>-6556</error_value>
+    <error_component>PAN Agent Errors</error_component>
+    <error_text>The remote device sent an invalid destination service UUID</error_text>
+  </error>
+  <error>
+    <error_name>KErrInvalidSourceServiceUuid</error_name>
+    <error_value>-6557</error_value>
+    <error_component>PAN Agent Errors</error_component>
+    <error_text>The remote device sent an invalid source service UUID</error_text>
+  </error>
+  <error>
+    <error_name>KErrCouldNotBecomePiconetMaster</error_name>
+    <error_value>-6558</error_value>
+    <error_component>PAN Agent Errors</error_component>
+    <error_text>Could not role switch to become piconet master</error_text>
+  </error>
+  <error>
+    <error_name>KErrInvalidOrUnacceptableRoleCombination</error_name>
+    <error_value>-6559</error_value>
+    <error_component>PAN Agent Errors</error_component>
+    <error_text>The remote device sent us a invalid role combination, or requested roles that we cannot fulfil due to our current state</error_text>
+  </error>
+  <error>
+    <error_name>KErrRemoteDeviceFailedToRespondToRoleRequests</error_name>
+    <error_value>-6560</error_value>
+    <error_component>PAN Agent Errors</error_component>
+    <error_text>The remote device did not respond to our role request messages</error_text>
+  </error>
+  <error>
+    <error_name>KErrDodgyResponseFromRemoteDevice</error_name>
+    <error_value>-6561</error_value>
+    <error_component>PAN Agent Errors</error_component>
+    <error_text>The remote device sent us the wrong sort of packet (eg. a response when we expected a request)</error_text>
+  </error>
+  <error>
+    <error_name>KErrAllDevicesDisconnected</error_name>
+    <error_value>-6562</error_value>
+    <error_component>PAN Agent Errors</error_component>
+    <error_text>No more devices are connected</error_text>
+  </error>
+  <error>
+    <error_name>KErrListenForIncomingConnectionRequestedWithoutListeningSupport</error_name>
+    <error_value>-6563</error_value>
+    <error_component>PAN Agent Errors</error_component>
+    <error_text>An attempt has been made to start a connection with incoming support only (despite the settings for outgoing connections in commdb), but the connection does not have incoming support enabled in commdb</error_text>
+  </error>
+  <error>
+    <error_name>KErrNapNotSupportedAsLocalRole</error_name>
+    <error_value>-6564</error_value>
+    <error_component>PAN Agent Errors</error_component>
+    <error_text>The settings in commdb have NAP set as the fixed local role</error_text>
+  </error>
+  <error>
+    <error_name>KErrIncompatiblePacketDriver</error_name>
+    <error_value>-6565</error_value>
+    <error_component>PAN Agent Errors</error_component>
+    <error_text>The packet driver has not returned us the control handle, and therefore cannot be bnep.drv</error_text>
+  </error>
+  <error>
+    <error_name>KErrUsbServiceStopped</error_name>
+    <error_value>-6601</error_value>
+    <error_component>USB</error_component>
+    <error_text> Used to complete an RUsb::Start request when the service ends up Idle  because another client did an RUsb::Stop.  </error_text>
+  </error>
+  <error>
+    <error_name>KErrUsbServiceStarted</error_name>
+    <error_value>-6602</error_value>
+    <error_component>USB</error_component>
+    <error_text>	Used to complete an RUsb::Stop request when the service ends up Started because another client did an RUsb::Start. </error_text>
+  </error>
+  <error>
     <error_name>KMsvMediaUnavailable</error_name>
     <error_value>-7000</error_value>
     <error_component>Message Server  (MSVSTD.H)</error_component>
@@ -4534,19 +5830,109 @@
     <error_name>KMsvMediaChanged</error_name>
     <error_value>-7002</error_value>
     <error_component>Message Server  (MSVSTD.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KMsvIndexBackup</error_name>
     <error_value>-7003</error_value>
     <error_component>Message Server  (MSVSTD.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KMsvIndexRestore</error_name>
     <error_value>-7004</error_value>
     <error_component>Message Server  (MSVSTD.H)</error_component>
-    <error_text />
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrBadVersion</error_name>
+    <error_value>-7150</error_value>
+    <error_component>Bookmark Database</error_component>
+    <error_text>The version number in the repository does not match the bookmark database version number  </error_text>
+  </error>
+  <error>
+    <error_name>KErrWrongType</error_name>
+    <error_value>-7151</error_value>
+    <error_component>Bookmark Database</error_component>
+    <error_text>The item is of the wrong type. A folder item is given where a bookmark item is required or visa versa  </error_text>
+  </error>
+  <error>
+    <error_name>KErrOpenHandle</error_name>
+    <error_value>-7152</error_value>
+    <error_component>Bookmark Database</error_component>
+    <error_text>Not all handles have been closed. A database object has been opened and has not been closed.  </error_text>
+  </error>
+  <error>
+    <error_name>KErrNotOpen</error_name>
+    <error_value>-7153</error_value>
+    <error_component>Bookmark Database</error_component>
+    <error_text>The handle has not been opened. The handle is not attached to any bookmark object</error_text>
+  </error>
+  <error>
+    <error_name>KErrReadOnly</error_name>
+    <error_value>-7154</error_value>
+    <error_component>Bookmark Database</error_component>
+    <error_text>The bookmark item is read only and can not be modified.</error_text>
+  </error>
+  <error>
+    <error_name>KErrCyclicLoop</error_name>
+    <error_value>-7155</error_value>
+    <error_component>Bookmark Database</error_component>
+    <error_text>An attempt has been made to set the parent of an item to an item it owns lower in the tree. This invalidate the tree structure.</error_text>
+  </error>
+  <error>
+    <error_name>KErrDatabaseLocked</error_name>
+    <error_value>-7156</error_value>
+    <error_component>Bookmark Database</error_component>
+    <error_text>The central database store is either locked or unaccessable at this time. You may want to try again later.</error_text>
+  </error>
+  <error>
+    <error_name>KErrNoMoreSpace</error_name>
+    <error_value>-7157</error_value>
+    <error_component>Bookmark Database</error_component>
+    <error_text>The database has no more space for new bookmark entries</error_text>
+  </error>
+  <error>
+    <error_name>KErrCorrupt</error_name>
+    <error_value>-7158</error_value>
+    <error_component>Bookmark Database</error_component>
+    <error_text>The database is in a corrupt state</error_text>
+  </error>
+  <error>
+    <error_name>KErrNotRegistered</error_name>
+    <error_value>-7159</error_value>
+    <error_component>Bookmark Database</error_component>
+    <error_text>A custom property with the given UID has not been reistered</error_text>
+  </error>
+  <error>
+    <error_name>KErrUidAlreadyUsed</error_name>
+    <error_value>-7160</error_value>
+    <error_component>Bookmark Database</error_component>
+    <error_text>An attempt was made to register a property using a UID that has already been used</error_text>
+  </error>
+  <error>
+    <error_name>KErrOrphanedItem</error_name>
+    <error_value>-7161</error_value>
+    <error_component>Bookmark Database</error_component>
+    <error_text>An orphaned item is one that is currently in the root folder due to its normal parent not being loaded. This usually occurs when folders are private but some of the bookmarks it contains are public. Some operations (such as changing the rank or order of an item) can not be performed on an orphaned object</error_text>
+  </error>
+  <error>
+    <error_name>KErrTitleAlreadyUsed</error_name>
+    <error_value>-7162</error_value>
+    <error_component>Bookmark Database</error_component>
+    <error_text>An attempt has been made to create a folder with a title that already exists</error_text>
+  </error>
+  <error>
+    <error_name>KErrOperationDenied</error_name>
+    <error_value>-7163</error_value>
+    <error_component>Bookmark Database</error_component>
+    <error_text>The operation is not allowed. (Like trying to delete the root folder)</error_text>
+  </error>
+  <error>
+    <error_name>KErrNotCommitted</error_name>
+    <error_value>-7164</error_value>
+    <error_component>Bookmark Database</error_component>
+    <error_text>The operation can not be completed until the item has been committed to the database (e.g. setting the owner ID)</error_text>
   </error>
   <error>
     <error_name>KErrHttpEncodeDefault</error_name>
@@ -5884,7 +7270,7 @@
     <error_name>KErrXMLBadEntity</error_name>
     <error_value>-9016</error_value>
     <error_component>XML Parser  (GMXMLCONSTANTS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrXMLInvalidElement</error_name>
@@ -5902,139 +7288,369 @@
     <error_name>KMmsErrUnspecified</error_name>
     <error_value>-9100</error_value>
     <error_component>MMS Server MTM  (MMSERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KMmsErrServiceDenied</error_name>
     <error_value>-9101</error_value>
     <error_component>MMS Server MTM  (MMSERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KMmsErrMessageFormatCorrupt</error_name>
     <error_value>-9102</error_value>
     <error_component>MMS Server MTM  (MMSERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KMmsErrSendingAddressUnresolved</error_name>
     <error_value>-9103</error_value>
     <error_component>MMS Server MTM  (MMSERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KMmsErrMessageNotFound</error_name>
     <error_value>-9104</error_value>
     <error_component>MMS Server MTM  (MMSERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KMmsErrNetworkProblem</error_name>
     <error_value>-9105</error_value>
     <error_component>MMS Server MTM  (MMSERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KMmsErrContentNotAccepted</error_name>
     <error_value>-9106</error_value>
     <error_component>MMS Server MTM  (MMSERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KMmsErrUnsupportedMessage</error_name>
     <error_value>-9107</error_value>
     <error_component>MMS Server MTM  (MMSERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KMmsErrInvalidPDU</error_name>
     <error_value>-9108</error_value>
     <error_component>MMS Server MTM  (MMSERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KMmsErrNoData</error_name>
     <error_value>-9109</error_value>
     <error_component>MMS Server MTM  (MMSERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KMmsNoResponseStatus</error_name>
     <error_value>-9110</error_value>
     <error_component>MMS Server MTM  (MMSERRORS.H)</error_component>
+    <error_text/>
+  </error>
+    <error>
+    <error_name>EWapErrGeneral</error_name>
+    <error_value>-10000</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>A general error has occurred</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrDocumentNotFound</error_name>
+    <error_value>-10001</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>The requested document cannot be found</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrDocumentCorrupted</error_name>
+    <error_value>-10002</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>This document is corrupt and cannot be read</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrAccessViolation</error_name>
+    <error_value>-10003</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>Access to this document has been denied</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrDataCallDropped</error_name>
+    <error_value>-10004</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>The data call has been closed</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrDataCallUnavailable</error_name>
+    <error_value>-10005</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>The data call is being used by another application</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrScriptNotFound</error_name>
+    <error_value>-10006</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>The requested script has not been found</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrScriptError</error_name>
+    <error_value>-10007</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>This script has returned a fatal error</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrScriptCorrupt</error_name>
+    <error_value>-10008</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>There is an error in this script</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrScriptIllegalAction</error_name>
+    <error_value>-10009</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>The script attempted an illegal action and has been terminated</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrScriptObscureLibraryCall</error_name>
+    <error_value>-10010</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>The script has attempted a function which is unavailable</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrAuthorizationFailed</error_name>
+    <error_value>-10011</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>Authorization has failed</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrProtocolNotSupported</error_name>
+    <error_value>-10012</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>The current network does not support the requested service</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrAccessPointNotSetUpGeneric</error_name>
+    <error_value>-10013</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>Access point information is missing</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrAccessPointNotSetUpForUSSD</error_name>
+    <error_value>-10014</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>Access point information is missing (USSD)</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrAccessPointNotSetUpForSMS</error_name>
+    <error_value>-10015</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>Access point information is missing (SMS)</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrAccessPointNotSetUpForCSD</error_name>
+    <error_value>-10016</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>Access point information is missing (CSD)</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrImageConversionFailed</error_name>
+    <error_value>-10017</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>Image conversion has failed</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrPluginNotFound</error_name>
+    <error_value>-10018</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>The requested plugin has not been found</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrCorruptUrl</error_name>
+    <error_value>-10019</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>Part of the URL contains invalid characters</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrCorruptScheme</error_name>
+    <error_value>-10020</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>Part of the scheme contains invalid characters</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrUnknownScheme</error_name>
+    <error_value>-10021</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>Unknown scheme</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrDTDUnavailable</error_name>
+    <error_value>-10022</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>Document cannot be validated as DTD is not available</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrInvalidDTD</error_name>
+    <error_value>-10023</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>DTD is invalid</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrUnknownDocument</error_name>
+    <error_value>-10024</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>The document requested cannot be found</error_text>
+  </error>
+  <error>
+    <error_name>EWapErrMimeTypeMissing</error_name>
+    <error_value>-10025</error_value>
+    <error_component>WAP Engine Errors</error_component>
+    <error_text>MIME information is missing</error_text>
+  </error>
+  <error>
+    <error_name>KErrSISPrerequisitesMissingDependency</error_name>
+    <error_value>-10136</error_value>
+    <error_component>Installer Engine</error_component>
+    <error_text>A dependency specified in the .pkg file is missing</error_text>
+  </error>
+  <error>
+    <error_name>KErrSISTooDeeplyEmbedded</error_name>
+    <error_value>-10145</error_value>
+    <error_component>Installer Engine</error_component>
+    <error_text>The SIS file contains too many levels of embedded SIS files (the maximum depth is 8).</error_text>
+  </error>
+  <error>
+    <error_name>KErrSISInvalidTargetFile</error_name>
+    <error_value>-10146</error_value>
+    <error_component>Installer Engine</error_component>
+    <error_text>Generally indicates an error with the file name and/or its target destination.</error_text>
+  </error>
+  <error>
+    <error_name>KErrSISWouldOverWrite</error_name>
+    <error_value>-10147</error_value>
+    <error_component>Installer Engine</error_component>
+    <error_text>A file being installed would overwrite an existing file.</error_text>
+  </error>
+  <error>
+    <error_name>KErrBadHash</error_name>
+    <error_value>-10253</error_value>
+    <error_component>Installer Engine</error_component>
+    <error_text>The checksums and digital signatures of the package might no longer match the rest of the data in the package.</error_text>
+  </error>
+  <error>
+    <error_name>KErrSecurityError</error_name>
+    <error_value>-10254</error_value>
+    <error_component>Installer Engine</error_component>
+    <error_text>A general purpose error code that can be generated in several situations like the SIS file is not signed and the device requires it, System capabilities are requested but not signed for, protected SID/VID which isn't signed for, certificate's validation period has expired, attempt to install an augmentation package with same name as an already installed base package </error_text>
+  </error>
+  <error>
+    <error_name>KErrMissingBasePackage</error_name>
+    <error_value>-10255</error_value>
+    <error_component>Installer Engine</error_component>
+    <error_text>An installation of an augmentation or partial upgrade failed because the base package is not present on the device</error_text>
+  </error>
+  <error>
+    <error_name>KErrInvalidUpgrade</error_name>
+    <error_value>-10256</error_value>
+    <error_component>Installer Engine</error_component>
+    <error_text>An upgrade failed because the package being installed is not a valid upgrade of the package already on the device.</error_text>
+  </error>
+  <error>
+    <error_name>KErrInvalidEclipsing</error_name>
+    <error_value>-10257</error_value>
+    <error_component>Installer Engine</error_component>
+    <error_text>The installation breaks eclipsing rules.</error_text>
+  </error>
+  <error>
+    <error_name>KErrWrongHeaderFormat</error_name>
+    <error_value>-10258</error_value>
+    <error_component>Installer Engine</error_component>
+    <error_text>The package contains executables which are not compatible with the target environment</error_text>
+  </error>
+  <error>
+    <error_name>KErrCapabilitiesMismatch</error_name>
+    <error_value>-10259</error_value>
+    <error_component>Installer Engine</error_component>
     <error_text />
   </error>
+  <error>
+    <error_name>KErrLegacySisFile</error_name>
+    <error_value>-10270</error_value>
+    <error_component>Installer Engine</error_component>
+    <error_text>The SIS file was created with old versions of tools (i.e. makesis.exe), and not those compatible with
+Symbian OS v9.x.</error_text>
+  </error>
+
   <error>
     <error_name>KErrBadPassphrase</error_name>
     <error_value>-11000</error_value>
     <error_component>Security Services   (SECURITYERR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrTotalLossOfEntropy</error_name>
     <error_value>-11001</error_value>
     <error_component>Security Services   (SECURITYERR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrKeyNotWeakEnough</error_name>
     <error_value>-11002</error_value>
     <error_component>Security Services   (SECURITYERR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrInvalidPadding</error_name>
     <error_value>-11003</error_value>
     <error_component>Security Services   (SECURITYERR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrWeakKey</error_name>
     <error_value>-11004</error_value>
     <error_component>Security Services   (SECURITYERR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrNegativeExportNotSupported</error_name>
     <error_value>-11005</error_value>
     <error_component>Security Services   (SECURITYERR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrKeyAlgorithm</error_name>
     <error_value>-11006</error_value>
     <error_component>Security Services   (SECURITYERR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrKeyUsage</error_name>
     <error_value>-11007</error_value>
     <error_component>Security Services   (SECURITYERR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrKeyValidity</error_name>
     <error_value>-11008</error_value>
     <error_component>Security Services   (SECURITYERR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrKeySize</error_name>
     <error_value>-11009</error_value>
     <error_component>Security Services   (SECURITYERR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrKeyAccess</error_name>
     <error_value>-11010</error_value>
     <error_component>Security Services   (SECURITYERR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrPrivateKeyNotFound</error_name>
     <error_value>-11011</error_value>
     <error_component>Security Services   (SECURITYERR.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KEZlibErrStream</error_name>
@@ -6088,31 +7704,31 @@
     <error_name>KEZlibErrNotGZipFile</error_name>
     <error_value>-11509</error_value>
     <error_component>EZLIB  (EZLIBERRORCODES.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KEZlibErrInvalidCompression</error_name>
     <error_value>-11510</error_value>
     <error_component>EZLIB  (EZLIBERRORCODES.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KEZlibErrBadGZipHeader</error_name>
     <error_value>-11511</error_value>
     <error_component>EZLIB  (EZLIBERRORCODES.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KEZlibErrBadGZipTrailer</error_name>
     <error_value>-11512</error_value>
     <error_component>EZLIB  (EZLIBERRORCODES.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KEZlibErrBadGZipCrc</error_name>
     <error_value>-11513</error_value>
     <error_component>EZLIB  (EZLIBERRORCODES.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrMMNotEnoughBandwidth</error_name>
@@ -6610,7 +8226,7 @@
     <error_name>KEComErrAlreadyReceiving</error_name>
     <error_value>-17001</error_value>
     <error_component>ECOM  (ECOMERRORCODES.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KEComErrEnableFailed</error_name>
@@ -6676,7 +8292,7 @@
     <error_name>KEComErrIndexEntryNotFound</error_name>
     <error_value>-17020</error_value>
     <error_component>ECOM  (ECOMERRORCODES.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KEComErrNoRegistrationData</error_name>
@@ -6688,19 +8304,19 @@
     <error_name>KEComErrMismatchedTags</error_name>
     <error_value>-17023</error_value>
     <error_component>ECOM  (ECOMERRORCODES.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KEComErrInstantiationPointerNotFound</error_name>
     <error_value>-17024</error_value>
     <error_component>ECOM  (ECOMERRORCODES.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KEComErrInstantiationPointerNotAvailable</error_name>
     <error_value>-17025</error_value>
     <error_component>ECOM  (ECOMERRORCODES.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrCHFProxyObjectAlreadyExists</error_name>
@@ -6913,16 +8529,22 @@
     <error_text>Queue length of binding invalid. Must be betweenTRSBindingInfo::EMinQueueLength and TRSBindingInfo::EMaxQueueLength.</error_text>
   </error>
   <error>
+    <error_name>KErrNoMBufs</error_name>
+    <error_value>-17200</error_value>
+    <error_component>Buffer Manager</error_component>
+    <error_text/>
+  </error>
+  <error>
     <error_name>KErrConnectionTerminated</error_name>
     <error_value>-17210</error_value>
     <error_component>Esock  (ES_SOCK.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrCannotFindProtocol</error_name>
     <error_value>-17211</error_value>
     <error_component>Esock  (ES_SOCK.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrTreeStoreUriTooLong</error_name>
@@ -6988,13 +8610,13 @@
     <error_name>KErrPositionBufferOverflow</error_name>
     <error_value>-17350</error_value>
     <error_component>LBS Position Framework  (LBSERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrPositionIncalculable</error_name>
     <error_value>-17351</error_value>
     <error_component>LBS Position Framework  (LBSERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrCANotSupported</error_name>
@@ -7048,264 +8670,1254 @@
     <error_name>KErrXmlStringDictionaryPluginNotFound</error_name>
     <error_value>-17550</error_value>
     <error_component>XML Framework (XMLFRAMEWORKERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrXmlParserPluginNotFound</error_name>
     <error_value>-17551</error_value>
     <error_component>XML Framework (XMLFRAMEWORKERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrXmlGeneratorPluginNotFound</error_name>
     <error_value>-17552</error_value>
     <error_component>XML Framework (XMLFRAMEWORKERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrXmlPluginNotFound</error_name>
     <error_value>-17553</error_value>
     <error_component>XML Framework (XMLFRAMEWORKERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrXmlBadCharacterConversion</error_name>
     <error_value>-17554</error_value>
     <error_component>XML Framework (XMLFRAMEWORKERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrXmlUnsupportedCharacterSet</error_name>
     <error_value>-17555</error_value>
     <error_component>XML Framework (XMLFRAMEWORKERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrXmlUnavailableCharacterSet</error_name>
     <error_value>-17556</error_value>
     <error_component>XML Framework (XMLFRAMEWORKERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrXmlUnsupportedElement</error_name>
     <error_value>-17557</error_value>
     <error_component>XML Framework (XMLFRAMEWORKERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrXmlUnsupportedAttribute</error_name>
     <error_value>-17558</error_value>
     <error_component>XML Framework (XMLFRAMEWORKERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrXmlUnsupportedAttributeValue</error_name>
     <error_value>-17559</error_value>
     <error_component>XML Framework (XMLFRAMEWORKERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrXmlMissingStringDictionary</error_name>
     <error_value>-17560</error_value>
     <error_component>XML Framework (XMLFRAMEWORKERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrXmlUnsupportedDocumentVersion</error_name>
     <error_value>-17561</error_value>
     <error_component>XML Framework (XMLFRAMEWORKERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrXmlDocumentCorrupt</error_name>
     <error_value>-17562</error_value>
     <error_component>XML Framework (XMLFRAMEWORKERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrXmlStringPoolTableNotFound</error_name>
     <error_value>-17563</error_value>
     <error_component>XML Framework (XMLFRAMEWORKERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrXmlBadIndex</error_name>
     <error_value>-17564</error_value>
     <error_component>XML Framework (XMLFRAMEWORKERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrXmlUnsupportedExtInterface</error_name>
     <error_value>-17566</error_value>
     <error_component>XML Framework (XMLFRAMEWORKERRORS.H)</error_component>
-    <error_text />
+    <error_text/>
+  </error>
+    <error>
+    <error_name>KErrSIPMalformedMessage</error_name>
+    <error_value>-17700</error_value>
+    <error_component>SIP</error_component>
+    <error_text>SIP message was malformed</error_text>
+  </error>
+  <error>
+    <error_name>KErrSIPInvalidRegistrarResponse</error_name>
+    <error_value>-17701</error_value>
+    <error_component>SIP</error_component>
+    <error_text>Invalid SIP response received from registrar</error_text>
+  </error>
+  <error>
+    <error_name>KErrSIPRequestPending</error_name>
+    <error_value>-17702</error_value>
+    <error_component>SIP</error_component>
+    <error_text>SIP Request pending</error_text>
+  </error>
+  <error>
+    <error_name>KErrSIPInvalidTransactionState</error_name>
+    <error_value>-17703</error_value>
+    <error_component>SIP</error_component>
+    <error_text>The action cannot be performed in the current transaction state</error_text>
+  </error>
+  <error>
+    <error_name>KErrSIPInvalidDialogState</error_name>
+    <error_value>-17704</error_value>
+    <error_component>SIP</error_component>
+    <error_text>Not allowed in dialogs current state</error_text>
+  </error>
+  <error>
+    <error_name>KErrSIPInvalidDialogRequest</error_name>
+    <error_value>-17705</error_value>
+    <error_component>SIP</error_component>
+    <error_text>Invalid request in SIP dialog</error_text>
+  </error>
+  <error>
+    <error_name>KErrSIPInvalidDialogResponse</error_name>
+    <error_value>-17706</error_value>
+    <error_component>SIP</error_component>
+    <error_text>Invalid response in SIP dialog</error_text>
+  </error>
+  <error>
+    <error_name>KErrSIPTransportFailure</error_name>
+    <error_value>-17707</error_value>
+    <error_component>SIP</error_component>
+    <error_text>Sending a SIP message failed. For example ICMP error occured</error_text>
+  </error>
+  <error>
+    <error_name>KErrSIPNoAckReceived</error_name>
+    <error_value>-17708</error_value>
+    <error_component>SIP</error_component>
+    <error_text>No ACK was received after sending a 2xx response</error_text>
+  </error>
+  <error>
+    <error_name>KErrSIPInvalidRegistrationState</error_name>
+    <error_value>-17709</error_value>
+    <error_component>SIP</error_component>
+    <error_text>Not allowed in registration's current state</error_text>
+  </error>
+  <error>
+    <error_name>KErrSIPInvalidContact</error_name>
+    <error_value>-17710</error_value>
+    <error_component>SIP</error_component>
+    <error_text>The contact given did not contain user part</error_text>
+  </error>
+  <error>
+    <error_name>KErrSIPResourceNotAvailable</error_name>
+    <error_value>-17711</error_value>
+    <error_component>SIP</error_component>
+    <error_text>Object can't access a resource, since that has been deleted by user. The user is expected to delete this object as it can no longer be used.</error_text>
+  </error>
+  <error>
+    <error_name>KErrSIPResolvingFailure</error_name>
+    <error_value>-17712</error_value>
+    <error_component>SIP</error_component>
+    <error_text>DNS query for the remote address failed</error_text>
+  </error>
+  <error>
+    <error_name>KErrSIPForbidden</error_name>
+    <error_value>-17713</error_value>
+    <error_component>SIP</error_component>
+    <error_text>Authentication with a server failed</error_text>
+  </error>
+  <error>
+    <error_name>KErrSIPMaxCompartmentsInUse</error_name>
+    <error_value>-17714</error_value>
+    <error_component>SIP</error_component>
+    <error_text>Maximum number of allowed SigComp compartments exceeded</error_text>
+  </error>
+  <error>
+    <error_name>KErrSIPTerminatedWithResponse</error_name>
+    <error_value>-17715</error_value>
+    <error_component>SIP</error_component>
+    <error_text>Refresh initiated client transaction was terminated with a 3xx, 4xx, 5xx or 6xx response.</error_text>
+  </error>
+  <error>
+    <error_name>KErrSIPOutboundProxyNotResponding</error_name>
+    <error_value>-17716</error_value>
+    <error_component>SIP</error_component>
+    <error_text>Provided SIP outbound proxy is not responding</error_text>
+  </error>
+  <error>
+    <error_name>KErrSIPInvalidURIType</error_name>
+    <error_value>-17717</error_value>
+    <error_component>SIP</error_component>
+    <error_text>The URI type is not allowed in some field of the particular SIP message. Note that this does not mean that the URI type is forbidden in general. For example Contact-header of an INVITE must always contain a SIP-URI. Any other types are rejected with this error code.</error_text>
+  </error>
+  <error>
+    <error_name>KErrSipCodecPreParser</error_name>
+    <error_value>-17750</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecTokenizer</error_name>
+    <error_value>-17751</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecNotAllowed</error_name>
+    <error_value>-17752</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecHeaderName</error_name>
+    <error_value>-17753</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecHeaderValue</error_name>
+    <error_value>-17754</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecRequestLine</error_name>
+    <error_value>-17755</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecResponseLine</error_name>
+    <error_value>-17756</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecResponseCode</error_name>
+    <error_value>-17757</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecSIPVersion</error_name>
+    <error_value>-17758</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecSIPMethod</error_name>
+    <error_value>-17759</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecReasonPhrase</error_name>
+    <error_value>-17760</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecAnyParam</error_name>
+    <error_value>-17761</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecAnyParamName</error_name>
+    <error_value>-17762</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecAnyParamValue</error_name>
+    <error_value>-17763</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecDuplicateParam</error_name>
+    <error_value>-17764</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecHostPort</error_name>
+    <error_value>-17765</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecHost</error_name>
+    <error_value>-17766</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecPort</error_name>
+    <error_value>-17767</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecSIPAddress</error_name>
+    <error_value>-17768</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecDisplayName</error_name>
+    <error_value>-17769</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecURI</error_name>
+    <error_value>-17770</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecURIScheme</error_name>
+    <error_value>-17771</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecURIParams</error_name>
+    <error_value>-17772</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecURIHeaders</error_name>
+    <error_value>-17773</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecFromOrToAddress</error_name>
+    <error_value>-17774</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecFromOrToParams</error_name>
+    <error_value>-17775</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecContactHeader</error_name>
+    <error_value>-17776</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecContactSetToStar</error_name>
+    <error_value>-17777</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecContactAddress</error_name>
+    <error_value>-17778</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecContactParams</error_name>
+    <error_value>-17779</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecViaHeader</error_name>
+    <error_value>-17780</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecCallIdHeader</error_name>
+    <error_value>-17781</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecCSeqHeader</error_name>
+    <error_value>-17782</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecContentLengthHeader</error_name>
+    <error_value>-17783</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecExpiresHeader</error_name>
+    <error_value>-17784</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecMaxForwardsHeader</error_name>
+    <error_value>-17785</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecContentTypeHeader</error_name>
+    <error_value>-17786</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecRouteHeader</error_name>
+    <error_value>-17787</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecMinExpiresHeader</error_name>
+    <error_value>-17788</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecTokenBaseHeader</error_name>
+    <error_value>-17789</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecRequireHeader</error_name>
+    <error_value>-17790</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecContentEncodingHeader</error_name>
+    <error_value>-17791</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecProxyRequireHeader</error_name>
+    <error_value>-17792</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecSupportedHeader</error_name>
+    <error_value>-17793</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecUnsupportedHeader</error_name>
+    <error_value>-17794</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecAllowHeader</error_name>
+    <error_value>-17795</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecSecurityHeader</error_name>
+    <error_value>-17796</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecContentDispositionHeader</error_name>
+    <error_value>-17797</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecSubscriptionStateHeader</error_name>
+    <error_value>-17798</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecAcceptHeader</error_name>
+    <error_value>-17799</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecAcceptEncodingHeader</error_name>
+    <error_value>-17800</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecAcceptLanguageHeader</error_name>
+    <error_value>-17801</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecAcceptParams</error_name>
+    <error_value>-17802</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecEventHeader</error_name>
+    <error_value>-17803</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecAllowEventsHeader</error_name>
+    <error_value>-17804</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecAuthenticationInfoHeader</error_name>
+    <error_value>-17805</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecReferToHeader</error_name>
+    <error_value>-17806</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecAuthenticationHeader</error_name>
+    <error_value>-17807</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecAuthScheme</error_name>
+    <error_value>-17808</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecAuthorizationHeader</error_name>
+    <error_value>-17809</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecURIContainer</error_name>
+    <error_value>-17810</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecRAckHeader</error_name>
+    <error_value>-17811</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecRSeqHeader</error_name>
+    <error_value>-17812</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecReplyToHeader</error_name>
+    <error_value>-17813</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecTimestampHeader</error_name>
+    <error_value>-17814</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecRetryAfterHeader</error_name>
+    <error_value>-17815</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecRetryAfterParams</error_name>
+    <error_value>-17816</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecAcceptContactHeader</error_name>
+    <error_value>-17817</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecPAssociatedURIHeader</error_name>
+    <error_value>-17818</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSipCodecPAccessNetworkInfoHeader</error_name>
+    <error_value>-17819</error_value>
+    <error_component>SIP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSdpCodecVersionField</error_name>
+    <error_value>-17875</error_value>
+    <error_component>SDP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSdpCodecOriginField</error_name>
+    <error_value>-17876</error_value>
+    <error_component>SDP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSdpCodecSessionField</error_name>
+    <error_value>-17877</error_value>
+    <error_component>SDP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSdpCodecInfoField</error_name>
+    <error_value>-17878</error_value>
+    <error_component>SDP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSdpCodecEmailField</error_name>
+    <error_value>-17880</error_value>
+    <error_component>SDP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSdpCodecConnectionField</error_name>
+    <error_value>-17882</error_value>
+    <error_component>SDP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSdpCodecBandwidthField</error_name>
+    <error_value>-17883</error_value>
+    <error_component>SDP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSdpCodecTimeField</error_name>
+    <error_value>-17884</error_value>
+    <error_component>SDP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSdpCodecRepeatField</error_name>
+    <error_value>-17885</error_value>
+    <error_component>SDP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSdpCodecZoneField</error_name>
+    <error_value>-17886</error_value>
+    <error_component>SDP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSdpCodecKeyField</error_name>
+    <error_value>-17887</error_value>
+    <error_component>SDP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSdpCodecAttributeField</error_name>
+    <error_value>-17888</error_value>
+    <error_component>SDP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSdpCodecMediaField</error_name>
+    <error_value>-17889</error_value>
+    <error_component>SDP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSdpCodecMediaInfoField</error_name>
+    <error_value>-17890</error_value>
+    <error_component>SDP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSdpCodecMediaConnectionField</error_name>
+    <error_value>-17891</error_value>
+    <error_component>SDP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSdpCodecMediaBandwidthField</error_name>
+    <error_value>-17892</error_value>
+    <error_component>SDP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSdpCodecMediaKeyField</error_name>
+    <error_value>-17893</error_value>
+    <error_component>SDP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSdpCodecMediaAttributeField</error_name>
+    <error_value>-17894</error_value>
+    <error_component>SDP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSdpCodecTypedTime</error_name>
+    <error_value>-17895</error_value>
+    <error_component>SDP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSdpCodecStringPool</error_name>
+    <error_value>-17896</error_value>
+    <error_component>SDP Codec</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSdpCodecDecode</error_name>
+    <error_value>-17897</error_value>
+    <error_component>SDP Codec</error_component>
+    <error_text/>
   </error>
   <error>
     <error_name>KErrPrivacyTbNullPtr</error_name>
     <error_value>-17901</error_value>
     <error_component>LBS Privacy  (EPOS_CSPRIVACYSHARELEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrPrivacyTbProgramError</error_name>
     <error_value>-17902</error_value>
     <error_component>LBS Privacy  (EPOS_CSPRIVACYSHARELEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrPrivacyTbNullSearchString</error_name>
     <error_value>-17903</error_value>
     <error_component>LBS Privacy  (EPOS_CSPRIVACYSHARELEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrPrivacyTbWriteFailure</error_name>
     <error_value>-17904</error_value>
     <error_component>LBS Privacy  (EPOS_CSPRIVACYSHARELEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrPriPolicyTbPackedPriByte</error_name>
     <error_value>-17905</error_value>
     <error_component>LBS Privacy  (EPOS_CSPRIVACYSHARELEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrPriVersionTbInvalidVersion</error_name>
     <error_value>-17906</error_value>
     <error_component>LBS Privacy  (EPOS_CSPRIVACYSHARELEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrPriVersionTbRecordAlreadyExist</error_name>
     <error_value>-17907</error_value>
     <error_component>LBS Privacy  (EPOS_CSPRIVACYSHARELEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrServicePrivacyTbErrorBase</error_name>
     <error_value>-17910</error_value>
     <error_component>LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrSerPriTbMismatchServiceIdAndType</error_name>
     <error_value>-17911</error_value>
     <error_component>LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrSerPriTbServiceIdTypeChanged</error_name>
     <error_value>-17912</error_value>
     <error_component>LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrSerPriTbSecureIdChanged</error_name>
     <error_value>-17913</error_value>
     <error_component>LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrServiceIdPhoneNumberTbErrorBase</error_name>
     <error_value>-17915</error_value>
     <error_component>LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrServiceIdPhoneNumTbMatchDigitsOutOfRange</error_name>
     <error_value>-17916</error_value>
     <error_component>LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrServicePrivacyErrorBase</error_name>
     <error_value>-17920</error_value>
     <error_component>LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrServicePrivacyDuplicateServiceItemId</error_name>
     <error_value>-17921</error_value>
     <error_component>LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrServicePrivacyArrayIndexOutOfRange</error_name>
     <error_value>-17922</error_value>
     <error_component>LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrServicePrivacyDbModelErrorBase</error_name>
     <error_value>-17925</error_value>
     <error_component>LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrSPDbModelWrongMajorVersion</error_name>
     <error_value>-17926</error_value>
     <error_component>LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrSPDbModelServiceIdPhNoDigitsLessThan7</error_name>
     <error_value>-17927</error_value>
     <error_component>LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrSPDbModelServiceIdTypeNotSet</error_name>
     <error_value>-17928</error_value>
     <error_component>LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrSPDbModelWrongServiceInfoMask</error_name>
     <error_value>-17929</error_value>
     <error_component>LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrSPDbModelNullServiceId</error_name>
     <error_value>-17930</error_value>
     <error_component>LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrSPDbModelChildTbRcdNotDeleted</error_name>
     <error_value>-17931</error_value>
     <error_component>LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrSPDbModelChildTbRcdNotUpdated</error_name>
     <error_value>-17932</error_value>
     <error_component>LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrSPDbModelInvalidPhMatchLength</error_name>
     <error_value>-17933</error_value>
     <error_component>LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrServicePrivacyDbErrorBase</error_name>
     <error_value>-17935</error_value>
     <error_component>LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrServicePrivacyDbInvalidServiceItemIdInArray</error_name>
     <error_value>-17936</error_value>
     <error_component>LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
   </error>
   <error>
     <error_name>KErrServicePrivacyDbEventObserverAlreadyExists</error_name>
     <error_value>-17937</error_value>
     <error_component>LBS Privacy  (EPOS_SERVICEPRIVACYLEAVECODE.H)</error_component>
-    <error_text />
+    <error_text/>
+  </error>
+  <error>
+    <error_name>EHttpGeneralError</error_name>
+    <error_value>-20000</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>A general error has occurred</error_text>
+  </error>
+  <error>
+    <error_name>EHttpCannotFindServer</error_name>
+    <error_value>-20001</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>The URL specified a non-existent or inaccessible server</error_text>
+  </error>
+  <error>
+    <error_name>EHttpCannotFindPlugin</error_name>
+    <error_value>-20002</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>The plugin name/type was not found on the device</error_text>
+  </error>
+  <error>
+    <error_name>EHttpUnsupportedMethod</error_name>
+    <error_value>-20003</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>The method requested is not supported</error_text>
+  </error>
+  <error>
+    <error_name>EHttpWapAPReadFailure</error_name>
+    <error_value>-20004</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>Access point information is missing</error_text>
+  </error>
+  <error>
+    <error_name>EHttpNetDialSetupFailed</error_name>
+    <error_value>-20005</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>Net dial setup has failed</error_text>
+  </error>
+  <error>
+    <error_name>EHttpWtlsConfigFailed</error_name>
+    <error_value>-20006</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>The WAP stack has been configured incorrectly for WTLS</error_text>
+  </error>
+  <error>
+    <error_name>EHttpWtlsBadServerCert</error_name>
+    <error_value>-20007</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>The WAP stack has rejected the gateway certificate</error_text>
+  </error>
+  <error>
+    <error_name>EHttpWtlsServerCertRejected</error_name>
+    <error_value>-20008</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>The security certificate has been rejected and the session will be aborted</error_text>
+  </error>
+  <error>
+    <error_name>EHttpWtlsCipherRejected</error_name>
+    <error_value>-20009</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>The session has been aborted due to low security status</error_text>
+  </error>
+  <error>
+    <error_name>EHttpGatewayCannotBeReached</error_name>
+    <error_value>-20010</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>A session could not be established with the WAP Gateway</error_text>
+  </error>
+  <error>
+    <error_name>EHttpGatewayTransactionAbort</error_name>
+    <error_value>-20011</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>A transaction was aborted by the gateway or the stack</error_text>
+  </error>
+  <error>
+    <error_name>EHttpGatewaySessionDisconnect</error_name>
+    <error_value>-20012</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>The session was disconnectedby the WAP Gateway</error_text>
+  </error>
+  <error>
+    <error_name>EHttpCancellationAbort</error_name>
+    <error_value>-20013</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>Error code for leave when cancellation has occured during RunL()</error_text>
+  </error>
+  <error>
+    <error_name>EHttpReceivingErrorDeck</error_name>
+    <error_value>-20014</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>Could not find document, so receiving an error deck</error_text>
+  </error>
+  <error>
+    <error_name>HTTP Status Code 400</error_name>
+    <error_value>-20400</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>The request sent does not use the correct syntax</error_text>
+  </error>
+  <error>
+    <error_name>HTTP Status Code 401</error_name>
+    <error_value>-20401</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>Unauthorized request, authentication must be used</error_text>
+  </error>
+  <error>
+    <error_name>HTTP Status Code 402</error_name>
+    <error_value>-20402</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>Payment is required for this action to succeed</error_text>
+  </error>
+  <error>
+    <error_name>HTTP Status Code 403</error_name>
+    <error_value>-20403</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>The document requested cannot be disclosed by the server</error_text>
+  </error>
+  <error>
+    <error_name>HTTP Status Code 404</error_name>
+    <error_value>-20404</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>The document requested cannot be found on the server</error_text>
+  </error>
+  <error>
+    <error_name>HTTP Status Code 405</error_name>
+    <error_value>-20405</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>The methodrequested is not currentlyallowed</error_text>
+  </error>
+  <error>
+    <error_name>HTTP Status Code 406</error_name>
+    <error_value>-20406</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>The header information of the returned resource is incorrect</error_text>
+  </error>
+  <error>
+    <error_name>HTTP Status Code 407</error_name>
+    <error_value>-20407</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>Proxy authentication is required</error_text>
+  </error>
+  <error>
+    <error_name>HTTP Status Code 408</error_name>
+    <error_value>-20408</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>The request has timed out</error_text>
+  </error>
+  <error>
+    <error_name>HTTPStatus Code 409</error_name>
+    <error_value>-20409</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>A Conflict has occurred</error_text>
+  </error>
+  <error>
+    <error_name>HTTP Status Code 410</error_name>
+    <error_value>-20410</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>The document requested cannot be found on the server</error_text>
+  </error>
+  <error>
+    <error_name>HTTP Status Code 411</error_name>
+    <error_value>-20411</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>Length is required here</error_text>
+  </error>
+  <error>
+    <error_name>HTTP Status Code 412</error_name>
+    <error_value>-20412</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>A precondition has not been met</error_text>
+  </error>
+  <error>
+    <error_name>HTTP Status Code 413</error_name>
+    <error_value>-20413</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>The request entity is too large</error_text>
+  </error>
+  <error>
+    <error_name>HTTP Status Code 414</error_name>
+    <error_value>-20414</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>The URL requested is too long</error_text>
+  </error>
+  <error>
+    <error_name>HTTP Status Code 415</error_name>
+    <error_value>-20415</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>The media type requested is unsupported</error_text>
+  </error>
+  <error>
+    <error_name>HTTP Status Code 500</error_name>
+    <error_value>-20500</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>An internal server error has occurred</error_text>
+  </error>
+  <error>
+    <error_name>HTTP Status Code 501</error_name>
+    <error_value>-20501</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>An internal server error has occurred</error_text>
+  </error>
+  <error>
+    <error_name>HTTP Status Code 502</error_name>
+    <error_value>-20502</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>An error has occurred within the WAP gateway</error_text>
+  </error>
+  <error>
+    <error_name>HTTP Status Code 503</error_name>
+    <error_value>-20503</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>The service requested is unavailable</error_text>
+  </error>
+  <error>
+    <error_name>HTTP Status Code 504</error_name>
+    <error_value>-20504</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>The connection to the gateway has timed out</error_text>
+  </error>
+  <error>
+    <error_name>HTTP Status Code 505</error_name>
+    <error_value>-20505</error_value>
+    <error_component>HTTP Errors</error_component>
+    <error_text>This HTTP version is not supported </error_text>
+  </error>
+  <error>
+    <error_name>KErrSenNotInitialized</error_name>
+    <error_value>-30291</error_value>
+    <error_component>SEN Service Connection</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSenServiceConnectionBusy</error_name>
+    <error_value>-30292</error_value>
+    <error_component>SEN Service Connection</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrConnectionInitializing</error_name>
+    <error_value>-30293</error_value>
+    <error_component>SEN Service Connection</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrConnectionExpired</error_name>
+    <error_value>-30294</error_value>
+    <error_component>SEN Service Connection</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSubmitting</error_name>
+    <error_value>-30295</error_value>
+    <error_component>SEN Service Connection</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSenSoapFault</error_name>
+    <error_value>-30296</error_value>
+    <error_component>SEN Service Connection</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSenInternal</error_name>
+    <error_value>-30297</error_value>
+    <error_component>SEN Service Connection</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSenNoEndpoint</error_name>
+    <error_value>-30298</error_value>
+    <error_component>SEN Service Connection</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSenNoContract</error_name>
+    <error_value>-30299</error_value>
+    <error_component>SEN Service Connection</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSenInvalidCharacters</error_name>
+    <error_value>-30300</error_value>
+    <error_component>SEN Service Connection</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSenZeroLengthDescriptor</error_name>
+    <error_value>-30301</error_value>
+    <error_component>SEN Service Connection</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSenXmlReaderNotSet</error_name>
+    <error_value>-30302</error_value>
+    <error_component>SEN Service Connection</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSenXmlContentHandlerNotSet</error_name>
+    <error_value>-30303</error_value>
+    <error_component>SEN Service Connection</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSenProviderIdInUseByAnotherEndpoint</error_name>
+    <error_value>-30305</error_value>
+    <error_component>SEN Service Connection</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrSenNoContractNoEndPoint</error_name>
+    <error_value>-30306</error_value>
+    <error_component>SEN Service Connection</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrPosLmNotInitialized</error_name>
+    <error_value>-30351</error_value>
+    <error_component>Landmarks</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrPosLmUnknownFormat</error_name>
+    <error_value>-30352</error_value>
+    <error_component>Landmarks</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrPositionBufferOverflow</error_name>
+    <error_value>-30371</error_value>
+    <error_component>LBS</error_component>
+    <error_text/>
+  </error>
+  <error>
+    <error_name>KErrPositionIncalculable</error_name>
+    <error_value>-30372</error_value>
+    <error_component>LBS</error_component>
+    <error_text/>
   </error>
 </error_codes>

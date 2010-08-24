@@ -23,6 +23,7 @@ import javax.xml.parsers.*;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.*;
 import org.w3c.dom.*;
+import org.xml.sax.*;
 
 import com.nokia.s60tools.crashanalyser.containers.OstTrace;
 import com.nokia.s60tools.crashanalyser.containers.RegisterDetails;
@@ -205,7 +206,10 @@ public class SummaryFile extends CrashAnalyserFile implements IEditorInput, Clon
 	 */
 	public List<Message> getMessages() {
 		List<Message> msgs = new ArrayList<Message>();
-		msgs.addAll(messages.values());
+		
+		if (messages != null)
+			msgs.addAll(messages.values());
+		
 		return msgs;
 	}
 
@@ -446,10 +450,23 @@ public class SummaryFile extends CrashAnalyserFile implements IEditorInput, Clon
 
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			dbf.setValidating(false);
 
 			// Using factory get an instance of document builder
 			DocumentBuilder db = dbf.newDocumentBuilder();
 
+			// As we are not validating we must create a EntityResolver that 
+			// returns a dummy DTD. Without this we get an error message 
+			// about missing MobileCrashXmlSchema.dtd.
+			db.setEntityResolver(new EntityResolver()
+	        {
+	            public InputSource resolveEntity(String publicId, String systemId)
+	                throws SAXException, IOException
+	            {
+	                return new InputSource(new StringReader(""));
+	            }
+	        });
+			
 			// parse using builder to get DOM representation of the XML file
 			Document dom = db.parse(xmlFilePath);
 			 
@@ -479,11 +496,24 @@ public class SummaryFile extends CrashAnalyserFile implements IEditorInput, Clon
 		super.doRead();
 		
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		dbf.setValidating(false);
 
 		try {
 
 			// Using factory get an instance of document builder
 			DocumentBuilder db = dbf.newDocumentBuilder();
+
+			// As we are not validating we must create a EntityResolver that 
+			// returns a dummy DTD. Without this we get an error message 
+			// about missing MobileCrashXmlSchema.dtd.
+			db.setEntityResolver(new EntityResolver()
+	        {
+	            public InputSource resolveEntity(String publicId, String systemId)
+	                throws SAXException, IOException
+	            {
+	                return new InputSource(new StringReader(""));
+	            }
+	        });
 
 			// parse using builder to get DOM representation of the XML file
 			Document dom = db.parse(filePath);

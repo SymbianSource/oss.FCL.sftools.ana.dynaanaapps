@@ -118,13 +118,13 @@ public class MultiPageEditor extends MultiPageEditorPart implements IResourceCha
 		} else if (summaryFile != null) {
 			if (summaryFile.getContentType() == ContentType.CRASH) {
 				int index = 
-					addPage(summaryPage.createPage(new Composite(getContainer(), SWT.NONE), summaryFile));
+					addPage(callStackPage.createPage(new Composite(getContainer(), SWT.NONE), summaryFile));
 				setPageText(index, "Call Stack");
 			}
 		// output.crashxml file opened from File > Open
 		} else {
 			int index = 
-				addPage(summaryPage.createPage(new Composite(getContainer(), SWT.NONE)));
+				addPage(callStackPage.createPage(new Composite(getContainer(), SWT.NONE)));
 			setPageText(index, "Call Stack");
 		}
 	}

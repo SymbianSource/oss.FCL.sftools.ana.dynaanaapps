@@ -72,9 +72,9 @@ public final class Summary {
 	private final String summaryProductionMode;
 	private final String summaryCrashSource;
 	
-	private Summary(String crashTime, String crashDate, String upTime, String[] swVersion, String language,
-					String romId, String[] hwVersion, String productType, String productCode, 
-					String serialNumber, String productionMode, String crashSource, String imei, String freeRam, String freeDisk) {
+	private Summary(final String crashTime, final String crashDate, final String upTime, final String[] swVersion, final String language,
+					final String romId, final String[] hwVersion, final String productType, final String productCode, 
+					final String serialNumber, final String productionMode, final String crashSource, final String imei, final String freeRam, final String freeDisk) {
 		summaryCrashTime = crashTime;
 		summaryCrashDate = crashDate;
 		summaryUpTime = upTime;
@@ -97,7 +97,7 @@ public final class Summary {
 	 * @param out
 	 * @throws IOException
 	 */
-	public void writeTo(BufferedWriter out) throws IOException {
+	public void writeTo(final BufferedWriter out) throws IOException {
 		writeLine(out, "Crash Time", summaryCrashTime);
 		writeLine(out, "Crash Date", summaryCrashDate);
 		writeLine(out, "Up Time", summaryUpTime);
@@ -123,7 +123,7 @@ public final class Summary {
 		writeLine(out, "Crash Source", summaryCrashSource);
 	}
 	
-	void writeLine(BufferedWriter out, String header, String value) throws IOException {
+	void writeLine(final BufferedWriter out, final String header, final String value) throws IOException {
 		if (!"".equals(value)) {
 			out.write(String.format(FORMAT, header, value));
 			out.newLine();
@@ -135,7 +135,7 @@ public final class Summary {
 	 * @param rootElement
 	 * @return created summary data or null
 	 */
-	public static Summary read(Element rootElement) {
+	public static Summary read(final Element rootElement) {
 		try {
 			String crashTime = "";
 			String crashDate = "";
@@ -143,14 +143,14 @@ public final class Summary {
 			String crashSource = "";
 			
 			// read data under seg_header node
-			NodeList segHeader = rootElement.getElementsByTagName(TAG_SEG_HEADER);
+			final NodeList segHeader = rootElement.getElementsByTagName(TAG_SEG_HEADER);
 			if (segHeader != null && segHeader.getLength() > 0) {
 				// read crash time
 				crashTime = XmlUtils.getTextValue((Element)segHeader.item(0), TAG_TIME);
 				if (crashTime == null) {
 					crashTime = "";
 				} else if (!crashTime.contains(":") && crashTime.length() == 6){
-					String time = crashTime.substring(0, 2) + ":" +
+					final String time = crashTime.substring(0, 2) + ":" +
 								  crashTime.substring(2, 4) + ":" +
 								  crashTime.substring(4, 6);
 					crashTime = time;
@@ -161,7 +161,7 @@ public final class Summary {
 				if (crashDate == null) {
 					crashDate = "";
 				} else if (crashDate.length() == 8) {
-					String date = crashDate.substring(0,4) + "-" + 
+					final String date = crashDate.substring(0,4) + "-" + 
 									crashDate.substring(4,6) + "-" +
 									crashDate.substring(6,8);
 					crashDate = date;
@@ -181,22 +181,22 @@ public final class Summary {
 					crashSource = "";
 			}
 			
-			List<String> hwVersions = new ArrayList<String>();
+			final List<String> hwVersions = new ArrayList<String>();
 			String productType = "";
 			String productCode = "";
 			String serialNumber = "";
 			String productionMode = "";
 			
 			// read data under seg_hw_info node
-			NodeList segHwInfo = rootElement.getElementsByTagName(TAG_SEG_HW_INFO);
+			final NodeList segHwInfo = rootElement.getElementsByTagName(TAG_SEG_HW_INFO);
 			if (segHwInfo != null && segHwInfo.getLength() > 0) {
 
 				// read all versions
-				NodeList versions = ((Element)segHwInfo.item(0)).getElementsByTagName(TAG_VERSION);
+				final NodeList versions = ((Element)segHwInfo.item(0)).getElementsByTagName(TAG_VERSION);
 				if (versions != null && versions.getLength() > 0) {
 					for (int i = 0; i < versions.getLength(); i++) {
 						// read sw version
-						String version = XmlUtils.getNodeValue(versions.item(i));
+						final String version = XmlUtils.getNodeValue(versions.item(i));
 						if (version != null)
 							hwVersions.add(version);
 					}
@@ -223,20 +223,20 @@ public final class Summary {
 					productionMode = "";
 			}
 			
-			List<String> swVersions = new ArrayList<String>();
+			final List<String> swVersions = new ArrayList<String>();
 			String language = "";
 			String romId = "";
 			
 			// read data under seg_sw_info node
-			NodeList segSwInfo = rootElement.getElementsByTagName(TAG_SEG_SW_INFO);
+			final NodeList segSwInfo = rootElement.getElementsByTagName(TAG_SEG_SW_INFO);
 			if (segSwInfo != null && segSwInfo.getLength() > 0) {
 
 				// read all versions
-				NodeList versions = ((Element)segSwInfo.item(0)).getElementsByTagName(TAG_VERSION);
+				final NodeList versions = ((Element)segSwInfo.item(0)).getElementsByTagName(TAG_VERSION);
 				if (versions != null && versions.getLength() > 0) {
 					for (int i = 0; i < versions.getLength(); i++) {
 						// read sw version
-						String version = XmlUtils.getNodeValue(versions.item(i));
+						final String version = XmlUtils.getNodeValue(versions.item(i));
 						if (version != null)
 							swVersions.add(version);
 					}
@@ -255,7 +255,7 @@ public final class Summary {
 			
 			String imei = "";
 			// read imei value
-			NodeList imeiNode = rootElement.getElementsByTagName(TAG_IMEI);
+			final NodeList imeiNode = rootElement.getElementsByTagName(TAG_IMEI);
 			if (imeiNode != null && imeiNode.getLength() > 0) {
 				imei = imeiNode.item(0).getFirstChild().getNodeValue();
 			}
@@ -264,15 +264,15 @@ public final class Summary {
 			String freeDiskSpace = "";
 			
 			// read free ram amount
-			NodeList segMemoryInfo = rootElement.getElementsByTagName(TAG_SEG_MEMORY_INFO);
+			final NodeList segMemoryInfo = rootElement.getElementsByTagName(TAG_SEG_MEMORY_INFO);
 			if (segMemoryInfo != null && segMemoryInfo.getLength() > 0) {
-				NodeList ram = ((Element)segMemoryInfo.item(0)).getElementsByTagName(TAG_RAM);
+				final NodeList ram = ((Element)segMemoryInfo.item(0)).getElementsByTagName(TAG_RAM);
 				if (ram != null && ram.getLength() > 0) {
 					freeRamAmount = XmlUtils.getTextValue((Element)ram.item(0), TAG_FREE);
 					if (freeRamAmount == null)
 						freeRamAmount = "";
 				}
-				NodeList drive = ((Element)segMemoryInfo.item(0)).getElementsByTagName(TAG_DRIVE);
+				final NodeList drive = ((Element)segMemoryInfo.item(0)).getElementsByTagName(TAG_DRIVE);
 				if (drive != null && drive.getLength() > 0) {
 					freeDiskSpace = XmlUtils.getTextValue((Element)drive.item(0), TAG_FREE);
 					if (freeDiskSpace == null)
@@ -349,10 +349,10 @@ public final class Summary {
 	}
 
 	
-	static String convertUpTime(String uptime) {
+	static String convertUpTime(final String uptime) {
 		try {
-			int secs =Integer.valueOf(uptime); 
-			int hours =  secs / 3600,
+			final int secs =Integer.valueOf(uptime); 
+			final int hours =  secs / 3600,
 			remainder = secs % 3600,
 			minutes = remainder / 60,
 			seconds = remainder % 60;

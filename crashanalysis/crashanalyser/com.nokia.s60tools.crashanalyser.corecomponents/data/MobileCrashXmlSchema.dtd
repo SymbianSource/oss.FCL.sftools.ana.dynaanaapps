@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!ELEMENT crash_root (crash_analyser, source_info, segment_dictionary, segment_table)>
+
+<!ELEMENT crash_analyser (file_format, runtime)>
+<!ELEMENT file_format (version_extended)>
+<!ELEMENT version_extended (major, minor)>
+<!ELEMENT major (#PCDATA)>
+<!ELEMENT minor (#PCDATA)>
+<!ELEMENT runtime (version_extended, analysis_type, command_line, sources)>
+<!ELEMENT command_line (#PCDATA)>
+<!ELEMENT analysis_type (#PCDATA)>
+<!ELEMENT sources (file*)>
+<!ELEMENT file (#PCDATA)>
+
+<!ELEMENT source_info (type, version_extended, source, raw_data)>
+<!ELEMENT type (#PCDATA)>
+<!ELEMENT source (#PCDATA)>
+<!ELEMENT raw_data (data*)>
+<!ELEMENT data (#PCDATA)>
+
+<!ELEMENT segment_dictionary (segment*)>
+<!ELEMENT segment (version_extended, name)>
+<!ELEMENT name (#PCDATA)>
+
+<!ELEMENT segment_table (seg_header*, seg_symbols*, seg_stacks*, seg_codesegs*, 
+  seg_registers*, seg_threads*, seg_processes*, seg_hw_info*, seg_sw_info*, seg_event_log*, 
+  seg_telephony*, seg_memory_info*, seg_value_interpretations*, seg_messages*, seg_traces*)>
+
+<!ELEMENT seg_header (date, time, uptime?, version_text, crash_source?)>
+<!ELEMENT date (#PCDATA)>
+<!ELEMENT time (#PCDATA)>
+<!ELEMENT uptime (#PCDATA)>
+<!ELEMENT version_text (#PCDATA)>
+<!ELEMENT crash_source (#PCDATA)>
+
+<!ELEMENT seg_symbols (symbol_set*)>
+<!ELEMENT symbol_set (source, symbol*)>
+<!ELEMENT symbol (id?, address?, size?, name?, object?, link?, attributes?)>
+<!ELEMENT id (#PCDATA)>
+<!ELEMENT address (#PCDATA)>
+<!ELEMENT size (#PCDATA)>
+<!ELEMENT object (#PCDATA)>
+<!ELEMENT link (#PCDATA)>
+<!ATTLIST link seg CDATA #IMPLIED>
+<!ELEMENT attributes (xip?, symbol?, heuristic?, from_register?, speculative?, current_stack_pointer?, current_bank?, ram?, map?, outside_current_stack_pointer_range?, nosymbols?, mismatch? )>
+<!ELEMENT xip (#PCDATA)>
+<!ELEMENT map (#PCDATA)>
+<!ELEMENT outside_current_stack_pointer_range (#PCDATA)>
+<!ELEMENT nosymbols (#PCDATA)>
+<!ELEMENT mismatch (#PCDATA)>
+<!ELEMENT heuristic (#PCDATA)>
+<!ELEMENT from_register (#PCDATA)>
+<!ELEMENT speculative (#PCDATA)>
+<!ELEMENT current_stack_pointer (#PCDATA)>
+<!ELEMENT current_bank (#PCDATA)>
+
+<!ELEMENT seg_stacks (stack*)>
+<!ELEMENT stack (id, link+, base, size, range, hash, detailed_hash, link*, attributes, stack_data)>
+<!ELEMENT base (#PCDATA)>
+<!ELEMENT range (#PCDATA)>
+<!ELEMENT hash (#PCDATA)>
+<!ELEMENT detailed_hash (#PCDATA)>
+<!ELEMENT stack_data (stack_entry*)>
+<!ELEMENT stack_entry (address?, value, text, offset?, link*, attributes)>
+<!ELEMENT value (#PCDATA)>
+<!ELEMENT text (#PCDATA)>
+<!ELEMENT offset (#PCDATA)>
+
+<!ELEMENT seg_codesegs (codeseg*)>
+<!ELEMENT codeseg (id, name, base, size, range, link*, attributes)>
+
+<!ELEMENT seg_registers (register_set*)>
+<!ELEMENT register_set (id, type, name, link, attributes*, register*)>
+<!ELEMENT register (id, name, value, link*)>
+
+<!ELEMENT seg_threads (thread*)>
+<!ELEMENT thread (id, name, fullname, link*, exit_info, linklist*)>
+<!ELEMENT fullname (#PCDATA)>
+<!ELEMENT exit_info (exit_type, exit_category, exit_reason, exit_description)>
+<!ELEMENT exit_type (#PCDATA)>
+<!ELEMENT exit_category (#PCDATA)>
+<!ELEMENT exit_reason (#PCDATA)>
+<!ELEMENT exit_description (#PCDATA)>
+<!ELEMENT linklist (link*, version_text*)>
+<!ATTLIST linklist seg CDATA #IMPLIED>
+
+<!ELEMENT seg_processes (process*)>
+<!ELEMENT process (id?, name?, uid3?, sid?, generation?, linklist*)>
+<!ELEMENT uid3 (#PCDATA)>
+<!ELEMENT sid (#PCDATA)>
+<!ELEMENT generation (#PCDATA)>
+
+<!ELEMENT seg_hw_info (product_type*, product_code*, serial_number*, production_mode?)>
+<!ELEMENT product_type (#PCDATA)>
+<!ELEMENT product_code (#PCDATA)>
+<!ELEMENT serial_number (#PCDATA)>
+<!ELEMENT production_mode (#PCDATA)>
+
+<!ELEMENT seg_sw_info (checksum*, date*, time*, platform*, language*, linklist*)>
+<!ELEMENT checksum (#PCDATA)>
+<!ELEMENT platform (#PCDATA)>
+<!ELEMENT language (#PCDATA)>
+
+<!ELEMENT seg_event_log (event*)>
+<!ELEMENT event (#PCDATA)>
+<!ATTLIST event type CDATA #REQUIRED>
+
+<!ELEMENT seg_telephony (phone_number?, imei?, imsi?, network?)>
+<!ELEMENT phone_number (#PCDATA)>
+<!ELEMENT imei (#PCDATA)>
+<!ELEMENT imsi (#PCDATA)>
+<!ELEMENT network (country?, identity?, cell?, registration?)>
+<!ELEMENT country (#PCDATA)>
+<!ELEMENT identity (#PCDATA)>
+<!ELEMENT cell (#PCDATA)>
+<!ELEMENT registration (#PCDATA)>
+
+<!ELEMENT seg_memory_info (drive?, ram?)>
+<!ELEMENT drive (id, free, path)>
+<!ELEMENT free (#PCDATA)>
+<!ELEMENT path (#PCDATA)>
+<!ELEMENT ram (id?, free?)>
+
+<!ELEMENT seg_value_interpretations (vi_entry*)>
+<!ELEMENT vi_entry (id, hex, binary, size, endian, link, description, interpretation)>
+<!ELEMENT hex (#PCDATA)>
+<!ELEMENT binary (#PCDATA)>
+<!ELEMENT endian (#PCDATA)>
+<!ATTLIST endian 
+  type CDATA #REQUIRED
+  bit0 CDATA #REQUIRED
+  >
+
+<!ELEMENT seg_traces (line*)>
+
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT interpretation (bit_range | bit | bit_index | bit_group)*>
+<!ELEMENT bit_range (#PCDATA)>
+<!ATTLIST bit_range 
+  start CDATA #REQUIRED
+  end CDATA #REQUIRED
+  value CDATA #REQUIRED
+  category CDATA #REQUIRED
+  type CDATA #IMPLIED
+  interpretation CDATA #IMPLIED
+  >
+<!ELEMENT bit_index (#PCDATA)>
+<!ATTLIST bit_index 
+  index CDATA #REQUIRED
+  value CDATA #REQUIRED
+  category CDATA #REQUIRED
+  type CDATA #IMPLIED
+  char CDATA #IMPLIED
+  >
+<!ELEMENT bit_group (bit*)>
+<!ELEMENT bit (#PCDATA)>
+<!ATTLIST bit 
+  index CDATA #REQUIRED
+  value CDATA #REQUIRED
+  category CDATA #REQUIRED
+  char CDATA #REQUIRED
+  type CDATA #IMPLIED
+  interpretation CDATA #IMPLIED
+  >
+
+<!ELEMENT seg_messages (message*)>
+<!ELEMENT message (id?, type?, title?, line*)>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT line (#PCDATA)>
+<!ATTLIST line 
+  type CDATA #IMPLIED
+  context_id CDATA #IMPLIED
+  timestamp CDATA #IMPLIED
+  prefix CDATA #IMPLIED
+  component CDATA #IMPLIED
+  group CDATA #IMPLIED
+  id CDATA #IMPLIED
+  file CDATA #IMPLIED
+  line_number CDATA #IMPLIED
+  >
+

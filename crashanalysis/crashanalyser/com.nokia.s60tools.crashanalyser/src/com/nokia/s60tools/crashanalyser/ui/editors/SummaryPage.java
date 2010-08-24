@@ -262,7 +262,7 @@ public class SummaryPage {
 				newSummaryTableItem("CRASH SOURCE", crashSummary.getCrashSource(), true);
 				newSummaryTableItem("FREE DISK SPACE", crashSummary.getFreeDisk(), true);
 				
-				// Print defect hash if exist
+				// Print defect hash and detailed defect hash if exist
 				List<Stack> stacks = null;
 				if (selectedThread != null)
 					stacks = selectedThread.getStacks();
@@ -270,10 +270,17 @@ public class SummaryPage {
 				if (stacks != null && !stacks.isEmpty()) 
 				{
 					String defectHash = "";
+					String detailedDefectHash = "";
+					
 					for(Stack stack: stacks) {
 						defectHash = stack.getHash();
 						if(! "".equals(defectHash)) {
 							newSummaryTableItem("DEFECT HASH", defectHash, true);
+						}
+						
+						detailedDefectHash = stack.getDetailedHash();
+						if(! "".equals(detailedDefectHash)) {
+							newSummaryTableItem("DETAILED DEFECT HASH", detailedDefectHash, true);
 						}
 					}
 				}

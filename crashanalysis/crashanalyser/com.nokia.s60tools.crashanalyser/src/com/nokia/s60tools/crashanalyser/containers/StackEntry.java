@@ -63,8 +63,8 @@ public final class StackEntry {
 	private final boolean xipSymbol;
 	private final boolean registerBased;
 	
-	private StackEntry(String address, String value, String symbol, String object, String offset, String text, String source,
-						String codeSegmentName, boolean outsideSB, boolean currentSP, boolean isAccurate, boolean xip, boolean register) {
+	private StackEntry(final String address, final String value, final String symbol, final String object, final String offset, final String text, final String source,
+						final String codeSegmentName, final boolean outsideSB, final boolean currentSP, final boolean isAccurate, final boolean xip, final boolean register) {
 		stackEntryAddress = address;
 		stackEntryValue = value;
 		stackEntrySymbol = symbol;
@@ -145,7 +145,7 @@ public final class StackEntry {
 	 * @param html
 	 * @throws IOException
 	 */
-	public void writeTo(BufferedWriter out, StackItems stackItems, Stack stack, boolean html) throws IOException {
+	public void writeTo(final BufferedWriter out, final StackItems stackItems, final Stack stack, final boolean html) throws IOException {
 		if (currentStackPointer) {
 			writeLine(out, "");
 			if (html)
@@ -194,7 +194,7 @@ public final class StackEntry {
 		}
 	}	
 	
-	void writeLine(BufferedWriter out, String line) throws IOException {
+	void writeLine(final BufferedWriter out, final String line) throws IOException {
 		out.write(line);
 		out.newLine();
 	}
@@ -206,9 +206,9 @@ public final class StackEntry {
 	 * @param registers
 	 * @return created stack entry or null
 	 */
-	public static StackEntry read(Element elementStackEntry, 
-									Map<Integer, Symbol> symbols,
-									Map<Integer, Register> registers) {
+	public static StackEntry read(final Element elementStackEntry, 
+									final Map<Integer, Symbol> symbols,
+									final Map<Integer, Register> registers) {
 		try {
 			// read address if exists
 			String address = XmlUtils.getTextValue(elementStackEntry, TAG_ADDRESS);
@@ -228,20 +228,20 @@ public final class StackEntry {
 			String codeSegment = "";
 			
 			// try to read symbol & register information for this stack entry
-			NodeList nl = elementStackEntry.getElementsByTagName(TAG_LINK);
+			final NodeList nl = elementStackEntry.getElementsByTagName(TAG_LINK);
 			if (nl != null && nl.getLength() > 0) {
 				for (int i = 0; i < nl.getLength(); i++) {
-					Node linkNode = nl.item(i);
-					String nodeValue = XmlUtils.getNodeValue(linkNode);
-					NamedNodeMap attributes = linkNode.getAttributes();
+					final Node linkNode = nl.item(i);
+					final String nodeValue = XmlUtils.getNodeValue(linkNode);
+					final NamedNodeMap attributes = linkNode.getAttributes();
 					if (attributes != null && attributes.getLength() > 0) {
-						Node seg = attributes.getNamedItem(ATTRIBUTE_SEG);
+						final Node seg = attributes.getNamedItem(ATTRIBUTE_SEG);
 						// symbol id
 						if (SEGMENT_SYMBOLS.equals(XmlUtils.getNodeValue(seg))) {
 							try {
-								int sId = Integer.parseInt(nodeValue);
+								final int sId = Integer.parseInt(nodeValue);
 								if (symbols.containsKey(sId)) {
-									Symbol sym = symbols.get(sId);
+									final Symbol sym = symbols.get(sId);
 									symbol = sym.getName();
 									object = sym.getObject();
 									source = sym.getSource();
@@ -254,9 +254,9 @@ public final class StackEntry {
 						// register id
 						} else if (SEGMENT_REGISTERS.equals(XmlUtils.getNodeValue(seg))) {
 							registerBased = true;
-							int rId = Integer.parseInt(nodeValue);
+							final int rId = Integer.parseInt(nodeValue);
 							if (registers.containsKey(rId)) {
-								Register reg = registers.get(rId);
+								final Register reg = registers.get(rId);
 								if ("R14".equals(reg.getName())) {
 									address = "LR";
 								} else if ("R15".equals(reg.getName())) {
@@ -268,9 +268,9 @@ public final class StackEntry {
 				}
 			}
 			
-			boolean currentStackPointer = XmlUtils.containsNode(elementStackEntry, TAG_CURRENT_STACK_POINTER);
-			boolean accurate = XmlUtils.containsNode(elementStackEntry, TAG_ACCURATE);
-			boolean outsideStackBounds = XmlUtils.containsNode(elementStackEntry, TAG_OUTSIDE_STACK_BOUNDS);
+			final boolean currentStackPointer = XmlUtils.containsNode(elementStackEntry, TAG_CURRENT_STACK_POINTER);
+			final boolean accurate = XmlUtils.containsNode(elementStackEntry, TAG_ACCURATE);
+			final boolean outsideStackBounds = XmlUtils.containsNode(elementStackEntry, TAG_OUTSIDE_STACK_BOUNDS);
 	
 			// read offset if exists
 			String offset = XmlUtils.getTextValue(elementStackEntry, TAG_OFFSET);

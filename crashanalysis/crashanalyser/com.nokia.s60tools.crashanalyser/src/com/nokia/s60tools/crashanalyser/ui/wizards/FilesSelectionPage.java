@@ -388,6 +388,13 @@ public class FilesSelectionPage extends S60ToolsWizardPage implements SelectionL
 			if (files == null || files.size() < 1)
 				return false;
 			
+			if (onlyCrashxmlFilesSelected())
+			{
+				// If there are just crashxml files then we do not need symbol files ->
+				// only Finish button is enabled. 
+				return false;
+			}
+			
 			TableItem[] items = tableFiles.getItems();
 			// no items in table (shouldn't happen)
 			if (items == null) {

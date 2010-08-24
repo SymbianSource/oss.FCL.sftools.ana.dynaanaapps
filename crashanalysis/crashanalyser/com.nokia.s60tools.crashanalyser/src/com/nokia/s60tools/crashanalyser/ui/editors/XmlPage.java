@@ -17,6 +17,9 @@
 
 package com.nokia.s60tools.crashanalyser.ui.editors;
 
+import java.io.File;
+
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.layout.GridData;
@@ -24,7 +27,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.*;
 import org.eclipse.ui.PlatformUI;
 
+import com.nokia.s60tools.crashanalyser.corecomponents.plugin.CrashAnalyserCoreComponentsPlugin;
 import com.nokia.s60tools.crashanalyser.files.*;
+import com.nokia.s60tools.crashanalyser.model.FileOperations;
+import com.nokia.s60tools.crashanalyser.plugin.CrashAnalyserPlugin;
 import com.nokia.s60tools.crashanalyser.resources.HelpContextIDs;
 
 /**
@@ -33,8 +39,9 @@ import com.nokia.s60tools.crashanalyser.resources.HelpContextIDs;
  */
 public class XmlPage {
 
-	Browser browserXml;
-	SummaryFile crashFile = null;
+	private static final String CRASHXML_DTD = "MobileCrashXmlSchema.dtd";
+	private Browser browserXml;
+	private SummaryFile crashFile = null;
 
 	/**
 	 * Creates the page
@@ -62,7 +69,7 @@ public class XmlPage {
 	 * @return composite
 	 */
 	Composite doCreatePage(Composite parent) {
-	
+		copyDtd();
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 1;
 		parent.setLayout(layout);
@@ -90,4 +97,21 @@ public class XmlPage {
 			browserXml.setUrl(crashFile.getFilePath());
 		}
 	}
+	
+	/**
+	 * Copy the DTD file for crashxml. 
+	 * Original location is com.nokia.s60tools.crashanalyser.corecomponents\data
+	 * and it will be copied to Carbide workspace
+	 * .metadata\.plugins\com.nokia.s60tools.crashanalyser\
+	 * 
+	 */
+	private static final void copyDtd() {
+		String fileName = FileOperations.addSlashToEnd(CrashAnalyserCoreComponentsPlugin.getDataPath()) +
+			CRASHXML_DTD;
+		String destinationPath = Platform.getStateLocation(CrashAnalyserPlugin
+				.getDefault().getBundle()).toOSString();
+ 
+		FileOperations.copyFile(new File(fileName), destinationPath, false);
+	}
+	
 }

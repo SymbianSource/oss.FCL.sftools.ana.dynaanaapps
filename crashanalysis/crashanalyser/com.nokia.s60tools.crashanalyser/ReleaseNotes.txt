@@ -1,5 +1,5 @@
 =====================================================================
-RELEASE NOTE for Crash Analyser 1.3.0 (30th March 2010)
+RELEASE NOTE for Crash Analyser 1.4.0 (June 2010)
 =====================================================================
 
 Product Description:
@@ -22,17 +22,11 @@ Features:
 
 New Features:
 =============
-- Shows production mode and crash source
-- Shows OST trace information and possible to insert OST dictionaries to 
-  decoding process
-- Added preferences button to main view
-- Defect hash information is shown
-- If there are multiple threads in the crash those are shown as tree view
-  in the main view
+- Added detailed defect hash information
 
 Enhancements:
 =============
-- Improved UI, more tabs added
+- Updated panic and error descriptions
 - Bug fixes
 
 System Requirements:

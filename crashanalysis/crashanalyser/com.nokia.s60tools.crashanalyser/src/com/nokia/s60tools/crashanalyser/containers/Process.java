@@ -69,8 +69,8 @@ public final class Process {
 	 * @param threads threads of the process
 	 * @param codeSegments code segments of the process
 	 */
-	private Process(int id, String name, String uid1, String uid2, String uid3, String sid,
-					List<Thread> threads, List<CodeSegment> codeSegments) {
+	private Process(final int id, final String name, final String uid1, final String uid2, final String uid3, final String sid,
+					final List<Thread> threads, final List<CodeSegment> codeSegments) {
 		processId = id;
 		processName = name;
 		processUid1 = uid1;
@@ -100,7 +100,7 @@ public final class Process {
 	 * @param html defines whether html format should be written
 	 * @throws IOException
 	 */
-	public void writeTo(BufferedWriter out, StackItems stackItems, boolean html) throws IOException {
+	public void writeTo(final BufferedWriter out, final StackItems stackItems, final boolean html) throws IOException {
 		
 		// write basic process data
 		writeLine(out,"");
@@ -118,7 +118,7 @@ public final class Process {
 			writeLine(out, "CODE SEGMENTS:");
 			writeLine(out, "--------------");
 			for (int i = 0; i < processCodeSegments.size(); i++) {
-				CodeSegment codeSegment = processCodeSegments.get(i);
+				final CodeSegment codeSegment = processCodeSegments.get(i);
 				codeSegment.writeTo(out);
 			}
 			writeLine(out, "");
@@ -127,7 +127,7 @@ public final class Process {
 		// write threads of the process
 		if (processThreads != null && !processThreads.isEmpty()) {
 			for (int i = 0; i < processThreads.size(); i++) {
-				Thread thread = processThreads.get(i);
+				final Thread thread = processThreads.get(i);
 				thread.writeTo(out, stackItems, html);
 				writeLine(out, "");
 			}
@@ -135,12 +135,12 @@ public final class Process {
 		}
 	}
 	
-	void writeLine(BufferedWriter out, String line) throws IOException {
+	void writeLine(final BufferedWriter out, final String line) throws IOException {
 		out.write(line);
 		out.newLine();
 	}
 
-	void writeLine(BufferedWriter out, String header, String value) throws IOException {
+	void writeLine(final BufferedWriter out, final String header, final String value) throws IOException {
 		if (!"".equals(value)) {
 			out.write(String.format(FORMAT, header, value));
 			out.newLine();
@@ -154,23 +154,23 @@ public final class Process {
 	 * @param codeSegments
 	 * @return created process or null
 	 */
-	public static Process read(Element elementProcess, 
-								Map<Integer, Thread> threads,
-								Map<Integer, CodeSegment> codeSegments) {
+	public static Process read(final Element elementProcess, 
+								final Map<Integer, Thread> threads,
+								final Map<Integer, CodeSegment> codeSegments) {
 		try {
 			if (threads == null || threads.isEmpty())
 				return null;
 			
 			// read process id
-			String processId = XmlUtils.getTextValue(elementProcess, TAG_ID);
+			final String processId = XmlUtils.getTextValue(elementProcess, TAG_ID);
 			if (processId == null)
 				return null;
 			
 			// convert process id to integer
-			int id = Integer.parseInt(processId);
+			final int id = Integer.parseInt(processId);
 			
 			// read process name
-			String  processName = XmlUtils.getTextValue(elementProcess, TAG_NAME);
+			final String  processName = XmlUtils.getTextValue(elementProcess, TAG_NAME);
 			if (processName == null)
 				return null;
 			
@@ -195,28 +195,28 @@ public final class Process {
 				sid = "";
 			
 			// get link nodes for thread and codesegment ids
-			NodeList nl = elementProcess.getElementsByTagName(TAG_LINK);
+			final NodeList nl = elementProcess.getElementsByTagName(TAG_LINK);
 			if (nl == null || nl.getLength() < 1)
 				return null;
 
-			List<Thread> processThreads = new ArrayList<Thread>();
-			List<CodeSegment> processCodesegments = new ArrayList<CodeSegment>();
+			final List<Thread> processThreads = new ArrayList<Thread>();
+			final List<CodeSegment> processCodesegments = new ArrayList<CodeSegment>();
 
 			// read threads and code segments
 			for (int i = 0; i < nl.getLength(); i++) {
-				Node node = nl.item(i);
-				String nodeValue = XmlUtils.getNodeValue(node);
-				NamedNodeMap attributes = node.getAttributes();
+				final Node node = nl.item(i);
+				final String nodeValue = XmlUtils.getNodeValue(node);
+				final NamedNodeMap attributes = node.getAttributes();
 				if (attributes != null && attributes.getLength() > 0) {
-					Node seg = attributes.getNamedItem(ATTRIBUTE_SEG);
+					final Node seg = attributes.getNamedItem(ATTRIBUTE_SEG);
 					// thread id
 					if (SEGMENT_THREADS.equals(XmlUtils.getNodeValue(seg))) {
-						int tId = Integer.parseInt(nodeValue);
+						final int tId = Integer.parseInt(nodeValue);
 						if (threads.containsKey(tId))
 							processThreads.add(threads.get(tId));
 					// codesegment id
 					} else if (SEGMENT_CODESEGS.equals(XmlUtils.getNodeValue(seg))) {
-						int segmentId = Integer.parseInt(nodeValue);
+						final int segmentId = Integer.parseInt(nodeValue);
 						if (codeSegments.containsKey(segmentId))
 							processCodesegments.add(codeSegments.get(segmentId));
 					}

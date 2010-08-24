@@ -77,7 +77,7 @@ public class DecoderEngine extends Job {
 	 *            crash file
 	 * @return true if file seems to be a known crash file, false if not
 	 */
-	public static boolean isFileValidCrashFile(String file) {
+	public static boolean isFileValidCrashFile(final String file) {
 		return isFileValidCrashFile(new File(file));
 	}
 
@@ -88,11 +88,11 @@ public class DecoderEngine extends Job {
 	 *            crash file
 	 * @return true if file seems to be a known crash file, false if not
 	 */
-	public static boolean isFileValidCrashFile(File file) {
+	public static boolean isFileValidCrashFile(final File file) {
 		try {
 			// file must be a file and it must exist
 			if (file.isFile() && file.exists()) {
-				String fileName = file.getName();
+				final String fileName = file.getName();
 				// file extension must match known extension types
 				if (fileName
 						.endsWith(CrashAnalyserFile.MOBILECRASH_FILE_EXTENSION)
@@ -117,14 +117,14 @@ public class DecoderEngine extends Job {
 	 *            from where Crash files should be found
 	 * @return true if given path contains Crash files, false if not
 	 */
-	protected boolean isCrashPathValid(String path) {
+	protected boolean isCrashPathValid(final String path) {
 		try {
-			File file = new File(path);
+			final File file = new File(path);
 			if (!file.isDirectory())
 				return false;
 
 			// We are looking for files *.bin, or *.txt or *.crashxml
-			FilenameFilter filter = new FilenameFilter() {
+			final FilenameFilter filter = new FilenameFilter() {
 				public boolean accept(File dir, String name) {
 					return (name
 							.endsWith(CrashAnalyserFile.MOBILECRASH_FILE_EXTENSION)
@@ -136,7 +136,7 @@ public class DecoderEngine extends Job {
 									.endsWith(CrashAnalyserFile.ELF_CORE_DUMP_FILE_EXTENSION));
 				}
 			};
-			File[] files = file.listFiles(filter);
+			final File[] files = file.listFiles(filter);
 			if (files != null && files.length > 0)
 				return true;
 
@@ -155,7 +155,7 @@ public class DecoderEngine extends Job {
 	 *         C:\My_Workspace\.metadata\.plugins\com.nokia.s60tools.crashanalyser
 	 *         \work\
 	 */
-	public static String getWorkingFolder(boolean clean) {
+	public static String getWorkingFolder(final boolean clean) {
 		String workingFolder = FileOperations
 				.addSlashToEnd(getPluginWorkingLocation());
 		workingFolder += FileOperations.addSlashToEnd(WORK_FOLDER);
@@ -172,10 +172,10 @@ public class DecoderEngine extends Job {
 	 * @return created folder, or null if failed
 	 */
 	public static String getNewCrashFolder() {
-		String crashFilesFolder = FileOperations
+		final String crashFilesFolder = FileOperations
 				.addSlashToEnd(getCrashFilesFolder());
 		for (int i = 1; i < MAX_FILE_COUNT; i++) {
-			File freeFolder = new File(crashFilesFolder + Integer.toString(i));
+			final File freeFolder = new File(crashFilesFolder + Integer.toString(i));
 			if (!freeFolder.exists()) {
 				FileOperations.createFolder(freeFolder.getAbsolutePath());
 				return freeFolder.getAbsolutePath();
@@ -195,7 +195,7 @@ public class DecoderEngine extends Job {
 	 *         C:\My_Workspace\.metadata\.plugins\com.nokia.s60tools.crashanalyser
 	 *         \temp
 	 */
-	public static String getTemporaryCrashFileFolder(boolean clean) {
+	public static String getTemporaryCrashFileFolder(final boolean clean) {
 		String tempFolder = FileOperations
 				.addSlashToEnd(getPluginWorkingLocation());
 		tempFolder += TEMPORARY_FOLDER;
@@ -213,7 +213,7 @@ public class DecoderEngine extends Job {
 	 *            defines "how" the path is validated
 	 * @return true if path is valid, false if not
 	 */
-	public boolean isPathValid(String path, PathTypes pathType) {
+	public boolean isPathValid(final String path, final PathTypes pathType) {
 
 		boolean retVal = false;
 
@@ -240,7 +240,7 @@ public class DecoderEngine extends Job {
 	 * @param files
 	 *            files to be decoded
 	 */
-	public void setCrashFiles(List<CrashFileBundle> files) {
+	public void setCrashFiles(final List<CrashFileBundle> files) {
 		crashFiles = files;
 	}
 
@@ -256,16 +256,16 @@ public class DecoderEngine extends Job {
 	 *            progress monitor
 	 * @return true if any files were found for summary info, false if not
 	 */
-	public boolean processSummaryInfoForFiles(String fileOrFolder,
-			ErrorLibrary errorLibrary, IProgressMonitor progress) {
+	public boolean processSummaryInfoForFiles(final String fileOrFolder,
+			ErrorLibrary errorLibrary, final IProgressMonitor progress) {
 		if (crashFiles != null)
 			crashFiles.clear();
-		String workingFolder = DecoderEngine.getWorkingFolder(true);
+		final String workingFolder = DecoderEngine.getWorkingFolder(true);
 		if (!"".equals(fileOrFolder)) {
 
 			String originatingDirectory = fileOrFolder;
 
-			File f = new File(fileOrFolder);
+			final File f = new File(fileOrFolder);
 			// if only one .crashxml file is selected, no need to run command
 			// line
 			if (f.isFile()
@@ -311,18 +311,18 @@ public class DecoderEngine extends Job {
 	 * @return true if fromFolder contained only crash files (.crashxml), false
 	 *         if folder contained other files also
 	 */
-	boolean copyCrashFilesToWorkingDirectory(String fromFolder,
-			String workingFolder) {
+	boolean copyCrashFilesToWorkingDirectory(final String fromFolder,
+			final String workingFolder) {
 		boolean retval = true;
-		File from = new File(fromFolder);
+		final File from = new File(fromFolder);
 		// given from folder needs to be an existing directory
 		if (from.isDirectory() && from.exists()) {
-			String[] files = from.list(); // get all files
+			final String[] files = from.list(); // get all files
 			// if files were found
 			if (files != null && files.length > 0) {
 				// go through all files in fromFolder
 				for (int i = 0; i < files.length; i++) {
-					String file = files[i];
+					final String file = files[i];
 					// files is .crashxml
 					if (file.endsWith(CrashAnalyserFile.OUTPUT_FILE_EXTENSION)) {
 						FileOperations.copyFile(new File(FileOperations
@@ -351,29 +351,30 @@ public class DecoderEngine extends Job {
 	 * @param errorLibrary
 	 *            Error Library
 	 */
-	void readSummaryFiles(String summaryFileDirectory,
-			String originatingDirectory, ErrorLibrary errorLibrary) {
-		File file = new File(summaryFileDirectory);
+	void readSummaryFiles(final String summaryFileDirectory,
+			final String originatingDirectory, final ErrorLibrary errorLibrary) {
+		final File file = new File(summaryFileDirectory);
 		crashFiles = new ArrayList<CrashFileBundle>();
 
 		// read all files from the directory
 		if (file.isDirectory()) {
 
 			// accept summary and output files (.xml & .crashxml)
-			FilenameFilter filter = new FilenameFilter() {
-				public boolean accept(File dir, String name) {
-					return (name
+			final FilenameFilter filter = new FilenameFilter() {
+				public boolean accept(final File dir, final String name) {
+					return ((name
 							.endsWith(CrashAnalyserFile.OUTPUT_FILE_EXTENSION) || name
 							.endsWith("."
-									+ CrashAnalyserFile.SUMMARY_FILE_EXTENSION));
+									+ CrashAnalyserFile.SUMMARY_FILE_EXTENSION)) && 
+									! name.equals(CommandLineManager.PARAMETERS_XML));
 				}
 			};
 
-			File[] files = file.listFiles(filter);
+			final File[] files = file.listFiles(filter);
 
 			// go through all found files
 			for (int i = 0; i < files.length; i++) {
-				File crashFile = files[i];
+				final File crashFile = files[i];
 
 				// file is output.crashxml type
 				if (crashFile.getName().endsWith(
@@ -385,7 +386,7 @@ public class DecoderEngine extends Job {
 								originatingDirectory));
 					// file is summary file
 				} else {
-					SummaryFile summaryXml = SummaryFile.read(crashFile,
+					final SummaryFile summaryXml = SummaryFile.read(crashFile,
 							errorLibrary);
 					if (summaryXml != null)
 						crashFiles.add(new CrashFileBundle(summaryXml,
@@ -401,7 +402,7 @@ public class DecoderEngine extends Job {
 	 * @param data
 	 *            decoding parameters
 	 */
-	public void setDecodingData(DecodingData data) {
+	public void setDecodingData(final DecodingData data) {
 		decodingData = data;
 	}
 
@@ -414,7 +415,7 @@ public class DecoderEngine extends Job {
 	 *         \
 	 */
 	protected static String getPluginWorkingLocation() {
-		IPath location = Platform.getStateLocation(CrashAnalyserPlugin
+		final IPath location = Platform.getStateLocation(CrashAnalyserPlugin
 				.getDefault().getBundle());
 		return location.toOSString();
 	}
@@ -427,7 +428,7 @@ public class DecoderEngine extends Job {
 	 *         \CrashFiles
 	 */
 	public static String getCrashFilesFolder() {
-		String crashFilesFolder = FileOperations
+		final String crashFilesFolder = FileOperations
 				.addSlashToEnd(getPluginWorkingLocation())
 				+ CRASH_FILES_FOLDER;
 		FileOperations.createFolder(crashFilesFolder);
@@ -440,7 +441,7 @@ public class DecoderEngine extends Job {
 	 * @param observer
 	 *            observer for the decoding process
 	 */
-	public void decode(IDecodingObserver observer) {
+	public void decode(final IDecodingObserver observer) {
 		decodingObserver = observer;
 		setPriority(Job.SHORT);
 		setUser(true);
@@ -458,16 +459,16 @@ public class DecoderEngine extends Job {
 	 * @param monitor
 	 *            for progress bar
 	 */
-	void importCrashFiles(String workingFolder, IProgressMonitor monitor) {
+	void importCrashFiles(final String workingFolder, final IProgressMonitor monitor) {
 		if (crashFiles != null) {
-			List<String> filesToBeDecoded = new ArrayList<String>();
+			final List<String> filesToBeDecoded = new ArrayList<String>();
 			// go through all crash files
 			for (int i = 0; i < crashFiles.size(); i++) {
-				CrashFileBundle crashFile = crashFiles.get(i);
+				final CrashFileBundle crashFile = crashFiles.get(i);
 
 				// we are importing already decoded file (.crashxml)
 				if (crashFile.isFullyDecoded()) {
-					CrashFile f = crashFile.getCrashFile();
+					final CrashFile f = crashFile.getCrashFile();
 					// this index was not chosen by user to be imported, delete
 					// this .crash from working folder
 					if (f != null && !decodingData.crashFileIndexes.contains(i)) {
@@ -480,7 +481,7 @@ public class DecoderEngine extends Job {
 					if (!decodingData.crashFileIndexes.contains(i))
 						continue;
 
-					SummaryFile f = crashFile.getSummaryFile();
+					final SummaryFile f = crashFile.getSummaryFile();
 					filesToBeDecoded.add(f.getSourceFilePath());
 				}
 			}
@@ -492,7 +493,7 @@ public class DecoderEngine extends Job {
 				if (mapFilesFolder != null && "".equals(mapFilesFolder)
 						&& decodingData.mapFilesZip != null
 						&& !"".equals(decodingData.mapFilesZip)) {
-					String zipFolder = FileOperations
+					final String zipFolder = FileOperations
 							.addSlashToEnd(workingFolder)
 							+ FileOperations
 									.addSlashToEnd(MAP_FILES_ZIP_FOLDER);
@@ -520,24 +521,24 @@ public class DecoderEngine extends Job {
 	 *            .xml or .crashxml file
 	 * @return CrashFileBundle for given file if found, null if not found
 	 */
-	CrashFileBundle getCrashFileBundle(File crashFile) {
+	CrashFileBundle getCrashFileBundle(final File crashFile) {
 		if (crashFiles != null) {
 			for (int i = 0; i < crashFiles.size(); i++) {
-				CrashFileBundle cfb = crashFiles.get(i);
+				final CrashFileBundle cfb = crashFiles.get(i);
 				String fileName = "";
-				SummaryFile sf = cfb.getSummaryFile();
+				final SummaryFile sf = cfb.getSummaryFile();
 				if (sf != null) {
 					fileName = FileOperations.getFileNameWithoutExtension(sf
 							.getFileName());
 				}
-				CrashFile cf = cfb.getCrashFile();
+				final CrashFile cf = cfb.getCrashFile();
 				if (cf != null) {
 					fileName = FileOperations.getFileNameWithoutExtension(cf
 							.getFileName());
 				}
 
 				if ("".equals(fileName)) {
-					UndecodedFile uf = cfb.getUndecodedFile();
+					final UndecodedFile uf = cfb.getUndecodedFile();
 					if (uf != null
 							&& uf
 									.getFileName()
@@ -563,32 +564,32 @@ public class DecoderEngine extends Job {
 	 * @param workingFolder
 	 *            from where decoded files are moved from
 	 */
-	CrashAnalyserFile moveDecodedFiles(String workingFolder) {
+	CrashAnalyserFile moveDecodedFiles(final String workingFolder) {
 		CrashAnalyserFile cafile = null;
-		File folder = new File(workingFolder);
+		final File folder = new File(workingFolder);
 
 		// accept output files (.crashxml)
-		FilenameFilter filter = new FilenameFilter() {
-			public boolean accept(File dir, String name) {
+		final FilenameFilter filter = new FilenameFilter() {
+			public boolean accept(final File dir, final String name) {
 				return (name.endsWith(CrashAnalyserFile.OUTPUT_FILE_EXTENSION));
 			}
 		};
 
-		File[] files = folder.listFiles(filter);
+		final File[] files = folder.listFiles(filter);
 
 		// go through all found files
 		for (int i = 0; i < files.length; i++) {
 			try {
-				File crashFile = files[i];
+				final File crashFile = files[i];
 
-				String crashFolder = getNewCrashFolder();
+				final String crashFolder = getNewCrashFolder();
 
 				// copy crash file (.crashxml) to crash folder
 				FileOperations.copyFile(crashFile, crashFolder, true);
 
 				// try to copy the original binary file also to crash folder
 				// (only mobilecrash, not D_EXC)
-				String binaryFile = SummaryFile.getSourceFilePath(crashFile
+				final String binaryFile = SummaryFile.getSourceFilePath(crashFile
 						.getAbsolutePath());
 				if (!"".equals(binaryFile)
 						&& binaryFile
@@ -610,13 +611,13 @@ public class DecoderEngine extends Job {
 				// html and/or text page needs to be generated
 				if ((decodingData.html || decodingData.text)
 						&& decodingData.htmlTextOutputFolder != null) {
-					CrashFile crashxml = CrashFile.read(crashFile,
+					final CrashFile crashxml = CrashFile.read(crashFile,
 							decodingData.errorLibrary);
 					if (crashxml != null) {
 						// create html/text file to the original folder where
 						// file came from
 						if ("".equals(decodingData.htmlTextOutputFolder)) {
-							CrashFileBundle cfb = getCrashFileBundle(crashFile);
+							final CrashFileBundle cfb = getCrashFileBundle(crashFile);
 							if (cfb != null) {
 								if (decodingData.html)
 									crashxml.writeTo(cfb
@@ -656,13 +657,13 @@ public class DecoderEngine extends Job {
 	 *            where files are to be decoded
 	 * @param monitor
 	 */
-	void reDecodeCrashFiles(String workingFolder, IProgressMonitor monitor) {
+	void reDecodeCrashFiles(final String workingFolder, final IProgressMonitor monitor) {
 		if (crashFiles != null) {
-			List<String> filesToBeDecoded = new ArrayList<String>();
+			final List<String> filesToBeDecoded = new ArrayList<String>();
 			// collect all binary file paths
 			for (int i = 0; i < crashFiles.size(); i++) {
-				CrashFileBundle crashFile = crashFiles.get(i);
-				UndecodedFile udf = crashFile.getUndecodedFile();
+				final CrashFileBundle crashFile = crashFiles.get(i);
+				final UndecodedFile udf = crashFile.getUndecodedFile();
 				filesToBeDecoded.add(udf.getFilePath());
 			}
 
@@ -673,7 +674,7 @@ public class DecoderEngine extends Job {
 				if (mapFilesFolder != null && "".equals(mapFilesFolder)
 						&& decodingData.mapFilesZip != null
 						&& !"".equals(decodingData.mapFilesZip)) {
-					String zipFolder = FileOperations
+					final String zipFolder = FileOperations
 							.addSlashToEnd(workingFolder)
 							+ FileOperations
 									.addSlashToEnd(MAP_FILES_ZIP_FOLDER);
@@ -700,31 +701,31 @@ public class DecoderEngine extends Job {
 	 * @param workingFolder
 	 *            from where decoded files are moved from
 	 */
-	CrashFile moveReDecodedFiles(String workingFolder) {
+	CrashFile moveReDecodedFiles(final String workingFolder) {
 		CrashFile cafile = null;
-		File folder = new File(workingFolder);
+		final File folder = new File(workingFolder);
 
 		// accept output files (.crashxml)
-		FilenameFilter filter = new FilenameFilter() {
-			public boolean accept(File dir, String name) {
+		final FilenameFilter filter = new FilenameFilter() {
+			public boolean accept(final File dir, final String name) {
 				return (name.endsWith(CrashAnalyserFile.OUTPUT_FILE_EXTENSION));
 			}
 		};
 
-		File[] files = folder.listFiles(filter);
+		final File[] files = folder.listFiles(filter);
 
 		// go through all found files
 		for (int i = 0; i < files.length; i++) {
 			try {
-				File crashFile = files[i];
+				final File crashFile = files[i];
 
-				CrashFileBundle cfb = getCrashFileBundle(crashFile);
+				final CrashFileBundle cfb = getCrashFileBundle(crashFile);
 				if (cfb == null)
 					continue;
 
-				String crashFolder = FileOperations.addSlashToEnd(cfb
+				final String crashFolder = FileOperations.addSlashToEnd(cfb
 						.getOriginatingDirectory());
-				File fCrashFolder = new File(crashFolder);
+				final File fCrashFolder = new File(crashFolder);
 
 				// folder should exist
 				if (!fCrashFolder.exists())
@@ -732,7 +733,7 @@ public class DecoderEngine extends Job {
 
 				// copy crash file (.crashxml) to crash folder
 				if (FileOperations.copyFile(crashFile, crashFolder, true)) {
-					String[] crashFolderFiles = fCrashFolder.list();
+					final String[] crashFolderFiles = fCrashFolder.list();
 
 					// if only one file was decoded, pass this file eventually
 					// to MainView so that this file can be opened up after decoding.
@@ -745,7 +746,7 @@ public class DecoderEngine extends Job {
 					// exist
 					if (crashFolderFiles != null && crashFolderFiles.length > 0) {
 						for (int j = 0; j < crashFolderFiles.length; j++) {
-							String crashFolderFile = crashFolderFiles[j];
+							final String crashFolderFile = crashFolderFiles[j];
 							if (crashFolderFile.toLowerCase().endsWith(
 									CrashFileBundle.EXTENSION_HTML)
 									|| crashFolderFile
@@ -776,7 +777,7 @@ public class DecoderEngine extends Job {
 	}
 
 	@Override
-	protected IStatus run(IProgressMonitor monitor) {
+	protected IStatus run(final IProgressMonitor monitor) {
 		String workingFolder = "";
 		CrashAnalyserFile caFile = null;
 		try {

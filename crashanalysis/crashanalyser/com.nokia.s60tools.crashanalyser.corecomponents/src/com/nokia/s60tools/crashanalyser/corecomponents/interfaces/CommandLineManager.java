@@ -42,7 +42,7 @@ public final class CommandLineManager {
 	 */
 	static final boolean progress_detailed = false;
 
-	static final String PARAMETERS_XML = "parameters.xml";
+	public static final String PARAMETERS_XML = "parameters.xml";
 	static final String EXE_FOLDER = "Binaries";
 	static final String COMMAND_LINE_COMMAND = "CrashAnalyserConsole.exe\" -plugin CRASH_ANALYSIS -input ";
 	static final String PROGRESS_PARAMETER = " -PROGRESS";
@@ -167,7 +167,8 @@ public final class CommandLineManager {
 	private static boolean createAndExecute(InputXmlGenerator xml,
 			IProgressMonitor monitor) {
 		String workingDirectory = getCrashAnalyserPath();
-		String fileName = workingDirectory + PARAMETERS_XML;
+		String parameterXmlPath = xml.getXMLAnalyseDirectoryOutput();
+		String fileName = parameterXmlPath + PARAMETERS_XML;
 		File filename = new File(fileName);
 		BufferedWriter writer = null;
 		try {
@@ -191,7 +192,7 @@ public final class CommandLineManager {
 
 		try {
 			String commandLineCommand = "\"" + workingDirectory
-					+ COMMAND_LINE_COMMAND + PARAMETERS_XML;
+					+ COMMAND_LINE_COMMAND + parameterXmlPath + PARAMETERS_XML;
 			if (monitor != null)
 				if (progress_detailed) {
 					commandLineCommand += PROGRESS_DETAILS_PARAMETER;

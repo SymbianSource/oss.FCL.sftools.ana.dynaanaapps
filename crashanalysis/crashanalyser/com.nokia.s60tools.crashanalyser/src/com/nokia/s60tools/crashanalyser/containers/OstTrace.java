@@ -13,7 +13,8 @@
 *
 * Description:
 *
-*/package com.nokia.s60tools.crashanalyser.containers;
+*/
+package com.nokia.s60tools.crashanalyser.containers;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

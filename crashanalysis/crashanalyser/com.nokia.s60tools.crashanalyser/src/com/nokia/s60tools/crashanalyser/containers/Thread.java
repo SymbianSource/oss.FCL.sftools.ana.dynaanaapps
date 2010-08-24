@@ -67,9 +67,9 @@ public final class Thread {
 	private final List<Stack> threadStacks;
 	private final List<RegisterSet> threadRegisters;
 
-	private Thread(int id, String fullName, String exitType, String exitCategory, 
-					String panicDescription, String programCounter, String stackPointer, String linkRegister, 
-					String exitReason, String exitDescription, List<Stack> stacks, List<RegisterSet> registers) {
+	private Thread(final int id, final String fullName, final String exitType, final String exitCategory, 
+					final String panicDescription, final String programCounter, final String stackPointer, final String linkRegister, 
+					final String exitReason, final String exitDescription, final List<Stack> stacks, final List<RegisterSet> registers) {
 		threadId = id;
 		threadFullName = fullName;
 		threadExitType = exitType;
@@ -139,7 +139,7 @@ public final class Thread {
 	 * @param html
 	 * @throws IOException
 	 */
-	public void writeTo(BufferedWriter out, StackItems stackItems, boolean html) throws IOException {
+	public void writeTo(final BufferedWriter out, final StackItems stackItems, final boolean html) throws IOException {
 		writeLine(out,"");
 		writeLine(out, "THREAD:");
 		writeLine(out, "--------");
@@ -156,7 +156,7 @@ public final class Thread {
 		writeLine(out, "");
 		if (threadRegisters != null && !threadRegisters.isEmpty()) {
 			for (int i = 0; i < threadRegisters.size(); i++) {
-				RegisterSet registerSet = threadRegisters.get(i);
+				final RegisterSet registerSet = threadRegisters.get(i);
 				registerSet.writeTo(out);
 				writeLine(out, "");
 			}
@@ -164,18 +164,18 @@ public final class Thread {
 		
 		if (threadStacks != null && !threadStacks.isEmpty()) {
 			for (int i = 0; i < threadStacks.size(); i++) {
-				Stack stack = threadStacks.get(i);
+				final Stack stack = threadStacks.get(i);
 				stack.writeTo(out, stackItems, html);
 			}
 		}
 	}
 	
-	void writeLine(BufferedWriter out, String line) throws IOException {
+	void writeLine(final BufferedWriter out, final String line) throws IOException {
 		out.write(line);
 		out.newLine();
 	}
 	
-	void writeLine(BufferedWriter out, String header, String value) throws IOException {
+	void writeLine(final BufferedWriter out, final String header, final String value) throws IOException {
 		if (!"".equals(value)) {
 			out.write(String.format(FORMAT, header, value));
 			out.newLine();
@@ -191,14 +191,14 @@ public final class Thread {
 	 * @param errorLibrary
 	 * @return created thread or null
 	 */
-	public static Thread read(Element elementThread,
-								Map<Integer, RegisterSet> registers,
-								Map<Integer, Symbol> symbols,
-								Map<Integer, Stack> stacks,
-								ErrorLibrary errorLibrary) {
+	public static Thread read(final Element elementThread,
+								final Map<Integer, RegisterSet> registers,
+								final Map<Integer, Symbol> symbols,
+								final Map<Integer, Stack> stacks,
+								final ErrorLibrary errorLibrary) {
 		try {
 			// read thread id
-			String threadId = XmlUtils.getTextValue(elementThread, TAG_ID);
+			final String threadId = XmlUtils.getTextValue(elementThread, TAG_ID);
 			if (threadId == null)
 				return null;
 			
@@ -211,7 +211,7 @@ public final class Thread {
 			}
 			
 			// read the threads full name
-			String fullName = XmlUtils.getTextValue(elementThread, TAG_FULLNAME);
+			final String fullName = XmlUtils.getTextValue(elementThread, TAG_FULLNAME);
 			if (fullName == null)
 				return null;
 			
@@ -220,17 +220,17 @@ public final class Thread {
 			String exitReason = "";
 			String exitDescription = "";
 			// get child nodes such as exit_info, stacks, registers
-			NodeList childNodes = elementThread.getChildNodes();
+			final NodeList childNodes = elementThread.getChildNodes();
 			if (childNodes == null || childNodes.getLength() < 1)
 				return null;
 			
 			// read Exit info
-			NodeList exitInfo = elementThread.getElementsByTagName(TAG_EXIT_INFO);
+			final NodeList exitInfo = elementThread.getElementsByTagName(TAG_EXIT_INFO);
 			if (exitInfo != null && exitInfo.getLength() > 0) {
-				NodeList exitInfos = exitInfo.item(0).getChildNodes();
+				final NodeList exitInfos = exitInfo.item(0).getChildNodes();
 				if (exitInfos != null && exitInfos.getLength() > 0) {
 					for (int i = 0; i < exitInfos.getLength(); i++) {
-						Node el = exitInfos.item(i);
+						final Node el = exitInfos.item(i);
 						Node firstChild = null;
 						if (TAG_EXIT_TYPE.equals(el.getNodeName())) {
 							// read exit type (Exception, Panic, Kill, Terminate)
@@ -289,26 +289,26 @@ public final class Thread {
 				panicDescription = errorLibrary.getPanicDescription(exitCategory, exitReason);
 			}
 			
-			List<Stack> threadStacks = new ArrayList<Stack>();
-			List<RegisterSet> threadRegisters = new ArrayList<RegisterSet>();
+			final List<Stack> threadStacks = new ArrayList<Stack>();
+			final List<RegisterSet> threadRegisters = new ArrayList<RegisterSet>();
 			String programCounter = "";
 			String stackPointer = "";
 			String linkRegister = "";
 			
 			// see if register has a symbol and/or message
-			NodeList nl = elementThread.getElementsByTagName(TAG_LINK);
+			final NodeList nl = elementThread.getElementsByTagName(TAG_LINK);
 			if (nl != null && nl.getLength() > 0) {
 				for (int i = 0; i < nl.getLength(); i++) {
-					Node linkNode = nl.item(i);
-					String nodeValue = XmlUtils.getNodeValue(linkNode);
-					NamedNodeMap attributes = linkNode.getAttributes();
+					final Node linkNode = nl.item(i);
+					final String nodeValue = XmlUtils.getNodeValue(linkNode);
+					final NamedNodeMap attributes = linkNode.getAttributes();
 					if (attributes != null && attributes.getLength() > 0) {
-						Node seg = attributes.getNamedItem(ATTRIBUTE_SEG);
+						final Node seg = attributes.getNamedItem(ATTRIBUTE_SEG);
 						// stack id
 						if (SEGMENT_STACKS.equals(XmlUtils.getNodeValue(seg))) {
-							int sId = Integer.parseInt(nodeValue);
+							final int sId = Integer.parseInt(nodeValue);
 							if (stacks.containsKey(sId)) {
-								Stack s = stacks.get(sId);
+								final Stack s = stacks.get(sId);
 								threadStacks.add(s);
 								// the most interesting PC, SP and LR comes from
 								// that stack which contains CPSR.
@@ -320,10 +320,10 @@ public final class Thread {
 							}
 						// register id
 						} else if (SEGMENT_REGISTERS.equals(XmlUtils.getNodeValue(seg))) {
-							int rId = Integer.parseInt(nodeValue);
+							final int rId = Integer.parseInt(nodeValue);
 							// if passed registers list contains a register for this id
 							if (registers.containsKey(rId)) {
-								RegisterSet registerSet = registers.get(rId);
+								final RegisterSet registerSet = registers.get(rId);
 								threadRegisters.add(registerSet);								
 							}							
 						}
@@ -340,7 +340,7 @@ public final class Thread {
 		}
 	}
 	
-	public Map<Integer, Stack> removeOwnStacks(Map<Integer, Stack> stacks) {
+	public Map<Integer, Stack> removeOwnStacks(final Map<Integer, Stack> stacks) {
 		
 		if (threadStacks != null && !threadStacks.isEmpty()) {
 			for (int i = 0; i < threadStacks.size(); i++) {
@@ -353,7 +353,7 @@ public final class Thread {
 		return stacks;
 	}
 	
-	public Map<Integer, RegisterSet> removeOwnRegisterSets(Map<Integer, RegisterSet> registerSets) {
+	public Map<Integer, RegisterSet> removeOwnRegisterSets(final Map<Integer, RegisterSet> registerSets) {
 		
 		if (threadRegisters != null && !threadRegisters.isEmpty()) {
 			for (int i = 0; i < threadRegisters.size(); i++) {

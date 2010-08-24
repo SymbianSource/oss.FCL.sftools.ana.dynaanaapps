@@ -20,17 +20,23 @@ package com.nokia.s60tools.crashanalyser.model;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.widgets.Display;
+
 import com.nokia.s60tools.crashanalyser.data.*;
 import com.nokia.s60tools.crashanalyser.interfaces.IErrorLibraryObserver;
 import com.nokia.s60tools.crashanalyser.files.*;
 import com.nokia.s60tools.crashanalyser.export.*;
 import com.nokia.s60tools.crashanalyser.plugin.*;
+
+
 
 /**
  * This class listens MobileCrash files via TraceViewer 
@@ -38,13 +44,35 @@ import com.nokia.s60tools.crashanalyser.plugin.*;
  */
 public final class TraceListener implements ITraceDataProcessor, 
 										IErrorLibraryObserver  {
+
+	/**
+	 * Private timer class. Takes care that we do not start crash
+	 * decoding process too many times within the predefined time
+	 * interval.
+	 */
+	private final class TraceTimerTask extends TimerTask
+	{
+		private final TraceListener traceListener;
+
+		TraceTimerTask(final TraceListener listener) {
+			traceListener = listener;
+		}
+		
+		@Override
+		public void run() {
+			traceListener.timerExpired();
+		}	
+	}
+
+	
 	private final static String MOBILE_CRASH_STARTTAG = "<MB_CR_START>"; //$NON-NLS-1$
 	private final static String MOBILE_CRASH_LINE_TAG = "<MB_CD>"; //$NON-NLS-1$
 	private final static String MOBILE_CRASH_STOPTAG = "<MB_CR_STOP>"; //$NON-NLS-1$
 	private final static String MOBILECRASH_START = "MobileCrash_"; //$NON-NLS-1$
-	final String EXTENSION_TRACE_PROVIDER = "traceprovider"; //$NON-NLS-1$
-
-
+	private final static String EXTENSION_TRACE_PROVIDER = "traceprovider"; //$NON-NLS-1$
+	private final static int MAX_DECODER_COUNT = 3;
+	private final static int DECODER_TIMER_DELAY = 10000; // 10 secs.
+	
 	boolean listening = false;
 	boolean mobileCrashStarted = false;
 	BufferedWriter mcFile = null;
@@ -53,19 +81,23 @@ public final class TraceListener implements ITraceDataProcessor,
 	ErrorLibrary errorLibrary = null;
 	boolean decode = false;
 	private static ITraceProvider traceProvider = null;
+	private Timer timer;
+
+	private int decoderCount = 0;
 	
 	/**
 	 * Constructor
 	 */
 	public TraceListener() {
 		readTraceProvider();
+		timer = new Timer();
 	}
 	
 	/**
 	 * Starts trace listening asynchronously
 	 */
 	public void errorLibraryReady() {
-		Runnable refreshRunnable = new Runnable(){
+		final Runnable refreshRunnable = new Runnable(){
 			public void run(){
 				startListening();
 			}
@@ -94,7 +126,7 @@ public final class TraceListener implements ITraceDataProcessor,
 	 * Sets whether we should decode imported files or just import them as undecoded state.
 	 * @param decodeFiles 
 	 */
-	public void setDecode(boolean decodeFiles) {
+	public void setDecode(final boolean decodeFiles) {
 		decode = decodeFiles;
 	}
 	
@@ -115,7 +147,7 @@ public final class TraceListener implements ITraceDataProcessor,
 	 * pics up MobileCrash file content from trace data.
 	 * @param line trace data line
 	 */
-	public void processDataLine(String line) {
+	public void processDataLine(final String line) {
 		int idx = line.indexOf(MOBILE_CRASH_STARTTAG);
 		
 		try {
@@ -124,8 +156,8 @@ public final class TraceListener implements ITraceDataProcessor,
 				mobileCrashStarted = true;
 				dumpFolder = FileOperations.addSlashToEnd(DecoderEngine.getNewCrashFolder());
 				
-				Calendar cal = Calendar.getInstance();
-			    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS"); //$NON-NLS-1$
+				final Calendar cal = Calendar.getInstance();
+			    final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS"); //$NON-NLS-1$
 			    dumpFile = new File(dumpFolder +
 			    					MOBILECRASH_START + 
 			    					sdf.format(cal.getTime()) + 
@@ -157,8 +189,19 @@ public final class TraceListener implements ITraceDataProcessor,
 						mobileCrashStarted = false;
 						
 						// give this mobilecrash file for further processing
-						MobileCrashImporter tc = new MobileCrashImporter();
-						tc.importFrom(dumpFolder, dumpFile.getName(), errorLibrary, decode);
+						final MobileCrashImporter tc = new MobileCrashImporter();
+						
+						if (decoderCount < MAX_DECODER_COUNT) {
+							decoderCount++;
+							if (decoderCount == 1) {
+								// Start timer when starting decoder at first time
+								timer.schedule(new TraceTimerTask(this), DECODER_TIMER_DELAY);
+							}
+							tc.importFrom(dumpFolder, dumpFile.getName(), errorLibrary, decode);
+						} else {
+							// Too many crashes in the trace file, do not decode (last parameter is false).
+							tc.importFrom(dumpFolder, dumpFile.getName(), errorLibrary, false);
+						}
 					}
 				}
 			}
@@ -183,25 +226,33 @@ public final class TraceListener implements ITraceDataProcessor,
 	}
 	
 	/**
+	 * This is called when the timer expires.
+	 */
+	public final void timerExpired()
+	{
+		decoderCount = 0;
+	}
+	
+	/**
 	 * Tries to find plugins which are Trace Providers. Selected the first found
 	 * Trace provider plugin.
 	 */
 	void readTraceProvider() {
 		try {
-			IExtensionRegistry er = Platform.getExtensionRegistry();
-			IExtensionPoint ep = 
+			final IExtensionRegistry er = Platform.getExtensionRegistry();
+			final IExtensionPoint ep = 
 				er.getExtensionPoint(CrashAnalyserPlugin.PLUGIN_ID, EXTENSION_TRACE_PROVIDER);
-			IExtension[] extensions = ep.getExtensions();
+			final IExtension[] extensions = ep.getExtensions();
 			
 			// if plug-ins were found.
 			if (extensions != null && extensions.length > 0) {
 				
 				// read all found trace providers
 				for (int i = 0; i < extensions.length; i++) {
-					IConfigurationElement[] ce = extensions[i].getConfigurationElements();
+					final IConfigurationElement[] ce = extensions[i].getConfigurationElements();
 					if (ce != null && ce.length > 0) {
 						try {
-							ITraceProvider provider = (ITraceProvider)ce[0].createExecutableExtension("class");
+							final ITraceProvider provider = (ITraceProvider)ce[0].createExecutableExtension("class");
 							// we support only one trace provider
 							if (provider != null) {
 								traceProvider = provider;
