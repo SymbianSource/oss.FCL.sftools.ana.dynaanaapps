@@ -2,7 +2,7 @@
 <feature
       id="com.nokia.carbide.extensions.memspy"
       label="Carbide.c++ Extensions - MemSpy"
-      version="1.6.0"
+      version="1.7.0"
       provider-name="Nokia"
       plugin="com.nokia.s60tools.memspy">
 
@@ -23,7 +23,6 @@ under the terms of &quot;Eclipse Public License v1.0&quot;
 which accompanies this distribution, and is available
 at the URL &quot;http://www.eclipse.org/legal/epl-v10.html&quot;.
    </license>
-
 
    <requires>
       <import plugin="org.eclipse.ui"/>
@@ -72,6 +71,4 @@ at the URL &quot;http://www.eclipse.org/legal/epl-v10.html&quot;.
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
-
 </feature>
