@@ -5,6 +5,7 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.nokia.s60tools.analyzetool.internal.ui.graph.messages"; //$NON-NLS-1$
 	public static String MemOpDescriptor_1;
+	public static String MemOpDescriptor_10;
 	public static String MemOpDescriptor_11;
 	public static String MemOpDescriptor_13;
 	public static String MemOpDescriptor_18;

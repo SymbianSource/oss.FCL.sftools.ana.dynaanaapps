@@ -12,8 +12,8 @@
    </item>
    <item title="Define the data gathering mode." dialog="true" skip="false" href="/com.nokia.s60tools.analyzetool.help/html/concepts/preferences.htm">
       <description>
-         Go to <b>Preferences</b> to define how to capture the trace data either by using the monitored external, external data gathering or internal data gathering.
-Tip! You can also define the data gathering mode by using the AnalyzeTool toolbar.
+         Go to <b>Preferences</b> to define how to capture the trace data: either by using the out put to trace mode or output to file system mode.
+Tip! You can also define the output mode by using the AnalyzeTool toolbar.
       </description>
       <command serialization="org.eclipse.ui.window.preferences(preferencePageId=com.nokia.s60tools.analyzetool.preferences.AnalyzeToolPreferencePage)" confirm="false">
       </command>
@@ -25,7 +25,7 @@ Tip! You can also define the data gathering mode by using the AnalyzeTool toolba
    </item>
    <item title="Build your project with AnalyzeTool" dialog="true" skip="false" href="/com.nokia.s60tools.analyzetool.help/html/tasks/build.htm">
       <description>
-         To make memory leak analysis possible, you must build each project with AnalyzeTool. Information of the building process is displayed in the Console view. You can activate the project build from the AnalyzeTool toolbar or from the pop-up menu in the Project Explorer. You can also change the data gathering mode from the AnalyzeTool toolbar.
+         To make memory leak analysis possible, you must build each project with AnalyzeTool. You can activate the project build from the AnalyzeTool toolbar or from the pop-up menu in the Project Explorer. You can also change the output mode from the AnalyzeTool toolbar.
       </description>
       <command serialization="org.eclipse.ui.views.showView(org.eclipse.ui.views.showView.viewId=com.nokia.s60tools.analyzetool.ui.MainView)" confirm="true">
       </command>
@@ -34,16 +34,16 @@ Tip! You can also define the data gathering mode by using the AnalyzeTool toolba
       <description>
          You have two possible choices to capture data.
 <br/><br/>
-1. If you have selected the <b>External data gathering</b> mode in AnalyzeTool build, AnalyzeTool captures trace data directly from the target hardware. You can start and stop the trace capturing from the AnalyzeTool toolbar. See the <b>TraceViewer help</b> for detailed information on creating a TraceViewer connection.
+1. If you have selected the <b>Output to trace</b> mode in AnalyzeTool build, AnalyzeTool captures trace data directly from the target hardware. You can start and stop the trace capturing from the AnalyzeTool toolbar. See the <b>TraceViewer help</b> for detailed information on creating a TraceViewer connection.
 <br/><br/>
-2. If you have selected the <b>Internal data gathering</b>  mode in AnalyzeTool build, AnalyzeTool collects the test data into a file in the target hardware. You need to transfer this file to a PC after the test run is completed.
+2. If you have selected the <b>Output to file system</b>  mode in AnalyzeTool build, AnalyzeTool collects the test data into a file in the target hardware. You need to transfer this file to a PC after the test run is completed.
       </description>
    </item>
    <item title="View and analyze memory leaks" dialog="true" skip="false" href="/com.nokia.s60tools.analyzetool.help/html/tasks/viewmemoryleaks.htm">
       <description>
          The memory leak analysis results are displayed in the AnalyzeTool window. Test runs with the memory leak information is displayed in the left pane. The right pane shows the information on the selected memory leak call stack.
 <br/><br/>
-Test run details will be shown in the AnalyzeTool view automatically after the data capture in External data gathering mode. You can also open the memory analysis data file by yourself later by clicking <b>Open and analyze data file</b> in the AnalyzeTool toolbar.
+Test run details will be shown in the AnalyzeTool view automatically after the data capture in Output to trace mode. You can also open the memory analysis data file  later by clicking <b>Open and analyze data file</b> in the AnalyzeTool toolbar.
 <br/><br/>
 You can define how much detail you want to see in the memory leak analysis report by using the AnalyzeTool toolbar.
       </description>

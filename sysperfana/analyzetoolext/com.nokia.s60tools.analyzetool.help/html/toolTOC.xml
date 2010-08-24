@@ -28,7 +28,7 @@
 
 		<topic label="Tasks" href="html/tasks/tasks.htm">
 			<topic label="Building the project with AnalyzeTool" href="html/tasks/build.htm" />
-			<topic label="Capturing trace data" href="html/tasks/capture.htm" />
+			<topic label="Capturing data" href="html/tasks/capture.htm" />
 			<topic label="Running subtests" href="html/tasks/subtest.htm" />
 			<topic label="Viewing memory leaks" href="html/tasks/viewmemoryleaks.htm" />
 			<topic label="Viewing memory activity graph" href="html/tasks/viewactivitygraph.htm" />

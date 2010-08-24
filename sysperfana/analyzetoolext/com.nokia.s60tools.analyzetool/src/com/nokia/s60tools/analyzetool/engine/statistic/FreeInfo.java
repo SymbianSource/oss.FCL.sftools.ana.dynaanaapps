@@ -22,10 +22,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-
-
 /**
- * Constains information of free
+ * Contains information of free
  * @author kihe
  *
  */
@@ -78,5 +76,4 @@ public class FreeInfo extends BaseInfo {
 		}
 		return sb.toString();
 	}
-	
 }

@@ -29,16 +29,15 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 /**
  * This class implements AnalyzeTool advanced preference page.
- *
+ * 
  * @author kihe
- *
+ * 
  */
 public class AdvancedPreferencePage extends PreferencePage implements
 		IWorkbenchPreferencePage {
 
-	/** Label to display info text  */
+	/** Label to display info text */
 	private Label infoText;
-	
 
 	/**
 	 * Constructor.
@@ -47,10 +46,9 @@ public class AdvancedPreferencePage extends PreferencePage implements
 		super();
 	}
 
-
 	/**
 	 * Creates this preference page content.
-	 *
+	 * 
 	 * @param parent
 	 *            This preference page parent
 	 */
@@ -74,16 +72,18 @@ public class AdvancedPreferencePage extends PreferencePage implements
 		composite.setLayout(gridLayout);
 
 		infoText = new Label(composite, INFORMATION);
-		infoText.setText("AnalyzeTool rom symbol definition is changed to project related definition. \nSelect project - properties - " +
-				"Carbide extensions - AnalyzeTool to define symbol file(s).");
+		infoText
+				.setText("AnalyzeTool rom symbol definition is changed to project related definition. \nSelect project - properties - "
+						+ "Carbide extensions - AnalyzeTool to define symbol file(s).");
 
 		return composite;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
+	 * 
+	 * @see
+	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	public void init(final IWorkbench workbench) {
 		// MethodDeclaration/Block[count(BlockStatement) = 0 and

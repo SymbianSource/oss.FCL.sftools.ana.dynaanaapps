@@ -23,25 +23,31 @@ import com.nokia.s60tools.analyzetool.engine.statistic.AllocCallstack;
 import com.nokia.s60tools.analyzetool.engine.statistic.BaseInfo;
 
 /**
- * Interface for access to callstack. This allows the transparent use of either the old-style saving
- * of callstacks in BaseInfo, or the newer deferred reading of callstacks.
+ * Interface for access to callstack. This allows the transparent use of either
+ * the old-style saving of callstacks in BaseInfo, or the newer deferred reading
+ * of callstacks.
  */
 public interface ICallstackManager {
-	
+
 	/**
-	 * Returns the callstack for the given BaseInfo. Note, this should not return null
-	 * if hasCallstack() returns true.
-	 * @param baseInfo  the BaseInfo to use
+	 * Returns the callstack for the given BaseInfo. Note, this should not
+	 * return null if hasCallstack() returns true.
+	 * 
+	 * @param baseInfo
+	 *            the BaseInfo to use
 	 * @return the callstack for the given BaseInfo
-	 * @throws IOException when problems accessing the .dat file for callstacks
+	 * @throws IOException
+	 *             when problems accessing the .dat file for callstacks
 	 */
-	public List<AllocCallstack> readCallstack(BaseInfo baseInfo) throws IOException;
+	public List<AllocCallstack> readCallstack(BaseInfo baseInfo)
+			throws IOException;
 
 	/**
 	 * Returns true if the given BaseInfo has a callstack, false otherwise
-	 * @param baseInfo the BaseInfo to use
+	 * 
+	 * @param baseInfo
+	 *            the BaseInfo to use
 	 * @return true if callstack present
 	 */
 	public boolean hasCallstack(BaseInfo baseInfo);
-
 }

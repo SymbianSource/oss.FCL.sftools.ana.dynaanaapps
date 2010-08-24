@@ -31,13 +31,13 @@ import com.nokia.s60tools.analyzetool.ui.IActionListener;
 
 /**
  * Entry point for displaying memory analysis results from file.
- *
+ * 
  * @author kihe
- *
+ * 
  */
 public class ViewMemoryLeakFromFile implements IObjectActionDelegate {
 
-	/** project reference.*/
+	/** project reference. */
 	public IProject project;
 
 	/**
@@ -49,8 +49,9 @@ public class ViewMemoryLeakFromFile implements IObjectActionDelegate {
 
 	/**
 	 * Performs this action.
-	 *
-	 * @param action User selected action
+	 * 
+	 * @param action
+	 *            User selected action
 	 */
 	public void run(IAction action) {
 
@@ -74,10 +75,12 @@ public class ViewMemoryLeakFromFile implements IObjectActionDelegate {
 	/**
 	 * Notifies this action delegate that the selection in the workbench has
 	 * changed.
-	 *
-	 * @param action User selected action
-	 *
-	 * @param selection User selection
+	 * 
+	 * @param action
+	 *            User selected action
+	 * 
+	 * @param selection
+	 *            User selection
 	 */
 	public void selectionChanged(IAction action, ISelection selection) {
 		try {
@@ -91,16 +94,17 @@ public class ViewMemoryLeakFromFile implements IObjectActionDelegate {
 
 	/**
 	 * Sets the active part for the delegate.
-	 *
+	 * 
 	 * @see IObjectActionDelegate#setActivePart(IAction, IWorkbenchPart)
-	 *
-	 * @param action User selected action
-	 *
-	 * @param targetPart Workbench part
+	 * 
+	 * @param action
+	 *            User selected action
+	 * 
+	 * @param targetPart
+	 *            Workbench part
 	 */
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		// MethodDeclaration/Block[count(BlockStatement) = 0 and
 		// @containsComment = 'false']
 	}
-
 }

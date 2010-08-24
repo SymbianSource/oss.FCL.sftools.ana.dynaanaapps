@@ -37,9 +37,9 @@ import org.xml.sax.XMLReader;
  * Parses atool.exe generated xml file and creates memory analysis results.
  * Using the SAX parser to parse xml file. SAX parser fits better than DOM
  * parser because it is possible that AT must handle very big xml files.
- *
+ * 
  * @author kihe
- *
+ * 
  */
 public class ParseXMLFileSAX implements org.xml.sax.ContentHandler {
 	/** XML constants. */
@@ -69,19 +69,19 @@ public class ParseXMLFileSAX implements org.xml.sax.ContentHandler {
 	public static final String XML_TIME = "time";
 	public static final String XML_UNKNOWN = "???";
 
-	/**Active call stack item id*/
+	/** Active call stack item id */
 	private int activeCallstackID = 1;
 
 	/** Active item(memory leak) information */
 	private AnalysisItem activeItem;
 
-	/**Active item(memory leak) id*/
+	/** Active item(memory leak) id */
 	private int activeItemID = 1;
 
-	/** Summary field active module memory leak count*/
+	/** Summary field active module memory leak count */
 	private String activeModuleCount;
 
-	/** Summary field active module name*/
+	/** Summary field active module name */
 	private String activeModuleName;
 
 	/** Active run information */
@@ -93,7 +93,7 @@ public class ParseXMLFileSAX implements org.xml.sax.ContentHandler {
 	/** Active subtest item information */
 	private Subtest activeSubtest;
 
-	/**Active subtest id*/
+	/** Active subtest id */
 	private int activeSubtestID = 1;
 
 	/** Active callstack item information */
@@ -102,20 +102,21 @@ public class ParseXMLFileSAX implements org.xml.sax.ContentHandler {
 	/** xml file path. */
 	private final String filePath;
 
-	/** 
-	 * Flag to demonstrate that is the memory leak summary parsing active. 
-	 * If this flag is set to False, then information is stored to the handle leak summary object, 
-	 * otherwise information is stored to the memory leak summary object.
+	/**
+	 * Flag to demonstrate that is the memory leak summary parsing active. If
+	 * this flag is set to False, then information is stored to the handle leak
+	 * summary object, otherwise information is stored to the memory leak
+	 * summary object.
 	 */
 	private boolean moduleLeakActive = true;
 
 	/** List of modules */
 	private final AbstractList<String> moduleList;
 
-	/** 
-	 * Is subtest related information parsing active. 
-	 * If this flag is set to true all the information (such as 
-	 * memory leaks etc) is stored to the subtest object.
+	/**
+	 * Is subtest related information parsing active. If this flag is set to
+	 * true all the information (such as memory leaks etc) is stored to the
+	 * subtest object.
 	 */
 	private boolean parsingSubtest = false;
 
@@ -127,11 +128,10 @@ public class ParseXMLFileSAX implements org.xml.sax.ContentHandler {
 
 	/** Index for active items */
 	private int runID = 1;
-	
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param projectRef
 	 *            Project reference
 	 * @param newFilePath
@@ -139,9 +139,8 @@ public class ParseXMLFileSAX implements org.xml.sax.ContentHandler {
 	 * @param projResults
 	 *            Project results reference
 	 */
-	public ParseXMLFileSAX(
-			final org.eclipse.core.resources.IProject projectRef,
-			final String newFilePath, final ProjectResults projResults) {
+	public ParseXMLFileSAX(final IProject projectRef, final String newFilePath,
+			final ProjectResults projResults) {
 		results = projResults;
 		filePath = newFilePath;
 		project = projectRef;
@@ -151,7 +150,7 @@ public class ParseXMLFileSAX implements org.xml.sax.ContentHandler {
 
 	/**
 	 * Adds module name to list
-	 *
+	 * 
 	 * @param moduleName
 	 *            Module to add to the list
 	 */
@@ -173,7 +172,7 @@ public class ParseXMLFileSAX implements org.xml.sax.ContentHandler {
 	/**
 	 * When the SAX parser reach the end of the XML file this function is
 	 * called.
-	 *
+	 * 
 	 * Updates results.
 	 */
 	public void endDocument() throws SAXException {
@@ -182,7 +181,7 @@ public class ParseXMLFileSAX implements org.xml.sax.ContentHandler {
 
 	/**
 	 * When the SAX parser reach the end of the xml tag this function is called.
-	 *
+	 * 
 	 * Checks what tag read is finished and stores corresponding results
 	 */
 	public void endElement(String uri, String localName, String name)
@@ -192,20 +191,18 @@ public class ParseXMLFileSAX implements org.xml.sax.ContentHandler {
 			activeRuns.add(activeRunResults);
 		} else if (name.equals(XML_LEAK)) {
 
-			//not enough information so clear the active item
-			if( activeItem == null || !activeItem.checkData() ) {
+			// not enough information so clear the active item
+			if (activeItem == null || !activeItem.checkData()) {
 				activeItem = null;
-			}
-			else if (parsingSubtest) {
+			} else if (parsingSubtest) {
 				activeSubtest.addAnalysisItem(activeItem);
 			} else {
 				activeRunResults.addAnalysisItem(activeItem);
 			}
 		} else if (name.equals(XML_ITEM)) {
-			if( callstackItem.isEmpty() ) {
+			if (callstackItem.isEmpty()) {
 				callstackItem = null;
-			}
-			else {
+			} else {
 				activeItem.addCallstackItem(callstackItem);
 			}
 		} else if (name.equals(XML_SUBTEST)) {
@@ -221,7 +218,7 @@ public class ParseXMLFileSAX implements org.xml.sax.ContentHandler {
 				}
 
 				// convert module count information to string object
-				int count = Integer.parseInt(activeModuleCount,16);
+				int count = Integer.parseInt(activeModuleCount, 16);
 
 				// if module leak summary is active
 				if (moduleLeakActive) {
@@ -232,7 +229,7 @@ public class ParseXMLFileSAX implements org.xml.sax.ContentHandler {
 					activeRunResults.addHandleLeak(activeModuleName, count);
 				}
 
-			}catch( NumberFormatException npe ) {
+			} catch (NumberFormatException npe) {
 				npe.printStackTrace();
 			}
 		}
@@ -246,7 +243,7 @@ public class ParseXMLFileSAX implements org.xml.sax.ContentHandler {
 
 	/**
 	 * Returns list of modules
-	 *
+	 * 
 	 * @return List of modules
 	 */
 	public AbstractList<String> getModules() {
@@ -261,8 +258,8 @@ public class ParseXMLFileSAX implements org.xml.sax.ContentHandler {
 	}
 
 	/**
-	 * Parses xml file content.
-	 *
+	 * Parses XML file content.
+	 * 
 	 * @return True if there are no errors while parsing XML file otherwise
 	 *         False
 	 */
@@ -275,16 +272,16 @@ public class ParseXMLFileSAX implements org.xml.sax.ContentHandler {
 			File file = new File(filePath);
 			if (file.exists()) {
 
-				SAXParserFactory factor = null;
+				SAXParserFactory factory = null;
 				SAXParser parser = null;
 				XMLReader xmlReader = null;
 
 				// get parser factory
-				factor = SAXParserFactory.newInstance();
+				factory = SAXParserFactory.newInstance();
 
-				if (factor != null) {
+				if (factory != null) {
 					// get xml parser
-					parser = factor.newSAXParser();
+					parser = factory.newSAXParser();
 
 					if (parser != null) {
 						// get xml reader
@@ -307,9 +304,9 @@ public class ParseXMLFileSAX implements org.xml.sax.ContentHandler {
 				ret = false;
 			}
 
-			//check that XML file contains data
-			//otherwise return false
-			if( activeRunResults == null ) {
+			// check that XML file contains data
+			// otherwise return false
+			if (activeRunResults == null) {
 				ret = false;
 			}
 		} catch (SAXException sae) {
@@ -354,13 +351,13 @@ public class ParseXMLFileSAX implements org.xml.sax.ContentHandler {
 
 	/**
 	 * When the SAX parser start to read xml tag this function is called.
-	 *
+	 * 
 	 * Checks what tag read is started and initializes corresponding objects
 	 */
 	public void startElement(String uri, String localName, String name,
 			Attributes atts) throws SAXException {
 
-		//parse one run information
+		// parse one run information
 		if (name.equals(XML_RUN)) {
 			activeRunResults = new RunResults(runID);
 			activeRunResults.setEndTime(atts.getValue(XML_END_TIME));
@@ -371,7 +368,7 @@ public class ParseXMLFileSAX implements org.xml.sax.ContentHandler {
 			activeItemID = 1;
 			activeSubtestID = 1;
 		}
-		//parse one memory leak information
+		// parse one memory leak information
 		else if (name.equals(XML_LEAK)) {
 			try {
 				activeItem = new AnalysisItem();
@@ -383,53 +380,56 @@ public class ParseXMLFileSAX implements org.xml.sax.ContentHandler {
 				activeItem.setModuleName(moduleName);
 				String size = atts.getValue(XML_SIZE);
 				if (size != null && !("").equals(size)) {
-					activeItem.setLeakSize(Integer
-							.parseInt(size));
+					activeItem.setLeakSize(Integer.parseInt(size));
 				}
 
-			}catch(NumberFormatException npe) {
+			} catch (NumberFormatException npe) {
 				npe.printStackTrace();
 			}
 			activeItemID++;
 			activeCallstackID = 1;
 		}
-		//parse call stack item information
+		// parse call stack item information
 		else if (name.equals(XML_ITEM)) {
-			try{
-				//create new item
+			try {
+				// create new item
 				callstackItem = new CallstackItem();
 				callstackItem.setID(activeCallstackID);
 				callstackItem.setFileName(atts.getValue(XML_FILE));
 				callstackItem.setFunctionName(atts.getValue(XML_FUNCTION));
 				callstackItem.setMemoryAddress(atts.getValue(XML_MEMADDR));
 
-				//get module name and add it to list
-				//module name list is used later.
+				// get module name and add it to list
+				// module name list is used later.
 				String moduleName = atts.getValue(XML_MODULE);
 				addModuleNameToList(moduleName);
 				callstackItem.setModuleName(moduleName);
 
-				//if line number is added to the XML file
-				//this means that the results are generated to UREL
+				// if line number is added to the XML file
+				// this means that the results are generated to UREL
 				String lineNumber = atts.getValue(XML_LINE);
-				if (lineNumber != null && !("").equals(lineNumber) && !(XML_UNKNOWN).equals(lineNumber)) {
-					callstackItem.setLeakLineNumber(Integer.parseInt(lineNumber));
+				if (lineNumber != null && !("").equals(lineNumber)
+						&& !(XML_UNKNOWN).equals(lineNumber)) {
+					callstackItem.setLeakLineNumber(Integer
+							.parseInt(lineNumber));
 				}
 
-				//if function line is added to the XML file
-				//this means that the results are generated to UREL
+				// if function line is added to the XML file
+				// this means that the results are generated to UREL
 				String functionLine = atts.getValue(XML_FUNCTION_LINE);
-				if (functionLine != null && !("").equals(functionLine) && !(XML_UNKNOWN).equals(functionLine)) {
-					callstackItem.setLeakLineNumber(Integer.parseInt(functionLine));
+				if (functionLine != null && !("").equals(functionLine)
+						&& !(XML_UNKNOWN).equals(functionLine)) {
+					callstackItem.setLeakLineNumber(Integer
+							.parseInt(functionLine));
 					callstackItem.setUrelBuild(true);
 				}
-			}catch(NumberFormatException npe) {
+			} catch (NumberFormatException npe) {
 				npe.printStackTrace();
 			}
 			activeCallstackID++;
 
 		}
-		//parse subtest information
+		// parse subtest information
 		else if (name.equals(XML_SUBTEST)) {
 			activeSubtest = new Subtest(activeSubtestID);
 			activeItemID = 1;

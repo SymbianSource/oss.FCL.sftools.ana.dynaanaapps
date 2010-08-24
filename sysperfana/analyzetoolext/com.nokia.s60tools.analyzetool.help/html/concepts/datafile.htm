@@ -1,25 +1,41 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 1.0 Transitional//EN">
 <html>
 <head>
-<meta content="text/html; charset=us-ascii" http-equiv="content-type">
-<meta content="text/css" http-equiv="content-style-type">
-<link href="../../book.css" rel="StyleSheet" type="text/css">
-<title>AnalyzeTool data file</title>
+  <meta content="text/html; charset=us-ascii" http-equiv="content-type">
+  <meta content="text/css" http-equiv="content-style-type">
+  <link href="../../book.css" rel="StyleSheet" type="text/css">
+  <title>AnalyzeTool data file</title>
 </head>
-<body>
 
-<h2>AnalyzeTool files</h2><p>AnalyzeTool uses files as follows:</p>
+<body>
+<h2>AnalyzeTool files</h2>
+
+<p>AnalyzeTool uses files as follows:</p>
 <ul>
-	<li>Device data file. Data file saved to target device in <b>monitored internal</b> data gathering mode.</li>
-	<li>Raw data file. Analysis file saved after the trace is captured in <b>monitored external</b> or <b>external</b> data gathering mode.</li>
-	<li>Memory leak results. Results file saved by user.</li>
+  <li>Device data file. Data file saved to target device in <b>output to file
+    system</b> mode.</li>
+  <li>Raw data file. Analysis file saved after the trace is captured in
+    <b>output to trace</b> mode.</li>
+  <li>Memory leak results. Results file saved by user.</li>
 </ul>
-<p>Any of these files can be opened by using the same button in <b>AnalyzeTool</b> view. AnalyzeTool automatically recognizes the file type, and performs the desired action.</p>
+
+<p>Any of these files can be opened by using the same button in
+<b>AnalyzeTool</b> view. AnalyzeTool automatically recognizes the file type,
+and performs the desired action.</p>
 
 <h4>Saving analysis data</h4>
-<p>You can save the memory leak results or raw test run data. The difference between the file formats is that the raw test run data contains all available data collected during the test run, whereas the memory leak results file only contains the test results from the currently selected project. The memory leak results file can be opened and the results read without source codes, but the raw data always needs the source codes built with AnalyzeTool before it can be opened.</p>    
 
-<div id="footer">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
-License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+<p>You can save the memory leak results or raw test run data. The difference
+between the file formats is that the raw test run data contains all available
+data collected during the test run, whereas the memory leak results file only
+contains the test results from the currently selected project. The memory leak
+results file can be opened and the results read without source codes, but the
+raw data always needs the source codes built with AnalyzeTool before it can be
+opened.</p>
+
+<div id="footer">
+Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
 </body>
 </html>

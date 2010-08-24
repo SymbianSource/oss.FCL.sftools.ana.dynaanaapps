@@ -20,13 +20,12 @@ package com.nokia.s60tools.analyzetool.engine;
 import java.util.AbstractList;
 import java.util.ArrayList;
 
-
 /**
  * Stores one run related results (these results are created to link multiple
- * xml results file).
- *
+ * XML results file).
+ * 
  * @author kihe
- *
+ * 
  */
 public class RunResults extends ResultsBase {
 
@@ -35,7 +34,7 @@ public class RunResults extends ResultsBase {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param newRunID
 	 *            Run ID
 	 */
@@ -45,40 +44,21 @@ public class RunResults extends ResultsBase {
 	}
 
 	/**
-	 * Adds new subtest to existing subtest list.
-	 *
+	 * Adds a new subtest to existing subtest list.
+	 * 
 	 * @param subtest
-	 *            Subtest
+	 *            subtest
 	 */
 	public final void addSubtest(final Subtest subtest) {
 		subtests.add(subtest);
 	}
 
 	/**
-	 * Gets used data file name.
-	 *
-	 * @return Used data file
-	 */
-	/*public final String getDataFileName() {
-		return usedDataFile;
-	}*/
-
-	/**
-	 * Gets current run Subtests.
-	 *
-	 * @return Subtests
+	 * Gets current run subtests.
+	 * 
+	 * @return subtests
 	 */
 	public final AbstractList<Subtest> getSubtest() {
 		return subtests;
 	}
-
-	/**
-	 * Sets used data file name.
-	 *
-	 * @param newDataFileName Used data file name and path
-	 */
-	/*public final void setDataFileName(final String newDataFileName) {
-		usedDataFile = newDataFileName;
-	}*/
-
 }

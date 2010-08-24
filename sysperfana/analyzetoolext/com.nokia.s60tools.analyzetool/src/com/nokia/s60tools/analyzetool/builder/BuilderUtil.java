@@ -23,9 +23,9 @@ import org.eclipse.core.runtime.CoreException;
 
 /**
  * Add and removes AnalyzeTool build natures to project natures.
- *
+ * 
  * @author kihe
- *
+ * 
  */
 public class BuilderUtil {
 
@@ -39,7 +39,7 @@ public class BuilderUtil {
 
 	/**
 	 * Adds AnalyzeTool build natures.
-	 *
+	 * 
 	 * @param project
 	 *            Project reference
 	 * @return True no errors otherwise False
@@ -56,46 +56,52 @@ public class BuilderUtil {
 			// create array for the new natures
 			String[] newNatures = new String[natures.length + 2];
 
+			// if QT nature found we must adjust pre- and post natures to
+			// correct place
+			if (description
+					.hasNature(com.trolltech.qtcppproject.QtNature.QT_NATURE_ID)) {
 
-			//if QT nature found we must adjust pre- and post natures to correct place
-			if( description.hasNature(com.trolltech.qtcppproject.QtNature.QT_NATURE_ID) ) {
-
-				//find QT nature location
+				// find QT nature location
 				int qtNatureIndex = 0;
-				for( int i=0; i<natures.length; i++ ) {
-					if( natures[i].equals(com.trolltech.qtcppproject.QtNature.QT_NATURE_ID ) ) {
+				for (int i = 0; i < natures.length; i++) {
+					if (natures[i]
+							.equals(com.trolltech.qtcppproject.QtNature.QT_NATURE_ID)) {
 						qtNatureIndex = i;
 						break;
 					}
 				}
 
-				//QT nature id found and it is first nature=> now start to copy existing id and add AT id
-				if( qtNatureIndex == 0 ) {
-					//add natures
+				// QT nature id found and it is first nature=> now start to copy
+				// existing id and add AT id
+				if (qtNatureIndex == 0) {
+					// add natures
 					newNatures[0] = natures[0];
 					newNatures[1] = PreNature.NATURE_ID;
 
-					//copy rest of the existing natures
-					System.arraycopy(natures, 1, newNatures, 2, natures.length-1);
+					// copy rest of the existing natures
+					System.arraycopy(natures, 1, newNatures, 2,
+							natures.length - 1);
 
 					// add post-builder nature
 					newNatures[natures.length + 1] = PostNature.NATURE_ID;
 				}
-				//QT nature id found but there are some other natures
-				//before QT nature
+				// QT nature id found but there are some other natures
+				// before QT nature
 				else {
-					//copy existing natures
-					System.arraycopy(natures, 0, newNatures, 0, qtNatureIndex+1);
-					newNatures[qtNatureIndex+1] = PreNature.NATURE_ID;
+					// copy existing natures
+					System.arraycopy(natures, 0, newNatures, 0,
+							qtNatureIndex + 1);
+					newNatures[qtNatureIndex + 1] = PreNature.NATURE_ID;
 
-					//copy rest of the existing natures
-					System.arraycopy(natures, qtNatureIndex+1, newNatures, qtNatureIndex+2, natures.length-qtNatureIndex);
+					// copy rest of the existing natures
+					System.arraycopy(natures, qtNatureIndex + 1, newNatures,
+							qtNatureIndex + 2, natures.length - qtNatureIndex);
 
 					// add post-builder nature
 					newNatures[natures.length + 1] = PostNature.NATURE_ID;
 				}
 			}
-			//no QT nature found just add pre nature first and post nature last
+			// no QT nature found just add pre nature first and post nature last
 			else {
 
 				// set pre-builder nature
@@ -119,11 +125,9 @@ public class BuilderUtil {
 		}
 	}
 
-
-
 	/**
 	 * Disable AnalyzeTool build natures.
-	 *
+	 * 
 	 * @param project
 	 *            Project reference
 	 */
@@ -141,21 +145,19 @@ public class BuilderUtil {
 				boolean foundPostNature = description
 						.hasNature(PostNature.NATURE_ID);
 
-				//either pre- or post builder nature found => remove it
+				// either pre- or post builder nature found => remove it
 				if (foundPreNature || foundPostNature) {
 					removeNature(project, 1);
 				}
-
 			}
 		} catch (CoreException ce) {
 			ce.printStackTrace();
 		}
-
 	}
 
 	/**
 	 * Add AnalyzeTool custom builder nature to project builder natures.
-	 *
+	 * 
 	 * @param project
 	 *            Project reference
 	 * @return True if natures are added otherwise False
@@ -163,15 +165,14 @@ public class BuilderUtil {
 	public final boolean enableNatures(final IProject project) {
 		try {
 			// check is nature enable
-			if( isNatureEnabled(project)) {
+			if (isNatureEnabled(project)) {
 				return true;
 			}
 			// get project description
 			IProjectDescription description = project.getDescription();
 
 			// find natures
-			boolean foundPreNature = description
-					.hasNature(PreNature.NATURE_ID);
+			boolean foundPreNature = description.hasNature(PreNature.NATURE_ID);
 			boolean foundPostNature = description
 					.hasNature(PostNature.NATURE_ID);
 
@@ -191,7 +192,7 @@ public class BuilderUtil {
 
 	/**
 	 * Checks is AnalyzeTool custom nature enabled.
-	 *
+	 * 
 	 * @param projRef
 	 *            Project reference
 	 * @return True both pre or post nature enabled otherwise False
@@ -200,7 +201,7 @@ public class BuilderUtil {
 		boolean preNatureFound = false;
 		boolean postNatureFound = false;
 
-		//check project validity
+		// check project validity
 		if (projRef == null || !projRef.isOpen()) {
 			return false;
 		}
@@ -216,12 +217,11 @@ public class BuilderUtil {
 			return true;
 		}
 		return false;
-
 	}
 
 	/**
 	 * Removes AnalyzeTool custom builder natures.
-	 *
+	 * 
 	 * @param project
 	 *            Project reference
 	 * @param count
@@ -235,8 +235,8 @@ public class BuilderUtil {
 
 			int index = 0;
 
-			//thru natures
-			//if pre- or post nature found skip it
+			// thru natures
+			// if pre- or post nature found skip it
 			for (int i = 0; i < natures.length; i++) {
 				if (!natures[i].equals(PreNature.NATURE_ID)
 						&& !natures[i].equals(PostNature.NATURE_ID)) {
@@ -250,6 +250,5 @@ public class BuilderUtil {
 		} catch (CoreException ce) {
 			ce.printStackTrace();
 		}
-
 	}
 }

@@ -32,14 +32,21 @@ Preferences...&gt; Carbide Extensions &gt; AnalyzeTool</b>.</p>
         used for instrumenting and uninstrumenting the project and analysing
         captured data. 
         <ul>
-          <li>Use internal engine. This option uses the built-in version of
-            <i>atool.exe</i>. </li>
-          <li>Use external command line engine. This options uses
-            <i>atool.exe</i> from a user-defined location. 
-            <ul>
-            </ul>
-          </li>
+          <li><strong>Use internal command line engine</strong>: This option
+            uses the built-in version of <i>atool.exe</i>. </li>
+          <li><strong>Use external command line engine</strong>: This options
+            uses <i>atool.exe</i> from the location selected to the
+            <strong>Atool.exe path</strong> field. </li>
         </ul>
+
+        <p>When the <em>atool.exe</em> version has been selected, the system
+        automatically checks that it matches with the version of the
+        AnalyzeTool Carbide extension. In case of a mismatch, an error is
+        displayed "<em>Command Line Engine is older than x.x.x</em>", and the
+        <strong>Apply</strong> and <strong>OK</strong> buttons are disnabled.
+        In this case you need to select a later CLE tool version. For more
+        information, see <a href="../reference/troubleshooting.htm">AnalyzeTool
+        Troubleshooting</a>.</p>
       </td>
     </tr>
     <!--<tr>
@@ -53,44 +60,47 @@ Preferences...&gt; Carbide Extensions &gt; AnalyzeTool</b>.</p>
     </tr>
     <tr>
       <td>Engine version</td>
-      <td>Displays selected engine version number.</td>
+      <td>Displays selected engine's version number.</td>
     </tr>
     <tr>
-      <td>Data gathering mode</td>
-      <td>Specifies the data gathering mode for AnalyzeTool build. 
+      <td>Output mode</td>
+      <td>Specifies the output mode for AnalyzeTool build. 
         <ul>
-          <li>Monitored External or External: This option will send the memory
-            analysis data through tracing utility connection. For more
-            information, see <a
+          <li><strong>Output to trace (recommended)</strong>: This option will
+            send the memory analysis data through tracing utility connection.
+            For more information, see <a
             href="../tasks/capture.htm#capture_external">Capturing data in
-            external data gathering mode</a>.</li>
-          <li>Internal: This option will create a data file to the target
-            hardware. The data file name is the same as the project name. If
-            you select the <b>Name from the user</b> option, you must define a
-            name for the data file. For more information, see <a
-            href="../tasks/capture.htm#capture_s60_file">Capturing data in
-            internal data gathering mode</a> 
+            output to trace mode</a>.</li>
+          <li><strong>Output to file system</strong>: This option will create a
+            data file to the target hardware. When using this option, you must
+            define a location and name for the data file. For more information,
+            see <a href="../tasks/capture.htm#capture_s60_file">Capturing data
+            in output to file system mode</a> 
             <ul>
-              <li>Name from the process: This option will a use data file name
-                which is the same as application target name.</li>
-              <li>Name from the user: This option will ask a data file name
-                every time a project is built with the <i>atool.exe</i>.</li>
+              <li><strong>Log file path</strong>: Type here the location for
+                the log file.</li>
+              <li><strong>File name</strong>: Type here the name you want to
+                use for the log file</li>
             </ul>
           </li>
-          <li>Ask always: This option will ask before each build which data
-            gathering mode to use, External or Internal</li>
+          <li><strong>Ask always</strong>: When this option is selected,
+            Analyse tool will display a dialog, asking which output mode you
+            want to use, each time you build a project.</li>
         </ul>
       </td>
     </tr>
     <tr>
       <td>Stored callstack size</td>
       <td><ul>
-          <li>No items. This option does not store any callstack items.</li>
-          <li>40 items. This option stores forty callstack items.</li>
-          <li>100 items. This option stores hundred callstack items</li>
-          <li>Custom callstack size. This option provides possibility to define
-            custom size of callstack items. Custom size of callstack items is
-            limited to 0-255</li>
+          <li><strong>No callstack stored</strong>: This option does not store
+            any callstack items.</li>
+          <li><strong>40 items</strong>: This option stores forty callstack
+            items.</li>
+          <li><strong>100 items</strong>: This option stores hundred callstack
+            items. Note that storing this meni items </li>
+          <li><strong>Custom size (0-255</strong>): This option provides
+            possibility to define custom size of callstack items. Custom size
+            of callstack items is limited to 0-255</li>
         </ul>
         <b>Note!</b> The callstack size affects the speed of hooked process,
         lower callstack size is faster. </td>

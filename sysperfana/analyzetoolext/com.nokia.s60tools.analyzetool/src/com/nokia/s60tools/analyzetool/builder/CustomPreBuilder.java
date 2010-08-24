@@ -29,19 +29,19 @@ import com.nokia.s60tools.analyzetool.global.Constants;
 
 /**
  * Class to execute AnalyzeTool custom pre-build actions.
- *
+ * 
  * This class holds many static variables because {@link CustomPostBuilder}
  * class need to know what variables is used when calling CustomPreBuilder
  * without creating a new object of this class
- *
+ * 
  * @author kihe
- *
+ * 
  */
 public class CustomPreBuilder extends AnalyzeToolBuilder {
 
 	/**
 	 * Executes AnalyzeTool post actions when user builds projects.
-	 *
+	 * 
 	 * @see com.nokia.carbide.cdt.builder.builder.CarbideCPPBuilder#build(int,
 	 *      java.util.Map, org.eclipse.core.runtime.IProgressMonitor)
 	 */
@@ -63,8 +63,9 @@ public class CustomPreBuilder extends AnalyzeToolBuilder {
 		final ICarbideProjectInfo cpi = CarbideBuilderPlugin.getBuildManager()
 				.getProjectInfo(project);
 
-		final CarbideCommandLauncher launcher = new CarbideCommandLauncher(project,
-				monitor, Constants.atoolParserIds, cpi.getINFWorkingDirectory());
+		final CarbideCommandLauncher launcher = new CarbideCommandLauncher(
+				project, monitor, Constants.atoolParserIds, cpi
+						.getINFWorkingDirectory());
 		launcher.showCommand(true);
 
 		if (!runPreSteps(launcher, monitor, cpi)) {
@@ -77,8 +78,7 @@ public class CustomPreBuilder extends AnalyzeToolBuilder {
 	}
 
 	@Override
-	protected void clean(final IProgressMonitor arg0){
+	protected void clean(final IProgressMonitor arg0) {
 		// DO nothing by design
 	}
-
 }

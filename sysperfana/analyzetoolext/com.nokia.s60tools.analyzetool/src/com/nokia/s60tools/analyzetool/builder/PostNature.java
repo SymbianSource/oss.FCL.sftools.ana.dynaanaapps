@@ -101,5 +101,4 @@ public class PostNature implements IProjectNature {
 	public void setProject(IProject projectRef) {
 		this.project = projectRef;
 	}
-
 }

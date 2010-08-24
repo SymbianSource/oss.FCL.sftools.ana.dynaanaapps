@@ -107,16 +107,17 @@ public class DllLoad {
 		this.endAddress = lValue;
 	}
 
-	/**
-	 * Set load time of this item
-	 *
-	 * @param newLoadTime
-	 *            Time when this dll is loaded.
-	 */
-	public void setLoadTime(String newLoadTime) {
-		Long lValue = Long.parseLong(newLoadTime, 16);
-		this.loadTime = lValue;
-	}
+//	/**
+//	 * Set load time of this item
+//	 *
+//	 * @param newLoadTime
+//	 *            Time when this dll is loaded.
+//	 */
+//	public void setLoadTime(String newLoadTime) {
+//		Long lValue = Long.parseLong(newLoadTime, 16);
+//		this.loadTime = lValue;
+//	}
+	
 	/**
 	 * Set load time of this item
 	 *
@@ -126,6 +127,7 @@ public class DllLoad {
 	public void setLoadTime(long loadTime) {
 		this.loadTime = loadTime;
 	}
+	
 	/**
 	 * Set unload time of this dll
 	 *

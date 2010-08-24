@@ -1,131 +1,324 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 1.0 Transitional//EN">
 <html>
 <head>
-<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-<meta http-equiv="content-style-type" content="text/css">
-<title>AnalyzeTool Troubleshooting</title>
-<link href="../../book.css" type="text/css" rel="StyleSheet">
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="content-style-type" content="text/css">
+  <title>AnalyzeTool Troubleshooting</title>
+  <link href="../../book.css" type="text/css" rel="StyleSheet">
 </head>
-<body>
 
+<body>
 <h2>Troubleshooting</h2>
+
 <p>The following table lists AnalyzeTool error messages:</p>
 
 <table width="615" border="1" cellspacing="1" cellpadding="2">
-<colgroup>
-<col width="250*">
-<col width="356*"></colgroup>
-<tbody>
-<tr>
-<th>Message</th>
-<th align="center">Description</th>
-</tr>
-<tr>
-<td>No project selected. Please select project.</td>
-<td>You tried to use Carbide.c++ Extension actions but you have not selected a project first. Select a project from the <b>Project Explorer</b> window, and run action again.</td>
-</tr>
-<tr>
-<td>Could not find mmp file for current project.</td>
-<td>AnalyzeTool Carbide.c++ Extension could not load the mmp file info. Ensure that project's <i>bld.inf</i> file contains mmp files.</td>
-</tr>
-<tr>
-<td>TraceViewer connection reserved for another plug-in.</td>
-<td>Another Carbide.c++ Extension uses TraceViewer. First close the other TraceViewer Carbide.c++ Extension connection, and then try again.</td>
-</tr>
-<tr>
-<td>Invalid TraceViewer connection settings.</td>
-<td>The TraceViewer has invalid connection settings and could not connect to target hardware. Check the TraceViewer options from <b>Window &gt; Preferences... &gt; Carbide Extensions &gt; TraceViewer &gt; Connection</b>.</td>
-</tr>
-<tr>
-<td>General TraceViewer error.</td>
-<td>The TraceViewer cannot connect to target hardware and the AnalyzeTool Carbide.c++ Extension could not resolve the problem. Check the TraceViewer options from <b>Window &gt; Preferences... &gt; Carbide Extensions &gt; TraceViewer &gt; Connection</b>.</td>
-</tr>
-<tr>
-<td>Invalid name. Do you want to specify a valid name?</td>
-<td>You have entered an invalid subtest name, for example the name is empty or starts with an illegal parameter.</td>
-</tr>
-<tr>
-<td>No process started, could not start a subtest.</td>
-<td>The trace is active but no processes started in the target hardware which are built with the external data gathering mode of AnalyzeTool.</td>
-</tr>
-<tr>
-<td>The given subtest is already started for the active process.</td>
-<td>You have already started the subtest with same name for selected process.
-</td>
-</tr>
-<tr>
-<td>Cannot find AnalyzeTool libraries from current SDK. Install libraries first.</td>
-<td>This message is displayed in the <b>Console</b> view if AnalyzeTool is not included in SDK.</td>
-</tr>
-</tbody>
+  <colgroup><col width="250*">
+    <col width="356*">
+  </colgroup>
+  <tbody>
+    <tr>
+      <th>Message</th>
+      <th align="center">Description</th>
+    </tr>
+    <tr>
+      <td>Cannot find AnalyzeTool libraries from current SDK. Install libraries
+        first.</td>
+      <td>This message is displayed in the <b>Console</b> view if AnalyzeTool
+        is not included in SDK.</td>
+    </tr>
+    <tr>
+      <td>Can not find AnalyzeTool library files from current SDK: 
+
+        <p>&lt;list of libraries that are missing&gt;</p>
+
+        <p>You can build AnalyzeTool from sources or contact AnalyzeTool
+        development team to get AnalyzeTool binaries.</p>
+      </td>
+      <td>This message appears during compiling if there are some SDK library
+        files missing. 
+
+        <p>To resolve the problem, build AnalyzeTool from sources or contact
+        AnalyzeTool development team for AnalyzeTool binaries.</p>
+      </td>
+    </tr>
+    <tr>
+      <td>Could not find mmp file for current project.</td>
+      <td>AnalyzeTool Carbide.c++ Extension could not load the mmp file info.
+        Ensure that project's <i>bld.inf</i> file contains mmp files.</td>
+    </tr>
+    <tr>
+      <td>Command Line Engine older than x.x.x.</td>
+      <td>This message is displayed in the Preferences window if the version of
+        the selected command line engine is earlier than the version of the
+        Carbide extension (for example 1.10.0). 
+
+        <p>To resolve the problem, unless you already have the version listed
+        in the error message available, you must update the command line engine
+        to the listed version, When you have the correct version available,
+        select/browse to that version in the preferences page. </p>
+      </td>
+    </tr>
+    <tr>
+      <td>Command Line Engine not available</td>
+      <td>This message appears, when the Preferences page is opened, if the
+        command line engine is not available in the selected path location. 
+
+        <p>To resolve the problem, set the correct location for the command
+        line engine in the AnalyzeTool Engine section of the Preferences page.
+        Or, if there is no AnalyzeTool Engine available, you must install
+        one.</p>
+      </td>
+    </tr>
+    <tr>
+      <td>General TraceViewer error.</td>
+      <td>The TraceViewer cannot connect to target hardware and the AnalyzeTool
+        Carbide.c++ Extension could not resolve the problem. Check the
+        TraceViewer options from <b>Window &gt; Preferences... &gt; Carbide
+        Extensions &gt; TraceViewer &gt; Connection</b>.</td>
+    </tr>
+    <tr>
+      <td>Invalid name. Do you want to specify a valid name?</td>
+      <td>You have entered an invalid subtest name, for example the name is
+        empty or starts with an illegal parameter.</td>
+    </tr>
+    <tr>
+      <td>Invalid TraceViewer connection settings.</td>
+      <td>The TraceViewer has invalid connection settings and could not connect
+        to target hardware. Check the TraceViewer options from <b>Window &gt;
+        Preferences... &gt; Carbide Extensions &gt; TraceViewer &gt;
+        Connection</b>.</td>
+    </tr>
+    <tr>
+      <td>No process started, could not start a subtest.</td>
+      <td>The trace is active but no processes started in the target hardware
+        which are built with the output to trace mode of AnalyzeTool.</td>
+    </tr>
+    <tr>
+      <td>No project selected. Please select project.</td>
+      <td>You tried to use Carbide.c++ Extension actions but you have not
+        selected a project first. Select a project from the <b>Project
+        Explorer</b> window, and run action again.</td>
+    </tr>
+    <tr>
+      <td>The given subtest is already started for the active process.</td>
+      <td>You have already started the subtest with same name for selected
+        process. </td>
+    </tr>
+    <tr>
+      <td>TraceViewer connection reserved for another plug-in.</td>
+      <td>Another Carbide.c++ Extension uses TraceViewer. First close the other
+        TraceViewer Carbide.c++ Extension connection, and then try again.</td>
+    </tr>
+    <tr>
+      <td>Unknown tag 
+
+        <p>Trace contains unknown xxx tag. AnalyzeTool Carbide extension might
+        not be up to date.</p>
+      </td>
+      <td>This warning is shown during online tracing or when you open a data
+        file that contains trace data with unknown tags. 
+
+        <p>The warning is shown again for each unknown tag encountered. You you
+        do not wish to see the warning again, you can check the <strong>Don't
+        show again</strong> checkbox.</p>
+
+        <p>To resolve the problem, you should update AnalyzeTool Carbide
+        extension to the latest available version.</p>
+      </td>
+    </tr>
+    <tr>
+      <td>Unsupported format 
+
+        <p>Carbide extension is older than Symbian components. Please see Help
+        for more information.</p>
+      </td>
+      <td>This message appears during online tracing or when you try to open a
+        data file that includes traces in a format that is not supported by the
+        version of AnalyzeTool extension you are using. 
+
+        <p>To resolve the problem, you should update AnalyzeTool Carbide
+        extension to the latest available version. </p>
+      </td>
+    </tr>
+    <tr>
+      <td>Unsupported format 
+
+        <p>Symbian components are not up to date. Please see Help for more
+        information.</p>
+      </td>
+      <td>This message appears during online tracing or when you try to open a
+        log file that includes traces in old trace format. From version 1.10.0
+        onwards, the AnalyzeTool Carbide.c++ extension supports the new trace
+        format, so the S60 component running on the device must be version
+        1.10.0 or higher. 
+
+        <p>To resolve the problem, you should update the AnalyzeTool Symbian
+        component on your device to the latest available version.</p>
+      </td>
+    </tr>
+    <tr>
+      <td>Version mismatch 
+
+        <p>Command Line engine not available. Check AnalyzeTool preferences.</p>
+      </td>
+      <td>This message appears, when starting a build, if the command line
+        engine is not available in the path location selected in the
+        AnalyzeTool preferences. 
+
+        <p>To resolve the problem:</p>
+        <ol>
+          <li>Open AnalyzeTool Preferences by clicking <img alt="icon"
+            src="../images/btn_preferences.png" width="16"
+          height="16">icon.</li>
+          <li>In the Analyze Tool Engine section, select / browse to the
+            correct version of the command line engine, or</li>
+          <li>If you do not have the correct version of the command line
+            engine, you must install it.</li>
+        </ol>
+      </td>
+    </tr>
+    <tr>
+      <td>Version mismatch 
+
+        <p>Command Line engine older than x.x.x. Check AnalyzeTool
+        preferences.</p>
+      </td>
+      <td>This message is displayed when starting a build, if the version of
+        the command line engine selected in the Preference page is earlier than
+        the version of the Carbide extension (for example 1.10.0). 
+
+        <p>To resolve the problem:</p>
+        <ol>
+          <li>Open AnalyzeTool Preferences by clicking <img alt="icon"
+            src="../images/btn_preferences.png" width="16"
+          height="16">icon.</li>
+          <li>In the Analyze Tool Engine section, select / browse to the
+            correct version of the command line engine, or</li>
+          <li>If you do not have the correct version of the command line
+            engine, you must install it.</li>
+        </ol>
+      </td>
+    </tr>
+    <tr>
+      <td>Version Mismatch 
+
+        <p>Version mismatch between the AnalyzeTool binaries (version x.y.z) in
+        the device and AnalyzeTool headers in the SDK (x.y.z).</p>
+
+        <p>Please make surethat those match otherwise results may be
+        unknown.</p>
+      </td>
+      <td>This warning message can appear during online tracing, or when
+        opening data file, if the versions of the Carbide extension and S60
+        application do not match. 
+
+        <p>To avoid problems, use the same version on Carbide extension and S60
+        component, otherwise results may be inaccurate.</p>
+      </td>
+    </tr>
+  </tbody>
 </table>
 
-<p>The following table lists possible known problematic situations related to AnalyzeTool:</p>
+<p>The following table lists possible known problematic situations related to
+AnalyzeTool:</p>
 
 <table width="615" border="1" cellspacing="1" cellpadding="2">
-<colgroup>
-<col width="250*">
-<col width="356*"></colgroup>
-<tbody>
-<tr>
-<th>Problem</th>
-<th align="center">Possible cause</th>
-</tr>
-<tr>
-<td>Compiling with AnalyzeTool gives an error related to header files.</td>
-<td>Mixing header files from different AnalyzeTool versions might be the cause. From version 1.5.0 onwards, AnalyzeTool uses a different folder structure compared to previous versions. Therefore it is essential that you check that there are no header files in the folder <i>\epoc32\include\applications\analyzetool</i> or <i>\epoc32\include\analyzetool</i>.</td>
-</tr>
-<tr>
-<td>Compiling with AnalyzeTool gives an error related to AnalyzeTool library files.</td>
-<td>Build environment is missing AnalyzeTool files. Install the AnalyzeTool to build environment by unzipping environment changes from AnalyzeTool installation folder.</i>.</td>
-</tr>
-<tr>
-<td>Software compiled with AnalyzeTool does not run.</td>
-<td>Mixing header files from different AnalyzeTool versions might be the cause. From version 1.5.0 onwards, AnalyzeTool uses a different folder structure compared to previous versions. Therefore it is essential that you check that there are no header files in the folder <i>\epoc32\include\applications\analyzetool</i> or <i>\epoc32\include\analyzetool</i>.</td>
-</tr>
-<tr>
-<td>Software compiled with AnalyzeTool does not run.</td>
-<td>AnalyzeTool core components are missing from the target HW/emulator environment.</td>
-</tr>
-<tr>
-<td>Software compiled with AnalyzeTool does not run.</td>
-<td>The AnalyzeTool core components in the target HW/emulator environment are old (incompatible) versions.</td>
-</tr>
-</tbody>
+  <colgroup><col width="250*">
+    <col width="356*">
+  </colgroup>
+  <tbody>
+    <tr>
+      <th>Problem</th>
+      <th align="center">Possible cause</th>
+    </tr>
+    <tr>
+      <td>Compiling with AnalyzeTool gives an error related to header
+      files.</td>
+      <td>Mixing header files from different AnalyzeTool versions might be the
+        cause. From version 1.5.0 onwards, AnalyzeTool uses a different folder
+        structure compared to previous versions. Therefore it is essential that
+        you check that there are no header files in the folder
+        <i>\epoc32\include\applications\analyzetool</i> or
+        <i>\epoc32\include\analyzetool</i>.</td>
+    </tr>
+    <tr>
+      <td>Compiling with AnalyzeTool gives an error related to AnalyzeTool
+        library files.</td>
+      <td>Build environment is missing AnalyzeTool files. Install the
+        AnalyzeTool to build environment by unzipping environment changes from
+        AnalyzeTool installation folder..</td>
+    </tr>
+    <tr>
+      <td>Software compiled with AnalyzeTool does not run.</td>
+      <td>Mixing header files from different AnalyzeTool versions might be the
+        cause. From version 1.5.0 onwards, AnalyzeTool uses a different folder
+        structure compared to previous versions. Therefore it is essential that
+        you check that there are no header files in the folder
+        <i>\epoc32\include\applications\analyzetool</i> or
+        <i>\epoc32\include\analyzetool</i>.</td>
+    </tr>
+    <tr>
+      <td>Software compiled with AnalyzeTool does not run.</td>
+      <td>AnalyzeTool core components are missing from the target HW/emulator
+        environment.</td>
+    </tr>
+    <tr>
+      <td>Software compiled with AnalyzeTool does not run.</td>
+      <td>The AnalyzeTool core components in the target HW/emulator environment
+        are old (incompatible) versions.</td>
+    </tr>
+  </tbody>
 </table>
 
-<p>The following ones are Command line engine related errors. These errors are displayed in the Carbide.c++ <b>Console</b> view.</p>
+<p>The following ones are Command line engine related errors. These errors are
+displayed in the Carbide.c++ <b>Console</b> view.</p>
 
 <table>
-<colgroup>
-<col width="250*">
-<col width="356*"></colgroup>
-<tbody>
-<tr>
-<th>Error</th>
-<th align="center">Possible cause</th>
-</tr>
-<tr>
-<td>Mmp file: &lt;mmp file name> is read only. Compile aborted.</td>
-<td>The project's mmp file is read only. Remove the write protection from the mmp file.</td>
-</tr>
-<tr>
-<td>AnalyzeTool build failed in module: &lt;mmp file name&gt;.</td>
-<td>Project contains build errors. Details can be found from <b>Console</b> view.</td>
-</tr>
-<tr>
-<td>Can not find AnalyzeTool libraries from current SDK</td>
-<td>Your build environment is missing the necessary files for building with AnalyzeTool. These files can be found from the AnalyzeTool installation folder from files S60_environment_changes31.zip, S60_environment_changes32.zip or S60_environment_changes50.zip. Unzip one of these to the desired Symbian OS root directory. The zip-package itself includes the necessary subfolder structure.</td>
-</tr>
-<tr>
-<td>AnalyzeTool : Errors :<br>
-Missing symbol file: <symbol file name></td>
-<td>You are using GCCE release build which does not produce needed symbol files. Symbol files are needed to pinpoint memory leaks. To correct this user needs to add "<i>-debug</i>" to project's build configuration arguments. To do this open project's <b>properties</b>, select <b>Carbide.c++ &gt; Build Configurations &gt; Arguments</b> while the GCCE release build configuration is selected and write the <i>-debug</i> to arguments field.</td>
-</tr>
-</tbody>
+  <colgroup><col width="250*">
+    <col width="356*">
+  </colgroup>
+  <tbody>
+    <tr>
+      <th>Error</th>
+      <th align="center">Possible cause</th>
+    </tr>
+    <tr>
+      <td>Mmp file: &lt;mmp file name&gt; is read only. Compile aborted.</td>
+      <td>The project's mmp file is read only. Remove the write protection from
+        the mmp file.</td>
+    </tr>
+    <tr>
+      <td>AnalyzeTool build failed in module: &lt;mmp file name&gt;.</td>
+      <td>Project contains build errors. Details can be found from
+        <b>Console</b> view.</td>
+    </tr>
+    <tr>
+      <td>Can not find AnalyzeTool libraries from current SDK</td>
+      <td>Your build environment is missing the necessary files for building
+        with AnalyzeTool. These files can be found from the AnalyzeTool
+        installation folder from files S60_environment_changes31.zip,
+        S60_environment_changes32.zip or S60_environment_changes50.zip. Unzip
+        one of these to the desired Symbian OS root directory. The zip-package
+        itself includes the necessary sub-folder structure.</td>
+    </tr>
+    <tr>
+      <td>AnalyzeTool : Errors :<br>
+        Missing symbol file: &lt; symbol file name&gt;</td>
+      <td>You are using GCCE release build which does not produce needed symbol
+        files. Symbol files are needed to pinpoint memory leaks. To correct
+        this user needs to add "<i>-debug</i>" to project's build configuration
+        arguments. To do this open project's <b>properties</b>, select
+        <b>Carbide.c++ &gt; Build Configurations &gt; Arguments</b> while the
+        GCCE release build configuration is selected and write the
+        <i>-debug</i> to arguments field.</td>
+    </tr>
+  </tbody>
 </table>
 
-<div id="footer">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
-License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
 </body>
 </html>

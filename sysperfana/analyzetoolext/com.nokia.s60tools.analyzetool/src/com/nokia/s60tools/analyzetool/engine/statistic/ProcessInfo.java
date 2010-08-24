@@ -39,7 +39,7 @@ public class ProcessInfo {
 	/** List of allocations and frees sorted as they arrive in time */
 	private AbstractList<BaseInfo> allocsFrees;
 
-	/** List of dll loads */
+	/** List of DLL loads */
 	private List<DllLoad> dllLoads;
 
 	/** Process id */
@@ -48,21 +48,26 @@ public class ProcessInfo {
 	/** Process Name */
 	private String processName;
 
+	/** Log time */
+	private long logTime;
+
 	/** Process start time */
 	private Long startTime;
 
-	/** Process start time */
+	/** Process end time */
 	private Long endTime;
 
 	/** Trace data format version number */
-	private int traceDataVersion = 1;
+	private int traceDataVersion = 0;
 
-	/** active allocations account */
+	/** Active allocations account */
 	private int allocCount = 0;
-	/** total memory consumed by this process at each event */
+
+	/** Total memory consumed by this process at each event */
 	private int totalMemory = 0;
-	/** highest memory consumed by this process */
-	private int highestMemory =0;
+
+	/** Highest memory consumed by this process */
+	private int highestMemory = 0;
 
 	/** Map of potential leaks; to track allocations not yet freed */
 	private Map<Long, List<AllocInfo>> potentialLeaksMap;
@@ -74,7 +79,7 @@ public class ProcessInfo {
 		dllLoads = new ArrayList<DllLoad>();
 		allocsFrees = new ArrayList<BaseInfo>();
 		allocCount = 0;
-		potentialLeaksMap = new HashMap<Long, List<AllocInfo>>(); 
+		potentialLeaksMap = new HashMap<Long, List<AllocInfo>>();
 	}
 
 	/**
@@ -91,10 +96,10 @@ public class ProcessInfo {
 			highestMemory = totalMemory;
 		}
 		allocsFrees.add(oneInfo);
-		//add this alloc to the potential leaks map
+		// add this alloc to the potential leaks map
 		Long addr = oneInfo.getMemoryAddress();
 		List<AllocInfo> allocsSameAddr = potentialLeaksMap.get(addr);
-		if (allocsSameAddr == null){
+		if (allocsSameAddr == null) {
 			allocsSameAddr = new ArrayList<AllocInfo>();
 			potentialLeaksMap.put(addr, allocsSameAddr);
 		}
@@ -102,20 +107,21 @@ public class ProcessInfo {
 	}
 
 	/**
-	 * Adds one dll load to the list.
+	 * Adds one DLL load to the list.
 	 * 
 	 * @param dllLoad
-	 *            One dll load
+	 *            One DLL load
 	 */
 	public void addOneDllLoad(DllLoad dllLoad) {
-		//make sure there is no dll with the same details already loaded
+		// make sure there is no DLL with the same details already loaded
 		for (DllLoad dll : dllLoads) {
-			if (dll.getName().equalsIgnoreCase(dllLoad.getName()) && dll.getProcessID() == dllLoad.getProcessID()
-					&& dll.getUnloadTime()> dllLoad.getLoadTime()){
+			if (dll.getName().equalsIgnoreCase(dllLoad.getName())
+					&& dll.getProcessID() == dllLoad.getProcessID()
+					&& dll.getUnloadTime() > dllLoad.getLoadTime()) {
 				return;
 			}
 		}
-		
+
 		dllLoads.add(dllLoad);
 	}
 
@@ -128,48 +134,54 @@ public class ProcessInfo {
 	public void free(FreeInfo info) {
 
 		int freeSize = 0;
-		
-		//remove allocs with the same address from the potential leaks map
+
+		// remove allocs with the same address from the potential leaks map
 		Long freeAddr = info.getMemoryAddress();
-		List<AllocInfo> allocsSameAddr = potentialLeaksMap.remove(freeAddr);		
-		if (allocsSameAddr != null && allocsSameAddr.size()>0){
-			for(AllocInfo allocInfo : allocsSameAddr){
+		List<AllocInfo> allocsSameAddr = potentialLeaksMap.remove(freeAddr);
+		if (allocsSameAddr != null && allocsSameAddr.size() > 0) {
+			for (AllocInfo allocInfo : allocsSameAddr) {
 				allocInfo.setFreedBy(info);
 				allocCount--;
 				int thisFreedSize = allocInfo.getSizeInt();
 				freeSize = freeSize + thisFreedSize;
 				totalMemory = totalMemory - thisFreedSize;
-			}	
+			}
 			info.setFreedAllocs(new HashSet<AllocInfo>(allocsSameAddr));
 		}
-		
 
 		info.setSizeInt(freeSize);
 		info.setTotalMem(totalMemory);
-		
-		if ( info.getTime() == 0 ) {
+
+		if (info.getTime() == 0) {
 			// support old format
-			//set time as last operation time or start time.
+			// set time as last operation time or start time.
 			Long time = getPreviousTime();
 			if (time == null || time == -1L) {
-				Activator.getDefault().log(IStatus.WARNING, String.format("AnalyzeTool encountered a process = %s, which starts with FREE.", processID), null);
+				Activator
+						.getDefault()
+						.log(
+								IStatus.WARNING,
+								String
+										.format(
+												"AnalyzeTool encountered a process = %s, which starts with FREE.",
+												processID), null);
 				time = startTime == null ? 0 : startTime;
 			}
 			info.setTime(time);
 		}
-		
 		allocsFrees.add(info);
 	}
 
 	/**
-	 * Returns the timestamp of the last memory operation
-	 * @return the timestamp of the last memory operation, or -1 if there
-	 * are no memory operations
+	 * Returns the time stamp of the last memory operation
+	 * 
+	 * @return the time stamp of the last memory operation, or -1 if there are
+	 *         no memory operations
 	 */
 	private Long getPreviousTime() {
 		Long time = -1L;
 		if (!allocsFrees.isEmpty()) {
-			time = (allocsFrees.get(allocsFrees.size() -1)).getTime();
+			time = (allocsFrees.get(allocsFrees.size() - 1)).getTime();
 		}
 		return time;
 	}
@@ -190,9 +202,9 @@ public class ProcessInfo {
 	}
 
 	/**
-	 * Returns list of dll loads
+	 * Returns list of DLL loads
 	 * 
-	 * @return List of dll loads
+	 * @return List of DLL loads
 	 */
 	public List<DllLoad> getDllLoads() {
 		return dllLoads;
@@ -224,8 +236,9 @@ public class ProcessInfo {
 		return count;
 	}
 
-	/** 
+	/**
 	 * get list of frees
+	 * 
 	 * @return List of FreeInfo
 	 */
 	public AbstractList<FreeInfo> getFrees() {
@@ -279,11 +292,30 @@ public class ProcessInfo {
 	 * Sets process start time
 	 * 
 	 * @param newTime
-	 *            Process start time
+	 *            process start time
 	 */
 	public void setStartTime(String newTime) {
 		long lValue = Long.parseLong(newTime, 16);
 		this.startTime = lValue;
+	}
+
+	/**
+	 * Sets log time
+	 * 
+	 * @param logTime
+	 *            log time of one trace message in microseconds
+	 */
+	public void setLogTime(long logTime) {
+		this.logTime = logTime;
+	}
+
+	/**
+	 * Gets log time
+	 * 
+	 * @return log time of one trace message in microseconds
+	 */
+	public long getLogTime() {
+		return logTime;
 	}
 
 	/**
@@ -293,25 +325,28 @@ public class ProcessInfo {
 	 *            New trace data version number
 	 */
 	public void setTraceDataVersion(String newTraceDataVersion) {
-
 		try {
 			traceDataVersion = Integer.parseInt(newTraceDataVersion, 16);
 		} catch (NumberFormatException nfe) {
-			// exception while trying to set new version number
-			// use the oldest version number, this version number is safest
-			// but when use this version some information could be lost
-			traceDataVersion = 1;
+			traceDataVersion = 0;
 		}
 	}
+
 	/**
 	 * Marks given dll as unloaded
-	 * @param dllName Dll name
-	 * @param startAddr memory start address for DLL
-	 * @param endAddr memory end address for DLL
-	 * @param dllUnloadTime time when DLL is unloaded
+	 * 
+	 * @param dllName
+	 *            Dll name
+	 * @param startAddr
+	 *            memory start address for DLL
+	 * @param endAddr
+	 *            memory end address for DLL
+	 * @param dllUnloadTime
+	 *            time when DLL is unloaded
 	 * @return the dll marked as unloaded, or null if no match found
 	 */
-	public DllLoad unloadOneDll(String dllName, long startAddr, long endAddr, long dllUnloadTime) {
+	public DllLoad unloadOneDll(String dllName, long startAddr, long endAddr,
+			long dllUnloadTime) {
 		DllLoad ret = null;
 		for (DllLoad dll : dllLoads) {
 			if (dll.getName().equals(dllName)
@@ -326,15 +361,26 @@ public class ProcessInfo {
 
 	/**
 	 * set end time of the process
-	 * @param aTime
+	 * 
+	 * @param endTime
 	 */
-	public void setEndTime(String aTime) {
-		Long lValue = Long.parseLong(aTime, 16);
-		endTime = lValue;
+	public void setEndTime(long endTime) {
+		this.endTime = endTime;
 	}
+
+	// /**
+	// * set end time of the process
+	// *
+	// * @param aTime
+	// */
+	// public void setEndTime(String aTime) {
+	// Long lValue = Long.parseLong(aTime, 16);
+	// endTime = lValue;
+	// }
 
 	/**
 	 * set process name
+	 * 
 	 * @param aProcessName
 	 */
 	public void setProcessName(String aProcessName) {
@@ -350,6 +396,7 @@ public class ProcessInfo {
 
 	/**
 	 * get all events
+	 * 
 	 * @return list of BaseInfo
 	 */
 	public AbstractList<BaseInfo> getAllocsFrees() {
@@ -357,7 +404,8 @@ public class ProcessInfo {
 	}
 
 	/**
-	 * get end time of the process
+	 * Get end time of the process
+	 * 
 	 * @return End time
 	 */
 	public Long getEndTime() {
@@ -374,19 +422,20 @@ public class ProcessInfo {
 	public AbstractList<AllocInfo> getAllocsFreedBy(FreeInfo free) {
 		AbstractList<AllocInfo> allocs = new ArrayList<AllocInfo>();
 		for (BaseInfo alloc : allocsFrees) {
-			if (alloc instanceof AllocInfo && ((AllocInfo) alloc).getFreedBy() == free) {
+			if (alloc instanceof AllocInfo
+					&& ((AllocInfo) alloc).getFreedBy() == free) {
 				allocs.add((AllocInfo) alloc);
 			}
 		}
 		return allocs;
 	}
+
 	/**
 	 * Getter for highest memory allocation for the current process
+	 * 
 	 * @return int containing highest memory usage
 	 */
 	public int getHighestCumulatedMemoryAlloc() {
 		return highestMemory;
 	}
-
-
 }

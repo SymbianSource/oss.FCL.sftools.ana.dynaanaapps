@@ -18,7 +18,7 @@
 package com.nokia.s60tools.analyzetool.engine.statistic;
 
 /**
- * Constains information of found source file.
+ * Contains information of found source file.
  * @author kihe
  *
  */

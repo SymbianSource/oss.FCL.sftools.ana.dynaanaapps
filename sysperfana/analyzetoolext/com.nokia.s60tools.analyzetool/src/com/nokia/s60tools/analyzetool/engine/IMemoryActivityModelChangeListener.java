@@ -23,17 +23,17 @@ import com.nokia.s60tools.analyzetool.engine.statistic.ProcessInfo;
  * A change listener for {@link IMemoryActivityModel}
  */
 public interface IMemoryActivityModelChangeListener {
-	
-	/** 
-	 * callback when data has been added to the model
-	 * and is ready to be used
+
+	/**
+	 * callback when data has been added to the model and is ready to be used
 	 */
 	public void onProcessesAdded();
-	
+
 	/**
 	 * callback when a process has been selected
-	 * @param processId The ProcessInfo of the newly selected process
+	 * 
+	 * @param processId
+	 *            The ProcessInfo of the newly selected process
 	 */
 	public void onProcessSelected(ProcessInfo processId);
-
 }

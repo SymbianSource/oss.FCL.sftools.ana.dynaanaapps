@@ -17,6 +17,9 @@
 
 package com.nokia.s60tools.analyzetool.preferences;
 
+import java.io.File;
+import java.text.MessageFormat;
+
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
@@ -38,6 +41,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 
+import com.nokia.carbide.cpp.epoc.engine.image.ISVGSource;
 import com.nokia.s60tools.analyzetool.Activator;
 import com.nokia.s60tools.analyzetool.AnalyzeToolHelpContextIDs;
 import com.nokia.s60tools.analyzetool.global.Constants;
@@ -46,8 +50,8 @@ import com.nokia.s60tools.analyzetool.ui.IActionListener;
 
 /**
  * This class represents a preference page that is contributed to the
- * Preferences dialog. By subclassing <samp>FieldEditorPreferencePage</samp>,
- * we can use the field support built into JFace that allows us to create a page
+ * Preferences dialog. By subclassing <samp>FieldEditorPreferencePage</samp>, we
+ * can use the field support built into JFace that allows us to create a page
  * that is small and knows how to save, restore and apply itself.
  * <p>
  * This page is used to modify preferences only. They are stored in the
@@ -56,7 +60,7 @@ import com.nokia.s60tools.analyzetool.ui.IActionListener;
  */
 
 public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
-		implements IWorkbenchPreferencePage, Listener{
+		implements IWorkbenchPreferencePage, Listener {
 
 	/** Button to ask always. */
 	Button askButton = null;
@@ -73,9 +77,6 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 	/** Browse button to active file selection dialog. */
 	Button browseButton = null;
 
-	/** Button to activate/deactivate statistic generation */
-	//Button generateStatistic = null;
-
 	/** Group for callstack size buttons. */
 	Group csSizeGroup;
 
@@ -87,12 +88,6 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 
 	/** Hundred items button */
 	Button hundredButton;
-
-	/** Button to use process data. */
-	Button processButton = null;
-
-	/** Button to refresh atool.exe version. */
-	Button refreshAtoolVersion = null;
 
 	/** Radio group for report level. */
 	RadioGroupFieldEditor reportLevels = null;
@@ -112,17 +107,11 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 	 */
 	Button useDefaultLocation = null;
 
-	/** Button to use user specified data file name. */
-	Button userButton = null;
-
 	/** Use user specified location. */
 	Button useUserSpecified = null;
 
 	/** Button to verbose atool.exe output. */
 	Button verboseButton = null;
-
-	/** Button to select TraceViewer connection. */
-	Button externalButton = null;
 
 	/** Button to select fast external data gathering mode */
 	Button externalFastButton = null;
@@ -130,6 +119,10 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 	/** No items button. */
 	Button zeroButton;
 
+	Label logPath;
+	Text logPathText;
+	Label fileName;
+	Text fileNameText;
 
 	/**
 	 * Constructor.
@@ -146,7 +139,7 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 	 */
 	public final void checkInitValues() {
 		IPreferenceStore store = Activator.getPreferences();
-		
+
 		// get stored atool folder
 		String atoolFolder = store.getString(Constants.ATOOL_FOLDER);
 		atoolVerLabel.setText(Constants.PREFS_ATOOL_VER_NOT_FOUND);
@@ -155,7 +148,7 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 		if (atoolFolder.equals(Constants.DEFAULT_ATOOL_FOLDER)) {
 
 			// check that stored atool location exists
-			java.io.File file = new java.io.File(atoolFolder);
+			File file = new File(atoolFolder);
 			if (file.exists()) { // if exists use this location and update
 				// preference page buttons
 				useDefaultLocation.setSelection(false);
@@ -164,12 +157,10 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 			} else { // location could not found => use internal atool
 				useDefaultLocation.setSelection(true);
 				store.setValue(Constants.USE_INTERNAL, true);
-
 			}
 		} else {
 			boolean useDef = store.getBoolean(Constants.USE_INTERNAL);
 			useDefaultLocation.setSelection(useDef);
-
 		}
 
 		// get atool.exe path and set it atool.exe path field
@@ -179,28 +170,17 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 		// update preference page buttons
 		handleDefaultLocationChange();
 
-		// update atool.exe version number
-		if (useDefaultLocation.getSelection()) {
-			updateAtoolVersion(null);
-		} else {
-			updateAtoolVersion(atoolDirText.getText());
-		}
-
 		// get logging mode and update buttons
 		String fileMode = store.getString(Constants.LOGGING_MODE);
 		setGroupButtons(fileMode);
 
-		String loggingMode = store.getString(Constants.S60_LOG_FILE_MODE);
-		if (loggingMode.equals(Constants.LOGGING_S60_USER_SPECIFIED)) {
-			processButton.setSelection(false);
-			userButton.setSelection(true);
-		} else {
-			processButton.setSelection(true);
-			userButton.setSelection(false);
-		}
+		logPathText.setText(store.getString(Constants.DEVICE_LOG_FILE_PATH));
+		fileNameText.setText(store.getString(Constants.DEVICE_LOG_FILE_NAME));
+
+		logPathText.setText(store.getString(Constants.DEVICE_LOG_FILE_PATH));
+		fileNameText.setText(store.getString(Constants.DEVICE_LOG_FILE_NAME));
 
 		verboseButton.setSelection(store.getBoolean(Constants.ATOOL_VERBOSE));
-		//generateStatistic.setSelection(store.getBoolean(Constants.CREATE_STATISTIC));
 
 		// get stored callstack size
 		int callstackSize = store.getInt(Constants.CALLSTACK_SIZE);
@@ -220,12 +200,11 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 			spinner.setEnabled(true);
 			spinner.setSelection(callstackSize);
 		}
-		
 	}
 
 	/**
 	 * Check if user entered folder location is available.
-	 *
+	 * 
 	 * @param folderLocation
 	 *            User entered folder location
 	 * @return True if folder exists otherwise False
@@ -301,8 +280,7 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 	/**
 	 * Creates data gathering group items
 	 */
-	private void createGatheringGroup()
-	{
+	private void createGatheringGroup() {
 		// create new button group for logging mode
 		Group groupGatheringMode = new Group(getFieldEditorParent(), SWT.NULL);
 		groupGatheringMode.setText(Constants.PREFS_LOGGING_MODE_TITLE);
@@ -316,12 +294,6 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 		gridData.horizontalSpan = 1;
 		groupGatheringMode.setLayoutData(gridData);
 
-		// External mode button
-		externalButton = new Button(groupGatheringMode, SWT.RADIO);
-		externalButton.setToolTipText(Constants.PREFS_EXT_TOOLTIP);
-		externalButton.setText(Constants.PREFS_EXT);
-		externalButton.addListener(SWT.Selection, this);
-
 		// External fast mode button
 		externalFastButton = new Button(groupGatheringMode, SWT.RADIO);
 		externalFastButton.setToolTipText(Constants.PREFS_EXT_FAST_TOOLTIP);
@@ -334,32 +306,40 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 		s60Button.setText(Constants.PREFS_S60);
 		s60Button.addListener(SWT.Selection, this);
 
-		Composite compStoreMode = new Composite(groupGatheringMode, SWT.NULL);
+		Composite compS60 = new Composite(groupGatheringMode, SWT.NULL);
 
-		final GridLayout layoutStoreMode = new GridLayout();
-		layoutStoreMode.marginLeft = 15;
-		layoutStoreMode.numColumns = 1;
-		compStoreMode.setLayout(layoutStoreMode);
+		final GridLayout layoutS60 = new GridLayout();
+		layoutS60.marginLeft = 15;
+		layoutS60.numColumns = 2;
+		compS60.setLayout(layoutS60);
 
-		// use process name button
-		processButton = new Button(compStoreMode, SWT.RADIO);
-		processButton.setToolTipText(Constants.PREFS_USE_PROCESS_NAME_TOOLTIP);
-		processButton.setText(Constants.PREFS_USE_PROCESS_NAME);
-		processButton.addListener(SWT.Selection, this);
+		// path label
+		logPath = new Label(compS60, SWT.NONE);
+		logPath.setToolTipText("Log file path in the device.");
+		logPath.setText("Log file path:");
 
-		// user specified button
-		userButton = new Button(compStoreMode, SWT.RADIO);
-		userButton.setToolTipText(Constants.PREFS_USER_SPEC_TOOLTIP);
-		userButton.setText(Constants.PREFS_USER_SPEC);
-		userButton.addListener(SWT.Selection, this);
+		// path field
+		logPathText = new Text(compS60, SWT.BORDER);
+		logPathText.setLayoutData(new GridData(280, SWT.DEFAULT));
+		logPathText.setText("C:\\logs\\atool\\");
+
+		// filename label
+		fileName = new Label(compS60, SWT.NONE);
+		fileName.setToolTipText("Log file name.");
+		fileName.setText("Filename:");
+
+		// filename field
+		fileNameText = new Text(compS60, SWT.BORDER);
+		fileNameText.setLayoutData(new GridData(280, SWT.DEFAULT));
+		fileNameText.setText("%processname%.dat");
 
 		// ask always button
 		askButton = new Button(groupGatheringMode, SWT.RADIO);
 		askButton.setToolTipText(Constants.PREFS_ASK_ALWAYS_TOOLTIP);
 		askButton.setText(Constants.PREFS_ASK_ALWAYS);
 		askButton.addListener(SWT.Selection, this);
-
 	}
+
 	/**
 	 * Creates the field editors. Field editors are abstractions of the common
 	 * GUI blocks needed to manipulate various types of preferences. Each field
@@ -367,7 +347,7 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 	 */
 	@Override
 	public final void createFieldEditors() {
-		
+
 		Composite composite = new Composite(getFieldEditorParent(), SWT.NULL);
 		final GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 3;
@@ -415,6 +395,7 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 
 		// directory field
 		atoolDirText = new Text(compAtool, SWT.BORDER);
+		atoolDirText.setEditable(false);
 		atoolDirText.setLayoutData(new GridData(200, SWT.DEFAULT));
 
 		// button which opens the folder selection dialog
@@ -423,12 +404,6 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 		browseButton.setText(Constants.PREFS_BROWSE);
 		browseButton.addListener(SWT.Selection, this);
 
-		// generate statistics for the test run
-		/*
-		generateStatistic = new Button(groupAtool, SWT.CHECK);
-		generateStatistic.setText("Generate statistics");
-		generateStatistic.setToolTipText("Generate statistics");
-		*/
 		// verbose atool.exe output
 		verboseButton = new Button(groupAtool, SWT.CHECK);
 		verboseButton.setText(Constants.PREFS_VERBOSE);
@@ -456,11 +431,6 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 		vergd13.horizontalSpan = 2;
 		atoolVerLabel.setLayoutData(vergd13);
 
-		// create button to refresh atool.exe version
-		refreshAtoolVersion = new Button(groupVersion, SWT.NONE);
-		refreshAtoolVersion.setText(Constants.PREFS_REFRESH_VERSION);
-		refreshAtoolVersion.addListener(SWT.Selection, this);
-
 		// create data gathering group
 		createGatheringGroup();
 
@@ -477,16 +447,43 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 				getFieldEditorParent(), true);
 
 		addField(reportLevels);
-		
+
 		checkInitValues();
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(super.getControl(),
 				AnalyzeToolHelpContextIDs.ANALYZE_TOOL_VIEW_MEM_LEAKS);
+	}
 
+	@Override
+	protected void checkState() {
+		super.checkState();
+
+		String path;
+
+		if (useDefaultLocation.getSelection()) {
+			path = null;
+		} else {
+			path = atoolDirText.getText();
+		}
+
+		if (Util.getAtoolVersionNumber(path).equals(
+				Constants.PREFS_ATOOL_VER_NOT_FOUND)) {
+			setErrorMessage(Constants.PREFS_CLE_NOT_AVAILABLE);
+			setValid(false);
+		} else if (Util.compareVersionNumber(Util.getAtoolVersionNumber(path),
+				Constants.MIN_CLE_SUPPORTED) == Constants.VERSION_NUMBERS_SECOND) {
+			setErrorMessage(MessageFormat.format(
+					Constants.PREFS_CLE_OLDER_THAN_MIN,
+					Constants.MIN_CLE_SUPPORTED));
+			setValid(false);
+		} else {
+			setErrorMessage(null);
+			setValid(true);
+		}
 	}
 
 	/**
-	 * Handles atool.exe location selection changes Update corresponding buttons
-	 * states.
+	 * Handles atool.exe location selection changes. Update corresponding
+	 * buttons states.
 	 */
 	public final void handleDefaultLocationChange() {
 		if (useDefaultLocation.getSelection()) {
@@ -494,36 +491,34 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 			browseButton.setEnabled(false);
 			atoolDir.setEnabled(false);
 			useUserSpecified.setSelection(false);
+			updateAtoolVersion(null);
 		} else {
 			atoolDirText.setEnabled(true);
 			browseButton.setEnabled(true);
 			atoolDir.setEnabled(true);
 			useUserSpecified.setSelection(true);
+			updateAtoolVersion(atoolDirText.getText());
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.swt.widgets.Listener#handleEvent(org.eclipse.swt.widgets.Event)
+	 * 
+	 * @see
+	 * org.eclipse.swt.widgets.Listener#handleEvent(org.eclipse.swt.widgets.
+	 * Event)
 	 */
 	public final void handleEvent(final Event event) {
 		if (event.widget == browseButton) {
 			openFolderDialog();
-		} else if (event.widget == externalButton || event.widget == externalFastButton || event.widget == askButton ) {
-			userButton.setEnabled(false);
-			processButton.setEnabled(false);
+		} else if (event.widget == externalFastButton
+				|| event.widget == askButton) {
+			setFileModeEnabled(false);
 		} else if (event.widget == s60Button) {
-			userButton.setEnabled(true);
-			processButton.setEnabled(true);
+			setFileModeEnabled(true);
 		} else if (event.widget == useDefaultLocation
 				|| event.widget == atoolDir) {
 			handleDefaultLocationChange();
-		} else if (event.widget == refreshAtoolVersion) {
-			if (useDefaultLocation.getSelection()) {
-				updateAtoolVersion(null);
-			} else {
-				updateAtoolVersion(atoolDirText.getText());
-			}
 		} else if (event.widget == zeroButton || event.widget == fortyButton
 				|| event.widget == hundredButton) {
 			spinner.setEnabled(false);
@@ -534,8 +529,9 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
+	 * 
+	 * @see
+	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	public void init(final IWorkbench workbench) {
 		// MethodDeclaration/Block[count(BlockStatement) = 0 and
@@ -553,6 +549,7 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 		String folderPath = folderDialog.open();
 		if (folderPath != null) {
 			atoolDirText.setText(folderPath);
+			updateAtoolVersion(atoolDirText.getText());
 		}
 	}
 
@@ -561,26 +558,19 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 	 */
 	@Override
 	public final void performDefaults() {
-		//check that AT prefs page is displayed
-		//if( getControl() != null && getControl().isVisible() ) {
+		setGroupButtons(Constants.LOGGING_EXT_FAST);
+		atoolDirText.setText(Constants.DEFAULT_ATOOL_FOLDER);
+		useDefaultLocation.setSelection(true);
+		handleDefaultLocationChange();
+		verboseButton.setSelection(false);
+		zeroButton.setSelection(false);
+		fortyButton.setSelection(true);
+		hundredButton.setSelection(false);
+		customButton.setSelection(false);
+		spinner.setEnabled(false);
 
-			processButton.setSelection(true);
-			userButton.setSelection(false);
-			setGroupButtons(Constants.LOGGING_EXT);
-
-			atoolDirText.setText(Constants.DEFAULT_ATOOL_FOLDER);
-			useDefaultLocation.setSelection(true);
-			handleDefaultLocationChange();
-			verboseButton.setSelection(false);
-			zeroButton.setSelection(false);
-			fortyButton.setSelection(true);
-			hundredButton.setSelection(false);
-			customButton.setSelection(false);
-			spinner.setEnabled(false);
-			
-			//generateStatistic.setSelection(false);
-			super.performDefaults();	
-		//}
+		logPathText.setText("C:\\logs\\atool\\");
+		fileNameText.setText("%processname%.dat");
 	}
 
 	/**
@@ -589,208 +579,132 @@ public class AnalyzeToolPreferencePage extends FieldEditorPreferencePage
 	 */
 	@Override
 	public final boolean performOk() {
-		
-		//check that AT prefs page is displayed
-		//if( getControl() != null && getControl().isVisible() ) {
-			IPreferenceStore store = Activator.getPreferences();
-			String atoolFolder = atoolDirText.getText();
 
-			// use default location is selected
-			if (useDefaultLocation.getSelection()) {
-				store.setValue(Constants.ATOOL_FOLDER, Util
-						.getDefaultAtoolLocation());
-				store.setValue(Constants.USE_INTERNAL, true);
-			}
-			// using user specified atool.exe location and the folder contains
-			// atool.exe
-			else if (checkIfFolderExists(atoolFolder)) {
-				store.setValue(Constants.ATOOL_FOLDER, atoolFolder);
-				store.setValue(Constants.USER_SELECTED_FOLDER, atoolFolder);
-				store.setValue(Constants.USE_INTERNAL, false);
-			}
-			// user selected folder does not contain atool.exe
-			// ask confirmation to use this folder anyway
-			else {
-				boolean ret = Util
-						.openConfirmationDialog(Constants.CONFIRM_DIR_DOES_NOT_CONTAIN_ATOOL);
-				if (ret) {
+		IPreferenceStore store = Activator.getPreferences();
 
-					store.setValue(Constants.ATOOL_FOLDER, atoolFolder);
-					store.setValue(Constants.USER_SELECTED_FOLDER, atoolFolder);
-					store.setValue(Constants.USE_INTERNAL, false);
-				} else {
-					return false;
-				}
-			}
+		// use default location is selected
+		if (useDefaultLocation.getSelection()) {
+			store.setValue(Constants.ATOOL_FOLDER, Util
+					.getDefaultAtoolLocation());
+			store.setValue(Constants.USE_INTERNAL, true);
+		}
+		// using user specified atool.exe location and the folder contains
+		// atool.exe
+		else {
+			store.setValue(Constants.ATOOL_FOLDER, atoolDirText.getText());
+			store.setValue(Constants.USER_SELECTED_FOLDER, atoolDirText
+					.getText());
+			store.setValue(Constants.USE_INTERNAL, false);
+		}
 
-			// store logging mode
-			if (askButton.getSelection()) {
-				store.setValue(Constants.LOGGING_MODE,
-						Constants.LOGGING_ASK_ALLWAYS);
-			} else if (s60Button.getSelection()) {
-				store.setValue(Constants.LOGGING_MODE, Constants.LOGGING_S60);
-			} else if( externalFastButton.getSelection() ) {
-				store.setValue(Constants.LOGGING_MODE, Constants.LOGGING_EXT_FAST);
-			} else {
-				store.setValue(Constants.LOGGING_MODE, Constants.LOGGING_EXT);
-			}
+		// store logging mode
+		if (askButton.getSelection()) {
+			store.setValue(Constants.LOGGING_MODE,
+					Constants.LOGGING_ASK_ALLWAYS);
+		} else if (s60Button.getSelection()) {
+			store.setValue(Constants.LOGGING_MODE, Constants.LOGGING_S60);
+		} else if (externalFastButton.getSelection()) {
+			store.setValue(Constants.LOGGING_MODE, Constants.LOGGING_EXT_FAST);
+		}
+		store.setValue(Constants.DEVICE_LOG_FILE_PATH, logPathText.getText());
+		store.setValue(Constants.DEVICE_LOG_FILE_NAME, fileNameText.getText());
 
-			// store log file option
-			if (userButton.getSelection()) {
-				store.setValue(Constants.S60_LOG_FILE_MODE,
-						Constants.LOGGING_S60_USER_SPECIFIED);
-			} else {
-				store.setValue(Constants.S60_LOG_FILE_MODE,
-						Constants.LOGGING_S60_PROCESS_NAME);
-			}
+		// store value of verbose atool.exe output
+		store.setValue(Constants.ATOOL_VERBOSE, verboseButton.getSelection());
 
-			// store value of verbose atool.exe output
-			store.setValue(Constants.ATOOL_VERBOSE, verboseButton.getSelection());
+		// update preference value
+		// this values is used later when UI creates/update toolbar options and
+		// when building project with "ask always" option
+		if (externalFastButton.isEnabled()) {
+			store.setValue(Constants.LOGGING_FAST_ENABLED, true);
+		} else {
+			store.setValue(Constants.LOGGING_FAST_ENABLED, false);
+		}
 
-			// update preference value
-			// this values is used later when UI creates/update toolbar options and when building project with "ask always" option
-			if( externalFastButton.isEnabled() ) {
-				store.setValue(Constants.LOGGING_FAST_ENABLED, true);
-			}
-			else {
-				store.setValue(Constants.LOGGING_FAST_ENABLED, false);
-			}
-			// store.setValue(Constants.CREATE_STATISTIC,
-			// generateStatistic.getSelection());
+		// get callstack size
+		int size = 0;
+		boolean userDefinedCSSize = false;
+		if (zeroButton.getSelection() && zeroButton.isEnabled()) {
+			userDefinedCSSize = true;
+		} else if (fortyButton.getSelection() && fortyButton.isEnabled()) {
+			size = 40;
+			userDefinedCSSize = true;
+		} else if (hundredButton.getSelection() && hundredButton.isEnabled()) {
+			size = 100;
+			userDefinedCSSize = true;
+		} else if (customButton.getSelection() && customButton.isEnabled()) {
+			size = spinner.getSelection();
+			userDefinedCSSize = true;
+		}
 
-			// get callstack size
-			int size = 0;
-			boolean userDefinedCSSize = false;
-			if (zeroButton.getSelection() && zeroButton.isEnabled()) {
-				userDefinedCSSize = true;
-			} else if (fortyButton.getSelection() && fortyButton.isEnabled()) {
-				size = 40;
-				userDefinedCSSize = true;
-			} else if (hundredButton.getSelection() && hundredButton.isEnabled()) {
-				size = 100;
-				userDefinedCSSize = true;
-			} else if (customButton.getSelection() && customButton.isEnabled()) {
-				size = spinner.getSelection();
-				userDefinedCSSize = true;
-			}
+		// store callstack size
+		store.setValue(Constants.USE_CALLSTACK_SIZE, userDefinedCSSize);
+		store.setValue(Constants.CALLSTACK_SIZE, size);
 
-			// store callstack size
-			store.setValue(Constants.USE_CALLSTACK_SIZE, userDefinedCSSize);
-			store.setValue(Constants.CALLSTACK_SIZE, size);
-			
-			// update view with new settings
-			IActionListener listener = Activator.getActionListener();
-			if (listener != null) {
-				listener.preferenceChanged();
-			}
-		//}
-		
+		// update view with new settings
+		IActionListener listener = Activator.getActionListener();
+		if (listener != null) {
+			listener.preferenceChanged();
+		}
+
 		// store report detail level prefs
 		return super.performOk();
 	}
 
 	/**
 	 * Sets S60 file options visible.
-	 *
+	 * 
 	 * @param enabled
 	 *            Is buttons enabled.
 	 */
 	private void setFileModeEnabled(final boolean enabled) {
-		processButton.setEnabled(enabled);
-		userButton.setEnabled(enabled);
+		logPath.setEnabled(enabled);
+		logPathText.setEnabled(enabled);
+		fileName.setEnabled(enabled);
+		fileNameText.setEnabled(enabled);
 	}
 
 	/**
 	 * Changes logging mode buttons.
-	 *
+	 * 
 	 * @param mode
 	 *            Which mode is used
 	 */
 	private void setGroupButtons(final String mode) {
 		if (mode.equals(Constants.LOGGING_S60)) {
-			externalButton.setSelection(false);
 			externalFastButton.setSelection(false);
 			s60Button.setSelection(true);
 			askButton.setSelection(false);
 			setFileModeEnabled(true);
 		} else if (mode.equals(Constants.LOGGING_ASK_ALLWAYS)) {
-			externalButton.setSelection(false);
 			externalFastButton.setSelection(false);
 			s60Button.setSelection(false);
 			askButton.setSelection(true);
 			setFileModeEnabled(false);
-		} else if( mode.equals(Constants.LOGGING_EXT_FAST)) {
-			externalButton.setSelection(false);
+		} else if (mode.equals(Constants.LOGGING_EXT_FAST)) {
 			externalFastButton.setSelection(true);
 			s60Button.setSelection(false);
 			askButton.setSelection(false);
 			setFileModeEnabled(false);
-		} else {
-			externalButton.setSelection(true);
-			externalFastButton.setSelection(false);
-			s60Button.setSelection(false);
-			askButton.setSelection(false);
-			setFileModeEnabled(false);
 		}
+		// else {
+		// externalButton.setSelection(true);
+		// externalFastButton.setSelection(false);
+		// s60Button.setSelection(false);
+		// askButton.setSelection(false);
+		// setFileModeEnabled(false);
+		// }
 	}
 
 	/**
 	 * Update atool.exe version number.
-	 *
+	 * 
 	 * @param path
 	 *            Atool.exe location
 	 */
 	private void updateAtoolVersion(final String path) {
 		atoolVerLabel.setText(Util.getAtoolVersionNumber(path));
 		atoolVerLabel.update();
-		updateCSGroup(path);
-	}
-
-	/**
-	 * Checks what version of command line is used, if the version is 1.7.4 or
-	 * higher enables callstack size selection otherwise disables callstack size
-	 * selection.
-	 *
-	 * @param path
-	 *            Command line engine path
-	 */
-	private void updateCSGroup(final String path) {
-		int compared = Constants.VERSION_NUMBERS_INVALID;
-
-		// compare version numbers
-		compared = Util.compareVersionNumber(Constants.CS_SUPPORT_MIN_VERSION,
-				Util.getAtoolVersionNumber(path));
-
-		// if used command line version is 1.7.4 or higher enable callstack size
-		// selection
-		if (compared == Constants.VERSION_NUMBERS_SECOND
-				|| compared == Constants.VERSION_NUMBERS_EQUALS) {
-			zeroButton.setEnabled(true);
-			fortyButton.setEnabled(true);
-			hundredButton.setEnabled(true);
-			customButton.setEnabled(true);
-			spinner.setEnabled(true);
-			csSizeGroup.setToolTipText("");
-			externalFastButton.setEnabled(true);
-			externalFastButton.setToolTipText("");
-		} else {
-			zeroButton.setEnabled(false);
-			fortyButton.setEnabled(false);
-			hundredButton.setEnabled(false);
-			customButton.setEnabled(false);
-			spinner.setEnabled(false);
-			csSizeGroup
-					.setToolTipText(Constants.PREFS_CS_SIZE_DISABLED_TOOLTIP);
-
-			if( externalFastButton.getSelection() ) {
-				externalButton.setSelection(true);
-			}
-			externalFastButton.setSelection(false);
-			externalFastButton.setEnabled(false);
-			externalFastButton.setToolTipText(Constants.PREFS_CS_SIZE_DISABLED_TOOLTIP);
-
-
-		}
-
+		checkState();
 	}
 }

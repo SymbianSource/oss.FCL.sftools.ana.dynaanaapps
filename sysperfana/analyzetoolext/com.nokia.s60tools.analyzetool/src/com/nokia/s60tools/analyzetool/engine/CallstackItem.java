@@ -21,9 +21,9 @@ package com.nokia.s60tools.analyzetool.engine;
  * Contains information of one memory leak item. Information is parsed from
  * atool.exe generated XML file so we can assume that all the information is
  * valid and no other checking is needed.
- *
+ * 
  * @author kihe
- *
+ * 
  */
 public class CallstackItem extends BaseItem {
 
@@ -39,10 +39,9 @@ public class CallstackItem extends BaseItem {
 	/** Flag to inform that is results created for urel builds. */
 	private boolean urelBuild = false;
 
-
 	/**
 	 * Gets file name.
-	 *
+	 * 
 	 * @return File name
 	 */
 	public final String getFileName() {
@@ -51,7 +50,7 @@ public class CallstackItem extends BaseItem {
 
 	/**
 	 * Gets function name.
-	 *
+	 * 
 	 * @return Function name
 	 */
 	public final String getFunctionName() {
@@ -60,7 +59,7 @@ public class CallstackItem extends BaseItem {
 
 	/**
 	 * Gets leak line number.
-	 *
+	 * 
 	 * @return Leak line number
 	 */
 	public final int getLeakLineNumber() {
@@ -69,7 +68,7 @@ public class CallstackItem extends BaseItem {
 
 	/**
 	 * Is results created for the urel build.
-	 *
+	 * 
 	 * @return True if results are created for the urel build otherwise false
 	 */
 	public final boolean isUrelBuild() {
@@ -78,7 +77,7 @@ public class CallstackItem extends BaseItem {
 
 	/**
 	 * Sets cpp file name which contains memory leaks.
-	 *
+	 * 
 	 * @param newFileName
 	 *            File name
 	 */
@@ -88,7 +87,7 @@ public class CallstackItem extends BaseItem {
 
 	/**
 	 * Sets function name.
-	 *
+	 * 
 	 * @param newFunctionName
 	 *            Function name
 	 */
@@ -98,7 +97,7 @@ public class CallstackItem extends BaseItem {
 
 	/**
 	 * Sets leak line number.
-	 *
+	 * 
 	 * @param newLeakLineNumber
 	 *            Leak line number
 	 */
@@ -108,7 +107,7 @@ public class CallstackItem extends BaseItem {
 
 	/**
 	 * Sets urel build flag.
-	 *
+	 * 
 	 * @param build
 	 *            Is project built with urel command
 	 */
@@ -118,13 +117,13 @@ public class CallstackItem extends BaseItem {
 
 	/**
 	 * Checks that at least one needed information is available
-	 *
-	 * @return False if at least one needed information is available(not empty) otherwise
-	 *         True
+	 * 
+	 * @return False if at least one needed information is available(not empty)
+	 *         otherwise True
 	 */
 	public boolean isEmpty() {
-		if ( !checkData() && (fileName == null || ("").equals(fileName))
-				&& (functionName == null || ("").equals(functionName) ) ) {
+		if (!checkData() && (fileName == null || ("").equals(fileName))
+				&& (functionName == null || ("").equals(functionName))) {
 			return true;
 		}
 		return false;

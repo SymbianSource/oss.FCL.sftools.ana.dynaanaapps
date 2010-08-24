@@ -31,9 +31,9 @@ import com.nokia.s60tools.analyzetool.global.Util;
 
 /**
  * Stores project related memory analysis results.
- *
+ * 
  * @author kihe
- *
+ * 
  */
 public class ProjectResults {
 
@@ -45,7 +45,6 @@ public class ProjectResults {
 
 	/** Contains list of project unknown componets */
 	private final Hashtable<IProject, AbstractList<String>> projectUnknownComp;
-
 
 	/**
 	 * Constructor.
@@ -67,7 +66,7 @@ public class ProjectResults {
 
 	/**
 	 * Clears given project data.
-	 *
+	 * 
 	 * @param project
 	 *            Project reference
 	 */
@@ -83,14 +82,14 @@ public class ProjectResults {
 		}
 
 		// remove project unknown components
-		if(projectUnknownComp.containsKey(project)) {
+		if (projectUnknownComp.containsKey(project)) {
 			projectUnknownComp.remove(project);
 		}
 	}
 
 	/**
 	 * Checks is there stored results available for the given project reference.
-	 *
+	 * 
 	 * @param project
 	 *            Project reference
 	 * @return True if project contains results, otherwise False
@@ -104,14 +103,14 @@ public class ProjectResults {
 
 	/**
 	 * Gets project related data file name.
-	 *
+	 * 
 	 * @param projRef
 	 *            Project reference
 	 * @return Data file or null
 	 */
-	public final String getDataFileName( final IProject projRef) {
+	public final String getDataFileName(final IProject projRef) {
 
-		if( projDataFile == null || projDataFile.isEmpty() ) {
+		if (projDataFile == null || projDataFile.isEmpty()) {
 			return null;
 		}
 		// if selected project contains data file
@@ -135,7 +134,7 @@ public class ProjectResults {
 
 	/**
 	 * Gets project results by project reference.
-	 *
+	 * 
 	 * @param projRef
 	 *            Project reference
 	 * @return Project moduleresults
@@ -163,7 +162,7 @@ public class ProjectResults {
 
 	/**
 	 * Gets project run results by run ID.
-	 *
+	 * 
 	 * @param project
 	 *            Project reference
 	 * @param runID
@@ -184,7 +183,7 @@ public class ProjectResults {
 
 	/**
 	 * Gets project one AnalysisItem by run ID and leak ID.
-	 *
+	 * 
 	 * @param project
 	 *            Project reference
 	 * @param runID
@@ -193,7 +192,8 @@ public class ProjectResults {
 	 *            Given leak ID
 	 * @return AlysisItem if exists, otherwise null
 	 */
-	public final AnalysisItem getSpecific(final IProject project, final int runID, final int leakID) {
+	public final AnalysisItem getSpecific(final IProject project,
+			final int runID, final int leakID) {
 		AbstractList<RunResults> runs = getResults(project);
 		Iterator<RunResults> iterRuns = runs.iterator();
 		while (iterRuns.hasNext()) {
@@ -214,7 +214,7 @@ public class ProjectResults {
 
 	/**
 	 * Gets subtest info for given project and given run.
-	 *
+	 * 
 	 * @param project
 	 *            Project reference
 	 * @param runID
@@ -225,8 +225,8 @@ public class ProjectResults {
 	 *            Subtest ID
 	 * @return Subtest if it exists otherwise null
 	 */
-	public final AnalysisItem getSubtestItem(final IProject project, final int runID, final int leakID,
-			final int subtestID) {
+	public final AnalysisItem getSubtestItem(final IProject project,
+			final int runID, final int leakID, final int subtestID) {
 		// get project runs
 		AbstractList<RunResults> runs = getResults(project);
 		Iterator<RunResults> iterRuns = runs.iterator();
@@ -255,20 +255,21 @@ public class ProjectResults {
 
 	/**
 	 * Set project used data file name and path.
-	 *
+	 * 
 	 * @param projectRef
 	 *            Project reference
 	 * @param newDataFileName
 	 *            Project used data file name
 	 */
-	public final void setDataFileName(final IProject projectRef, final String newDataFileName) {
+	public final void setDataFileName(final IProject projectRef,
+			final String newDataFileName) {
 		// store data file name
 		projDataFile.put(projectRef, newDataFileName);
 	}
 
 	/**
 	 * Updates/stores project related memory analysis results.
-	 *
+	 * 
 	 * @param projRef
 	 *            Project reference
 	 * @param runResults
@@ -285,107 +286,118 @@ public class ProjectResults {
 		setDataFileName(projRef, dataFile);
 	}
 
-
 	/**
 	 * Sets project modules, also creating the unknown component list
-	 * @param project Project reference
-	 * @param mmps Project mmp's
-	 * @param modules List of the modules.
+	 * 
+	 * @param project
+	 *            Project reference
+	 * @param mmps
+	 *            Project mmp's
+	 * @param modules
+	 *            List of the modules.
 	 */
-	public void setProjectModules(IProject project, AbstractList<MMPInfo> mmps, AbstractList<String> modules)
-	{
-		try{
-			if( modules.isEmpty() || mmps.isEmpty() ) {
+	public void setProjectModules(IProject project, AbstractList<MMPInfo> mmps,
+			AbstractList<String> modules) {
+		try {
+			if (modules.isEmpty() || mmps.isEmpty()) {
 				return;
 			}
 			Iterator<String> iterModules = modules.iterator();
 			AbstractList<String> unknownComponents = new ArrayList<String>();
-			while( iterModules.hasNext() ) {
+			while (iterModules.hasNext()) {
 				String moduleName = iterModules.next();
 				boolean build = Util.isModulePartOfProject(mmps, moduleName);
-				if( !build ) {
+				if (!build) {
 					unknownComponents.add(moduleName);
 				}
 			}
 			setProjectUnknownModules(project, unknownComponents);
+		} catch (Exception e) {
+			Activator.getDefault().log(IStatus.ERROR,
+					"Can not set project modules", e);
 		}
-		catch(Exception e)
-		{
-			Activator.getDefault().log(IStatus.ERROR, "Can not set project modules", e);
-		}
-		
-		
+
 	}
 
 	/**
 	 * Stores project unknown modules.
-	 * @param project Project reference
-	 * @param modules Project unknown modules
+	 * 
+	 * @param project
+	 *            Project reference
+	 * @param modules
+	 *            Project unknown modules
 	 */
-	private void setProjectUnknownModules(IProject project, AbstractList<String> modules) {
+	private void setProjectUnknownModules(IProject project,
+			AbstractList<String> modules) {
 
-		//update list only it is empty
-		if( !projectUnknownComp.containsKey(project) ) {
+		// update list only it is empty
+		if (!projectUnknownComp.containsKey(project)) {
 			projectUnknownComp.put(project, modules);
 			return;
 		}
 
 		AbstractList<String> existingModules = projectUnknownComp.get(project);
-		if( existingModules == null || existingModules.isEmpty() ) {
+		if (existingModules == null || existingModules.isEmpty()) {
 			projectUnknownComp.put(project, modules);
 		}
 	}
 
 	/**
 	 * Returns project unknown modules.
-	 * @param project Project reference
-	 * @return If project contains unknown modules returns unknown component list otherwise empty list
+	 * 
+	 * @param project
+	 *            Project reference
+	 * @return If project contains unknown modules returns unknown component
+	 *         list otherwise empty list
 	 */
-	public AbstractList<String> getProjectUnknownModules(IProject project){
-		if( projectUnknownComp == null || projectUnknownComp.isEmpty() ) {
+	public AbstractList<String> getProjectUnknownModules(IProject project) {
+		if (projectUnknownComp == null || projectUnknownComp.isEmpty()) {
 			return new ArrayList<String>();
 		}
-		if( projectUnknownComp.containsKey(project)) {
+		if (projectUnknownComp.containsKey(project)) {
 			return projectUnknownComp.get(project);
 		}
 
-		//no unknown components found for given project => return empty list
+		// no unknown components found for given project => return empty list
 		return new ArrayList<String>();
 	}
 
 	/**
 	 * Updates project unknown components list
-	 * @param project Project reference
-	 * @param targets Project targets
+	 * 
+	 * @param project
+	 *            Project reference
+	 * @param targets
+	 *            Project targets
 	 */
-	public void updateUnknownModulesList(final IProject project, final AbstractList<MMPInfo> targets) {
-		if( project != null && project.isOpen() ) {
+	public void updateUnknownModulesList(final IProject project,
+			final AbstractList<MMPInfo> targets) {
+		if (project != null && project.isOpen()) {
 			AbstractList<String> unkModules = projectUnknownComp.get(project);
-			if( unkModules == null || unkModules.isEmpty() ) {
+			if (unkModules == null || unkModules.isEmpty()) {
 				return;
 			}
 
-			if( targets == null || targets.isEmpty() ) {
+			if (targets == null || targets.isEmpty()) {
 				return;
 			}
 			Iterator<MMPInfo> iterTargets = targets.iterator();
 
-			while(iterTargets.hasNext()) {
+			while (iterTargets.hasNext()) {
 				MMPInfo oneInfo = iterTargets.next();
-				if( oneInfo == null ) {
+				if (oneInfo == null) {
 					continue;
 				}
 				String oneModule = oneInfo.getTarget();
-				if( oneModule == null || ("").equals(oneModule ) ) {
+				if (oneModule == null || ("").equals(oneModule)) {
 					continue;
 				}
 
-				if(unkModules.contains(oneModule.toLowerCase(Locale.US)) ) {
+				if (unkModules.contains(oneModule.toLowerCase(Locale.US))) {
 					unkModules.remove(oneModule.toLowerCase(Locale.US));
 				}
 			}
-
-			projectUnknownComp.put(project,unkModules);
+			projectUnknownComp.put(project, unkModules);
 		}
 	}
 }

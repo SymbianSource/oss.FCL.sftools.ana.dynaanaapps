@@ -16,18 +16,19 @@
  */
 package com.nokia.s60tools.analyzetool.engine.statistic;
 
-
-
 /**
  * Class holds information of one memory allocation
+ * 
  * @author kihe
- *
+ * 
  */
 public class AllocInfo extends BaseInfo {
 
 	/**
 	 * Constructor
-	 * @param memoryAddress memory address for this allocation
+	 * 
+	 * @param memoryAddress
+	 *            memory address for this allocation
 	 */
 	public AllocInfo(String memoryAddress) {
 		super(memoryAddress);
@@ -36,15 +37,17 @@ public class AllocInfo extends BaseInfo {
 	private FreeInfo freedBy = null;
 
 	/**
-	 * set this allocation as freed by the provide FreeInfo
+	 * set this allocation as freed by the provided FreeInfo
+	 * 
 	 * @param info
 	 */
 	public void setFreedBy(FreeInfo info) {
-		this.freedBy  =info;
+		this.freedBy = info;
 	}
-	
+
 	/**
 	 * get the FreeInfo that freed this allocation
+	 * 
 	 * @return a FreeInfo or null
 	 */
 	public FreeInfo getFreedBy() {
@@ -53,6 +56,7 @@ public class AllocInfo extends BaseInfo {
 
 	/**
 	 * is this allocation freed
+	 * 
 	 * @return boolean true/false
 	 */
 	public boolean isFreed() {
@@ -61,14 +65,16 @@ public class AllocInfo extends BaseInfo {
 
 	@Override
 	public String toString() {
-		return String.format("AllocInfo [%s freedBy=[%s]]", super.toString(), freedByToString());
+		return String.format("AllocInfo [%s freedBy=[%s]]", super.toString(),
+				freedByToString());
 	}
-	
-	private String freedByToString(){
-		if (freedBy == null){
+
+	private String freedByToString() {
+		if (freedBy == null) {
 			return "null";
 		}
-		
-		return String.format("addr=0x%08X time=%s", freedBy.getMemoryAddress(), freedBy.getTime());
+
+		return String.format("addr=0x%08X time=%s", freedBy.getMemoryAddress(),
+				freedBy.getTime());
 	}
 }

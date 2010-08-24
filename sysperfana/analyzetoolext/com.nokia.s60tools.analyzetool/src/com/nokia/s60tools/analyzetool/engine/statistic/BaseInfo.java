@@ -52,11 +52,15 @@ public class BaseInfo {
 	private int totalMemory;
 	private int size;
 	
+	/** Thread Id. **/
+	private int threadId;
+	
 	/** file position to defer callstack reading */
 	private long filePos;
 
 	/**
 	 * Constructor
+	 * 
 	 * @param memoryAddress The address for this memory operation
 	 */
 	public BaseInfo(String memoryAddress) {
@@ -128,19 +132,20 @@ public class BaseInfo {
 		this.processID = iValue;
 	}
 
-	/**
-	 * Sets time for the allocation
-	 *
-	 * @param newTime
-	 *            Allocation time
-	 */
-	public void setTime(String newTime) {
-		long lValue = Long.parseLong(newTime, 16);
-		this.time = lValue;
-	}
+//	/**
+//	 * Sets time for the allocation
+//	 *
+//	 * @param newTime
+//	 *            Allocation time
+//	 */
+//	public void setTime(String newTime) {
+//		long lValue = Long.parseLong(newTime, 16);
+//		this.time = lValue;
+//	}
 	
 	/**
-	 * Sets the timestamp of event occurrence
+	 * Sets the time stamp of event occurrence
+	 * 
 	 * @param newTime
 	 */
 	public void setTime(long newTime)
@@ -228,6 +233,24 @@ public class BaseInfo {
 	public int getSizeInt() {
 		return size;
 	}
+	
+	/**
+	 * Sets thread id.
+	 * 
+	 * @param threadId thread id
+	 */
+	public void setThreadId(String threadId){
+		this.threadId = Integer.parseInt(threadId, 16);
+	}
+	
+	/**
+	 * Gets thread id.
+	 * 
+	 * @return thread id
+	 */
+	public int getThreadId(){
+		return threadId;
+	}
 
 	/**
 	 * Getter for file position pointing to first record in 
@@ -280,6 +303,4 @@ public class BaseInfo {
 		}
 		return sb.toString();
 	}
-	
-	
 }

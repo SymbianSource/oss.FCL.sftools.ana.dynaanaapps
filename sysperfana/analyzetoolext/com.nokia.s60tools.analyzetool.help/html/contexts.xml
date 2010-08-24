@@ -7,13 +7,17 @@
 	<topic label="Setting AnalyzeTool preferences" href="html/concepts/preferences.htm" />
 </context> 
 <context id="ANALYZETOOL_MAIN">
-	<description>AnalyzeTool Help</description>
+	<description>The AnalyzeTool view will show the test run details automatically after the data is capture with tracing utility connection.</description>
 	<topic label="AnalyzeTool introduction" href="html/gettingstarted/overview.htm" />
 	<topic label="AnalyzeTool basic walk-through" href="html/gettingstarted/basic.htm" />
 	<topic label="AnalyzeTool toolbar buttons" href="html/reference/toolbar.htm" />
+ <topic href="html/concepts/datafile.htm" label="AnalyzeTool files"/>
 </context>   
-<context id="ANALYZETOOL_GRAPH" title="AnalyzeTool Graph Help">
+<context id="ANALYZETOOL_GRAPH">
+   <description>Memory activity graphs are generated automatically after the data captured is stopped. The graph shows the cumulative memory of the given process over time.</description>
 	<topic label="AnalyzeTool Memory Activity Graph" href="html/tasks/viewactivitygraph.htm" />
 </context>   
- 
+<context id="ANALYZETOOL_TROUBLESHOOTING" title="AnalyzeTool Troubleshooting Help">
+	<topic label="AnalyzeTool troubleshooting" href="html/reference/troubleshooting.htm" />
+</context> 
 </contexts>

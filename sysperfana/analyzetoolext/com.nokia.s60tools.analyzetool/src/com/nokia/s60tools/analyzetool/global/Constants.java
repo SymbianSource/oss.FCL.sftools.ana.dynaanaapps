@@ -19,18 +19,18 @@ package com.nokia.s60tools.analyzetool.global;
 
 /**
  * Contains all the defined constants
- *
+ * 
  * @author kihe
- *
+ * 
  */
 public class Constants {
 
 	public static enum ACTIONS {
 		RUN_VIEW_MEM_LEAKS, RUN_BUILD, RUN_CLEAN
 	}
+
 	public static enum Operation {
-		PROCESS_START, 
-		PROCESS_END, ALLOC, FREE, ALLOCH, FREEH, ALLOCF, FREEF, DLL_LOAD, DLL_UNLOAD, NOVALUE;
+		PCS, PCE, ALH, ALF, FRH, FRF, RAH, RAF, DLL, DLU, TDS, TDE, VER, TSS, TSE, DEVINFO, NOVALUE;
 
 		public static Operation toOperation(String str) {
 			try {
@@ -40,6 +40,8 @@ public class Constants {
 			}
 		}
 	}
+
+	public static final String ATOOL_LIBS_OK = "atool_libs_ok";
 
 	/** AnalyzeTool specific constants */
 	public final static String ANALYZE_TOOL_TITLE = "AnalyzeTool";
@@ -67,11 +69,22 @@ public class Constants {
 	public final static String ACTION_CHANGE_REPORT_LEVEL_ALL = "Report detail level: All";
 	public final static String ACTION_CHANGE_REPORT_LEVEL_KNOWN = "Report detail level: Known";
 	public final static String ACTION_CHANGE_REPORT_LEVEL_TOPMOST = "Report detail level: Topmost";
-	public final static String ACTION_CHANGE_LOGGING_MODE = "Change data gathering mode";
-	public final static String ACTION_CHANGE_LOGGING_MODE_TOOLTIP_EXT = "Current mode: Monitored external";
-	public final static String ACTION_CHANGE_LOGGING_MODE_TOOLTIP_FAST = "Current mode: External";
-	public final static String ACTION_CHANGE_LOGGING_MODE_TOOLTIP_S60 = "Current mode: Monitored Internal";
-	public final static String ACTION_CHANGE_LOGGING_MODE_TOOLTIP_ASK = "Current mode: Ask always";
+	public final static String ACTION_CHANGE_LOGGING_MODE = "Change data output mode";
+
+	public static final String PREFS_EXT_FAST = "Output to trace (recommended)";
+	public static final String PREFS_EXT_FAST_TOOLTIP = "Output data to the host computer through external connection.";
+	public static final String PREFS_S60 = "Output to file system";
+	public static final String PREFS_S60_TOOLTIP = "Output data to a file in the target device.";
+	public static final String PREFS_ASK_ALWAYS = "Ask always";
+	public static final String PREFS_ASK_ALWAYS_TOOLTIP = "Ask data output mode from the user every time when building.";
+
+	public final static String ACTION_CHANGE_LOGGING_MODE_TOOLTIP_FAST = "Current mode: "
+			+ PREFS_EXT_FAST;
+	public final static String ACTION_CHANGE_LOGGING_MODE_TOOLTIP_S60 = "Current mode: "
+			+ PREFS_S60;
+	public final static String ACTION_CHANGE_LOGGING_MODE_TOOLTIP_ASK = "Current mode: "
+			+ PREFS_ASK_ALWAYS;
+
 	public final static String ACTION_SAVE = "Save raw test run data or memory leak results";
 	public final static String ACTION_SAVE_REPORT = "Save memory leak results";
 	public final static String ACTION_SAVE_DATA = "Save raw test run data";
@@ -96,7 +109,7 @@ public class Constants {
 
 	// Selection dialog title when user builds project with AnalyzeTool and
 	// logging mode is set to "Ask always"
-	public final static String DIALOG_SELECT_LOGGING_MODE = "Select data gathering mode for AnalyzeTool";
+	public final static String DIALOG_SELECT_LOGGING_MODE = "Select data output mode for AnalyzeTool";
 
 	// generic title for all dialogs, information notes
 	public final static String DIALOG_TITLE = "AnalyzeTool";
@@ -123,8 +136,8 @@ public class Constants {
 
 	// information text when user try to use actions and the atool.exe can not
 	// be executed
-	public static final String INFO_ATOOL_NOT_AVAILABLE = "\n\nCan not execute command line engine. \nCheck AnalyzeTool preferences.";
-	public static final String ERROR_ATOOL_NOT_AVAILABLE = "Can not execute command line engine. \nCheck AnalyzeTool preferences.";
+	public static final String INFO_ATOOL_NOT_AVAILABLE = "\n\nCommand Line Engine not available. \nCheck AnalyzeTool preferences.";
+	public static final String ERROR_ATOOL_NOT_AVAILABLE = "Command Line Engine not available. Check AnalyzeTool preferences.";
 
 	// info to user if AnalyzeTool for some reason can create results
 	public static final String INFO_FILE_INVALID = "Can not analyze. \nNo data to be analyzed.";
@@ -150,7 +163,7 @@ public class Constants {
 	/** Tree model text */
 	// when no results are opened/available
 	public static final String INFO_NO_DATA_FILE_AVAILABLE = "No data file opened or trace data captured.";
-	/** Preference page title*/
+	/** Preference page title */
 	public static final String ATOOL_DESC = "AnalyzeTool Carbide extension configuration";
 	/** Trace capturing related text */
 	public static final String INFO_NO_DATA = "No data";
@@ -201,19 +214,33 @@ public class Constants {
 	public static final String RUN_ABNORMAL = "Abnormal process end";
 	public static final String RUN_NO_LEAKS = "No memory leaks.";
 
-	public static final String CANCELLED = "Canceled.";
+	public static final String CANCELLED = "Cancelled.";
 
-	/**Error information if AnalyzeTool libraries are not installed*/
-	public static final String CAN_NOT_FIND_LIBRARIES = "Can not find AnalyzeTool library files from current SDK. \n\nYou can build AnalyzeTool from sources or contact " +
-			"AnalyzeTool development team to get AnalyzeTool binaries.";
+	/** Error information if AnalyzeTool libraries are not installed */
+	public static final String CAN_NOT_FIND_LIBRARIES_SUPPORT = "You can build AnalyzeTool from sources or contact AnalyzeTool development team to get AnalyzeTool binaries.";
 
-	public static final String CAN_NOT_FIND_LIBRARIES_MARKER = "Can not find AnalyzeTool library files from current SDK."; 
-	/**If user try to build with unsupported platform*/
+	public static final String CAN_NOT_FIND_LIBRARIES_MARKER = "Can not find AnalyzeTool library files from current SDK:";
+
+	/** If user try to build with unsupported platform */
 	public static final String PLATFORM_NOT_SUPPORTED = "AnalyzeTool supports only ARMV5, GCCE and WINSCW build platforms. \n\nDo you want to continue?";
 
 	public static final String TOO_OLD_ENGINE = "Current version of AnalyzeTool Engine is too old. \nRequired version must be 1.6.0 or higher.\n\nCheck AnalyzeTool preferences.";
 
-	/** Error text when trying to import unknown module to the workspace and module could not be found*/
+	public static final String MIN_CLE_SUPPORTED = "1.10.0";
+	public static final String CLE_OLDER_THAN_MIN = "Command Line Engine older than {0}. Check AnalyzeTool preferences.";
+	public static final String CLE_VERSION_MISMATCH = "Version mismatch";
+
+	public static final String AT_BINARIES_VERSION_MISMATCH = "Version mismatch between the AnalyzeTool binaries ({0}) in the device and AnalyzeTool headers in the SDK ({1}).\nPlease make sure that those match otherwise results may be unknown.";
+
+	public static final String UNSUPPORTED_FORMAT_TITLE = "Unsupported format";
+	public static final String UNSUPPORTED_FORMAT_MESSAGE = "Symbian side components are not up to date. Please see help for more information.";
+
+	public static final String TRACE_FORMAT_VERSION_IS_HIGHER = "Carbide extension is older than Symbian components. Please see help for more information.";
+
+	/**
+	 * Error text when trying to import unknown module to the workspace and
+	 * module could not be found
+	 */
 	public static final String CAN_NOT_FIND_MODULE = "Can not find module from the active SDK";
 
 	public static final String BUILD_STATE_CHANGED = "Project build state changed. \nDo you want to re-analyze results?";
@@ -233,24 +260,16 @@ public class Constants {
 	public static final String INPUT_NO_SPACES_ALLOWED = "No spaces allowed";
 
 	public static final String MAIN_CAN_NOT_COPY = "Cannot copy: \n";
+
 	/**
 	 * Preference page constants
 	 */
-	public static final String PREFS_EXT = "Monitored external data gathering";
-	public static final String PREFS_EXT_TOOLTIP = "Gather data to the host computer through external connection.";
-	public static final String PREFS_EXT_FAST = "External data gathering";
-	public static final String PREFS_EXT_FAST_TOOLTIP = "Gather data to the host computer through external connection.";
-	public static final String PREFS_S60 = "Monitored internal data gathering";
-	public static final String PREFS_S60_TOOLTIP = "Gather data to a file in the target device.";
 	public static final String PREFS_USER_SPEC = "Name from the user";
 	public static final String PREFS_USER_SPEC_TOOLTIP = "Ask the file name from the user when building.";
 	public static final String PREFS_USE_PROCESS_NAME = "Name from the process";
 	public static final String PREFS_USE_PROCESS_NAME_TOOLTIP = "Use the process name as the name of the file.";
-	public static final String PREFS_ASK_ALWAYS = "Ask Always";
-	public static final String PREFS_ASK_ALWAYS_TOOLTIP = "Ask data gathering mode from the user every time when building.";
-	public static final String PREFS_ATOOL_VER_NOT_FOUND ="Not available";
-
-	public static final String PREFS_ATOOL_GROUP_TITLE= "AnalyzeTool Engine";
+	public static final String PREFS_ATOOL_VER_NOT_FOUND = "Not available";
+	public static final String PREFS_ATOOL_GROUP_TITLE = "AnalyzeTool Engine";
 	public static final String PREFS_USE_INTERNAL_TITLE = "Use internal command line engine";
 	public static final String PREFS_USE_EXTERNAL_TITLE = "Use external command line engine";
 	public static final String PREFS_SELECT_FOLDER = "Choose the atool.exe directory";
@@ -264,11 +283,11 @@ public class Constants {
 	public static final String PREFS_USE_ROM_SYMBOL_TOOLTIP = "Use rom symbol file to pinpoint rom locations.";
 	public static final String PREFS_ROM_SYMBOL_PATH = "Rom symbol file:";
 	public static final String PREFS_ROM_SYMBOL_PATH_TOOLTIP = "Define which rom symbol file to use.";
-	public static final String PREFS_SELECT_ROM_SYMBOL= "Choose the rom symbol file.";
+	public static final String PREFS_SELECT_ROM_SYMBOL = "Choose the rom symbol file.";
 	public static final String PREFS_REFRESH_VERSION = "Refresh version";
 	public static final String PREFS_REPORT_LEVEL = "Report level";
 	public static final String PREFS_SHOW_EVERY = "&Show every detail";
-	public static final String PREFS_SHOW_KNOWN = "Show only known code lines(default)";
+	public static final String PREFS_SHOW_KNOWN = "Show only known code lines (default)";
 	public static final String PREFS_SHOW_TOPMOST = "Show only topmost memory allocation code line";
 	public static final String PREFS_SELECT_DIR = "Select folder";
 	public static final String PREFS_CSSIZE_TITLE = "Callstack size";
@@ -277,9 +296,10 @@ public class Constants {
 	public static final String PREFS_HUNDRED_BUTTON = "100 items (Slows down test run a lot)";
 	public static final String PREFS_CUSTOM_BUTTON = "Custom size (0-255)";
 	public static final String PREFS_CS_SIZE_DISABLED_TOOLTIP = "Command line engine version is too old, version must be 1.7.4 or higher";
+	public static final String PREFS_CLE_NOT_AVAILABLE = "Command Line Engine not available.";
+	public static final String PREFS_CLE_OLDER_THAN_MIN = "Command Line Engine older than {0}.";
 
-
-	/**Statistics view constants*/
+	/** Statistics view constants */
 	public static final String STATISTICS_TAB_TITLE = "Top allocation locations";
 	public static final String STATISTICS_SELECT_RUN = "Select run";
 	public static final String STATISTICS_NODE_FILE = "File";
@@ -294,14 +314,11 @@ public class Constants {
 	public static final String GRAPH_LOAD_JOB_TITLE = "AnalyzeTool Loading Graph Data...";
 	public static final String STATISTICS_NO_STATS = "No statistics available.";
 
-
 	public static final String FIND_COMP_JOB_TITLE = "Finding component locations";
 	public static final String FIND_COMP_JOB_SELECT_MODULE = "Select module";
 	// UI RELATED CONSTANTS END HERE
 
-
 	public static final String SOURCE_NOT_FOUND = "Source file not found from any project.";
-
 
 	public static final String SOURCE_FILE_EDITOR_ID = "org.eclipse.jdt.ui.SourceView";
 	/** Plug-in id */
@@ -316,34 +333,54 @@ public class Constants {
 	/** File name which is used when generating memory analysis results */
 	public static final String FILENAME_CARBIDE = "AtoolFileToCarbide.xml";
 
-	/** Alloc */
-	public static final String ALLOC = "ALLOC";
-	/** Alloc */
-	public static final String ALLOCH = "ALLOCH";
-	/** Alloc */
-	public static final String ALLOCF = "ALLOCF";
-	/** Free */
-	public static final String FREE = "FREE";
-	public static final String FREEH = "FREEH";
-	public static final String FREEF = "FREEF";
+	/** Prefix of the old data trace format */
+	public final static String PREFIX_OLD = "PCSS";
 
-	public static final String DLL_LOAD = "DLL_LOAD";
-	public static final String DLL_UNLOAD = "DLL_UNLOAD";
+	/** Prefix to find */
+	public final static String PREFIX = "<AT>";
+
+	/** Process start string */
+	public static final String PCS = "PCS";
+
+	/** Process end string */
+	public static final String PCE = "PCE";
+
+	/** Allocation */
+	public static final String ALH = "ALH";
+	public static final String ALF = "ALF";
+
+	/** Free */
+	public static final String FRH = "FRH";
+	public static final String FRF = "FRF";
+
+	/** Reallocation */
+	public static final String RAH = "RAH";
+	public static final String RAF = "RAF";
+
+	/** DLL */
+	public static final String DLL = "DLL";
+	public static final String DLU = "DLU";
+
+	/** Thread */
+	public static final String TDS = "TDS";
+	public static final String TDE = "TDE";
+
+	/** Version */
+	public static final String VER = "VER";
+
+	/** Subtests */
+	public static final String TSS = "TSS";
+	public static final String TSE = "TSE";
+
+	/** Device info */
+	public static final String DEVINFO = "DEVINFO";
 
 	/** Memory allocation deallocation flag definitions */
 	public static final int TYPE_ALLOC = 0;
-
 	public static final int TYPE_FREE = 1;
 	public static final int TYPE_ALLOCH = 2;
 	public static final int TYPE_FREEH = 3;
 
-	/** Prefix to find */
-	public final static String PREFIX = "PCSS";
-
-	/** Process start string */
-	public static final String PROCESS_START = "PROCESS_START";
-	/** Process end string */
-	public static final String PROCESS_END = "PROCESS_END";
 	/** Button icon definitions */
 	public static final String BUTTON_RUN = "icons/btn_record.png";
 	public static final String BUTTON_STOP = "icons/btn_terminate.png";
@@ -364,15 +401,20 @@ public class Constants {
 	public static final String ICON_OUTSIDE = "icons/module_outside.png";
 	public static final String ICON_NOT_BUILD = "icons/module_not_build.png";
 	public static final String ICON_BUILD = "icons/module_build.png";
+
 	/** Data file definitions */
 	public static final int DATAFILE_LOG = 0;
 	public static final int DATAFILE_TRACE = 1;
 	public static final int DATAFILE_XML = 2;
+	public static final int DATAFILE_BINARY = 3;
 
 	public static final int DATAFILE_INVALID = -1;
 	public static final int DATAFILE_EMPTY = -2;
+	public static final int DATAFILE_OLD_FORMAT = -3;
+	public static final int DATAFILE_UNSUPPORTED_TRACE_FORMAT = -4;
 
 	public static final String DATAFILE_VERSION = "DATA_FILE_VERSION";
+	public static final String BINARY_FILE_VERSION = "BINARY_FILE_VERSION";
 	public static final String ATOOL_TEMP = "atool_temp";
 	public static final String ATOOL_FOLDER = "atool_folder";
 	public static final String LOGGING_MODE = "logging_mode";
@@ -387,8 +429,11 @@ public class Constants {
 	public static final String USE_CALLSTACK_SIZE = "use_user_define_cs_size";
 	public static final String REPORT_LEVEL = "report_level";
 	public static final String ATOOL_VERBOSE = "verbose_atool";
+
+	public static final String DEVICE_LOG_FILE_PATH = "device_log_file_path";
+	public static final String DEVICE_LOG_FILE_NAME = "device_log_file_name";
+
 	/** Logging mode preference values */
-	public static final String LOGGING_EXT = "EXT";
 	public static final String LOGGING_EXT_FAST = "EXT_FAST";
 	public static final String LOGGING_S60 = "S60";
 	public static final String LOGGING_ASK_ALLWAYS = "ask_always";
@@ -403,11 +448,10 @@ public class Constants {
 	/** S60 logging mode data file name */
 	public static final String LOGGING_S60_PROCESS_NAME = "process_name";
 	public static final String LOGGING_S60_USER_SPECIFIED = "user_secified";
-	
+
 	/** Save report file types */
 	public static final int SAVE_REPORT_FILE_DATA = 0;
 	public static final int SAVE_REPORT_FILE_XML = 1;
-
 
 	public static final String BUILD_TARGET_WINSCW = "WINSCW";
 	public static final String BUILD_TARGET_ARMV5 = "ARMV5";
@@ -416,9 +460,9 @@ public class Constants {
 	/** Default preference values */
 	public static final String DEFAULT_ATOOL_FOLDER = "c:\\apps\\atool\\";
 
-	public static final String DEFAULT_LOGGING_MODE = Constants.LOGGING_EXT;
+	public static final String DEFAULT_LOGGING_MODE = Constants.LOGGING_EXT_FAST;
 	public static final String DEFAULT_REPORT_LEVEL = Constants.REPORT_KNOWN;
-	public static final String PREFS_LOGGING_MODE_TITLE = "Data gathering mode";
+	public static final String PREFS_LOGGING_MODE_TITLE = "Output mode";
 
 	public static final int ANALYZE_ASK_FOR_USER = 0;
 	public static final int ANALYZE_USE_DATA_FILE = 1;
@@ -431,9 +475,9 @@ public class Constants {
 	public static final int SAVE_DATA_FILE_CANCEL = 2;
 
 	public static final String ATOOL_INST = "-inst";
-	public static final String ATOOL_INST_E = "-instrument_e";
 	public static final String ATOOL_INST_EF = "-instrument_ef";
 	public static final String ATOOL_INST_I = "-instrument_i";
+
 	public static final String ATOOL_UNINST = "-uninstrument";
 	public static final String ATOOL_USE_VARIANT = "-variant";
 	public static final String ATOOL_UNINST_FAILED = "-uninstrument_failed";
@@ -445,13 +489,11 @@ public class Constants {
 
 	public static final int HISTORY_LEVEL = 5;
 
-	//version number comparision constants
+	// version number comparison constants
 	public static final int VERSION_NUMBERS_INVALID = -1;
 	public static final int VERSION_NUMBERS_FIRST = 0;
 	public static final int VERSION_NUMBERS_SECOND = 1;
 	public static final int VERSION_NUMBERS_EQUALS = 2;
-	public static final String MIN_VERSION = "1.6.0";
-	public static final String CS_SUPPORT_MIN_VERSION = "1.7.4";
 
 	public static final String UNKNOWN = "Unknown";
 
@@ -461,70 +503,58 @@ public class Constants {
 	public static final String PREFS_CONC_BUILD = "useConcBuild";
 	public static final String PREFS_BUILD_CANCELLED = "buildCancelled";
 
-	// List of libraries what AnalyzeTool needs when compiled applications on armv5 platform
+	// List of libraries what AnalyzeTool needs when compiled applications on
+	// armv5 platform
 	public static final String atoolLibs[] = {
-		"epoc32\\RELEASE\\armv5\\LIB\\AToolMemoryHook.lib",
-		"epoc32\\RELEASE\\armv5\\udeb\\AtoolStaticLib.lib",
-		"epoc32\\RELEASE\\armv5\\urel\\AtoolStaticLib.lib"
-	};
+			"epoc32\\RELEASE\\armv5\\LIB\\AToolMemoryHook.lib",
+			"epoc32\\RELEASE\\armv5\\udeb\\AtoolStaticLib.lib",
+			"epoc32\\RELEASE\\armv5\\urel\\AtoolStaticLib.lib" };
 
-	// List of libraries what AnalyzeTool needs when compiled applications on armv5 platform (using sbs2 / ABIV2 binaries)
-	public static final String  atoolLibsSbs2[] = {
-		"epoc32\\RELEASE\\armv5\\LIB\\AToolMemoryHook.dso",
-		"epoc32\\RELEASE\\armv5\\udeb\\AtoolStaticLib.lib",
-		"epoc32\\RELEASE\\armv5\\urel\\AtoolStaticLib.lib"
-	};
+	// List of libraries what AnalyzeTool needs when compiled applications on
+	// armv5 platform (using sbs2 / ABIV2 binaries)
+	public static final String atoolLibsSbs2[] = {
+			"epoc32\\RELEASE\\armv5\\LIB\\AToolMemoryHook.dso",
+			"epoc32\\RELEASE\\armv5\\udeb\\AtoolStaticLib.lib",
+			"epoc32\\RELEASE\\armv5\\urel\\AtoolStaticLib.lib" };
 
-	// List of libraries what AnalyzeTool needs when compiled applications on winscw platform
-	public static final String  atoolLibsWinscw[] = {
-		"epoc32\\RELEASE\\winscw\\udeb\\AToolMemoryHook.lib",
-		"epoc32\\RELEASE\\winscw\\udeb\\AtoolStaticLib.lib",
-		"epoc32\\RELEASE\\winscw\\urel\\AtoolStaticLib.lib"
-	};
+	// List of libraries what AnalyzeTool needs when compiled applications on
+	// winscw platform
+	public static final String atoolLibsWinscw[] = {
+			"epoc32\\RELEASE\\winscw\\udeb\\AToolMemoryHook.lib",
+			"epoc32\\RELEASE\\winscw\\udeb\\AtoolStaticLib.lib",
+			"epoc32\\RELEASE\\winscw\\urel\\AtoolStaticLib.lib" };
 
 	public static enum COMMAND_LINE_ERROR_CODE {
-		EXECUTE_ERROR(-1),
-		OK(0),
+		EXECUTE_ERROR(-1), OK(0),
 		/* instrument errors */
-		INVALID_ARGUMENT_ERROR(1), 
-		CANNOT_FIND_EPOCROOT(3),
-		MAKEFILE_ERROR(5),
-		NO_SUPPORTED_MODULES_ERROR(8),
+		INVALID_ARGUMENT_ERROR(1), CANNOT_FIND_EPOCROOT(3), MAKEFILE_ERROR(5), NO_SUPPORTED_MODULES_ERROR(
+				8),
 		/* Analyze errors */
-		WRONG_DATA_FILE_VERSION(10),
-		ANALYZE_ERROR(12),
-		EMPTY_DATA_FILE(13),
-		SYMBOL_FILE_ERROR(14),
-		DATA_FILE_EMPTY(31),
-		DATA_FILE_INVALID(32),
+		WRONG_DATA_FILE_VERSION(10), ANALYZE_ERROR(12), EMPTY_DATA_FILE(13), SYMBOL_FILE_ERROR(
+				14), DATA_FILE_EMPTY(31), DATA_FILE_INVALID(32), DATA_FILE_OLD_FORMAT(
+				33), DATA_FILE_UNSUPPORTED_TRACE_FORMAT(34),
 		/* building&releasing errors */
-		RELEASABLES_ERROR(20),
-		RESTORE_MODULES_ERROR(21),
-		CREATING_TEMP_CPP_ERROR(22),
-		CLEANING_TEMP_ERROR(23),
-		READ_MAKEFILE_ERROR(24),
-		MODIFY_MODULES_ERROR(25),
-		INVALID_MMP_DEFINED(27),
+		RELEASABLES_ERROR(20), RESTORE_MODULES_ERROR(21), CREATING_TEMP_CPP_ERROR(
+				22), CLEANING_TEMP_ERROR(23), READ_MAKEFILE_ERROR(24), MODIFY_MODULES_ERROR(
+				25), INVALID_MMP_DEFINED(27),
 
 		/* User issued exit */
 		UNKNOWN_ERROR(999);
 		private final int code;
 
 		COMMAND_LINE_ERROR_CODE(int c) {
-		   code = c;
-		 }
+			code = c;
+		}
 
-		 public int getCode() {
-		   return code;
-		 }
+		public int getCode() {
+			return code;
+		}
 	}
-	
-	
+
 	static final String AT_CORE_INCLUDE_FILE_WITH_VERSION_NUMBER[] = {
 			"epoc32\\include\\domain\\osextensions\\analyzetool\\analyzetool.h",
 			"epoc32\\include\\oem\\analyzetool\\analyzetool.h",
-			"epoc32\\include\\platform\\analyzetool\\analyzetool.h"
-		};
-	
-	static final String AT_CORE_VERSION_NUMBER_TAG="ANALYZETOOL_CORE_VERSION_FOR_CLE";
+			"epoc32\\include\\platform\\analyzetool\\analyzetool.h" };
+
+	static final String AT_CORE_VERSION_NUMBER_TAG = "ANALYZETOOL_CORE_VERSION_FOR_CLE";
 }

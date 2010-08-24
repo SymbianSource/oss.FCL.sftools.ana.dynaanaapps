@@ -27,7 +27,7 @@ public class AllocCallstack {
 	/** Callstack memory address */
 	long memoryAddress;
 
-	/** Dll name where this callstack belongs*/
+	/** DLL name where this callstack belongs*/
 	DllLoad dllLoad;
 
 	/**
@@ -47,8 +47,8 @@ public class AllocCallstack {
 	}
 
 	/**
-	 * Set dll load item for current allocation callstack item
-	 * @param loadItem Dll load item
+	 * Set DLL load item for current allocation callstack item
+	 * @param loadItem DLL load item
 	 */
 	public void setDllLoad(DllLoad loadItem)
 	{
@@ -56,8 +56,8 @@ public class AllocCallstack {
 	}
 
 	/**
-	 * Returns Dll load item
-	 * @return Dll load item
+	 * Returns DLL load item
+	 * @return DLL load item
 	 */
 	public DllLoad getDllLoad()
 	{

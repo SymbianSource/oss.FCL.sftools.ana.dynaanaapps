@@ -28,7 +28,7 @@ import com.nokia.s60tools.analyzetool.engine.statistic.ProcessInfo;
 /**
  * AnalyseGraphModel
  * this class fills a model suitable for AnalyseTool graph
- * the model is initialised from the constructor.  
+ * the model is initialized from the constructor.  
  *
  */
 public class MemoryActivityModel implements IMemoryActivityModel {

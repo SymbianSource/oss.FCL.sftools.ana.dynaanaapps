@@ -10,11 +10,10 @@
 <body>
 <h2>Capturing data</h2>
 
-<p>There are two alternative ways to capture data, depending on the data
-gathering mode.</p>
+<p>There are two alternative ways to capture data, depending on the output
+mode.</p>
 
-<h3 id="capture_external">Capturing data in monitored external or external data
-gathering mode</h3>
+<h3 id="capture_external">Capturing data in output to trace mode</h3>
 
 <p><b>Note!</b> AnalyzeTool decides which connection method to use by checking
 the project active build configuration settings. If the active build
@@ -36,10 +35,10 @@ tracing activation from the device side.</p>
     AnalyzeTool.</b></li>
   <li>Start capturing data by clicking <b>Start tracing</b> in the AnalyzeTool
     toolbar. 
-    <p><strong>Note</strong> that at this point the system checks the version
-    of the dbghelp.dll library provided by Windows. If the version is not at
-    least 6.3.0.0, a confirmation dialog will appear with instructions on how
-    to update a later version. </p>
+    <p class="note">NOTE that at this point the system checks the version of
+    the dbghelp.dll library provided by Windows. If the version is not at least
+    6.3.0.0, a confirmation dialog will appear with instructions on how to
+    update a later version. </p>
   </li>
   <li>Start the application built with AnalyzeTool, and run the desired test
     cases. Note that Carbide.c++ needs to be connected to the target
@@ -53,11 +52,10 @@ tracing activation from the device side.</p>
   </li>
 </ol>
 
-<h3 id="capture_s60_file">Capturing data in monitored internal data gathering
-mode</h3>
+<h3 id="capture_s60_file">Capturing data in output to file system mode</h3>
 
-<p>When you select the <b>monitored internal</b> data gathering mode in
-AnalyzeTool build, AnalyzeTool collects the test data into a file.</p>
+<p>When you select the <b>output to file system</b> mode in AnalyzeTool build,
+AnalyzeTool collects the test data into a file.</p>
 
 <p><b>Note!</b> If you are analyzing an application in the target hardware, the
 file must be transferred to a PC after the test run is completed.</p>
@@ -71,11 +69,12 @@ file must be transferred to a PC after the test run is completed.</p>
   <li>Start the application built with AnalyzeTool in the target hardware, and
     run the desired test cases.</li>
   <li>At the end of a test run, close the tested application (process). This
-    will write the test data to a file. In the target hardware the file is
-    saved in <i>e:\analyzetool\</i> or <i>c:\data\analyzetool\</i> depending if
-    the memory card is used or not. In the emulator environment the file is
-    saved in <i>\epoc32\winscw\c\logs\analyzetool\</i>. 
-    <p><b>Note!</b> The data file name was specified before the build.</p>
+    will write the test data to a file. 
+    <p class="note">NOTE The name of the file and the location where the file
+    is saved in the target hardware are defined in the AnalyzeTool
+    preferences.</p>
+    <p>In the emulator environment the file is saved in
+    <i>\epoc32\winscw\c\logs\analyzetool\</i>. </p>
   </li>
   <li>While the tested software project is active in the <b>Project
     Explorer</b>, open the data file by clicking <b>Open and analyze data

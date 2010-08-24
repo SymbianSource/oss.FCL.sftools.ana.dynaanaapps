@@ -11,7 +11,7 @@
  *
  * Contributors:
  *
- * Description:  Definitions for the class ReadFile
+ * Description: Definitions for the class ReadFile
  *
  */
 
@@ -29,27 +29,28 @@ import java.util.AbstractList;
 import com.nokia.s60tools.analyzetool.engine.ParseAnalyzeData;
 
 /**
- * Reads thru trace file and generates statistic info
+ * Reads thru trace file and generates statistic info.
+ * 
  * @author kihe
- *
+ * 
  */
 public class ReadFile {
 
-	/** Parser */
+	/** Parser. */
 	private ParseAnalyzeData parser;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
-	public ReadFile()
-	{
+	public ReadFile() {
 	}
 
-
 	/**
-	 * Reads thru file
-	 * @param path File location
-	 * @return True if no errors occurs when reading file otherwise False
+	 * Reads thru file.
+	 * 
+	 * @param path
+	 *            file location
+	 * @return true, if no errors occurs when reading file, otherwise false
 	 */
 	public boolean readFile(final String path) {
 		// return value
@@ -58,35 +59,39 @@ public class ReadFile {
 		// input
 		BufferedReader input = null;
 		FileInputStream fis = null;
-		try {
 
+		try {
 			// check that file exists
 			if (path == null || ("").equals(path)) {
 				return false;
 			}
-			java.io.File file = new java.io.File(path);
+			File file = new File(path);
 			if (!file.exists()) {
 				return false;
 			}
 
 			// get input
 			fis = new FileInputStream(file);
-			input = new BufferedReader(new InputStreamReader(fis,"UTF-8"));
-			int linebreakSize = lineBreakSize(file); //important to determine file position for deferred callstack reading
+			input = new BufferedReader(new InputStreamReader(fis, "UTF-8"));
+			int linebreakSize = lineBreakSize(file); // important to determine
+			// file position for deferred callstack reading
 
 			// get first line of data file
 			parser = new ParseAnalyzeData(false, true, true, linebreakSize);
 			String line = null;
 			// go thru file
 			while ((line = input.readLine()) != null) {
-				parser.parse(line);
+				boolean success = parser.parse(line);
+				if (!success) {
+					return false;
+				}
 			}
 			fis.close();
 			input.close();
 		} catch (FileNotFoundException ex) {
 			retValue = false;
 			ex.printStackTrace();
-		} catch (OutOfMemoryError oome){
+		} catch (OutOfMemoryError oome) {
 			retValue = true;
 			oome.printStackTrace();
 		} catch (IOException ex) {
@@ -102,10 +107,10 @@ public class ReadFile {
 			}
 
 			try {
-				if( fis != null ) {
+				if (fis != null) {
 					fis.close();
 				}
-			}catch(Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -114,59 +119,58 @@ public class ReadFile {
 
 	/**
 	 * Returns statistic
+	 * 
 	 * @return Statistic
 	 */
-	public AbstractList<ProcessInfo> getStatistic()
-	{
+	public AbstractList<ProcessInfo> getStatistic() {
 		return parser.getStatistic();
 	}
 
 	/**
 	 * Finish the file reading.
 	 */
-	public void finish()
-	{
+	public void finish() {
 		parser.finish();
-
 	}
-	
+
 	/**
-	 * Returns true if callstack reading from file is done
-	 * on demand; false if callstacks are made available during parsing
-	 * phase.
+	 * Returns true if callstack reading from file is done on demand; false if
+	 * callstacks are made available during parsing phase.
+	 * 
 	 * @return true for deferred callstack reading
 	 */
-	public boolean hasDeferredCallstacks(){
+	public boolean hasDeferredCallstacks() {
 		return parser.hasDeferredCallstacks();
 	}
-	
+
 	/**
-	 * Determines the size of line breaks in the given file. File produced on the device-side
-	 * should have while Windows files have.
-	 * @param aFile the file to check
+	 * Determines the size of line breaks in the given file. File produced on
+	 * the device-side should have while Windows files have.
+	 * 
+	 * @param aFile
+	 *            the file to check
 	 * @return 1 or 2 for size of line break, or 0 if it cannot be determined
 	 */
-	private static int lineBreakSize(File aFile){
+	private static int lineBreakSize(File aFile) {
 		int ret = 0;
 		try {
-			BufferedReader br = new BufferedReader(new FileReader( aFile.getPath() ));
-			
+			BufferedReader br = new BufferedReader(new FileReader(aFile
+					.getPath()));
+
 			int ch;
 			int cnt = 0;
-			while ((ch = br.read()) >=0){
-				cnt ++;
-				if (ch == '\r'){
-					ret ++;
-				} else if (ch == '\n'){
-					ret ++;
+			while ((ch = br.read()) >= 0) {
+				cnt++;
+				if (ch == '\r') {
+					ret++;
+				} else if (ch == '\n') {
+					ret++;
 					break;
 				}
 			}
-			
 		} catch (IOException e) {
 			// do nothing, a return value of 0 will indicate some problem
 		}
 		return ret;
 	}
-	
 }

@@ -2,7 +2,7 @@
 <feature
       id="com.nokia.carbide.extensions.analyzetool"
       label="Carbide.c++ Extensions - AnalyzeTool"
-      version="1.9.0"
+      version="1.10.0"
       provider-name="Nokia"
       plugin="com.nokia.s60tools.analyzetool">
 
@@ -971,21 +971,20 @@ SUCH DAMAGE.
          id="com.nokia.s60tools.analyzetool"
          download-size="0"
          install-size="0"
-         version="1.9.0"
+         version="1.10.0"
          unpack="false"/>
 
    <plugin
          id="com.nokia.s60tools.analyzetool.corecomponents"
          download-size="0"
          install-size="0"
-         version="1.9.0"/>
+         version="1.10.0"/>
 
    <plugin
          id="com.nokia.s60tools.analyzetool.help"
          download-size="0"
          install-size="0"
-         version="1.9.0"
+         version="1.10.0"
          unpack="false"/>
-
 
 </feature>

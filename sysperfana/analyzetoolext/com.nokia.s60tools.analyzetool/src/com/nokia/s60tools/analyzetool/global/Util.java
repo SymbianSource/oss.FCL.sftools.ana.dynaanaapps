@@ -28,6 +28,7 @@ import java.nio.channels.FileChannel;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.cdt.core.model.ICModelMarker;
 import org.eclipse.core.resources.IMarker;
@@ -44,13 +45,25 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Cursor;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -70,10 +83,13 @@ import com.nokia.carbide.cpp.epoc.engine.model.mmp.EMMPStatement;
 import com.nokia.carbide.cpp.epoc.engine.model.mmp.IMMPData;
 import com.nokia.carbide.cpp.epoc.engine.preprocessor.AcceptedNodesViewFilter;
 import com.nokia.s60tools.analyzetool.Activator;
+import com.nokia.s60tools.analyzetool.AnalyzeToolHelpContextIDs;
 import com.nokia.s60tools.analyzetool.builder.AnalyzeToolBuilder;
 import com.nokia.s60tools.analyzetool.engine.MMPInfo;
 import com.nokia.s60tools.analyzetool.engine.UseAtool;
 import com.nokia.s60tools.analyzetool.global.Constants.COMMAND_LINE_ERROR_CODE;
+import com.nokia.s60tools.analyzetool.ui.CustomMessageDialog;
+import com.nokia.s60tools.analyzetool.ui.OutputModeDialog;
 
 /**
  * Provides commonly used functions.
@@ -91,6 +107,8 @@ public final class Util {
 
 	/** Contains user selection (String) in the selection dialog. */
 	private static String userSelection = "";
+
+	private static String[] outputMode = new String[3];
 
 	/** Contains StringBuffer size. */
 	private static int bufferSize = 32;
@@ -141,13 +159,13 @@ public final class Util {
 	}
 
 	/**
-	 * Checks is AnalyzeTool libraries installed from the current SDK.
+	 * Checks AnalyzeTool libraries from the current SDK.
 	 * 
 	 * @param cpi
 	 *            {@link ICarbideProjectInfo} reference
-	 * @return True if libraries are installed otherwise false.
+	 * @return error message or Constants.ATOOL_LIBS_OK if libraries are OK
 	 */
-	public static boolean checkAtoolLibs(final ICarbideProjectInfo cpi) {
+	public static String checkAtoolLibs(final ICarbideProjectInfo cpi) {
 		// get active platform
 		String platform = cpi.getDefaultConfiguration().getPlatformString();
 
@@ -155,57 +173,61 @@ public final class Util {
 		IPath epocRootPath = EpocEngineHelper.getEpocRootForProject(cpi
 				.getProject());
 
-		// check that epocroot path found
+		// check that epoc root path was found
 		if (epocRootPath == null) {
-			return false;
+			return "EPOCROOT directory of the SDK for the active build configuration of the project not found.";
 		}
 
 		String epocroot = epocRootPath.toOSString();
-		boolean found = true;
-		StringBuffer fileBuffer = new StringBuffer(bufferSize);
-		fileBuffer.append(Constants.CAN_NOT_FIND_LIBRARIES_MARKER);
-		fileBuffer.append(": ");
+
+		List<String> missingAtoolLibsList = new ArrayList<String>();
+
 		if ((Constants.BUILD_TARGET_WINSCW).equalsIgnoreCase(platform)) {
-			for (int i = 0; i < Constants.atoolLibsSbs2.length; i++) {
-				java.io.File file = new java.io.File(epocroot
-						+ Constants.atoolLibsWinscw[i]);
+			for (int i = 0; i < Constants.atoolLibsWinscw.length; i++) {
+				File file = new File(epocroot + Constants.atoolLibsWinscw[i]);
 				if (!file.exists()) {
-					found = false;
-					fileBuffer.append(epocroot);
-					fileBuffer.append(Constants.atoolLibsWinscw[i]);
-					fileBuffer.append(' ');
+					missingAtoolLibsList.add(epocroot
+							+ Constants.atoolLibsWinscw[i]);
 				}
 			}
 		} else if ((Constants.BUILD_TARGET_ARMV5).equalsIgnoreCase(platform)) {
 			if (AnalyzeToolBuilder.isSBSBuildActivated(cpi)) {
 				for (int i = 0; i < Constants.atoolLibsSbs2.length; i++) {
-					java.io.File file = new java.io.File(epocroot
-							+ Constants.atoolLibsSbs2[i]);
+					File file = new File(epocroot + Constants.atoolLibsSbs2[i]);
 					if (!file.exists()) {
-						found = false;
-						fileBuffer.append(epocroot);
-						fileBuffer.append(Constants.atoolLibsSbs2[i]);
-						fileBuffer.append(' ');
+						missingAtoolLibsList.add(epocroot
+								+ Constants.atoolLibsSbs2[i]);
 					}
 				}
 			} else {
 				for (int i = 0; i < Constants.atoolLibs.length; i++) {
-					java.io.File file = new java.io.File(epocroot
-							+ Constants.atoolLibs[i]);
+					File file = new File(epocroot + Constants.atoolLibs[i]);
 					if (!file.exists()) {
-						found = false;
-						fileBuffer.append(epocroot);
-						fileBuffer.append(Constants.atoolLibs[i]);
-						fileBuffer.append(' ');
+						missingAtoolLibsList.add(epocroot
+								+ Constants.atoolLibs[i]);
 					}
 				}
 			}
 		}
-		if (!found) {
-			createErrorMarker(cpi.getProject(), fileBuffer.toString());
+
+		if (missingAtoolLibsList.size() > 0) {
+			StringBuffer fileBuffer = new StringBuffer(bufferSize);
+
+			fileBuffer.append(Constants.CAN_NOT_FIND_LIBRARIES_MARKER);
+			fileBuffer.append("\n\n");
+
+			for (String string : missingAtoolLibsList) {
+				fileBuffer.append(string);
+				fileBuffer.append("\n");
+			}
+
+			fileBuffer.append("\n");
+			fileBuffer.append(Constants.CAN_NOT_FIND_LIBRARIES_SUPPORT);
+
+			return fileBuffer.toString();
 		}
 
-		return found;
+		return Constants.ATOOL_LIBS_OK;
 	}
 
 	/**
@@ -372,7 +394,6 @@ public final class Util {
 		fileDialog.setText(title);
 		fileDialog.setFilterExtensions(ext);
 		return fileDialog.open();
-
 	}
 
 	/**
@@ -398,7 +419,7 @@ public final class Util {
 			store.setValue(Constants.USE_INTERNAL, true);
 			atoolInstallFolder.append(getDefaultAtoolLocation());
 		} else if (folder.equals(Constants.DEFAULT_ATOOL_FOLDER)) {
-			java.io.File file = new java.io.File(Constants.DEFAULT_ATOOL_FOLDER);
+			File file = new File(Constants.DEFAULT_ATOOL_FOLDER);
 			if (file.exists()) {
 				atoolInstallFolder.append(Constants.DEFAULT_ATOOL_FOLDER);
 			} else {
@@ -658,6 +679,29 @@ public final class Util {
 		return infDir + "\\atool_temp\\";
 	}
 
+	public static ToolBar createHelpControl(Composite parent) {
+		ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.NO_FOCUS);
+		((GridLayout) parent.getLayout()).numColumns++;
+		toolBar.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER));
+		final Cursor cursor = new Cursor(parent.getDisplay(), SWT.CURSOR_HAND);
+		toolBar.setCursor(cursor);
+		toolBar.addDisposeListener(new DisposeListener() {
+			public void widgetDisposed(DisposeEvent e) {
+				cursor.dispose();
+			}
+		});
+		ToolItem item = new ToolItem(toolBar, SWT.NONE);
+		item.setImage(JFaceResources.getImage(Dialog.DLG_IMG_HELP));
+		item.setToolTipText(JFaceResources.getString("helpToolTip")); //$NON-NLS-1$
+		item.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				PlatformUI.getWorkbench().getHelpSystem().displayHelp(
+						AnalyzeToolHelpContextIDs.ANALYZE_TROUBLESHOOTING);
+			}
+		});
+		return toolBar;
+	}
+
 	/**
 	 * Gets cpp file name and path.
 	 * 
@@ -763,7 +807,6 @@ public final class Util {
 				return true;
 			}
 		}
-
 		return false;
 	}
 
@@ -808,7 +851,6 @@ public final class Util {
 			}
 		}
 		return false;
-
 	}
 
 	/**
@@ -1087,6 +1129,29 @@ public final class Util {
 		return userSelection;
 	}
 
+	public static String[] openOutputModeDialog() {
+		Activator.getDefault().getWorkbench().getDisplay().syncExec(
+				new Runnable() {
+					public void run() {
+						OutputModeDialog outputModeDialog = new OutputModeDialog(
+								new Shell());
+						outputModeDialog.open();
+						if (outputModeDialog.getReturnCode() == Dialog.OK) {
+							outputMode[0] = outputModeDialog.getOutputMode();
+							if (outputModeDialog.getOutputMode().equals(
+									Constants.LOGGING_S60)) {
+								outputMode[1] = outputModeDialog.getLogPath();
+								outputMode[2] = outputModeDialog.getFileName();
+							}
+						} else {
+							outputMode = null;
+						}
+					}
+				});
+
+		return outputMode;
+	}
+
 	/**
 	 * Displays error message.
 	 * 
@@ -1102,7 +1167,28 @@ public final class Util {
 						Constants.DIALOG_TITLE, message);
 			}
 		});
+	}
 
+	/**
+	 * Displays error message with title.
+	 * 
+	 * @param title
+	 *            dialog title
+	 * @param message
+	 *            error message
+	 * @param icon
+	 *            message icon
+	 */
+	public static void showMessageDialog(final String title,
+			final String message, final int icon) {
+
+		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+			public void run() {
+				new CustomMessageDialog(PlatformUI.getWorkbench()
+						.getActiveWorkbenchWindow().getShell(), title, message,
+						icon).open();
+			}
+		});
 	}
 
 	/**
@@ -1122,7 +1208,6 @@ public final class Util {
 						Constants.DIALOG_TITLE, message);
 			}
 		});
-
 	}
 
 	/**
@@ -1246,7 +1331,7 @@ public final class Util {
 				} else {
 					return Constants.VERSION_NUMBERS_SECOND;
 				}
-
+			
 			} catch (NumberFormatException nfe) {
 				nfe.printStackTrace();
 				return Constants.VERSION_NUMBERS_INVALID;
@@ -1342,6 +1427,20 @@ public final class Util {
 					"AnalyzeTool - Invalid data file.");
 			break;
 
+		case DATA_FILE_OLD_FORMAT:
+			Util.showMessageDialog(Constants.UNSUPPORTED_FORMAT_TITLE,
+					Constants.UNSUPPORTED_FORMAT_MESSAGE, SWT.ICON_ERROR);
+			Activator.getDefault().logInfo(IStatus.ERROR, IStatus.ERROR,
+					"AnalyzeTool - Unsupported format.");
+			break;
+
+		case DATA_FILE_UNSUPPORTED_TRACE_FORMAT:
+			Util.showMessageDialog(Constants.UNSUPPORTED_FORMAT_TITLE,
+					Constants.TRACE_FORMAT_VERSION_IS_HIGHER, SWT.ICON_ERROR);
+			Activator.getDefault().logInfo(IStatus.ERROR, IStatus.ERROR,
+					"AnalyzeTool - Unsupported trace format.");
+			break;
+
 		case RELEASABLES_ERROR:
 			Util
 					.showErrorMessage("AnalyzeTool can not copy needed files, therefore callstack can not be displayed when analyzing data."
@@ -1402,7 +1501,6 @@ public final class Util {
 			Activator.getDefault().logInfo(IStatus.ERROR, IStatus.ERROR,
 					"AnalyzeTool - unknown error.");
 			break;
-
 		}
 	}
 

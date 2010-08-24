@@ -9,9 +9,9 @@
 <body>
 <h2>Release note</h2>
 
-<h4>AnalyzeTool Carbide.c++ Extension &ndash; Version 1.9.0</h4>
+<h4>AnalyzeTool Carbide.c++ Extension &ndash; Version 1.10.0</h4>
 
-<p>Released 21st April 2010</p>
+<p>Released 30th June 2010</p>
 <ul>
   <li><a href="#description">Product description</a></li>
   <li><a href="#features">Main features</a></li>
@@ -47,22 +47,24 @@ to contact project team and other users directly.</p>
 
 <h3><a name="newfeatures"></a>What's new</h3>
 <ul>
-  <li>Feature: The version of the dbghelp.dll library provided by Windows is
-    checked when user starts tracing. If the version is not at least 6.3.0.0, a
-    confirmation dialog will appear with instructions on how to update a later
-    version. </li>
-  <li>Fix: Substantially reduced the graph memory usage in the callstack area.
-    This allowed removing the option for disabling the graph feature in the
-    Preferences page.</li>
-  <li>Fix: Cleaning dialog functionality has been fixed, the graph is no longer
-    cleaned if user selects <strong>No</strong>.</li>
-  <li>Fix: Warning "No project selected" is no longer mistakenly displayed if
-    the project is selected in Navigator.</li>
+  <li>Feature: Support added for new trace format.</li>
+  <li>Feature: New output formats added: Output to trace and Output to file
+    system.</li>
+  <li>Feature: Tread ID is shown in Properties for all allocations,
+    deallocations and leaks.</li>
+  <li>Feature: Added Graph settings dialog for setting thresholds for
+    allocations shown in the graph view.</li>
+  <li>Feature: Real-time tracing re-factoring.</li>
+  <li>Feature: Version checks and notification dialogs added for the following:
+    for the old trace format containing the old PCSS prefix; for supported
+    trace format version; for supported command line engine and command line
+    engine availability; for unknown tags in traces; for mismatch between
+    AnalyzeTool binaries in the device and AnalyzeTool headers in the SDK.</li>
 </ul>
 
-<h3><a name="installation"></a>Installation notes</h3>
+<h3><a name="installation" id="installation"></a>Installation notes</h3>
 <ul>
-  <li>N/A</li>
+  <li>Update details for version 1.10.0 here</li>
 </ul>
 
 <h3><a name="requirements"></a>System requirements</h3>
@@ -111,6 +113,21 @@ to contact project team and other users directly.</p>
 </ul>
 
 <h3>Version history</h3>
+
+<h5>Version 1.9.0 - 21st April 2010</h5>
+<ul>
+  <li>Feature: The version of the dbghelp.dll library provided by Windows is
+    checked when user starts tracing. If the version is not at least 6.3.0.0, a
+    confirmation dialog will appear with instructions on how to update a later
+    version. </li>
+  <li>Fix: Substantially reduced the graph memory usage in the callstack area.
+    This allowed removing the option for disabling the graph feature in the
+    Preferences page.</li>
+  <li>Fix: Cleaning dialog functionality has been fixed, the graph is no longer
+    cleaned if user selects <strong>No</strong>.</li>
+  <li>Fix: Warning "No project selected" is no longer mistakenly displayed if
+    the project is selected in Navigator.</li>
+</ul>
 
 <h5>Version 1.8.1 - 14th January 2010</h5>
 <ul>

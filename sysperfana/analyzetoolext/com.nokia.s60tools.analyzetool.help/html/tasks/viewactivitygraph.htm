@@ -1,52 +1,151 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 1.0 Transitional//EN">
 <html>
 <head>
-<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-<title>Viewing AnalyzeTool memory activity graphs</title>
-<link href="../../book.css" type="text/css" rel="StyleSheet">
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>Viewing AnalyzeTool memory activity graphs</title>
+  <link href="../../book.css" type="text/css" rel="StyleSheet">
 </head>
-<body>
 
+<body>
 <h2>Viewing memory activity graph</h2>
-<p>Memory activity graphs are generated automatically after the data capturing is stopped. Alternatively, an existing trace file can be opened to view memory activity graphs. For more information, see <a href="..\concepts\datafile.htm">AnalyzeTool files</a>.</p>
+
+<p>This section describe the AnalyzeTool Graph tab and gives instructions on
+using it. The following subsections are included:</p>
+<ul>
+  <li><a href="#Descriptio">Description of graph</a></li>
+  <li><a href="#Setting">Setting thresholds for displayed allocations</a></li>
+  <li><a href="#Navigating">Navigating the graph</a></li>
+  <li><a href="#Eclipse">The Eclipse Properties View</a></li>
+</ul>
+
+<p>Memory activity graphs are generated automatically after the data capturing
+is stopped. Alternatively, an existing trace file can be opened to view memory
+activity graphs. For more information, see <a
+href="..\concepts\datafile.htm">AnalyzeTool files</a>.</p>
+
 <p>There are two options for opening a memory analysis data file:</p>
 <ul>
-<li>From the <b>Project pop-up</b> menu, select <b>AnalyzeTool</b> > <b>Open and analyze data file</b>.</li>
-<li>In the <b>AnalyzeTool</b> view, click the <b>Open and analyze data file</b> button.</li>
+  <li>From the <b>Project pop-up</b> menu, select <b>AnalyzeTool</b> &gt;
+    <b>Open and analyze data file</b>.</li>
+  <li>In the <b>AnalyzeTool</b> view, click the <b>Open and analyze data
+    file</b> button.</li>
 </ul>
-<p>Memory activity graphs are displayed in the <b>AnalyzeTool</b> window on the <b>Graph</b> tab. After the data has loaded, select a process in the <b>Process</b> drop down box to view its memory activity. </p>
-<p><img src="../images/sample_graph.png" alt="AnalyzeTool graph tab"></p>
 
-<h3>Description of graph</h3>
-<p>The graph shows the cumulative memory of the given process over time. 
-Each memory operation is marked with a dot on the graph as follows:
+<p>Memory activity graphs are displayed in the <b>AnalyzeTool</b> window on the
+<b>Graph</b> tab. After the data has loaded, select a process in the
+<b>Process</b> drop down box to view its memory activity. </p>
+
+<p><img src="../images/graph_view.png" alt="AnalyzeTool graph tab"></p>
+
+<p class="figure"
+style="text-align:left;margin-left:0;margin-right:auto;">Figure 1. Example
+graph</p>
+
+<h3 id="Descriptio">Description of graph</h3>
+
+<p>The graph shows the cumulative memory of the given process over time. Each
+memory operation is marked with a dot on the graph as follows: </p>
 <ul>
-<li><font color="blue">Alloc</font>: A memory allocation is marked in blue if it is freed during the lifetime of the process.</li>
-<li><font color="red">Leak</font>: A memory allocation is marked in red with a vertical line going down if it is not freed during the lifetime of the process (also known as <em>leak</em>).</li>
-<li><font color="green">Free</font>: A memory free is marked in green.</li>
+  <li><font color="blue">Alloc</font>: A memory allocation is marked in blue if
+    it is freed during the lifetime of the process.</li>
+  <li><font color="red">Leak</font>: A memory allocation is marked in red with
+    a vertical line going down if it is not freed during the lifetime of the
+    process (also known as <em>leak</em>).</li>
+  <li><font color="green">Free</font>: A memory free is marked in green.</li>
 </ul>
-<p>Hovering the mouse over a memory operation shows a tooltip with relevant information. 
-A memory operation can also be selected with a mouse click. This will highlight the memory operation on the graph, and 
-more detailed information is shown in the Eclipse Properties view. The Eclipse Properties view may include callstack information if available.
-<p><b>Tip</b>: Use the <b>arrow left</b> and <b>arrow right</b> keys to move to the next or previous memory operation.</p> 
-<p>When a memory operation is selected, related memory operations are highlighted on the graph. For example, when an alloc is selected, its associated free memory is marked on the graph with a green line going down.</p>
 
-<h3>Navigating the graph</h3>
+<p>Hovering the mouse over a memory operation shows a tooltip with relevant
+information. A memory operation can also be selected with a mouse click. This
+will highlight the memory operation on the graph, and more detailed information
+is shown in the Eclipse Properties view. The Eclipse Properties view may
+include callstack information if available. </p>
+
+<p><b>Tip</b>: Use the <b>arrow left</b> and <b>arrow right</b> keys to move to
+the next or previous memory operation.</p>
+
+<p>When a memory operation is selected, related memory operations are
+highlighted on the graph. For example, when an alloc is selected, its
+associated free memory is marked on the graph with a green line going down.</p>
+
+<h3 id="Setting">Setting thresholds for displayed allocations</h3>
+
+<p>You can set a threshold for the minimum or maximum size of allocation
+displayed in the graph. To do this, click the <img
+src="../images/icon_graph_settings.png"> on the toolbar to open open the graph
+settings dialog. </p>
+
+<p><strong>Note</strong> that this option is not available in the optimized
+drawing mode, where only leaks are shown due to high number of memory
+operations.</p>
+
+<p><img src="../images/graph_settings_dialog.png"></p>
+
+<p class="figure"
+style="text-align:left;margin-left:0;margin-right:auto;">Figure 2. Graph
+Settings dialog</p>
+<ol>
+  <li>Choose one of the radio buttons:</li>
+</ol>
 <ul>
-<li><b>Zoom in:</b> Select a region in the graph with your mouse (click the left edge and drag to the right edge of the region to be zoomed in).</li>
-<li><b>Zoom out:</b> Right-click with the mouse.</li>
-<li><b>Scroll:</b> Use the scroll bar. Alternatively, select a memory operation with your mouse and use the <b>arrow right</b> or <b>arrow left</b> keys to bring the next or previous into view.</li>
+  <li><strong>above or equals the threshold</strong> to display memory
+    allocations which size is equal or above the set threshold, or </li>
+  <li><strong>below or equals the threshold</strong> to display memory
+    allocations which size is equal of below the set threshold. </li>
+</ul>
+<ul>
+  <li>Type in the threshold. You can give the threshold in bytes, kilobytes or
+    megabytes (B, kB, MB).</li>
+  <li>Click Ok. The Graph will now display only the memory allocations within
+    the set threshold. </li>
 </ul>
 
-<h3>The Eclipse Properties View</h3>
-<p>When a single memory allocation is selected on the graph, the Eclipse Properties view shows detailed information about the memory operation.
-If the Eclipse Properties view is not already open, it can be opened by selecting <b>Windows</b> > <b>Show View</b> > <b>Properties</b>.
-</p>
-<img src="../images/properties_view.png" alt="AnalyzeTool Properties View">
-<p>Double-clicking an item in the callstack opens the appropriate source code file to that code line, provided the source code file can be found in the selected project in Carbide.c++.</p>
+<p>The figure below shows the same graph as in Figure 1. above, but now with
+threshold setting of 4kB.</p>
 
+<p><img src="../images/graph_view_threshold.png"
+alt="AnalyzeTool graph with threshold"></p>
 
-<div id="footer">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
-License: <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
+<p class="figure"
+style="text-align:left;margin-left:0;margin-right:auto;">Figure 3. Example
+graph with threshold set at 4 kB</p>
+
+<p>As you can see in Figure 3 above, memory leaks are always show on the graph,
+regardless of the threshold settings.</p>
+
+<p>The threshold setting is data file specific. So, if you choose another date
+file, there will be no thresholds applied to it by default, but you need to set
+them in the <strong>Graph Settings</strong> dialog.</p>
+
+<h3 id="Navigating">Navigating the graph</h3>
+<ul>
+  <li><b>Zoom in:</b> Select a region in the graph with your mouse (click the
+    left edge and drag to the right edge of the region to be zoomed in).</li>
+  <li><b>Zoom out:</b> Right-click with the mouse.</li>
+  <li><b>Scroll:</b> Use the scroll bar. Alternatively, select a memory
+    operation with your mouse and use the <b>arrow right</b> or <b>arrow
+    left</b> keys to bring the next or previous into view.</li>
+</ul>
+
+<h3 id="Eclipse">The Eclipse Properties View</h3>
+
+<p>When a single memory allocation is selected on the graph, the Eclipse
+Properties view shows detailed information about the memory operation. If the
+Eclipse Properties view is not already open, it can be opened by clicking the
+<img src="../images/properties.png"> icon on the Graph tab, or by selecting
+<b>Windows</b> &gt; <b>Show View</b> &gt; <b>Properties</b>. </p>
+<img src="../images/properties_view.png" alt="AnalyzeTool Properties View"> 
+
+<p class="figure"
+style="text-align:left;margin-left:0;margin-right:auto;">Figure 4. Properties
+view</p>
+
+<p>Double-clicking an item in the callstack opens the appropriate source code
+file to that code line, provided the source code file can be found in the
+selected project in Carbide.c++.</p>
+
+<div id="footer">
+Copyright © 2010 Nokia Corporation and/or its subsidiary(-ies). All rights
+reserved. License: <a
+href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</div>
 </body>
 </html>
